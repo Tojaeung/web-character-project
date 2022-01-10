@@ -1,10 +1,11 @@
 import { Router } from 'express';
-import authCtrl from '@src/controllers/auth.ctrl';
+import authController from '@src/controllers/auth.controller';
+import jwtAuth from '@src/middlewares/jwt.middleware';
 
 const authRouter = Router();
 
-authRouter.post('/register', authCtrl.register);
-authRouter.post('/login', authCtrl.login);
-authRouter.post('/logout', authCtrl.logout);
+authRouter.post('/register', authController.register);
+authRouter.post('/login', authController.login);
+authRouter.get('/logout', jwtAuth, authController.logout);
 
 export default authRouter;

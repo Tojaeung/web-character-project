@@ -1,0 +1,14 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 15
+    },
+    "auditLog": "C:\\Users\\tojaeung\\Desktop\\coding\\web-character-project\\server\\src\\logs\\.9ccb894a750def3dd74163744a3afb90274844ce-audit.json",
+    "files": [
+        {
+            "date": 1641795641427,
+            "name": "C:\\Users\\tojaeung\\Desktop\\coding\\web-character-project\\server\\src\\logs\\2022-01-10.info.log",
+            "hash": "770d3b7367480edad44f98523dff3263"
+        }
+    ]
+}
