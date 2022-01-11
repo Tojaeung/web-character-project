@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LoginModal from './modals/LoginModal';
+import LoginModal from './modals/Login.modal';
 import { Container, Logo, Auth } from '@src/styles/Header.styled';
 
 function Header() {
