@@ -10,6 +10,8 @@ import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
 import Header from '@src/components/Header';
 import Home from '@src/pages/Home';
 import Register from '@src/pages/Register';
+import FindPw from '@src/pages/FindPw';
+import ChangePw from '@src/pages/ChangePw';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -24,6 +26,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/findPw" element={<FindPw />} />
+              <Route path="/changePw" element={<ChangePw />} />
             </Routes>
           </AppScreenDiv>
         </FullScreenDiv>

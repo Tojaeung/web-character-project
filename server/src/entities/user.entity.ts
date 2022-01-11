@@ -25,6 +25,14 @@ export class User extends BaseEntity {
   accountNumber: string;
 
   @Column({
+    nullable: true,
+  })
+  emailToken: string | null;
+
+  @Column()
+  pwToken: string;
+
+  @Column({
     default: false,
   })
   isVerified: boolean;

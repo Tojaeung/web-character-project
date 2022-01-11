@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import argon2 from 'argon2';
+import argon2, { hash } from 'argon2';
 import { User } from '@src/entities/user.entity';
 import { UserType } from '@src/types/user.type';
 import redisClient from '@src/config/redis.config';
 import logger from '@src/config/winston';
-import { sendEmail } from '@src/config/nodemailer.config';
+import { sendRegisterEmail, sendFindEmail } from '@src/config/nodemailer.config';
 
 const authController = {
   // 회원가입  API 입니다.
@@ -29,12 +29,22 @@ const authController = {
 
       // 비밀번호를 암호화 합니다.
       const hashedPw = await argon2.hash(pw);
+      const emailToken = await argon2.hash(email);
+      const pwToken = await argon2.hash(nickname);
 
       // 데이터베이스에 가입정보를 저장합니다.
-      const user: UserType = await User.create({ email, nickname, pw: hashedPw, bank, accountNumber }).save();
+      const user: UserType = await User.create({
+        email,
+        nickname,
+        pw: hashedPw,
+        bank,
+        accountNumber,
+        emailToken,
+        pwToken,
+      }).save();
 
       // 인증이메일을 발송합니다.
-      await sendEmail(req, res, email);
+      await sendRegisterEmail(req, res, email, emailToken);
 
       /*
        * 클라이언트에 엑세스토큰를 쿠키로 보냅니다. (만료기한 7일)
@@ -68,7 +78,11 @@ const authController = {
       }
 
       // 인증되지 않은 회원일 경우에 다시 인증메일을 발송합니다.
-      await sendEmail(req, res, email);
+      if (!user.isVerified) {
+        await sendRegisterEmail(req, res, user.email, user.emailToken as string);
+        logger.warn('인증되지 않은 사용자 입니다.');
+        return res.status(400).json({ status: false, message: '인증되지 않은 사용자 입니다.' });
+      }
 
       // 엑세스토큰과 리프레쉬토큰을 생성합니다.
       delete user.pw;
@@ -109,16 +123,22 @@ const authController = {
   // 이메일 인증을 위한 API입니다.
   verifyUser: async (req: Request, res: Response) => {
     try {
-      const { email } = req.query;
-      const user = await User.findOne({ email: email as string });
+      // nodemailer.config.ts에서 보낸 쿼리 입니다.
+      const { emailToken } = req.query;
+      const user = await User.findOne({ emailToken: emailToken as string });
+
       if (!user) {
         logger.error('이메일 인증확인이 실패하였습니다.');
         return res.status(400).json({ statuse: false, message: '이메일 인증확인이 실패하였습니다.' });
       }
 
-      // 유저가 있다면 로그인을 할수 있도록 유저의 isVertified 칼럼을 수정 및 저장합니다.
-      user.isVerified = true;
-      await user.save();
+      // 이메일토큰이 유효하다면 로그인이 가능 합니다..
+      const decryptedEmailToken = await argon2.verify(emailToken as string, user.email);
+      if (decryptedEmailToken) {
+        user.emailToken = null;
+        user.isVerified = true;
+        await user.save();
+      }
 
       // 로그인을 위해 클라이언트의 홈페이지로 리다이렉트 합니다.
       logger.info('이메일 인증확인 성공하였습니다.');
@@ -126,6 +146,75 @@ const authController = {
     } catch (err: any) {
       logger.error('이메일 인증확인 에러: ', err);
       return res.status(500).json({ status: false, message: '이메일 인증확인 에러' });
+    }
+  },
+
+  // 비밀번호를 찾기 위한 API입니다.
+  findPw: async (req: Request, res: Response) => {
+    try {
+      const { email } = req.body;
+      const user = await User.findOne({ email });
+
+      // 유저가 존재한다면 비밀번호 찾기 인증 메일을 발송합니다.
+      if (user) {
+        await sendFindEmail(req, res, email, user.pwToken);
+      }
+
+      return res.status(200).json({ status: true, message: '인증 이메일을 발송하였습니다.' });
+    } catch (err: any) {
+      logger.error('유효한 이메일 에러', err);
+      return res.status(500).json({ status: false, message: '유효한 이메일 에러' });
+    }
+  },
+
+  // 비밀번호 인증을 위한 API 입니다.
+  verifyPw: async (req: Request, res: Response) => {
+    try {
+      // nodemailer.config.ts에서 온 쿼리정보 입니다.
+      const { pwToken } = req.query;
+      const user = await User.findOne({ pwToken: pwToken as string });
+
+      if (!user) {
+        logger.error('비밀번호 인증확인이 실패하였습니다.');
+        return res.status(400).json({ statuse: false, message: '비밀번호 인증확인이 실패하였습니다.' });
+      }
+
+      /*
+       * 이메일토큰은 이메일과 연결되어있고 비밀번호토큰은 닉네임과 연결되어 있습니다.
+       * 클라이언트에 비밀번호토큰을 쿼리정보로 포함하여 보내줍니다.
+       */
+      const decryptedPwToken = await argon2.verify(pwToken as string, user.nickname);
+      if (decryptedPwToken) {
+        logger.info('비밀번호 인증확인 성공하였습니다.');
+        return res.status(200).redirect(`${process.env.CLIENT_ADDR}/changePw?pwToken=${pwToken}`);
+      }
+    } catch (err: any) {
+      logger.error('비밀번호 인증확인 에러: ', err);
+      return res.status(500).json({ status: false, message: '비밀번호 인증확인 에러' });
+    }
+  },
+
+  // 비밀번호를 변경하기 위한 API 입니다.
+  changePw: async (req: Request, res: Response) => {
+    try {
+      const { pw, pwToken } = req.body;
+      const user = await User.findOne({ pwToken: pwToken as string });
+
+      if (!user) {
+        logger.error('비밀번호 토큰과 일치하는 유저가 없습니다.');
+        return res.status(400).json({ statuse: false, message: '비밀번호 토큰과 일치하는 유저가 없습니다.' });
+      }
+
+      // 클라이언트에서 받아온 비밀번호를 헤싱하여 데이터베이스에 저장 합니다.
+      const hashedPw = await argon2.hash(pw);
+      user.pw = hashedPw;
+      user.save();
+
+      logger.info('비밀번호가 재설정 되었습니다.');
+      return res.status(200).json({ status: true, message: '비밀번호가 재설정 되었습니다.' });
+    } catch (err: any) {
+      logger.error('비밀번호 변경 에러: ', err);
+      return res.status(500).json({ status: false, message: '비밀번호 변경 에러' });
     }
   },
 };

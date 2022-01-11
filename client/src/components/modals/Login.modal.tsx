@@ -28,6 +28,20 @@ function LoginModal({ openModal, closeModal }: IProps) {
     }
   };
 
+  const onClickFindPw = (e: React.MouseEvent<HTMLSpanElement>) => {
+    navigate('/findPw');
+    onCloseModal(e);
+    setEmail('');
+    setPw('');
+  };
+
+  const onClickRegister = (e: React.MouseEvent<HTMLSpanElement>) => {
+    navigate('/findPw');
+    onCloseModal(e);
+    setEmail('');
+    setPw('');
+  };
+
   if (!openModal) return null;
   return createPortal(
     <>
@@ -63,11 +77,11 @@ function LoginModal({ openModal, closeModal }: IProps) {
         <Footer>
           <button className="login-button">로그인</button>
           <div className="modal-rest-wrapper">
-            <span className="find-password-button" onClick={() => navigate('/')}>
+            <span className="find-password-button" onClick={onClickFindPw}>
               비밀번호찾기
             </span>
             <span className="boundary"> | </span>
-            <span className="register-button" onClick={() => navigate('/register')}>
+            <span className="register-button" onClick={onClickRegister}>
               회원가입
             </span>
           </div>
