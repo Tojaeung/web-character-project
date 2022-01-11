@@ -34,9 +34,6 @@ function Register() {
           <div className="input-wrapper">
             <label className="input-label" htmlFor="email">
               이메일
-              <span className="email-guide-text">
-                ( <span className="guide-emphasis-text">필수</span>: 이메일 인증 )
-              </span>
             </label>
             <input
               className="input"
