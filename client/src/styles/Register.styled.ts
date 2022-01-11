@@ -12,9 +12,6 @@ export const Container = styled.div`
 export const Form = styled.form`
   width: 300px;
   height: 100vh;
-  > * {
-    margin: 2rem 0;
-  }
 `;
 
 export const Header = styled.div`
@@ -26,7 +23,7 @@ export const Header = styled.div`
 
 export const Body = styled.div`
   > * {
-    margin: 3rem 0;
+    margin: 2rem 0;
   }
   .input-wrapper {
     position: relative;
@@ -47,9 +44,7 @@ export const Body = styled.div`
   .error-message {
     font-size: 1.3rem;
   }
-  .label-guide-text {
-    font-size: 1.3rem;
-  }
+
   .register-guide-text {
     font-size: 1.3rem;
     text-align: center;

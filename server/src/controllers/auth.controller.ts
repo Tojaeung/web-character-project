@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import argon2 from 'argon2';
+import nodemailer from 'nodemailer';
 import { User } from '@src/entities/user.entity';
 import { UserType } from '@src/types/user.type';
 import redisClient from '@src/config/redis.config';
 import logger from '@src/config/winston';
+import { mailOption, generatEmailForm } from '@src/config/nodemailer.config';
 
 const authController = {
   // 회원가입  API 입니다.
@@ -25,21 +27,25 @@ const authController = {
       // 데이터베이스에 가입정보를 저장합니다.
       const user: UserType = await User.create({ email, nickname, pw: hashedPw, bank, accountNumber }).save();
 
-      // 엑세스 토큰과 리프레쉬 토큰을 발급합니다.
-      createRefreshToken(nickname);
-      const accessToken = createAccessToken(nickname);
+      // 인증이메일을 발송합니다.
+      const transporter = nodemailer.createTransport(mailOption);
+      const mailForm = generatEmailForm(req, email);
+      const info = await transporter.sendMail(mailForm);
+      if (!info) {
+        logger.error('이메일 송신 실패하였습니다.');
+        return res.status(500).json({ status: false, message: '이메일 송신 에러' });
+      } else {
+        logger.info('이메일 송신 성공하였습니다.');
+      }
 
       /*
        * 클라이언트에 엑세스토큰를 쿠키로 보냅니다. (만료기한 7일)
        * 클라이언트에게 새로 생성된 유저정보를 보내 줍니다.
        */
       logger.info('회원가입 되었습니다.');
-      return res
-        .status(200)
-        .cookie('accessToken', accessToken, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7 })
-        .json({ status: true, message: '회원가입 되었습니다.', data: user });
+      return res.status(200).json({ status: true, message: '회원가입 되었습니다.' });
     } catch (err: any) {
-      logger.error('회원가입 에러: ', err.message);
+      logger.error('회원가입 에러: ', err);
       return res.status(500).json({ status: false, message: '회원가입 에러' });
     }
   },
@@ -63,6 +69,21 @@ const authController = {
         return res.status(400).json({ status: false, message: '아이디 또는 비밀번호가 틀렸습니다.' });
       }
 
+      // 인증되지 않은 회원일 경우에 다시 인증메일을 발송합니다.
+      if (!user.isVerified) {
+        const transporter = nodemailer.createTransport(mailOption);
+        const mailForm = generatEmailForm(req, email);
+        const info = await transporter.sendMail(mailForm);
+        if (!info) {
+          logger.error('이메일 송신 실패하였습니다.');
+          return res.status(500).json({ status: false, message: '이메일 송신 에러' });
+        } else {
+          logger.info('이메일 송신 성공하였습니다.');
+        }
+        logger.warn('인증된 회원이 아닙니다. 인증메일을 다시 보냈습니다.');
+        return res.status(400).json({ status: false, message: '인증된 회원이 아닙니다. 인증메일을 다시 보냈습니다.' });
+      }
+
       // 엑세스토큰과 리프레쉬토큰을 생성합니다.
       createRefreshToken(user.id);
       const accessToken = createAccessToken(user.id);
@@ -77,7 +98,7 @@ const authController = {
         .cookie('accessToken', accessToken, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7 })
         .json({ status: true, message: '로그인 되었습니다.', data: user });
     } catch (err: any) {
-      logger.error('로그인 에러:', err.message);
+      logger.error('로그인 에러:', err);
       return res.status(500).json({ status: false, message: '로그인 에러' });
     }
   },
@@ -86,13 +107,38 @@ const authController = {
   logout: async (req: Request, res: Response) => {
     try {
       const { id } = res.locals.user.id;
+
+      // 레디스에 저장된 리프레쉬 토큰을 삭제합니다.
       await redisClient.del(id.toString());
 
       logger.info('로그아웃 되었습니다.');
       return res.status(200).clearCookie('accessToken').json({ message: '로그아웃 되었습니다.' });
     } catch (err: any) {
-      logger.error('로그아웃 에러:', err.message);
+      logger.error('로그아웃 에러:', err);
       return res.status(500).json({ status: false, message: '로그아웃 에러' });
+    }
+  },
+
+  // 이메일 인증을 위한 API입니다.
+  verifyUser: async (req: Request, res: Response) => {
+    try {
+      const { email } = req.query;
+      const user = await User.findOne({ email: email as string });
+      if (!user) {
+        logger.error('이메일 인증확인이 실패하였습니다.');
+        return res.status(400).json({ statuse: false, message: '이메일 인증확인이 실패하였습니다.' });
+      }
+
+      // 유저가 있다면 로그인을 할수 있도록 유저의 isVertified 칼럼을 수정 및 저장합니다.
+      user.isVerified = true;
+      await user.save();
+
+      // 로그인을 위해 클라이언트의 홈페이지로 리다이렉트 합니다.
+      logger.info('이메일 인증확인 성공하였습니다.');
+      return res.status(200).redirect(process.env.CLIENT_ADDR as string);
+    } catch (err: any) {
+      logger.error('이메일 인증확인 에러: ', err);
+      return res.status(500).json({ status: false, message: '이메일 인증확인 에러' });
     }
   },
 };

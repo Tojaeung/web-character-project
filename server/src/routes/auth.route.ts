@@ -7,5 +7,6 @@ const authRouter = Router();
 authRouter.post('/register', authController.register);
 authRouter.post('/login', authController.login);
 authRouter.get('/logout', jwtAuth, authController.logout);
+authRouter.get('/verifyUser', authController.verifyUser);
 
 export default authRouter;

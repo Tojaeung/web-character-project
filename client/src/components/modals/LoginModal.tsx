@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { Background, Form, Header, Body, Footer } from '@src/styles/LoginModal.styled';
 import { AiOutlineClose, AiOutlineUser, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import axios from 'axios';
+import { Background, Form, Header, Body, Footer } from '@src/styles/LoginModal.styled';
 import { IProps } from '@src/types/LoginModal.type';
 
 function LoginModal({ openModal, closeModal }: IProps) {
@@ -19,6 +20,12 @@ function LoginModal({ openModal, closeModal }: IProps) {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const res = await axios.post('/api/login', { email, pw });
+    const { status } = res.data;
+    if (status === true) {
+      console.log(res.data);
+      alert('로그인 되었습니다.');
+    }
   };
 
   if (!openModal) return null;

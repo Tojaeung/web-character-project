@@ -24,6 +24,11 @@ export class User extends BaseEntity {
   @Column()
   accountNumber: string;
 
+  @Column({
+    default: false,
+  })
+  isVerified: boolean;
+
   @CreateDateColumn()
   createAt: Date;
 

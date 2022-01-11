@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { AiOutlineUser, AiOutlineMail, AiOutlineEye, AiOutlineEyeInvisible, AiOutlineBank } from 'react-icons/ai';
+import { AiOutlineUser, AiOutlineEye, AiOutlineMail, AiOutlineEyeInvisible, AiOutlineBank } from 'react-icons/ai';
+import axios from 'axios';
 import { Container, Form, Header, Body, Footer } from '@src/styles/Register.styled';
 import { IFormInputType } from '@src/types/Register.type';
 
@@ -13,7 +14,11 @@ function Register() {
   } = useForm<IFormInputType>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<IFormInputType> = async (data) => {
-    console.log(data);
+    const res = await axios.post('/api/register', data);
+    const { status } = res.data;
+    if (status === true) {
+      alert('이메일 확인 ㄱㄱ');
+    }
   };
 
   const [hidePw, setHidePw] = useState(true);
@@ -29,6 +34,9 @@ function Register() {
           <div className="input-wrapper">
             <label className="input-label" htmlFor="email">
               이메일
+              <span className="email-guide-text">
+                ( <span className="guide-emphasis-text">필수</span>: 이메일 인증 )
+              </span>
             </label>
             <input
               className="input"
@@ -59,7 +67,7 @@ function Register() {
               {...register('nickname', {
                 required: { value: true, message: '닉네임을 입력해주세요' },
                 minLength: { value: 2, message: '최소 2글자 이상입니다.' },
-                maxLength: { value: 6, message: '최대 8글자 이하입니다.' },
+                maxLength: { value: 10, message: '최대 10글자 이하입니다.' },
                 pattern: {
                   value: /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/,
                   message: '영어,한글,숫자를 조합할 수 있습니다.',
@@ -135,7 +143,7 @@ function Register() {
               은행
             </label>
             <select className="input" {...register('bank')}>
-              <option>------------------------은행선택---------------------------</option>
+              <option value="">------------------------은행선택---------------------------</option>
               <option value="hyundai">현대카드</option>
               <option value="shinhan">신한카드</option>
               <option value="kookmin">국민카드</option>

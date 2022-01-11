@@ -1,0 +1,31 @@
+22Y-01-11 04:02:58 error: 인증메일 보내기 실패하였습니다.
+22Y-01-11 04:05:05 error: 인증메일 보내기 실패하였습니다.
+22Y-01-11 04:05:29 error: 인증메일 보내기 실패하였습니다.
+22Y-01-11 06:13:07 error: 회원가입 에러: 
+22Y-01-11 06:14:42 error: 회원가입 에러: 
+22Y-01-11 06:15:30 error: 회원가입 에러: 
+22Y-01-11 06:15:53 error: 회원가입 에러:  No repository for "User" was found. Looks like this entity is not registered in current "default" connection?
+22Y-01-11 06:17:32 error: 회원가입 에러:  The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received undefined
+22Y-01-11 06:19:17 error: 회원가입 에러:  The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received undefined
+22Y-01-11 06:20:34 error: 회원가입 에러:  The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received undefined
+22Y-01-11 06:22:15 error: 회원가입 에러:  The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received undefined
+22Y-01-11 06:24:07 error: 회원가입 에러:  The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received undefined
+22Y-01-11 16:01:43 error: redis 연결실패
+22Y-01-11 16:01:43 error: redis 연결실패
+22Y-01-11 16:01:43 error: redis 연결실패
+22Y-01-11 16:01:43 error: redis 연결실패
+22Y-01-11 16:01:43 error: redis 연결실패
+22Y-01-11 16:01:43 error: redis 연결실패
+22Y-01-11 16:01:43 error: redis 연결실패
+22Y-01-11 16:01:44 error: redis 연결실패
+22Y-01-11 16:01:44 error: redis 연결실패
+22Y-01-11 16:01:45 error: redis 연결실패
+22Y-01-11 16:01:45 error: redis 연결실패
+22Y-01-11 16:01:46 error: redis 연결실패
+22Y-01-11 16:01:46 error: redis 연결실패
+22Y-01-11 17:54:13 error: 이메일 인증확인 에러: 
+22Y-01-11 17:55:40 error: 이메일 인증확인 에러: 
+22Y-01-11 17:56:52 warn: 이미 존재하는 닉네임 입니다.
+22Y-01-11 17:57:16 error: 이메일 인증확인 에러: 
+22Y-01-11 18:01:38 error: 이메일 인증확인 에러:  Cannot set headers after they are sent to the client
+22Y-01-11 19:12:51 error: 회원가입 에러:  중복된 키 값이 "UQ_e12875dfb3b1d92d7d7c5377e22" 고유 제약 조건을 위반함
