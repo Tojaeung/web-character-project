@@ -35,11 +35,10 @@ const jwtAuth = async (req: Request, res: Response, next: NextFunction) => {
       res.status(200).cookie('accessToken', newAccessToken, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7 });
     }
 
-    const user = await User.findOne({ id: decodedAccessToken.id });
-    res.locals.user = user;
+    res.locals.user = decodedRefreshToken.user;
     next();
   } catch (err: any) {
-    logger.error('jwt 미들웨어 에러 :', err.message);
+    logger.error('jwt 미들웨어 에러 :', err);
     return res.status(500).clearCookie('accessToken').json({ status: false, message: 'jwt 미들웨어 에러' });
   }
 };

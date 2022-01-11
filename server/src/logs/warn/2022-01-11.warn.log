@@ -29,3 +29,5 @@
 22Y-01-11 17:57:16 error: 이메일 인증확인 에러: 
 22Y-01-11 18:01:38 error: 이메일 인증확인 에러:  Cannot set headers after they are sent to the client
 22Y-01-11 19:12:51 error: 회원가입 에러:  중복된 키 값이 "UQ_e12875dfb3b1d92d7d7c5377e22" 고유 제약 조건을 위반함
+22Y-01-11 19:59:19 warn: 이미 존재하는 이메일 입니다.
+22Y-01-11 21:42:37 error: jwt 미들웨어 에러 :

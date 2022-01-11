@@ -63,14 +63,14 @@ const authController = {
       const { email, pw } = req.body;
 
       // 유효한 email인지 확인하기 위해 email를 조회합니다.
-      const user = await User.findOne({ email });
+      const user = (await User.findOne({ email })) as UserType;
       if (!user) {
         logger.warn('회원이 존재하지 않습니다.');
         return res.status(400).json({ status: false, message: '회원이 존재하지 않습니다.' });
       }
 
       // 유효한 이메일이라면 비밀번호가 맞는지 확인합니다.
-      const decryptedPw = await argon2.verify(user.pw, pw);
+      const decryptedPw = await argon2.verify(user.pw as string, pw);
       if (!decryptedPw) {
         logger.warn('아이디 또는 비밀번호가 틀렸습니다.');
         return res.status(400).json({ status: false, message: '아이디 또는 비밀번호가 틀렸습니다.' });
@@ -92,7 +92,8 @@ const authController = {
       }
 
       // 엑세스토큰과 리프레쉬토큰을 생성합니다.
-      createRefreshToken(user.id);
+      delete user.pw;
+      createRefreshToken(user);
       const accessToken = createAccessToken(user.id);
 
       /*
@@ -159,13 +160,13 @@ const createAccessToken = async (id: number) => {
 };
 
 // 리프레쉬토큰 생성 함수 입니다.
-const createRefreshToken = async (id: number) => {
-  const refreshToken = await jwt.sign({ id: id.toString() }, process.env.JWT_REFRESH_SECRET as string, {
+const createRefreshToken = async (user: UserType) => {
+  const refreshToken = await jwt.sign({ user }, process.env.JWT_REFRESH_SECRET as string, {
     expiresIn: '30d',
   });
 
   // 레디스에 유저의 리프레쉬 토큰을 저장합니다.
-  redisClient.set(id.toString(), JSON.stringify(refreshToken));
+  redisClient.set(user.id.toString(), JSON.stringify(refreshToken));
 
   return refreshToken;
 };
