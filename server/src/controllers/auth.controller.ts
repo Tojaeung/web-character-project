@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import argon2 from 'argon2';
-import nodemailer from 'nodemailer';
 import { User } from '@src/entities/user.entity';
 import { UserType } from '@src/types/user.type';
 import redisClient from '@src/config/redis.config';
 import logger from '@src/config/winston';
-import { mailOption, generatEmailForm } from '@src/config/nodemailer.config';
+import { sendEmail } from '@src/config/nodemailer.config';
 
 const authController = {
   // 회원가입  API 입니다.
@@ -35,15 +34,7 @@ const authController = {
       const user: UserType = await User.create({ email, nickname, pw: hashedPw, bank, accountNumber }).save();
 
       // 인증이메일을 발송합니다.
-      const transporter = nodemailer.createTransport(mailOption);
-      const mailForm = generatEmailForm(req, email);
-      const info = await transporter.sendMail(mailForm);
-      if (!info) {
-        logger.error('이메일 송신 실패하였습니다.');
-        return res.status(500).json({ status: false, message: '이메일 송신 에러' });
-      } else {
-        logger.info('이메일 송신 성공하였습니다.');
-      }
+      await sendEmail(req, res, email);
 
       /*
        * 클라이언트에 엑세스토큰를 쿠키로 보냅니다. (만료기한 7일)
@@ -77,19 +68,7 @@ const authController = {
       }
 
       // 인증되지 않은 회원일 경우에 다시 인증메일을 발송합니다.
-      if (!user.isVerified) {
-        const transporter = nodemailer.createTransport(mailOption);
-        const mailForm = generatEmailForm(req, email);
-        const info = await transporter.sendMail(mailForm);
-        if (!info) {
-          logger.error('이메일 송신 실패하였습니다.');
-          return res.status(500).json({ status: false, message: '이메일 송신 에러' });
-        } else {
-          logger.info('이메일 송신 성공하였습니다.');
-        }
-        logger.warn('인증된 회원이 아닙니다. 인증메일을 다시 보냈습니다.');
-        return res.status(400).json({ status: false, message: '인증된 회원이 아닙니다. 인증메일을 다시 보냈습니다.' });
-      }
+      await sendEmail(req, res, email);
 
       // 엑세스토큰과 리프레쉬토큰을 생성합니다.
       delete user.pw;
