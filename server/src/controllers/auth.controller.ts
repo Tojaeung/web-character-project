@@ -14,6 +14,13 @@ const authController = {
     try {
       const { email, nickname, pw, bank, accountNumber } = req.body;
 
+      // 기존 이메일 존재 유무를 확인합니다.
+      const existingEmail = await User.findOne({ email });
+      if (existingEmail) {
+        logger.warn('이미 존재하는 이메일 입니다.');
+        return res.status(400).json({ status: false, message: '이미 존재하는 이메일 입니다.' });
+      }
+
       // 기존 닉네임 존재 유무를 확인합니다.
       const existingNickname = await User.findOne({ nickname });
       if (existingNickname) {
