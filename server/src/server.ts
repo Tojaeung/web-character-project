@@ -43,7 +43,7 @@ app.listen(port, async () => {
       logger.info('pg 연결 !!');
     })
     .catch((err: any) => {
-      logger.error('pg 연결실패 !!', err.message);
+      logger.error('pg 연결실패 !!', err);
     });
   await redisClient.connect();
 });

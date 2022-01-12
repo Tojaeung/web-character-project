@@ -24,9 +24,7 @@ export class User extends BaseEntity {
   @Column()
   accountNumber: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Column({ type: 'text', nullable: true })
   emailToken: string | null;
 
   @Column()
