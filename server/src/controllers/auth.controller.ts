@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import argon2, { hash } from 'argon2';
+import bcrypt from 'bcrypt';
 import { User } from '@src/entities/user.entity';
 import { UserType } from '@src/types/user.type';
 import redisClient from '@src/config/redis.config';
@@ -28,15 +28,15 @@ const authController = {
       }
 
       // 비밀번호를 암호화 합니다.
-      const hashedPw = await argon2.hash(pw);
-      const emailToken = await argon2.hash(email);
-      const pwToken = await argon2.hash(nickname);
+      const encryptedPw = await bcrypt.hash(pw, 8);
+      const emailToken = await bcrypt.hash(email, 8);
+      const pwToken = await bcrypt.hash(nickname, 8);
 
       // 데이터베이스에 가입정보를 저장합니다.
       const user: UserType = await User.create({
         email,
         nickname,
-        pw: hashedPw,
+        pw: encryptedPw,
         bank,
         accountNumber,
         emailToken,
@@ -71,7 +71,7 @@ const authController = {
       }
 
       // 유효한 이메일이라면 비밀번호가 맞는지 확인합니다.
-      const decryptedPw = await argon2.verify(user.pw as string, pw);
+      const decryptedPw = await bcrypt.compare(pw, user.pw as string);
       if (!decryptedPw) {
         logger.warn('아이디 또는 비밀번호가 틀렸습니다.');
         return res.status(400).json({ status: false, message: '아이디 또는 비밀번호가 틀렸습니다.' });
@@ -133,7 +133,7 @@ const authController = {
       }
 
       // 이메일토큰이 유효하다면 로그인이 가능 합니다..
-      const decryptedEmailToken = await argon2.verify(emailToken as string, user.email);
+      const decryptedEmailToken = await bcrypt.compare(user.email, emailToken as string);
       if (decryptedEmailToken) {
         user.emailToken = null;
         user.isVerified = true;
@@ -183,7 +183,7 @@ const authController = {
        * 이메일토큰은 이메일과 연결되어있고 비밀번호토큰은 닉네임과 연결되어 있습니다.
        * 클라이언트에 비밀번호토큰을 쿼리정보로 포함하여 보내줍니다.
        */
-      const decryptedPwToken = await argon2.verify(pwToken as string, user.nickname);
+      const decryptedPwToken = await bcrypt.compare(user.nickname, pwToken as string);
       if (decryptedPwToken) {
         logger.info('비밀번호 인증확인 성공하였습니다.');
         return res.status(200).redirect(`${process.env.CLIENT_ADDR}/changePw?pwToken=${pwToken}`);
@@ -205,9 +205,14 @@ const authController = {
         return res.status(400).json({ statuse: false, message: '비밀번호 토큰과 일치하는 유저가 없습니다.' });
       }
 
-      // 클라이언트에서 받아온 비밀번호를 헤싱하여 데이터베이스에 저장 합니다.
-      const hashedPw = await argon2.hash(pw);
-      user.pw = hashedPw;
+      /*
+       * 클라이언트에서 받아온 비밀번호를 헤싱하여 데이터베이스에 저장 합니다.
+       *  보안을 위해 pwToken을 새롭게 발급하고 데이터베이스에 저장합니다.
+       */
+      const encryptedPw = await bcrypt.hash(pw, 8);
+      const newPwToken = await bcrypt.hash(user.nickname, 8);
+      user.pw = encryptedPw;
+      user.pwToken = newPwToken;
       user.save();
 
       logger.info('비밀번호가 재설정 되었습니다.');
