@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginModal from './modals/Login.modal';
-import { Container, Logo, Auth } from '@src/styles/Header.styled';
+import { Container } from '@src/styles/Header.styled';
 
 function Header() {
   const navigate = useNavigate();
@@ -9,15 +9,15 @@ function Header() {
 
   return (
     <Container>
-      <Logo>기업로고</Logo>
-      <Auth>
-        <button className="login-button" onClick={() => setOpenModal(true)}>
+      <div className="logo">기업로고</div>
+      <div className="right">
+        <button className="right__login-btn" onClick={() => setOpenModal(true)}>
           로그인
         </button>
-        <button className="register-button" onClick={() => navigate('/register')}>
+        <button className="right__register-btn" onClick={() => navigate('/register')}>
           회원가입
         </button>
-      </Auth>
+      </div>
       <LoginModal openModal={openMoal} closeModal={() => setOpenModal(false)} />
     </Container>
   );

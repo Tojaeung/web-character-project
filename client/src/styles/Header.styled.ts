@@ -10,17 +10,15 @@ export const Container = styled.div`
   justify-content: space-between;
   border: 1px solid black;
   padding: 2rem;
-`;
-
-export const Logo = styled.div`
-  font-size: 2rem;
-`;
-
-export const Auth = styled.div`
-  .login-button {
-    ${greenButtonStyle};
+  .logo {
+    font-size: 2rem;
   }
-  .register-button {
-    ${redButtonStyle}
+  .right {
+    &__login-btn {
+      ${greenButtonStyle};
+    }
+    &__register-btn {
+      ${redButtonStyle}
+    }
   }
 `;

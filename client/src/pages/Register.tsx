@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { AiOutlineUser, AiOutlineEye, AiOutlineMail, AiOutlineEyeInvisible, AiOutlineBank } from 'react-icons/ai';
 import axios from 'axios';
-import { Container, Form, Header, Body, Footer } from '@src/styles/Register.styled';
+import { Container } from '@src/styles/Register.styled';
 import { IFormInputType } from '@src/types/Register.type';
 
 function Register() {
@@ -30,37 +30,35 @@ function Register() {
   return (
     <Container>
       {showGuideText ? (
-        <div className="guide-text-wrapper">
+        <div className="authEmailGuide">
           <div>
-            <p className="guide-text-title">
-              가입하신 이메일로 <span className="guide-text-email">"인증메일"</span>을 보내드렸습니다.📫
+            <p className="authEmailGuide__title">
+              가입하신 이메일로 <span className="authEmailGuide__text">"인증메일"</span>을 보내드렸습니다.📫
             </p>
           </div>
-          <p className="guide-text-content">
+          <p className="authEmailGuide__content">
             안녕하세요. 회원이 되신것을 축하합니다.🌈🌈
             <br /> 아직 한단계가 남았어요 !! 😉😉
             <br /> 가입하신 이메일에서 인증을 해주시면, 저희 서비스를 마음껏 이용하실수 있습니다.
             <br />
-            <span className="guide-text-caution">
+            <span className="authEmailGuide__caution">
               (단, 회원가입을 하셨어도 이메일 인증을 하지 않으면 서비스를 이용하실수 없습니다.)⛔⛔
             </span>
           </p>
-          <button className="guide-text-button" onClick={() => navigate('/')}>
+          <button className="authEmailGuide__btn" onClick={() => navigate('/')}>
             홈 페이지로 가기
           </button>
         </div>
       ) : (
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <Header>
-            <div className="logo">회원가입</div>
-          </Header>
-          <Body>
-            <div className="input-wrapper">
-              <label className="input-label" htmlFor="email">
+        <form className="form" onSubmit={handleSubmit(onSubmit)}>
+          <div className="form__title">회원가입</div>
+          <div className="form__input-wrapper">
+            <div className="form__input">
+              <label className="form__input-label" htmlFor="email">
                 이메일
               </label>
               <input
-                className="input"
+                className="form__input-entry"
                 type="text"
                 placeholder="이메일(Tojaeung@xxx.com)"
                 style={{ borderColor: errors.email && 'red' }}
@@ -72,16 +70,16 @@ function Register() {
                   },
                 })}
               />
-              {errors.email && <div className="error-message">{errors.email.message}</div>}
-              <AiOutlineMail className="input-icon" />
+              {errors.email && <div className="form__input-errorMessage">{errors.email.message}</div>}
+              <AiOutlineMail className="form__input-icon" />
             </div>
 
-            <div className="input-wrapper">
-              <label className="input-label" htmlFor="nickname">
+            <div className="form__input">
+              <label className="form__input-label" htmlFor="nickname">
                 닉네임
               </label>
               <input
-                className="input"
+                className="form__input-entry"
                 type="text"
                 placeholder="닉네임"
                 style={{ borderColor: errors.nickname && 'red' }}
@@ -95,16 +93,16 @@ function Register() {
                   },
                 })}
               />
-              {errors.nickname && <div className="error-message">{errors.nickname.message}</div>}
-              <AiOutlineUser className="input-icon" />
+              {errors.nickname && <div className="form__input-errorMessage">{errors.nickname.message}</div>}
+              <AiOutlineUser className="form__input-icon" />
             </div>
 
-            <div className="input-wrapper">
-              <label className="input-label" htmlFor="pw">
+            <div className="form__input">
+              <label className="form__input-label" htmlFor="pw">
                 비밀번호
               </label>
               <input
-                className="input"
+                className="form__input-entry"
                 type={hidePw ? 'password' : 'text'}
                 placeholder="비밀번호"
                 style={{ borderColor: errors.pw && 'red' }}
@@ -116,20 +114,20 @@ function Register() {
                   },
                 })}
               />
-              {errors.pw && <div className="error-message">{errors.pw.message}</div>}
+              {errors.pw && <div className="input__errorMessage">{errors.pw.message}</div>}
               {hidePw ? (
-                <AiOutlineEye className="input-icon" onClick={() => setHidePw(false)} />
+                <AiOutlineEye className="form__input-icon" onClick={() => setHidePw(false)} />
               ) : (
-                <AiOutlineEyeInvisible className="input-icon" onClick={() => setHidePw(true)} />
+                <AiOutlineEyeInvisible className="form__input-icon" onClick={() => setHidePw(true)} />
               )}
             </div>
 
-            <div className="input-wrapper">
-              <label className="input-label" htmlFor="confirmPw">
+            <div className="form__input">
+              <label className="form__input-label" htmlFor="confirmPw">
                 비밀번호 확인
               </label>
               <input
-                className="input"
+                className="form__input-entry"
                 type={hideConfirmPw ? 'password' : 'text'}
                 placeholder="비밀번호 확인"
                 style={{ borderColor: errors.confirmPw && 'red' }}
@@ -139,31 +137,31 @@ function Register() {
                 })}
               />
               {errors.confirmPw && errors.confirmPw.type === 'required' && (
-                <div className="error-message">{errors.confirmPw.message}</div>
+                <div className="input__errorMessage">{errors.confirmPw.message}</div>
               )}
               {errors.confirmPw && errors.confirmPw.type === 'validate' && (
-                <div className="error-message">비밀번호가 일치하지 않습니다.</div>
+                <div className="input__errorMessage">비밀번호가 일치하지 않습니다.</div>
               )}
               {hideConfirmPw ? (
-                <AiOutlineEye className="input-icon" onClick={() => setHideConfirmPw(false)} />
+                <AiOutlineEye className="form__input-icon" onClick={() => setHideConfirmPw(false)} />
               ) : (
-                <AiOutlineEyeInvisible className="input-icon" onClick={() => setHideConfirmPw(true)} />
+                <AiOutlineEyeInvisible className="form__input-icon" onClick={() => setHideConfirmPw(true)} />
               )}
             </div>
 
             <hr />
 
-            <div className="register-guide-text">
+            <div className="form__registerGuide">
               작가활동을 원하시는 분은 거래의 편리함을 위해
               <br /> 아래의 은행과 계좌번호를 입력해주세요. (필수X)
               <br />
             </div>
 
-            <div className="input-wrapper">
-              <label className="input-label" htmlFor="bank">
+            <div className="form__input">
+              <label className="form__input-label" htmlFor="bank">
                 은행
               </label>
-              <select className="input" {...register('bank')}>
+              <select className="form__input-entry" {...register('bank')}>
                 <option value="">------------------------은행선택---------------------------</option>
                 <option value="hyundai">현대카드</option>
                 <option value="shinhan">신한카드</option>
@@ -180,20 +178,19 @@ function Register() {
               </select>
             </div>
 
-            <div className="input-wrapper">
-              <label className="input-label" htmlFor="accountNumber">
+            <div className="form__input">
+              <label className="form__input-label" htmlFor="accountNumber">
                 계좌번호
               </label>
-              <input className="input" type="text" placeholder="계좌번호" {...register('accountNumber')} />
-              <AiOutlineBank className="input-icon" />
+              <input className="form__input-entry" type="text" placeholder="계좌번호" {...register('accountNumber')} />
+              <AiOutlineBank className="form__input-icon" />
             </div>
-          </Body>
-          <Footer>
-            <button className="submit-button" type="submit">
-              회원가입
-            </button>
-          </Footer>
-        </Form>
+          </div>
+
+          <button className="form__submit-btn" type="submit">
+            회원가입
+          </button>
+        </form>
       )}
     </Container>
   );

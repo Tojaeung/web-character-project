@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineClose, AiOutlineUser, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import axios from 'axios';
-import { Background, Form, Header, Body, Footer } from '@src/styles/LoginModal.styled';
+import { Container } from '@src/styles/LoginModal.styled';
 import { IProps } from '@src/types/LoginModal.type';
 
 function LoginModal({ openModal, closeModal }: IProps) {
@@ -44,50 +44,50 @@ function LoginModal({ openModal, closeModal }: IProps) {
 
   if (!openModal) return null;
   return createPortal(
-    <>
-      <Background onClick={onCloseModal} />
-      <Form onSubmit={onSubmit}>
-        <AiOutlineClose className="modal-close-button" onClick={onCloseModal} />
-        <Header>기업로고</Header>
-        <Body>
-          <div className="input-wrapper">
+    <Container>
+      <div className="background" onClick={onCloseModal} />
+      <form className="form" onSubmit={onSubmit}>
+        <AiOutlineClose className="form__close-btn" onClick={onCloseModal} />
+        <div className="form__title">기업로고</div>
+        <div className="form__input-wrapper">
+          <div className="form__input">
             <input
-              className="login-email-input"
+              className="form__input-entry"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="이메일"
             />
-            <AiOutlineUser className="login-email-icon" />
+            <AiOutlineUser className="form__input-icon" />
           </div>
-          <div className="input-wrapper">
+          <div className="form__input">
             <input
-              className="login-password-input"
+              className="form__input-entry"
               type={hidePw ? 'password' : 'text'}
               value={pw}
               onChange={(e) => setPw(e.target.value)}
               placeholder="비밀번호"
             />
             {hidePw ? (
-              <AiOutlineEye className="login-password-icon" onClick={() => setHidePw(false)} />
+              <AiOutlineEye className="form__input-icon" onClick={() => setHidePw(false)} />
             ) : (
-              <AiOutlineEyeInvisible className="login-password-icon" onClick={() => setHidePw(true)} />
+              <AiOutlineEyeInvisible className="form__input-icon" onClick={() => setHidePw(true)} />
             )}
           </div>
-        </Body>
-        <Footer>
-          <button className="login-button">로그인</button>
-          <div className="modal-rest-wrapper">
-            <span className="find-password-button" onClick={onClickFindPw}>
+        </div>
+        <div className="form__btn-wrapper">
+          <button className="form__submit-btn">로그인</button>
+          <div className="form__rest-btn-wrapper">
+            <span className="form__findPassword-btn" onClick={onClickFindPw}>
               비밀번호찾기
             </span>
-            <span className="boundary"> | </span>
-            <span className="register-button" onClick={onClickRegister}>
+            <span className="form__boundary"> | </span>
+            <span className="form__register-btn" onClick={onClickRegister}>
               회원가입
             </span>
           </div>
-        </Footer>
-      </Form>
-    </>,
+        </div>
+      </form>
+    </Container>,
     document.getElementById('portal') as HTMLElement
   );
 }

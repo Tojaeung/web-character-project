@@ -19,16 +19,16 @@ function FindPw() {
 
   return (
     <Container>
-      <form className="block" onSubmit={handleSubmit(onSubmit)}>
-        <div className="block__logo">기업로고</div>
-        <p className="block__text">
+      <form className="form" onSubmit={handleSubmit(onSubmit)}>
+        <div className="form__logo">기업로고</div>
+        <p className="form__text">
           비밀번호를 잃어버리셨나요?😂😂
           <br /> 기업이름에 가입한 이메일을 정확히 입력해 주세요.🌙
           <br /> 이메일을 통해 비밀번호 수정 링크가 전송됩니다.🌤
           <br />
         </p>
         <input
-          className="block__input"
+          className="form__input"
           placeholder="가입하셨던 이메일을 입력해주세요."
           style={{ borderColor: errors.email && 'red' }}
           {...register('email', {
@@ -39,8 +39,8 @@ function FindPw() {
             },
           })}
         />
-        {errors.email && <div className="block__errorMessage">{errors.email.message}</div>}
-        <button className="block__btn" type="submit">
+        {errors.email && <div className="form__errorMessage">{errors.email.message}</div>}
+        <button className="form__btn" type="submit">
           비밀번호 찾기
         </button>
       </form>
