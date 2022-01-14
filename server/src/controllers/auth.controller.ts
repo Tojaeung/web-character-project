@@ -87,7 +87,8 @@ const authController = {
       // 엑세스토큰과 리프레쉬토큰을 생성합니다.
       delete user.pw;
       createRefreshToken(user);
-      const accessToken = createAccessToken(user.id);
+      const accessToken = await createAccessToken(user.id);
+      console.log(accessToken);
 
       /*
        * 엑세스 토큰을 클라이언트에 보내줍니다.
