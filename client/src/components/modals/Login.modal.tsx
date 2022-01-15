@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineClose, AiOutlineUser, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import axios from 'axios';
 import { Container } from '@src/styles/LoginModal.styled';
 import { IProps } from '@src/types/LoginModal.type';
+import { loginUser } from '@src/redux/requests/auth.request';
+import { useAppDispatch } from '@src/redux/app/hook';
 
 function LoginModal({ openModal, closeModal }: IProps) {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [hidePw, setHidePw] = useState(true);
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
@@ -20,11 +22,14 @@ function LoginModal({ openModal, closeModal }: IProps) {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = await axios.post('/api/login', { email, pw });
-    const { status } = res.data;
-    if (status === true) {
-      console.log(res.data);
-      alert('로그인 되었습니다.');
+    const data = { email, pw };
+    const response = await dispatch(loginUser(data)).unwrap();
+    const { ok, message } = response;
+    if (ok) {
+      localStorage.setItem('login', 'true');
+      onCloseModal(e);
+    } else {
+      alert(message);
     }
   };
 
@@ -36,7 +41,7 @@ function LoginModal({ openModal, closeModal }: IProps) {
   };
 
   const onClickRegister = (e: React.MouseEvent<HTMLSpanElement>) => {
-    navigate('/findPw');
+    navigate('/register');
     onCloseModal(e);
     setEmail('');
     setPw('');

@@ -1,5 +1,5 @@
 import { createClient } from 'redis';
-import logger from './winston';
+import logger from './winston.helper';
 
 const redisClient = createClient();
 

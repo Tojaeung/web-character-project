@@ -1,10 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { Container } from '@src/styles/FindPw.styled';
 import { IFormInputType } from '@src/types/FindPw.type';
 
 function FindPw() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -12,9 +14,12 @@ function FindPw() {
   } = useForm<IFormInputType>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<IFormInputType> = async (data) => {
-    const res = await axios.post('/api/findPw', data);
-    const { status } = res.data;
-    console.log(status);
+    const response = await axios.post('/api/findPw', data);
+    const { ok, message } = response.data;
+    if (ok) {
+      alert(message);
+      navigate('/');
+    }
   };
 
   return (

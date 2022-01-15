@@ -7,8 +7,8 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 
-import logger, { stream } from '@src/config/winston';
-import redisClient from '@src/config/redis.config';
+import logger, { stream } from '@src/helpers/winston.helper';
+import redisClient from '@src/helpers/redis.helper';
 
 import authRouter from '@src/routes/auth.route';
 

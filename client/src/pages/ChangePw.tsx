@@ -19,9 +19,13 @@ function ChangePw() {
     const query = qs.parse(window.location.search, {
       ignoreQueryPrefix: true,
     });
-    const res = await axios.post('/api/changePw', { pw: data.pw, pwToken: query.pwToken });
-    const { status } = res.data;
-    console.log(status);
+    const response = await axios.post('/api/changePw', { pw: data.pw, pwToken: query.pwToken });
+    const { ok, message } = response.data;
+    if (ok) {
+      alert(message);
+    } else {
+      alert(message);
+    }
   };
 
   return (

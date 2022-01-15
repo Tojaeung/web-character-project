@@ -5,7 +5,7 @@ export type UserType = {
   pw?: string;
   bank: string;
   accountNumber: string;
-  emailToken?: string | null;
-  pwToken?: string;
+  emailToken: string | null;
+  pwToken: string;
   isVerified: boolean;
 };

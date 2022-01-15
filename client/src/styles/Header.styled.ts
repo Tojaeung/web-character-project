@@ -20,5 +20,8 @@ export const Container = styled.div`
     &__register-btn {
       ${redButtonStyle}
     }
+    &__logout-btn {
+      ${redButtonStyle}
+    }
   }
 `;

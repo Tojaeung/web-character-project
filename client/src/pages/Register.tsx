@@ -17,10 +17,12 @@ function Register() {
 
   const [showGuideText, setShowGuideText] = useState(false);
   const onSubmit: SubmitHandler<IFormInputType> = async (data) => {
-    const res = await axios.post('/api/register', data);
-    const { status } = res.data;
-    if (status === true) {
+    const response = await axios.post('/api/register', data);
+    const { ok, message } = response.data;
+    if (ok) {
       setShowGuideText(true);
+    } else {
+      alert(message);
     }
   };
 
@@ -114,7 +116,7 @@ function Register() {
                   },
                 })}
               />
-              {errors.pw && <div className="input__errorMessage">{errors.pw.message}</div>}
+              {errors.pw && <div className="form__input-errorMessage">{errors.pw.message}</div>}
               {hidePw ? (
                 <AiOutlineEye className="form__input-icon" onClick={() => setHidePw(false)} />
               ) : (
@@ -137,10 +139,10 @@ function Register() {
                 })}
               />
               {errors.confirmPw && errors.confirmPw.type === 'required' && (
-                <div className="input__errorMessage">{errors.confirmPw.message}</div>
+                <div className="form__input-errorMessage">{errors.confirmPw.message}</div>
               )}
               {errors.confirmPw && errors.confirmPw.type === 'validate' && (
-                <div className="input__errorMessage">비밀번호가 일치하지 않습니다.</div>
+                <div className="form__input-errorMessage">비밀번호가 일치하지 않습니다.</div>
               )}
               {hideConfirmPw ? (
                 <AiOutlineEye className="form__input-icon" onClick={() => setHideConfirmPw(false)} />

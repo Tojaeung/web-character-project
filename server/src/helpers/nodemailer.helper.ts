@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { createTransport } from 'nodemailer';
-import logger from '@src/config/winston';
+import logger from '@src/helpers/winston.helper';
 
 export const sendRegisterEmail = async (req: Request, res: Response, email: string, emailToken: string) => {
   const transporter = createTransport({
@@ -23,7 +23,7 @@ export const sendRegisterEmail = async (req: Request, res: Response, email: stri
 
   if (!info) {
     logger.error('이메일 송신 실패하였습니다.');
-    return res.status(500).json({ status: false, message: '이메일 송신 에러' });
+    return res.status(500).json({ message: '이메일 송신 에러' });
   } else {
     logger.info('이메일 송신 성공하였습니다.');
   }

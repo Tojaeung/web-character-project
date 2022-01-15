@@ -31,10 +31,10 @@ export const Container = styled.div`
       flex-direction: column;
       margin-bottom: 1rem;
     }
-    &__label {
+    &__input-label {
       font-size: 1.5rem;
     }
-    &__entry {
+    &__input-entry {
       ${greenInputStyle};
     }
     &__errorMessage {

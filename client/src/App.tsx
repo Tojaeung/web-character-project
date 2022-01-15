@@ -5,7 +5,8 @@ import { lightTheme } from '@src/Theme';
 import GlobalStyles from '@src/GlobalStyles';
 
 import { FullScreenDiv, AppScreenDiv } from '@src/styles/App.styled';
-import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
+import { useAppDispatch } from '@src/redux/app/hook';
+import { refreshToken } from '@src/redux/requests/auth.request';
 
 import Header from '@src/components/Header';
 import Home from '@src/pages/Home';
@@ -15,6 +16,19 @@ import ChangePw from '@src/pages/ChangePw';
 
 function App() {
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const login = localStorage.getItem('login');
+    if (!login) return;
+    dispatch(refreshToken())
+      .unwrap()
+      .then((response) => {
+        const { ok } = response;
+        if (!ok) {
+          localStorage.removeItem('login');
+        }
+      });
+  }, [dispatch]);
 
   return (
     <ThemeProvider theme={lightTheme}>
