@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { greenButtonStyle, greenInputStyle } from '@src/GlobalStyles';
+import { greenButtonStyle, greenInputStyle } from '@src/styles/GlobalStyles';
 
 export const Container = styled.div`
   width: 100%;
@@ -18,33 +18,23 @@ export const Container = styled.div`
     &__logo {
       font-size: 3rem;
     }
-    &__guideText {
+    &__text {
       text-align: center;
       font-size: 1.5rem;
       line-height: 2rem;
     }
-    &__input-wrapper {
-      width: 100%;
-    }
     &__input {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 1rem;
-    }
-    &__input-label {
-      font-size: 1.5rem;
-    }
-    &__input-entry {
-      ${greenInputStyle};
+      ${greenInputStyle}
     }
     &__errorMessage {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
+      color: ${({ theme }) => theme.palette.red};
     }
-    &__submit-btn {
-      width: 100%;
+    &__btn {
+      width: 70%;
       font-size: 1.5rem;
       padding: 1rem 0;
-      ${greenButtonStyle}
+      ${greenButtonStyle};
     }
   }
 `;

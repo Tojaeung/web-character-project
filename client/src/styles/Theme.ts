@@ -23,6 +23,7 @@ export const lightTheme: DefaultTheme = {
     gray6: '#808080',
     gray7: '#666666',
     black: '#000000',
+    transparency: '#fffff',
   },
   device: {
     mobile: `screen and (max-width: ${deviceSizes.mobile})`,
@@ -51,6 +52,7 @@ export const lightTheme: DefaultTheme = {
 //     gray6: '#808080',
 //     gray7: '#666666',
 //     black: '#000000',
+// transparency: '#fffff',
 //   },
 //   device: {
 //     mobile: `screen and (max-width: ${deviceSizes.mobile})`,

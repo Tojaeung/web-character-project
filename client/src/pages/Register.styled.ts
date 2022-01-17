@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { greenButtonStyle, greenInputStyle } from '../GlobalStyles';
+import { greenButtonStyle, greenInputStyle } from '@src/styles/GlobalStyles';
 
 export const Container = styled.div`
   width: 100%;

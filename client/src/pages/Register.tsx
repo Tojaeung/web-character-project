@@ -3,8 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { AiOutlineUser, AiOutlineEye, AiOutlineMail, AiOutlineEyeInvisible, AiOutlineBank } from 'react-icons/ai';
 import axios from 'axios';
-import { Container } from '@src/styles/Register.styled';
-import { IFormInputType } from '@src/types/Register.type';
+import { Container } from '@src/pages/Register.styled';
+
+interface IFormInputType {
+  email: string;
+  nickname: string;
+  pw: string;
+  confirmPw: string;
+  bank: string;
+  accountNumber: string;
+}
 
 function Register() {
   const navigate = useNavigate();

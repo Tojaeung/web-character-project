@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineClose, AiOutlineUser, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { Container } from '@src/styles/LoginModal.styled';
-import { IProps } from '@src/types/LoginModal.type';
+import { Container } from '@src/components/modals/Login.modal.styled';
 import { loginUser } from '@src/redux/requests/auth.request';
 import { useAppDispatch } from '@src/redux/app/hook';
+
+interface IProps {
+  openModal: boolean;
+  closeModal: (e: any) => void;
+}
 
 function LoginModal({ openModal, closeModal }: IProps) {
   const navigate = useNavigate();

@@ -1,14 +1,16 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import express, { Application } from 'express';
+import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import { createConnection } from 'typeorm';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 
+import ormconfig from '@src/config/ormconfig';
 import logger, { stream } from '@src/helpers/winston.helper';
 import redisClient from '@src/helpers/redis.helper';
+import { avatarUpload, s3 } from '@src/helpers/s3.helper';
 
 import authRouter from '@src/routes/auth.route';
 
@@ -26,19 +28,26 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/api', authRouter);
 
+// app.post('/', avatarUpload.single('avatar'), async (req: Request, res: Response) => {
+//   const file = req.file;
+//   console.log(file);
+//   return res.json({ file });
+// });
+
+// app.delete('/', async (req: Request, res: Response) => {
+//   const response = await s3
+//     .deleteObject({
+//       Bucket: 'character-project',
+//       Key: 'avatar/34c719df-10e5-4af5-8de0-4940e3df49ca.jpeg',
+//     })
+//     .promise();
+//   console.log(response);
+// });
+
 const port = process.env.PORT as string;
 app.listen(port, async () => {
   logger.info(`${port}포트 연결!!`);
-  createConnection({
-    type: 'postgres',
-    host: process.env.PG_HOST as string,
-    port: 5432,
-    username: process.env.PG_USERNAME as string,
-    password: process.env.PG_PASSWORD as string,
-    database: process.env.PG_DATABASE as string,
-    entities: [`${__dirname}/entities/**/*.ts`],
-    synchronize: true,
-  })
+  createConnection(ormconfig)
     .then(() => {
       logger.info('pg 연결 !!');
     })

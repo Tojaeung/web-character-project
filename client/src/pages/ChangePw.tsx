@@ -3,8 +3,12 @@ import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import qs from 'qs';
 
-import { IFormInputType } from '@src/types/ChangePw.type';
-import { Container } from '@src/styles/ChangePw.styled';
+import { Container } from '@src/pages/ChangePw.styled';
+
+interface IFormInputType {
+  pw: string;
+  confirmPw?: string;
+}
 
 function ChangePw() {
   const {

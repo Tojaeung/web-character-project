@@ -24,6 +24,18 @@ export class User extends BaseEntity {
   @Column()
   accountNumber: string;
 
+  @Column({
+    default:
+      'https://character-project.s3.ap-southeast-1.amazonaws.com/avatar/b6d32a4f-2cb1-4bda-b3a1-be1664b66686.png',
+  })
+  avatar: string;
+
+  @Column({ default: 1 })
+  level: number;
+
+  @Column({ default: 'user' })
+  role: string;
+
   @Column({ type: 'text', nullable: true })
   emailToken: string | null;
 

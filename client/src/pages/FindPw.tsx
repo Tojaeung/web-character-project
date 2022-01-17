@@ -2,8 +2,11 @@ import React from 'react';
 import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { Container } from '@src/styles/FindPw.styled';
-import { IFormInputType } from '@src/types/FindPw.type';
+import { Container } from '@src/pages/FindPw.styled';
+
+interface IFormInputType {
+  email: string;
+}
 
 function FindPw() {
   const navigate = useNavigate();
