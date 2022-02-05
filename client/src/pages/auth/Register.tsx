@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { AiOutlineUser, AiOutlineEye, AiOutlineMail, AiOutlineEyeInvisible, AiOutlineBank } from 'react-icons/ai';
 import axios from 'axios';
-import { Container } from '@src/pages/Register.styled';
+import { Container } from '@src/pages/auth/Register.styled';
 
 interface IFormInputType {
   email: string;
@@ -25,7 +25,7 @@ function Register() {
 
   const [showGuideText, setShowGuideText] = useState(false);
   const onSubmit: SubmitHandler<IFormInputType> = async (data) => {
-    const response = await axios.post('/api/register', data);
+    const response = await axios.post('/api/auth/register', data);
     const { ok, message } = response.data;
     if (ok) {
       setShowGuideText(true);

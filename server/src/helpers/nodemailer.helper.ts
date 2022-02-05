@@ -18,7 +18,7 @@ export const sendRegisterEmail = async (req: Request, res: Response, email: stri
     to: email,
     subject: '안뇽~',
     html: `<h3 style="background-color: green; text-align: center; color: pink;">안녕하세요. 캐릭캐릭체인지에 가입해주셔서 감사합니다.</h3>
-      <a href='http://${req.headers.host}/api/verifyUser?emailToken=${emailToken}'>Verify your email</a>`,
+      <a href='http://${req.headers.host}/api/auth/verifyUser?emailToken=${emailToken}'>Verify your email</a>`,
   });
 
   if (!info) {
@@ -47,7 +47,7 @@ export const sendFindEmail = async (req: Request, res: Response, email: string, 
     to: email,
     subject: '안뇽~',
     html: `<h3 style="background-color: green; text-align: center; color: pink;">비밀번호 재설정을 위해서 아래의 버튼을 눌러주세요.</h3>
-      <a href='http://${req.headers.host}/api/verifyPw?pwToken=${pwToken}'>Verify your email</a>`,
+      <a href='http://${req.headers.host}/api/auth/verifyPw?pwToken=${pwToken}'>Verify your email</a>`,
   });
 
   if (!info) {

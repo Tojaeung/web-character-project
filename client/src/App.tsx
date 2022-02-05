@@ -1,21 +1,18 @@
-import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import styled, { ThemeProvider } from 'styled-components';
-import { lightTheme } from '@src/styles/Theme';
-import GlobalStyles from '@src/styles/GlobalStyles';
+import styled from 'styled-components';
 
-import { useAppDispatch } from '@src/redux/app/hook';
-import { refreshToken } from '@src/redux/requests/auth.request';
+import { useRefreshLogin } from '@src/hook/useRefreshLogin';
+import { useSocketSetup } from '@src/hook/useSocketSetup';
 
 import Header from '@src/components/header/Header';
-import Home from '@src/pages/home';
-import PageRender from './PageRender';
+import Home from '@src/pages/Home';
+import { AuthPageRender, SettingsPageRender } from '@src/routes/PageRender';
+import { AuthPrivateRouter, SettingsPrivateRouter } from '@src/routes/PrivateRouter';
 
 const Container = styled.div`
   .fullScreen {
     width: 100%;
     min-height: 100vh;
-    overflow-y: auto;
     background-color: ghostwhite;
   }
   .appScreen {
@@ -26,38 +23,40 @@ const Container = styled.div`
 `;
 
 function App() {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    const login = localStorage.getItem('login');
-    if (!login) return;
-    dispatch(refreshToken())
-      .unwrap()
-      .then((response) => {
-        const { ok } = response;
-        if (!ok) {
-          localStorage.removeItem('login');
-        }
-      });
-  }, [dispatch]);
+  useRefreshLogin();
+  useSocketSetup();
 
   return (
     <Container>
-      <ThemeProvider theme={lightTheme}>
-        <GlobalStyles />
-        <BrowserRouter>
-          <div className="fullScreen">
-            <Header />
-            <div className="appScreen">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/:page" element={<PageRender />} />
-                <Route path="/:page/:id" element={<PageRender />} />
-              </Routes>
-            </div>
+      <BrowserRouter>
+        <div className="fullScreen">
+          <Header />
+          <div className="appScreen">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/auth/:page"
+                element={
+                  <AuthPrivateRouter>
+                    <AuthPageRender />
+                  </AuthPrivateRouter>
+                }
+              />
+
+              <Route
+                path="/settings/:page"
+                element={
+                  <SettingsPrivateRouter>
+                    <SettingsPageRender />
+                  </SettingsPrivateRouter>
+                }
+              />
+
+              <Route path="*" element={<h1>나다호다</h1>} />
+            </Routes>
           </div>
-        </BrowserRouter>
-      </ThemeProvider>
+        </div>
+      </BrowserRouter>
     </Container>
   );
 }

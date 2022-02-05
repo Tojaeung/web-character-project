@@ -2,8 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import qs from 'qs';
-
-import { Container } from '@src/pages/ChangePw.styled';
+import { useLocation } from 'react-router-dom';
+import { Container } from '@src/pages/auth/ChangePw.styled';
 
 interface IFormInputType {
   pw: string;
@@ -11,6 +11,8 @@ interface IFormInputType {
 }
 
 function ChangePw() {
+  const location = useLocation();
+
   const {
     register,
     handleSubmit,
@@ -20,10 +22,10 @@ function ChangePw() {
 
   const onSubmit: SubmitHandler<IFormInputType> = async (data) => {
     delete data.confirmPw;
-    const query = qs.parse(window.location.search, {
+    const query = qs.parse(location.search, {
       ignoreQueryPrefix: true,
     });
-    const response = await axios.post('/api/changePw', { pw: data.pw, pwToken: query.pwToken });
+    const response = await axios.post('/api/auth/changePw', { pw: data.pw, pwToken: query.pwToken });
     const { ok, message } = response.data;
     if (ok) {
       alert(message);

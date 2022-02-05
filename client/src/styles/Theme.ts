@@ -23,6 +23,11 @@ export const lightTheme: DefaultTheme = {
     gray6: '#808080',
     gray7: '#666666',
     black: '#000000',
+    pink: '#ffcdd2',
+    yellow1: '#fffdf2',
+    yellow2: '#faf4d8',
+
+    yellow3: '#fef3bd',
     transparency: '#fffff',
   },
   device: {

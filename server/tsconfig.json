@@ -1,10 +1,11 @@
 {
+  "extends": "./tsconfig.paths.json",
   "compilerOptions": {
     "target": "es6" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
     "module": "commonjs" /* Specify what module code is generated. */,
     "lib": ["ESNext", "dom"],
     "allowJs": true,
-    "outDir": "dist" /* Specify an output folder for all emitted files. */,
+    "outDir": "./dist" /* Specify an output folder for all emitted files. */,
     "removeComments": true /* Disable emitting comments. */,
     "strict": true /* Enable all strict type-checking options. */,
     "noImplicitAny": true,
@@ -14,12 +15,9 @@
     "emitDecoratorMetadata": true,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
-    "baseUrl": "./",
-    "paths": {
-      "@src/*": ["src/*"]
-    },
+    "typeRoots": ["./src/types", "./node_modules/@types"],
     "strictPropertyInitialization": false /* 타입 orm 오류 나는거 */
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", "coverage"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "coverage", "__tests__"]
 }

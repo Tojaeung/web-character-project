@@ -14,6 +14,7 @@ interface IProps {
 function LoginModal({ openModal, closeModal }: IProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
   const [hidePw, setHidePw] = useState(true);
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
@@ -29,23 +30,23 @@ function LoginModal({ openModal, closeModal }: IProps) {
     const data = { email, pw };
     const response = await dispatch(loginUser(data)).unwrap();
     const { ok, message } = response;
-    if (ok) {
-      localStorage.setItem('login', 'true');
-      onCloseModal(e);
-    } else {
+    if (!ok) {
       alert(message);
+      return;
     }
+    onCloseModal(e);
+    navigate(0);
   };
 
   const onClickFindPw = (e: React.MouseEvent<HTMLSpanElement>) => {
-    navigate('/findPw');
+    navigate('/auth/findPw');
     onCloseModal(e);
     setEmail('');
     setPw('');
   };
 
   const onClickRegister = (e: React.MouseEvent<HTMLSpanElement>) => {
-    navigate('/register');
+    navigate('/auth/register');
     onCloseModal(e);
     setEmail('');
     setPw('');

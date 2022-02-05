@@ -16,6 +16,28 @@ export const s3 = new S3({
   secretAccessKey,
 });
 
+export const chatUpload = multer({
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
+      return cb(null, true);
+    } else {
+      logger.error('유효한 이미지파일 확장자가 아닙니다.');
+      return cb(null, false);
+    }
+  },
+  storage: multerS3({
+    s3,
+    acl: 'public-read-write',
+    bucket: bucketName,
+    key: (req, file, cb) => {
+      cb(null, `chat/${v4()}.${mime.extension(file.mimetype)}`);
+    },
+  }),
+  limits: {
+    fileSize: 1024 * 1024 * 5,
+  },
+});
+
 export const avatarUpload = multer({
   fileFilter: (req, file, cb) => {
     if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {

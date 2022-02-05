@@ -5,6 +5,8 @@ export type UserType = {
   pw?: string;
   bank: string;
   accountNumber: string;
+  avatar: string;
+  level: number;
   emailToken?: string | null;
   pwToken?: string;
   isVerified: boolean;

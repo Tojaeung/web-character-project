@@ -4,8 +4,8 @@ import {
   loginReturnType,
   loginParamType,
   loginErrorType,
-  refreshTokenReturnType,
-  refreshTokenErrorType,
+  refreshLoginReturnType,
+  refreshLoginErrorType,
   logoutReturnType,
   logoutErrorType,
 } from '../types/auth.type';
@@ -17,7 +17,7 @@ export const loginUser = createAsyncThunk<
   { state: RootState; rejectValue: loginErrorType }
 >('LOGIN', async (data, thunkApi) => {
   try {
-    const res = await axios.post('/api/login', data, {
+    const res = await axios.post('/api/auth/login', data, {
       withCredentials: true,
     });
     return res.data;
@@ -30,7 +30,7 @@ export const logoutUser = createAsyncThunk<logoutReturnType, void, { state: Root
   'LOGOUT',
   async (_, thunkApi) => {
     try {
-      const res = await axios.get('/api/logout', {
+      const res = await axios.get('/api/auth/logout', {
         withCredentials: true,
       });
       return res.data;
@@ -40,13 +40,13 @@ export const logoutUser = createAsyncThunk<logoutReturnType, void, { state: Root
   }
 );
 
-export const refreshToken = createAsyncThunk<
-  refreshTokenReturnType,
+export const refreshLogin = createAsyncThunk<
+  refreshLoginReturnType,
   void,
-  { state: RootState; rejectValue: refreshTokenErrorType }
->('REFRESH_TOKEN', async (_, thunkApi) => {
+  { state: RootState; rejectValue: refreshLoginErrorType }
+>('REFRESH_LOGIN', async (_, thunkApi) => {
   try {
-    const res = await axios.get('/api/refreshToken', {
+    const res = await axios.get('/api/auth/login', {
       withCredentials: true,
     });
     return res.data;

@@ -1,29 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BsChatLeftText } from 'react-icons/bs';
-import { AiOutlineClose } from 'react-icons/ai';
 import { Container } from '@src/components/header/Chat.styled';
+import ChatModal from '@src/components/modals/chat/Chat.modal';
+// import socket from '@src/utils/socket';
+import { useAppSelector } from '@src/redux/app/hook';
+import { selectMsgNotis } from '@src/redux/slices/msgNoti.slice';
 
 function Chat() {
+  // 확인 안한 메세지 알림 수
+  const msgNotis = useAppSelector(selectMsgNotis);
+  const [totalMsgNotiNum, setTotalMsgNotiNum] = useState<number>();
+
+  useEffect(() => {
+    const totalMsgNotiNum = msgNotis.length;
+    setTotalMsgNotiNum(totalMsgNotiNum);
+  }, [msgNotis]);
+
+  // 메세지 모달 열기, 닫기
   const [openChat, setOpenChat] = useState(false);
 
+  useEffect(() => {
+    const chatModalStatus = localStorage.getItem('chat');
+    if (!chatModalStatus) return;
+    setOpenChat(true);
+  }, []);
+
+  const onChatModal = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!openChat) {
+      localStorage.setItem('chat', 'on');
+      setOpenChat(true);
+      // socket.connect();
+      return;
+    }
+    localStorage.removeItem('chat');
+    setOpenChat(false);
+    // socket.disconnect();
+  };
+
   return (
-    <Container openChat={openChat}>
-      <div className="chat" onClick={(e) => setOpenChat(!openChat)}>
-        <BsChatLeftText className="chat__icon" />
-      </div>
-      {openChat && (
-        <div className="chatBot">
-          <div className="chatBot__list"></div>
-          <div className="chatBot__wrapper">
-            <div className="chatBot__title">
-              <span className="chatBot__title-nickname">채팅시작</span>
-              <AiOutlineClose className="chatBot__title-closeBtn" onClick={(e) => setOpenChat(!openChat)} />
-            </div>
-            <div className="chatBot__talk"></div>
+    <>
+      <Container openChat={openChat} onClick={onChatModal}>
+        {totalMsgNotiNum === 0 ? null : (
+          <div className="noti">
+            <span className="noti-number">{totalMsgNotiNum}</span>
           </div>
-        </div>
-      )}
-    </Container>
+        )}
+
+        <BsChatLeftText className="chat-icon" />
+      </Container>
+      <ChatModal openChat={openChat} setOpenChat={setOpenChat} />
+    </>
   );
 }
 

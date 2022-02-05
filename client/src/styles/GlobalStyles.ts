@@ -59,7 +59,6 @@ export const greenInputStyle = css`
   height: 4rem;
   font-size: 1.4rem;
   outline: none;
-
   border: 2px solid ${({ theme }) => theme.palette.gray2};
   &:focus {
     border: 2px solid ${({ theme }) => theme.palette.green};

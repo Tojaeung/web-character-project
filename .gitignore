@@ -1,3 +1,9 @@
 node_modules
-.env
 logs
+.env
+# testing
+coverage
+
+# production
+build
+

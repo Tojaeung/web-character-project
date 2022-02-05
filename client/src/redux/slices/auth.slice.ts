@@ -1,16 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import { UserType } from '../types/user.type';
-import { loginUser, logoutUser, refreshToken } from '../requests/auth.request';
+import { loginUser, logoutUser, refreshLogin } from '../requests/auth.request';
 
 interface AuthType {
-  token: string | undefined;
+  ok: boolean | undefined;
   message: string | undefined;
   user: UserType | undefined;
 }
 
 const initialState: AuthType = {
-  token: undefined,
+  ok: undefined,
   user: undefined,
   message: undefined,
 };
@@ -21,34 +21,34 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(loginUser.fulfilled, (state, { payload }) => {
-      state.token = payload.token;
+      state.ok = payload.ok;
       state.message = payload.message;
       state.user = payload.user;
     });
     builder.addCase(loginUser.rejected, (state, { payload }) => {
-      state.token = undefined;
+      state.ok = undefined;
       state.message = payload?.message;
       state.user = undefined;
     });
 
     builder.addCase(logoutUser.fulfilled, (state, { payload }) => {
-      state.token = undefined;
+      state.ok = undefined;
       state.message = payload.message;
       state.user = undefined;
     });
     builder.addCase(logoutUser.rejected, (state, { payload }) => {
-      state.token = undefined;
+      state.ok = undefined;
       state.message = payload?.message;
       state.user = undefined;
     });
 
-    builder.addCase(refreshToken.fulfilled, (state, { payload }) => {
-      state.token = payload.token;
+    builder.addCase(refreshLogin.fulfilled, (state, { payload }) => {
+      state.ok = payload.ok;
       state.message = payload.message;
       state.user = payload.user;
     });
-    builder.addCase(refreshToken.rejected, (state, { payload }) => {
-      state.token = undefined;
+    builder.addCase(refreshLogin.rejected, (state, { payload }) => {
+      state.ok = undefined;
       state.message = payload?.message;
       state.user = undefined;
     });
@@ -56,7 +56,7 @@ export const authSlice = createSlice({
 });
 
 // export const {  } = authSlice.actions;
-export const selectAuthToken = (state: RootState) => state.auth.token;
+export const selectAuthOk = (state: RootState) => state.auth.ok;
 export const selectAuthMessage = (state: RootState) => state.auth.message;
 export const selectAuthUser = (state: RootState) => state.auth.user;
 

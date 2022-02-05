@@ -9,11 +9,11 @@ import Search from './Search';
 import Menu from './Menu';
 import { Container } from '@src/components/header/Header.styled';
 import { useAppSelector } from '@src/redux/app/hook';
-import { selectAuthToken } from '@src/redux/slices/auth.slice';
+import { selectAuthUser } from '@src/redux/slices/auth.slice';
 
 function Header() {
   const navigate = useNavigate();
-  const token = useAppSelector(selectAuthToken);
+  const user = useAppSelector(selectAuthUser);
 
   const [openMoal, setOpenModal] = useState<boolean>(false);
 
@@ -23,7 +23,7 @@ function Header() {
       <Menu />
       <Search />
       <div className="right">
-        {token ? (
+        {user ? (
           <div className="right__tools">
             <Chat />
             <Alert />
@@ -34,7 +34,7 @@ function Header() {
             <button className="right__login-btn" onClick={() => setOpenModal(true)}>
               로그인
             </button>
-            <button className="right__register-btn" onClick={() => navigate('/register')}>
+            <button className="right__register-btn" onClick={() => navigate('/auth/register')}>
               회원가입
             </button>
           </div>

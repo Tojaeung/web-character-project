@@ -8,6 +8,6 @@ export type UserType = {
   level: number;
   accountNumber: string;
   emailToken: string | null;
-  pwToken: string;
+  pwToken?: string;
   isVerified: boolean;
 };

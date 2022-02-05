@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { Container } from '@src/pages/FindPw.styled';
+import { Container } from '@src/pages/auth/FindPw.styled';
 
 interface IFormInputType {
   email: string;
@@ -17,7 +17,7 @@ function FindPw() {
   } = useForm<IFormInputType>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<IFormInputType> = async (data) => {
-    const response = await axios.post('/api/findPw', data);
+    const response = await axios.post('/api/auth/findPw', data);
     const { ok, message } = response.data;
     if (ok) {
       alert(message);
