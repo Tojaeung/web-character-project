@@ -8,11 +8,17 @@ import { messageDate } from '@src/utils/date';
 import { selectAuthUser } from '@src/redux/slices/auth.slice';
 import { useAppSelector } from '@src/redux/app/hook';
 
-interface IProp {
-  chatNickname: string | null | undefined;
+interface ChatType {
+  id: string;
+  nickname: string;
+  avatar: string;
 }
 
-function ChatFooter({ chatNickname }: IProp) {
+interface IProp {
+  chat: ChatType | null | undefined;
+}
+
+function ChatFooter({ chat }: IProp) {
   const user = useAppSelector(selectAuthUser);
   const inputRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState<string | undefined>(undefined);
@@ -21,8 +27,8 @@ function ChatFooter({ chatNickname }: IProp) {
   const onSendTextMsg = (e: any) => {
     const textMsgObj = {
       type: 'text',
-      to: chatNickname,
-      from: user?.nickname,
+      to: chat?.id,
+      from: user?.id,
       content: message,
       date: messageDate(),
     };
@@ -35,23 +41,23 @@ function ChatFooter({ chatNickname }: IProp) {
     }
 
     socket.emit('addMessage', textMsgObj);
-    socket.emit('addMsgNoti', { from: user?.nickname, to: chatNickname });
-    socket.emit('deleteMsgNoti', { from: chatNickname });
+    socket.emit('addMsgNoti', { from: user?.id, to: chat?.id });
+    socket.emit('deleteMsgNoti', chat?.id);
     setMessage('');
   };
 
   // 이미지 메세지
   const onSendImgMsg = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target?.files) return;
-    if (chatNickname === '') {
+    if (!chat) {
       alert('대화상대를 찾을 수 없습니다.');
       return;
     }
 
     const formData = new FormData();
     formData.append('imgMessage', e.target?.files[0]);
-    formData.append('chatNickname', chatNickname as string);
-    formData.append('userNickname', user?.nickname as string);
+    formData.append('chatId', chat?.id);
+    formData.append('userId', user?.id as string);
     formData.append('messageDate', messageDate());
     const response = await axios.post('/api/chat/imgMessage', formData, { withCredentials: true });
     const { ok, imgMsgObj } = response.data;

@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import socket from '@src/utils/socket';
 import { useAppDispatch } from '@src/redux/app/hook';
 import { logoutUser } from '@src/redux/requests/auth.request';
-import { addChat, initChatList } from '@src/redux/slices/chat.slice';
-import { initMessageList, addMessage } from '@src/redux/slices/message.slice';
+import { addChat, initChats } from '@src/redux/slices/chat.slice';
+import { initMessages, addMessage } from '@src/redux/slices/message.slice';
 import { initMsgNotis, addMsgNoti } from '@src/redux/slices/msgNoti.slice';
 
 export const useSocketSetup = () => {
@@ -12,20 +12,20 @@ export const useSocketSetup = () => {
   useEffect(() => {
     socket.connect();
 
-    socket.on('initChatList', async (parsedChatList) => {
-      if (!parsedChatList) {
-        await dispatch(initChatList({ newChatList: [] }));
+    socket.on('initChats', async (parsedChats) => {
+      if (!parsedChats) {
+        await dispatch(initChats({ newChats: [] }));
         return;
       }
-      await dispatch(initChatList({ newChatList: parsedChatList }));
+      await dispatch(initChats({ newChats: parsedChats }));
     });
 
-    socket.on('initMessageList', async (parsedMessageList) => {
-      if (!parsedMessageList) {
-        await dispatch(initMessageList({ newMessageList: [] }));
+    socket.on('initMessages', async (parsedMessages) => {
+      if (!parsedMessages) {
+        await dispatch(initMessages({ newMessages: [] }));
         return;
       }
-      await dispatch(initMessageList({ newMessageList: parsedMessageList }));
+      await dispatch(initMessages({ newMessages: parsedMessages }));
     });
 
     socket.on('initMsgNotis', async (parsedMsgNotis) => {
@@ -40,12 +40,12 @@ export const useSocketSetup = () => {
       await dispatch(addChat({ newChat }));
     });
 
-    socket.on('addMessage', async (msgObj) => {
-      await dispatch(addMessage({ newMessage: msgObj }));
+    socket.on('addMessage', async (newMessage) => {
+      await dispatch(addMessage({ newMessage: newMessage }));
     });
 
-    socket.on('addMsgNoti', async (msgNoti) => {
-      await dispatch(addMsgNoti({ newMsgNoti: msgNoti }));
+    socket.on('addMsgNoti', async (newMsgNoti) => {
+      await dispatch(addMsgNoti({ newMsgNoti: newMsgNoti }));
     });
 
     socket.on('connect_error', async () => {

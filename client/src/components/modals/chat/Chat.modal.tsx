@@ -12,11 +12,17 @@ interface IProps {
   setOpenChat: (e: any) => void;
 }
 
+interface ChatType {
+  id: string;
+  nickname: string;
+  avatar: string;
+}
+
 function ChatModal({ openChat, setOpenChat }: IProps) {
-  const [chatNickname, setChatNickname] = useState<string | null | undefined>(undefined);
+  const [chat, setChat] = useState<ChatType | null | undefined>(undefined);
   useEffect(() => {
-    const chatNickname1 = localStorage.getItem('chatNickname');
-    setChatNickname(chatNickname1);
+    const chatObj = JSON.parse(localStorage.getItem('chatUser') as string);
+    setChat(chatObj);
   }, []);
 
   const onClose = (e: React.MouseEvent<SVGElement>) => {
@@ -29,21 +35,21 @@ function ChatModal({ openChat, setOpenChat }: IProps) {
   return createPortal(
     <S.Container>
       <S.ListWrapper>
-        <ChatList setChatNickname={setChatNickname} />
+        <ChatList setChat={setChat} />
       </S.ListWrapper>
 
       <S.WindowWrapper>
         <S.Header>
-          <span>{chatNickname ? `${chatNickname}님과 대화 중...💬` : '왼쪽 대화 상대를 클릭하세요!!📢'}</span>
+          <span>{chat ? `${chat.nickname}님과 대화 중...💬` : '왼쪽 대화 상대를 클릭하세요!!📢'}</span>
           <AiOutlineClose className="closeIcon" onClick={onClose} />
         </S.Header>
 
         <S.Body>
-          <ChatBody chatNickname={chatNickname} />
+          <ChatBody chat={chat} />
         </S.Body>
 
         <S.Footer>
-          <ChatFooter chatNickname={chatNickname} />
+          <ChatFooter chat={chat} />
         </S.Footer>
       </S.WindowWrapper>
     </S.Container>,

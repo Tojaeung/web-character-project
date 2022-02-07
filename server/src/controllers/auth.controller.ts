@@ -62,7 +62,7 @@ const authController = {
       const { email, pw } = req.body;
 
       // 유효한 email인지 확인하기 위해 email를 조회합니다.
-      const checkedUser = (await User.findOne({ email })) as UserType;
+      const checkedUser = await User.findOne({ email });
       if (!checkedUser) {
         logger.info('회원 이메일이 존재하지 않습니다.');
         return res.status(200).json({ ok: false, message: '아이디 또는 비밀번호가 올바르지 않습니다.' });
@@ -79,7 +79,7 @@ const authController = {
       if (!checkedUser.isVerified) {
         await sendRegisterEmail(req, res, checkedUser.email, checkedUser.emailToken as string);
         logger.info('이메일 인증을 받지 않은 회원입니다.');
-        return res.status(200).json({ ok: false, message: '인증되지 않은 사용자 입니다.' });
+        return res.status(200).json({ ok: false, message: '인증되지 않은 사용자 입니다. 이메일 인증을 확인해주세요' });
       }
 
       req.session.user = {
@@ -90,6 +90,7 @@ const authController = {
         accountNumber: checkedUser.accountNumber,
         emailToken: checkedUser.emailToken,
         avatar: checkedUser.avatar,
+        avatarKey: checkedUser.avatarKey,
         level: checkedUser.level,
         isVerified: checkedUser.isVerified,
       };
@@ -126,6 +127,7 @@ const authController = {
   // refresh시 다시 유저정보를 보내주는 API입니다.
   refreshLogin: async (req: Request, res: Response) => {
     const user = req.session.user;
+
     return res.status(200).json({ ok: true, message: '로그인 정보가 갱신되었습니다.', user });
   },
 

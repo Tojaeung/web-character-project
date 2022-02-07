@@ -1,22 +1,22 @@
 import { SessionSocket } from '@src/types/index';
 import redisClient from '@src/helpers/redis.helper';
-import parseChatList from './parseChatList';
-import parseMessageList from './parseMessageList';
+import parseChats from './parseChats';
+import parseMessages from './parseMessages';
 import parseMsgNotis from './parseMsgNotis';
 
 const initUser = async (socket: SessionSocket) => {
   const user = socket.request.session.user;
 
   // 자신의 chatList를 업데이트 시킨다.
-  const chatList = await redisClient.lrange(`chats:${user.nickname}`, 0, -1);
-  const parsedChatList = await parseChatList(chatList);
-  socket.emit('initChatList', parsedChatList);
+  const chats = await redisClient.lrange(`chats:${user.id}`, 0, -1);
+  const parsedChats = await parseChats(chats);
+  socket.emit('initChats', parsedChats);
 
-  const msgList = await redisClient.lrange(`messages:${user.nickname}`, 0, -1);
-  const parsedMessageList = await parseMessageList(msgList);
-  socket.emit('initMessageList', parsedMessageList);
+  const messages = await redisClient.lrange(`messages:${user.id}`, 0, -1);
+  const parsedMessages = await parseMessages(messages);
+  socket.emit('initMessages', parsedMessages);
 
-  const msgNotis = await redisClient.lrange(`msgNotis:${user.nickname}`, 0, -1);
+  const msgNotis = await redisClient.lrange(`msgNotis:${user.id}`, 0, -1);
   const parsedMsgNotis = await parseMsgNotis(msgNotis);
   socket.emit('initMsgNotis', parsedMsgNotis);
 };

@@ -2,8 +2,8 @@ import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, U
 
 @Entity('user')
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({
     unique: true,
@@ -25,10 +25,14 @@ export class User extends BaseEntity {
   accountNumber: string;
 
   @Column({
-    default:
-      'https://character-project.s3.ap-southeast-1.amazonaws.com/avatar/b6d32a4f-2cb1-4bda-b3a1-be1664b66686.png',
+    default: 'https://character.s3.ap-northeast-2.amazonaws.com/avatar/default-avatar.png',
   })
   avatar: string;
+
+  @Column({
+    default: 'default-avatar.png',
+  })
+  avatarKey: string;
 
   @Column({ default: 1 })
   level: number;

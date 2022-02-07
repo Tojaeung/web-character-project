@@ -27,7 +27,7 @@ export const chatUpload = multer({
   },
   storage: multerS3({
     s3,
-    acl: 'public-read-write',
+    acl: 'public-read',
     bucket: bucketName,
     key: (req, file, cb) => {
       cb(null, `chat/${v4()}.${mime.extension(file.mimetype)}`);
@@ -49,7 +49,7 @@ export const avatarUpload = multer({
   },
   storage: multerS3({
     s3,
-    acl: 'public-read-write',
+    acl: 'public-read',
     bucket: bucketName,
     key: (req, file, cb) => {
       cb(null, `avatar/${v4()}.${mime.extension(file.mimetype)}`);

@@ -1,30 +1,30 @@
 import { Container } from './ChatList.styled';
 import { v4 } from 'uuid';
 import { useAppSelector } from '@src/redux/app/hook';
-import { selectChatList } from '@src/redux/slices/chat.slice';
+import { selectChats } from '@src/redux/slices/chat.slice';
 import { selectMsgNotis } from '@src/redux/slices/msgNoti.slice';
 
 interface IProp {
-  setChatNickname: (e: any) => void;
+  setChat: (e: any) => void;
 }
 
-function ChatList({ setChatNickname }: IProp) {
-  const chatList = useAppSelector(selectChatList);
+function ChatList({ setChat }: IProp) {
+  const chats = useAppSelector(selectChats);
   const msgNotis = useAppSelector(selectMsgNotis);
 
   return (
     <Container>
-      {chatList.length > 0 &&
-        chatList.map((chat) => {
-          const msgNotiNum = msgNotis.filter((msgNoti) => msgNoti.from === chat.nickname).length;
+      {chats.length > 0 &&
+        chats.map((chat) => {
+          const msgNotiNum = msgNotis.filter((msgNoti) => msgNoti.from === chat.id).length;
 
           return (
             <div
               className="wrapper"
               key={v4()}
               onClick={(e) => {
-                setChatNickname(chat.nickname);
-                localStorage.setItem('chatNickname', chat.nickname);
+                setChat(chat);
+                localStorage.setItem('chatUser', JSON.stringify(chat));
               }}
             >
               {msgNotiNum === 0 ? null : (

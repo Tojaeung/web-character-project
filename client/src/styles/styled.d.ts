@@ -20,7 +20,8 @@ declare module 'styled-components' {
       gray5: string;
       gray6: string;
       gray7: string;
-      pink: string;
+      pink1: string;
+      pink2: string;
       black: string;
       yellow1: string;
       yellow2: string;

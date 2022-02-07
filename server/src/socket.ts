@@ -5,6 +5,7 @@ import addChat from '@src/socketio/addChat';
 import addMessage from '@src/socketio/addMessage';
 import addMsgNoti from '@src/socketio/addMsgNoti';
 import deleteMsgNoti from '@src/socketio/deleteMsgNoti';
+import deleteUser from '@src/socketio/deleteUser';
 import onDisconnect from '@src/socketio/onDisconnect';
 
 const socket = ({ io }: { io: Server }) => {
@@ -28,6 +29,10 @@ const socket = ({ io }: { io: Server }) => {
 
     socket.on('deleteMsgNoti', (obj) => {
       deleteMsgNoti(socket, obj);
+    });
+
+    socket.on('deleteUser', () => {
+      deleteUser(socket);
     });
 
     socket.on('disconnect', () => {

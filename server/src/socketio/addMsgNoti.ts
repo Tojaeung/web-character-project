@@ -13,7 +13,12 @@ const addMsgNoti = async (socket: SessionSocket, msgNoti: MsgNotiType) => {
 
   await redisClient.lpush(`msgNotis:${msgNoti.to}`, msgNotiStr);
 
-  socket.to(msgNoti.to).emit('addMsgNoti', msgNoti);
+  const newMsgNoti = {
+    from: msgNoti.from,
+    to: msgNoti.to,
+  };
+
+  socket.to(msgNoti.to).emit('addMsgNoti', newMsgNoti);
 };
 
 export default addMsgNoti;

@@ -30,10 +30,7 @@ function LoginModal({ openModal, closeModal }: IProps) {
     const data = { email, pw };
     const response = await dispatch(loginUser(data)).unwrap();
     const { ok, message } = response;
-    if (!ok) {
-      alert(message);
-      return;
-    }
+    if (!ok) return alert(message);
     onCloseModal(e);
     navigate(0);
   };

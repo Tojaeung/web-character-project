@@ -2,28 +2,28 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 
 interface ChatType {
-  chatList: { nickname: string; avatar: string; connected: string }[];
+  chats: { id: string; nickname: string; avatar: string }[];
 }
 
 const initialState: ChatType = {
-  chatList: [],
+  chats: [],
 };
 
 export const chatSlice = createSlice({
   name: 'chat',
   initialState,
   reducers: {
-    initChatList: (state, action) => {
-      state.chatList = action.payload.newChatList;
+    initChats: (state, action) => {
+      state.chats = action.payload.newChats;
     },
     addChat: (state, action) => {
-      state.chatList.unshift(action.payload.newChat);
+      state.chats.unshift(action.payload.newChat);
     },
   },
   extraReducers: {},
 });
 
-export const { initChatList, addChat } = chatSlice.actions;
-export const selectChatList = (state: RootState) => state.chat.chatList;
+export const { initChats, addChat } = chatSlice.actions;
+export const selectChats = (state: RootState) => state.chat.chats;
 
 export default chatSlice.reducer;

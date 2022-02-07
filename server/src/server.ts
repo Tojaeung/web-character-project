@@ -20,6 +20,7 @@ import socket from './socket';
 
 import authRouter from '@src/routes/auth.route';
 import chatRouter from '@src/routes/chat.route';
+import settingsRouter from '@src/routes/settings.route';
 
 const app: Application = express();
 const http = createServer(app);
@@ -46,6 +47,7 @@ io.use((defaultSocket: Socket, next: any) => authorizeUser(defaultSocket, next))
 // Routes
 app.use('/api', authRouter);
 app.use('/api', chatRouter);
+app.use('/api', settingsRouter);
 
 // Server & DB listening
 const port = process.env.PORT as string;
@@ -60,17 +62,3 @@ http.listen(port, async () => {
     });
   await socket({ io });
 });
-
-// app.post('/', avatarUpload.single('avatar'), async (req: Request, res: Response) => {
-//  const imgUrl = (req.file as Express.MulterS3.File).location;
-// });
-
-// app.delete('/', async (req: Request, res: Response) => {
-//   const response = await s3
-//     .deleteObject({
-//       Bucket: 'character-project',
-//       Key: 'avatar/34c719df-10e5-4af5-8de0-4940e3df49ca.jpeg',
-//     })
-//     .promise();
-//   console.log(response);
-// });

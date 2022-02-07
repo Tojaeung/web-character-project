@@ -5,7 +5,6 @@ export const Container = styled.div`
   width: 70rem;
   border-bottom: 1px solid;
   padding: 2rem;
-
   .title-wrapper {
     display: flex;
     align-items: center;
@@ -16,13 +15,13 @@ export const Container = styled.div`
     font-size: 2rem;
   }
 
-  .subtitle {
+  .subTitle {
     font-size: 1.2rem;
     color: ${({ theme }) => theme.palette.red};
   }
   .form {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
   }
   .input {
     ${greenInputStyle};
