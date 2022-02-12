@@ -17,48 +17,83 @@ export const Container = styled.div`
   ::-webkit-scrollbar-thumb:hover {
     background-color: ${({ theme }) => theme.palette.gray5};
   }
-`;
-export const Message = styled.div<{ kinds: string }>`
-  width: 100%;
-  padding: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: ${({ kinds }) => (kinds === 'sent' ? 'flex-end' : 'flex-start')};
-  background-color: ${({ kinds }) => (kinds === 'sent' ? 'red' : 'blue')};
-  border-radius: 10px;
-  margin-bottom: 1rem;
-`;
 
-export const Header = styled.div<{ kinds: string }>`
-  width: 100%;
-  display: flex;
-  padding: 0.3rem;
-  align-items: center;
-  justify-content: ${({ kinds }) => (kinds === 'sent' ? 'flex-end' : 'flex-start')};
-
-  > div.time {
-    margin-right: ${({ kinds }) => (kinds === 'sent' ? '0.5rem' : '0rem')};
+  .sent-wrapper {
+    width: 100%;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    background-color: ${({ theme }) => theme.palette.white};
+    border: 1px solid ${({ theme }) => theme.palette.gray3};
+    border-radius: 10px;
+    margin-bottom: 1rem;
   }
 
-  > div.from {
+  .received-wrapper {
+    width: 100%;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: ${({ theme }) => theme.palette.white};
+    border: 1px solid ${({ theme }) => theme.palette.gray3};
+    border-radius: 10px;
+    margin-bottom: 1rem;
+  }
+
+  .sent-header {
+    width: 100%;
+    display: flex;
+    padding: 0.3rem;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .received-header {
+    width: 100%;
+    display: flex;
+    padding: 0.3rem;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .sent-time {
+    margin-right: 0.5rem;
+    color: ${({ theme }) => theme.palette.gray5};
+  }
+  .sent-from {
     font-size: 1.2rem;
     font-weight: 700;
-    margin-right: ${({ kinds }) => (kinds === 'sent' ? '0rem' : '0.5rem')};
   }
-`;
-
-export const Body = styled.div<{ kinds: string }>`
-  width: 100%;
-  padding: 1rem;
-  display: flex;
-  justify-content: ${({ kinds }) => (kinds === 'sent' ? 'flex-end' : 'flex-start')};
-
-  > div {
+  .received-from {
+    margin-right: 0.5rem;
     font-size: 1.2rem;
+    font-weight: 700;
+  }
+  .received-time {
+    color: ${({ theme }) => theme.palette.gray5};
   }
 
-  > img {
+  .sent-body {
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .received-body {
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    justify-content: flex-start;
+  }
+  .textMessage {
+    font-size: 1.2rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .imgMessage {
     width: 50%;
   }
 `;

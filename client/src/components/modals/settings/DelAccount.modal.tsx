@@ -1,23 +1,18 @@
 import React, { useState } from 'react';
-import { createPortal } from 'react-dom';
 import { Container } from './DelAccount.modal.styled';
 import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai';
 import axios from 'axios';
 import socket from '@src/utils/socket';
 import { logoutUser } from '@src/redux/requests/auth.request';
 import { useAppDispatch } from '@src/redux/app/hook';
+import { closeModal } from '@src/redux/slices/modal.slice';
 
-interface IProp {
-  openDelAccountModal: boolean;
-  setOpenDelAccountModal: (e: any) => void;
-}
-
-function DelAccountModal({ openDelAccountModal, setOpenDelAccountModal }: IProp) {
+function DelAccountModal() {
   const dispatch = useAppDispatch();
   const [confirmText, setConfirmText] = useState('');
 
-  const onCloseModal = (e: any) => {
-    setOpenDelAccountModal(false);
+  const onCloseModal = async (e: any) => {
+    await dispatch(closeModal());
     setConfirmText('');
   };
 
@@ -30,10 +25,8 @@ function DelAccountModal({ openDelAccountModal, setOpenDelAccountModal }: IProp)
     await dispatch(logoutUser());
   };
 
-  if (!openDelAccountModal) return null;
-  return createPortal(
+  return (
     <Container confirmText={confirmText}>
-      <div className="background" onClick={onCloseModal} />
       <div className="delAccount">
         <AiOutlineClose className="closeBtn" onClick={onCloseModal} />
         <div className="title">정말 탈퇴하시겠습니까?</div>
@@ -55,8 +48,7 @@ function DelAccountModal({ openDelAccountModal, setOpenDelAccountModal }: IProp)
           계정탈퇴
         </button>
       </div>
-    </Container>,
-    document.getElementById('portal') as HTMLElement
+    </Container>
   );
 }
 

@@ -6,7 +6,8 @@ import addMessage from '@src/socketio/addMessage';
 import addMsgNoti from '@src/socketio/addMsgNoti';
 import deleteMsgNoti from '@src/socketio/deleteMsgNoti';
 import deleteUser from '@src/socketio/deleteUser';
-import onDisconnect from '@src/socketio/onDisconnect';
+import deleteChat from '@src/socketio/deleteChat';
+import deleteMessage from '@src/socketio/deleteMessage';
 
 const socket = ({ io }: { io: Server }) => {
   io.on('connect', async (defaultSocket: Socket) => {
@@ -15,21 +16,32 @@ const socket = ({ io }: { io: Server }) => {
 
     initUser(socket);
 
-    socket.on('addChat', (chatNickname, cb) => {
-      addChat(socket, chatNickname, cb);
+    socket.on('addChat', (chatId) => {
+      addChat(socket, chatId);
     });
 
-    socket.on('addMessage', (msgObj, cb) => {
-      addMessage(socket, msgObj, cb);
+    socket.on('addMessage', (msgObj) => {
+      addMessage(socket, msgObj);
     });
 
     socket.on('addMsgNoti', (msgNoti) => {
       addMsgNoti(socket, msgNoti);
     });
 
-    socket.on('deleteMsgNoti', (obj) => {
-      deleteMsgNoti(socket, obj);
+    socket.on('deleteMsgNoti', (chatId) => {
+      deleteMsgNoti(socket, chatId);
     });
+
+    socket.on('deleteChat', (chatId) => {
+      deleteChat(socket, chatId);
+    });
+
+    socket.on('deleteMessage', (chatId) => {
+      deleteMessage(socket, chatId);
+    });
+    // socket.on('deleteMsgNoti', (chatId) => {
+    //   deleteChat(socket, chatId);
+    // });
 
     socket.on('deleteUser', () => {
       deleteUser(socket);
@@ -37,7 +49,6 @@ const socket = ({ io }: { io: Server }) => {
 
     socket.on('disconnect', () => {
       console.log('nickname', `${socket.request.session.user.nickname}님 퇴장`);
-      onDisconnect(socket);
     });
   });
 };

@@ -26,18 +26,18 @@ export const authSlice = createSlice({
       state.user = payload.user;
     });
     builder.addCase(loginUser.rejected, (state, { payload }) => {
-      state.ok = undefined;
+      state.ok = payload?.ok;
       state.message = payload?.message;
       state.user = undefined;
     });
 
     builder.addCase(logoutUser.fulfilled, (state, { payload }) => {
-      state.ok = undefined;
+      state.ok = payload.ok;
       state.message = payload.message;
       state.user = undefined;
     });
     builder.addCase(logoutUser.rejected, (state, { payload }) => {
-      state.ok = undefined;
+      state.ok = payload?.ok;
       state.message = payload?.message;
       state.user = undefined;
     });
@@ -48,7 +48,7 @@ export const authSlice = createSlice({
       state.user = payload.user;
     });
     builder.addCase(refreshLogin.rejected, (state, { payload }) => {
-      state.ok = undefined;
+      state.ok = payload?.ok;
       state.message = payload?.message;
       state.user = undefined;
     });

@@ -52,7 +52,7 @@ const authController = {
       return res.status(200).json({ ok: true, message: '회원가입 되었습니다.' });
     } catch (err: any) {
       logger.error('회원가입 에러: ', err);
-      return res.status(500).json({ message: '회원가입 에러' });
+      return res.status(500).json({ ok: false, message: '회원가입 에러' });
     }
   },
 
@@ -82,18 +82,10 @@ const authController = {
         return res.status(200).json({ ok: false, message: '인증되지 않은 사용자 입니다. 이메일 인증을 확인해주세요' });
       }
 
-      req.session.user = {
-        id: checkedUser.id,
-        email: checkedUser.email,
-        nickname: checkedUser.nickname,
-        bank: checkedUser.bank,
-        accountNumber: checkedUser.accountNumber,
-        emailToken: checkedUser.emailToken,
-        avatar: checkedUser.avatar,
-        avatarKey: checkedUser.avatarKey,
-        level: checkedUser.level,
-        isVerified: checkedUser.isVerified,
-      };
+      delete checkedUser.pw;
+      delete checkedUser.pwToken;
+
+      req.session.user = checkedUser;
 
       const user = req.session.user;
 
@@ -103,7 +95,7 @@ const authController = {
       console.log(err);
 
       logger.error('로그인 에러:', err);
-      return res.status(500).json({ message: '로그인 에러' });
+      return res.status(500).json({ ok: false, message: '로그인 에러' });
     }
   },
 
@@ -113,22 +105,26 @@ const authController = {
       req.session.destroy((err: any) => {
         if (err) {
           logger.warn('로그아웃시 세션제거 과정 중 에러 발생');
-          return res.status(400).json({ message: '로그아웃이 되지 않습니다.' });
+          return res.status(400).json({ ok: false, message: '로그아웃이 되지 않습니다.' });
         }
       });
       logger.info('로그아웃 되었습니다.');
       return res.status(200).clearCookie('sid').json({ ok: true, message: '로그아웃 되었습니다.' });
     } catch (err: any) {
       logger.error('로그아웃 에러:', err);
-      return res.status(500).json({ message: '로그아웃 에러' });
+      return res.status(500).json({ ok: false, message: '로그아웃 에러' });
     }
   },
 
   // refresh시 다시 유저정보를 보내주는 API입니다.
   refreshLogin: async (req: Request, res: Response) => {
-    const user = req.session.user;
-
-    return res.status(200).json({ ok: true, message: '로그인 정보가 갱신되었습니다.', user });
+    try {
+      const user = req.session.user;
+      return res.status(200).json({ ok: true, message: '로그인 정보가 갱신되었습니다.', user });
+    } catch (err: any) {
+      logger.error('리프레쉬 로그인 에러', err);
+      return res.status(500).json({ ok: false, message: '리프레쉬 로그인 에러' });
+    }
   },
 
   // 이메일 인증을 위한 API입니다.
@@ -140,7 +136,7 @@ const authController = {
 
       if (!user) {
         logger.warn('이메일토큰 정보로 회원을 찾을 수 없습니다.');
-        return res.status(400).json({ message: '인증이 실패하였습니다.' });
+        return res.status(400).json({ ok: false, message: '인증이 실패하였습니다.' });
       }
 
       // 이메일토큰이 유효하다면 로그인이 가능 합니다.
@@ -156,7 +152,7 @@ const authController = {
       return res.status(200).redirect(process.env.CLIENT_ADDR as string);
     } catch (err: any) {
       logger.error('이메일 인증확인 에러: ', err);
-      return res.status(500).json({ message: '이메일 인증확인 에러' });
+      return res.status(500).json({ ok: false, message: '이메일 인증확인 에러' });
     }
   },
 
@@ -172,12 +168,12 @@ const authController = {
       }
 
       // 유저가 존재한다면 비밀번호 찾기 인증 메일을 발송합니다.
-      await sendFindEmail(req, res, email, user.pwToken);
+      await sendFindEmail(req, res, email, user?.pwToken as string);
 
       return res.status(200).json({ ok: true, message: '인증 이메일을 발송하였습니다.' });
     } catch (err: any) {
       logger.error('비밀번호 찾기 에러', err);
-      return res.status(500).json({ message: '유효한 이메일 에러' });
+      return res.status(500).json({ ok: false, message: '유효한 이메일 에러' });
     }
   },
 
@@ -200,23 +196,23 @@ const authController = {
       const decryptedPwToken = await bcrypt.compare(user.nickname, pwToken as string);
       if (decryptedPwToken) {
         logger.info('비밀번호 인증확인 성공하였습니다.');
-        return res.status(200).redirect(`${process.env.CLIENT_ADDR}/changePw?pwToken=${pwToken}`);
+        return res.status(200).redirect(`${process.env.CLIENT_ADDR}/auth/editPw?pwToken=${pwToken}`);
       }
     } catch (err: any) {
       logger.error('비밀번호 인증확인 에러: ', err);
-      return res.status(500).json({ message: '비밀번호 인증확인 에러' });
+      return res.status(500).json({ ok: false, message: '비밀번호 인증확인 에러' });
     }
   },
 
   // 비밀번호를 변경하기 위한 API 입니다.
-  changePw: async (req: Request, res: Response) => {
+  editPw: async (req: Request, res: Response) => {
     try {
       const { pw, pwToken } = req.body;
       const user = await User.findOne({ pwToken: pwToken as string });
 
       if (!user) {
         logger.warn('비밀번호 토큰과 일치하는 유저가 없습니다.');
-        return res.status(400).json({ message: '비밀번호 변경 실패하였습니다.' });
+        return res.status(400).json({ ok: false, message: '비밀번호 변경 실패하였습니다.' });
       }
 
       /*
@@ -233,7 +229,7 @@ const authController = {
       return res.status(200).json({ ok: true, message: '비밀번호가 재설정 되었습니다.' });
     } catch (err: any) {
       logger.error('비밀번호 변경 에러: ', err);
-      return res.status(500).json({ message: '비밀번호 변경 에러' });
+      return res.status(500).json({ ok: false, message: '비밀번호 변경 에러' });
     }
   },
 };

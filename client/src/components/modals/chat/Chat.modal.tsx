@@ -1,55 +1,63 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import * as S from './Chat.modal.styled';
 import { AiOutlineClose } from 'react-icons/ai';
+import { ImExit } from 'react-icons/im';
 import ChatList from './ChatList';
 import ChatFooter from './ChatFooter';
 import ChatBody from './ChatBody';
-// import socket from '@src/utils/socket';
+import { isChatUser, selectChats, selectChatUser, selectChatOk, closeChatModal } from '@src/redux/slices/chat.slice';
+import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
+import { openModal } from '@src/redux/slices/modal.slice';
 
-interface IProps {
-  openChat: boolean;
-  setOpenChat: (e: any) => void;
-}
+function ChatModal() {
+  const dispatch = useAppDispatch();
+  const chatOk = useAppSelector(selectChatOk);
+  const chatUser = useAppSelector(selectChatUser);
+  const chats = useAppSelector(selectChats);
 
-interface ChatType {
-  id: string;
-  nickname: string;
-  avatar: string;
-}
-
-function ChatModal({ openChat, setOpenChat }: IProps) {
-  const [chat, setChat] = useState<ChatType | null | undefined>(undefined);
   useEffect(() => {
     const chatObj = JSON.parse(localStorage.getItem('chatUser') as string);
-    setChat(chatObj);
+    if (!chatObj) return;
+    dispatch(isChatUser({ chatUser: chatObj }));
   }, []);
 
-  const onClose = (e: React.MouseEvent<SVGElement>) => {
-    localStorage.removeItem('chat');
-    setOpenChat(false);
-    // socket.disconnect();
+  const onExitChat = async (e: React.MouseEvent<SVGElement>) => {
+    if (!chatUser) return alert('나가고 싶은 채팅방을 선택해주세요.');
+    await dispatch(openModal({ mode: 'exitChat' }));
   };
 
-  if (!openChat) return null;
+  const onClose = async (e: React.MouseEvent<SVGElement>) => {
+    localStorage.removeItem('chat');
+    await dispatch(closeChatModal());
+  };
+
+  if (!chatOk) return null;
   return createPortal(
     <S.Container>
       <S.ListWrapper>
-        <ChatList setChat={setChat} />
+        <ChatList />
       </S.ListWrapper>
 
       <S.WindowWrapper>
         <S.Header>
-          <span>{chat ? `${chat.nickname}님과 대화 중...💬` : '왼쪽 대화 상대를 클릭하세요!!📢'}</span>
-          <AiOutlineClose className="closeIcon" onClick={onClose} />
+          <span>
+            {chats.length === 0 && !chatUser && '채팅상대를 추가해주세요!! 🔍'}
+            {chats.length > 0 && !chatUser && '왼쪽 채팅상대를 클릭하세요!! 📢'}
+            {chats.length > 0 && chatUser && `${chatUser.nickname}님과 채팅 중...💬`}
+          </span>
+          <div>
+            <ImExit className="exitChat-icon" onClick={onExitChat} />
+            <AiOutlineClose className="closeIcon" onClick={onClose} />
+          </div>
         </S.Header>
 
         <S.Body>
-          <ChatBody chat={chat} />
+          <ChatBody />
         </S.Body>
 
         <S.Footer>
-          <ChatFooter chat={chat} />
+          <ChatFooter />
         </S.Footer>
       </S.WindowWrapper>
     </S.Container>,

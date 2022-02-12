@@ -6,20 +6,13 @@ import * as S from './ChatFooter.styled';
 import socket from '@src/utils/socket';
 import { messageDate } from '@src/utils/date';
 import { selectAuthUser } from '@src/redux/slices/auth.slice';
+import { selectChatUser } from '@src/redux/slices/chat.slice';
 import { useAppSelector } from '@src/redux/app/hook';
 
-interface ChatType {
-  id: string;
-  nickname: string;
-  avatar: string;
-}
-
-interface IProp {
-  chat: ChatType | null | undefined;
-}
-
-function ChatFooter({ chat }: IProp) {
+function ChatFooter() {
   const user = useAppSelector(selectAuthUser);
+  const chatUser = useAppSelector(selectChatUser);
+
   const inputRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState<string | undefined>(undefined);
 
@@ -27,7 +20,7 @@ function ChatFooter({ chat }: IProp) {
   const onSendTextMsg = (e: any) => {
     const textMsgObj = {
       type: 'text',
-      to: chat?.id,
+      to: chatUser?.id,
       from: user?.id,
       content: message,
       date: messageDate(),
@@ -41,22 +34,22 @@ function ChatFooter({ chat }: IProp) {
     }
 
     socket.emit('addMessage', textMsgObj);
-    socket.emit('addMsgNoti', { from: user?.id, to: chat?.id });
-    socket.emit('deleteMsgNoti', chat?.id);
+    socket.emit('addMsgNoti', { from: user?.id, to: chatUser?.id });
+    socket.emit('deleteMsgNoti', chatUser?.id);
     setMessage('');
   };
 
   // 이미지 메세지
   const onSendImgMsg = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target?.files) return;
-    if (!chat) {
+    if (!chatUser) {
       alert('대화상대를 찾을 수 없습니다.');
       return;
     }
 
     const formData = new FormData();
     formData.append('imgMessage', e.target?.files[0]);
-    formData.append('chatId', chat?.id);
+    formData.append('chatId', chatUser?.id);
     formData.append('userId', user?.id as string);
     formData.append('messageDate', messageDate());
     const response = await axios.post('/api/chat/imgMessage', formData, { withCredentials: true });

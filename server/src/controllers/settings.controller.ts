@@ -6,7 +6,7 @@ import { sendChangeEmail } from '@src/helpers/nodemailer.helper';
 import { s3 } from '@src/helpers/s3.helper';
 
 const settingsController = {
-  email: async (req: Request, res: Response) => {
+  editEmail: async (req: Request, res: Response) => {
     try {
       const newEmail = req.body.email;
       const currentEmail = req.session.user?.email;
@@ -27,11 +27,11 @@ const settingsController = {
       return res.status(200).json({ ok: true, message: '이메일 인증 메세지를 보냈습니다.' });
     } catch (err: any) {
       logger.error('이메일 변경 에러', err);
-      return res.status(500).json({ message: '이메일 변경 에러' });
+      return res.status(500).json({ ok: false, message: '이메일 변경 에러' });
     }
   },
 
-  nickname: async (req: Request, res: Response) => {
+  editNickname: async (req: Request, res: Response) => {
     try {
       const newNickname = req.body.nickname;
       const currentNickname = req.session.user?.nickname;
@@ -50,18 +50,18 @@ const settingsController = {
       return res.status(200).json({ ok: true, message: '닉네임이 변경되었습니다.' });
     } catch (err) {
       logger.error('닉네임 변경 에러', err);
-      return res.status(500).json({ message: '닉네임 변경 에러' });
+      return res.status(500).json({ ok: false, message: '닉네임 변경 에러' });
     }
   },
 
-  pw: async (req: Request, res: Response) => {
+  editPw: async (req: Request, res: Response) => {
     try {
       const { currentPw, newPw } = req.body;
       const userId = req.session.user?.id;
 
       // 비밀번호 일치 확인
       const user = await User.findOne({ id: userId });
-      const decryptedPw = await bcrypt.compare(currentPw, user!.pw);
+      const decryptedPw = await bcrypt.compare(currentPw, user?.pw as string);
 
       if (!decryptedPw) return res.status(200).json({ ok: false, message: '비밀번호가 틀렸습니다.' });
 
@@ -73,11 +73,11 @@ const settingsController = {
       return res.status(200).json({ ok: true, message: '비밀번호가 변경되었습니다. 다시 로그인 해주세요.' });
     } catch (err: any) {
       logger.error('비밀번호 변경 에러', err);
-      return res.status(500).json({ message: '비밀번호 변경 에러' });
+      return res.status(500).json({ ok: false, message: '비밀번호 변경 에러' });
     }
   },
 
-  avatar: async (req: Request, res: Response) => {
+  editAvatar: async (req: Request, res: Response) => {
     try {
       // s3 helper에서 받아온 file 속성
       const newAvatar = (req.file as Express.MulterS3.File).location;
@@ -112,7 +112,7 @@ const settingsController = {
       s3.deleteObject({ Bucket: bucketName, Key: currentAvatarKey as string }, (err) => {
         if (err) {
           logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-          return res.status(400).json({ message: 's3 최적화 실패하였습니다.' });
+          return res.status(400).json({ ok: false, message: 's3 최적화 실패하였습니다.' });
         }
       });
 
@@ -128,7 +128,7 @@ const settingsController = {
       return res.status(200).json({ ok: true, message: '프로필 사진을 변경하였습니다.' });
     } catch (err: any) {
       logger.error('프로필사진 변경 에러', err);
-      return res.status(500).json({ message: '프로필사진 변경 에러' });
+      return res.status(500).json({ ok: false, message: '프로필사진 변경 에러' });
     }
   },
 
@@ -151,7 +151,7 @@ const settingsController = {
       s3.deleteObject({ Bucket: bucketName, Key: currentAvatarKey as string }, (err) => {
         if (err) {
           logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-          return res.status(400).json({ message: '최적화 실패하였습니다.' });
+          return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
         }
       });
 
@@ -167,7 +167,7 @@ const settingsController = {
       return res.status(200).json({ ok: true, message: '기본 이미지로 변경되었습니다.' });
     } catch (err: any) {
       logger.error('기본 프로필 사진 변경 에러', err);
-      return res.status(500).json({ message: '기본 프로필 사진 변경 에러' });
+      return res.status(500).json({ ok: false, message: '기본 프로필 사진 변경 에러' });
     }
   },
 
@@ -183,7 +183,7 @@ const settingsController = {
         s3.deleteObject({ Bucket: bucketName, Key: currentAvatarKey as string }, (err) => {
           if (err) {
             logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-            return res.status(400).json({ message: '최적화 실패하였습니다.' });
+            return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
           }
         });
       }
@@ -193,7 +193,7 @@ const settingsController = {
       return res.status(200).json({ ok: true, message: '계정이 정상적으로 삭제되었습니다.' });
     } catch (err: any) {
       logger.error('계정탈퇴 에러', err);
-      return res.status(500).json({ message: '계정탈퇴 에러' });
+      return res.status(500).json({ ok: false, message: '계정탈퇴 에러' });
     }
   },
 
@@ -214,7 +214,36 @@ const settingsController = {
       return res.status(200).redirect(process.env.CLIENT_ADDR as string);
     } catch (err: any) {
       logger.error('이메일 변경 인증 확인 에러', err);
-      return res.status(500).json({ message: '이메일 변경 인증 확인 에러' });
+      return res.status(500).json({ ok: false, message: '이메일 변경 인증 확인 에러' });
+    }
+  },
+
+  editDesc: async (req: Request, res: Response) => {
+    try {
+      const { content } = req.body;
+      const userId = req.session.user?.id;
+
+      if (content.length === 0) {
+        logger.info('자기소개 변경 글자가 없습니다.');
+        return res.status(200).json({ ok: false, message: '자기소개를 입력해주세요.' });
+      }
+
+      if (content.length > 1000) {
+        logger.info('자기소개 변경 글자가 너무 많습니다.');
+        return res.status(200).json({ ok: false, message: '자기소개가 너무 길어서 등록이 안되었습니다.' });
+      }
+
+      const user = await User.findOne({ id: userId });
+      user!.description = content;
+      user?.save();
+
+      req.session.user!.description = content;
+
+      logger.info('자기소개 변경 완료되었습니다.');
+      return res.status(200).json({ ok: true, message: '자기소개 변경 완료되었습니다.' });
+    } catch (err: any) {
+      logger.error('자기소개 변경 에러', err);
+      return res.status(500).json({ ok: false, message: '자기소개 변경 에러' });
     }
   },
 };

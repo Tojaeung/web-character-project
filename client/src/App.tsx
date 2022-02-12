@@ -6,8 +6,11 @@ import { useSocketSetup } from '@src/hook/useSocketSetup';
 
 import Header from '@src/components/header/Header';
 import Home from '@src/pages/Home';
-import { AuthPageRender, SettingsPageRender } from '@src/routes/PageRender';
-import { AuthPrivateRouter, SettingsPrivateRouter } from '@src/routes/PrivateRouter';
+import { AuthPageRender, SettingsPageRender, ProfilePageRender } from '@src/routes/PageRender';
+import { AuthPrivateRouter, SettingsPrivateRouter, ProfilePrivateRouter } from '@src/routes/PrivateRouter';
+
+import Modal from '@src/components/modals/Modal';
+import ChatModal from '@src/components/modals/chat/Chat.modal';
 
 const Container = styled.div`
   .fullScreen {
@@ -52,8 +55,19 @@ function App() {
                 }
               />
 
+              <Route
+                path="/profile/:userId"
+                element={
+                  <ProfilePrivateRouter>
+                    <ProfilePageRender />
+                  </ProfilePrivateRouter>
+                }
+              />
+
               <Route path="*" element={<h1>나다호다</h1>} />
             </Routes>
+            <Modal />
+            <ChatModal />
           </div>
         </div>
       </BrowserRouter>

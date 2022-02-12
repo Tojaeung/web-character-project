@@ -4,7 +4,7 @@ import SettingsList from '../../components/settings/SettingsList';
 function Alert() {
   return (
     <div>
-      <SettingsList list="alert" />
+      <SettingsList />
     </div>
   );
 }

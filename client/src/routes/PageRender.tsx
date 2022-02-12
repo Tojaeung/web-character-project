@@ -32,3 +32,17 @@ export const SettingsPageRender = () => {
     return <h1>나다호다</h1>;
   }
 };
+
+export const ProfilePageRender = () => {
+  const { userId } = useParams();
+
+  if (!userId) return <h1>나다호다</h1>;
+
+  const component = () => require(`../pages/profile/[id]`).default;
+
+  try {
+    return createElement(component());
+  } catch (err) {
+    return <h1>나다호다</h1>;
+  }
+};

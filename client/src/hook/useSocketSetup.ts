@@ -2,9 +2,7 @@ import { useEffect } from 'react';
 import socket from '@src/utils/socket';
 import { useAppDispatch } from '@src/redux/app/hook';
 import { logoutUser } from '@src/redux/requests/auth.request';
-import { addChat, initChats } from '@src/redux/slices/chat.slice';
-import { initMessages, addMessage } from '@src/redux/slices/message.slice';
-import { initMsgNotis, addMsgNoti } from '@src/redux/slices/msgNoti.slice';
+import { addChat, initChats, initMessages, addMessage, initMsgNotis, addMsgNoti } from '@src/redux/slices/chat.slice';
 
 export const useSocketSetup = () => {
   const dispatch = useAppDispatch();
@@ -36,7 +34,10 @@ export const useSocketSetup = () => {
       await dispatch(initMsgNotis({ newMsgNotis: parsedMsgNotis }));
     });
 
-    socket.on('addChat', async (newChat) => {
+    socket.on('addChat', async (result) => {
+      const { ok, message, newChat } = result;
+      if (!ok) return alert(message);
+      alert(message);
       await dispatch(addChat({ newChat }));
     });
 
@@ -60,7 +61,7 @@ export const useSocketSetup = () => {
       socket.off('initNotiList');
       socket.off('addChat');
       socket.off('addMessage');
-      socket.off('addNoti');
+      socket.off('addMsgNoti');
       socket.off('connect_error');
     };
   }, []);

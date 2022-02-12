@@ -5,33 +5,47 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
   .wrapper {
     position: relative;
     width: 100%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    justify-content: center;
+    padding: 1rem;
     cursor: pointer;
+    border-radius: 5px;
+    text-overflow: ellipsis;
+    overflow-y: scroll;
+    ::-webkit-scrollbar {
+      width: 1rem;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: ${({ theme }) => theme.palette.gray3};
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: ${({ theme }) => theme.palette.gray5};
+    }
     &:hover {
       background-color: ${({ theme }) => theme.palette.gray1};
     }
   }
 
-  .noti {
+  .noti-wrapper {
     background-color: red;
-    border-radius: 50%;
+    border-radius: 100%;
     position: absolute;
     padding: 0.3rem;
-    top: 2.5rem;
-    left: 4rem;
+    top: 2.7rem;
+    left: 3.2rem;
   }
 
   .noti-number {
     color: white;
   }
 
-  .avatar {
+  .avatar-wrapper {
     width: 3rem;
     height: 3rem;
     border-radius: 50%;

@@ -2,6 +2,7 @@ export type UserType = {
   id: string;
   email: string;
   nickname: string;
+  description: string;
   pw?: string;
   bank: string;
   avatar: string;
@@ -11,4 +12,6 @@ export type UserType = {
   emailToken: string | null;
   pwToken?: string;
   isVerified: boolean;
+  followers: string[];
+  followings: string[];
 };

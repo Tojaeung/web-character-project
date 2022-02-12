@@ -15,8 +15,13 @@ export class User extends BaseEntity {
   })
   nickname: string;
 
-  @Column()
-  pw: string;
+  @Column({
+    nullable: true,
+  })
+  description: string;
+
+  @Column({ type: 'text' })
+  pw: string | undefined;
 
   @Column()
   bank: string;
@@ -44,12 +49,18 @@ export class User extends BaseEntity {
   emailToken: string | null;
 
   @Column({ type: 'text' })
-  pwToken: string;
+  pwToken: string | undefined;
 
   @Column({
     default: false,
   })
   isVerified: boolean;
+
+  @Column({ type: 'text', array: true, default: [] })
+  followers: string[];
+
+  @Column({ type: 'text', array: true, default: [] })
+  followings: string[];
 
   @CreateDateColumn()
   createAt: Date;

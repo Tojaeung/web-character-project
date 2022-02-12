@@ -1,58 +1,57 @@
-import React, { useEffect, useRef } from 'react';
-import * as S from './ChatBody.styled';
+import { useEffect, useRef } from 'react';
+import { Container } from './ChatBody.styled';
 import { v4 } from 'uuid';
 import { useAppSelector } from '@src/redux/app/hook';
-import { selectMessages } from '@src/redux/slices/message.slice';
+import { selectChatUser, selectMessages } from '@src/redux/slices/chat.slice';
+import { selectAuthUser } from '@src/redux/slices/auth.slice';
 
-interface ChatType {
-  id: string;
-  nickname: string;
-  avatar: string;
-}
-interface IProp {
-  chat: ChatType | null | undefined;
-}
-
-function ChatBody({ chat }: IProp) {
+function ChatBody() {
+  const user = useAppSelector(selectAuthUser);
   const messages = useAppSelector(selectMessages);
+  const chatUser = useAppSelector(selectChatUser);
 
   // 새로운 메세지 추가, 대화상대 바뀔때마다 스크롤 하단으로 내리기
   const messageBoxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     messageBoxRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, chat]);
+  }, [messages, chatUser]);
 
   return (
-    <S.Container>
-      {chat &&
+    <Container>
+      {chatUser &&
         messages.length > 0 &&
         messages
-          .filter((message) => message.to === chat.id || message.from === chat.id)
+          .filter((message) => message.to === chatUser.id || message.from === chatUser.id)
           .map((message) => {
             const date = message.date;
             const parsedDate = date.split('-');
             return (
-              <S.Message kinds={`${message.to === chat.id ? 'sent' : 'received'}`} key={v4()}>
-                <S.Header kinds={`${message.to === chat.id ? 'sent' : 'received'}`}>
-                  {message.to === chat.id ? (
+              <div className={message.to === chatUser.id ? 'sent-wrapper' : 'received-wrapper'} key={v4()}>
+                <div className={message.to === chatUser.id ? 'sent-header' : 'received-header'}>
+                  {message.to === chatUser.id ? (
                     <>
-                      <div className="time">{`${parsedDate[0]}-${parsedDate[1]}-${parsedDate[2]}(${parsedDate[3]}) ${parsedDate[4]}`}</div>
+                      <div className="sent-time">{`${parsedDate[0]}-${parsedDate[1]}-${parsedDate[2]}(${parsedDate[3]}) ${parsedDate[4]}`}</div>
+                      <div className="sent-from">{user?.nickname}</div>
                     </>
                   ) : (
                     <>
-                      <div className="time">{`${parsedDate[0]}-${parsedDate[1]}-${parsedDate[2]}(${parsedDate[3]}) ${parsedDate[4]}`}</div>
+                      <div className="received-from">{chatUser.nickname}</div>
+                      <div className="received-time">{`${parsedDate[0]}-${parsedDate[1]}-${parsedDate[2]}(${parsedDate[3]}) ${parsedDate[4]}`}</div>
                     </>
                   )}
-                </S.Header>
-
-                <S.Body kinds={`${message.to === chat.id ? 'sent' : 'received'}`}>
-                  {message.type === 'text' ? <div>{message.content}</div> : <img src={message.content} alt="이미지" />}
-                </S.Body>
-              </S.Message>
+                </div>
+                <div className={message.to === chatUser.id ? 'sent-body' : 'received-body'}>
+                  {message.type === 'text' ? (
+                    <div className="textMessage">{message.content}</div>
+                  ) : (
+                    <img className="imgMessage" src={message.content} alt="이미지" />
+                  )}
+                </div>
+              </div>
             );
           })}
       <div ref={messageBoxRef} />
-    </S.Container>
+    </Container>
   );
 }
 

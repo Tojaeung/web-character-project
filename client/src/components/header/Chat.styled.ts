@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-export const Container = styled.div<{ openChat: boolean }>`
+export const Container = styled.div<{ chatOk: boolean }>`
   position: relative;
   width: 5rem;
   height: 5rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${({ theme, openChat }) => openChat && theme.palette.gray1};
+  background: ${({ theme, chatOk }) => chatOk && theme.palette.gray1};
   cursor: pointer;
   &:hover {
     border: 1px solid ${({ theme }) => theme.palette.gray1};

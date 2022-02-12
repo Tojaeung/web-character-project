@@ -16,6 +16,7 @@ export const imgWrapper = styled.div`
   .imgIcon {
     font-size: 3rem;
     cursor: pointer;
+  
   }
 `;
 

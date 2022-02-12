@@ -1,16 +1,23 @@
 import { Container } from './ChatList.styled';
 import { v4 } from 'uuid';
-import { useAppSelector } from '@src/redux/app/hook';
-import { selectChats } from '@src/redux/slices/chat.slice';
-import { selectMsgNotis } from '@src/redux/slices/msgNoti.slice';
+import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
+import { selectChats, isChatUser, selectMsgNotis } from '@src/redux/slices/chat.slice';
 
-interface IProp {
-  setChat: (e: any) => void;
+interface ChatUserType {
+  id: string;
+  nickname: string;
+  avatar: string;
 }
 
-function ChatList({ setChat }: IProp) {
+function ChatList() {
+  const dispatch = useAppDispatch();
   const chats = useAppSelector(selectChats);
   const msgNotis = useAppSelector(selectMsgNotis);
+
+  const onAddChatUser = (chat: ChatUserType) => async (e: React.MouseEvent<HTMLDivElement>) => {
+    await dispatch(isChatUser({ chatUser: chat }));
+    localStorage.setItem('chatUser', JSON.stringify(chat));
+  };
 
   return (
     <Container>
@@ -19,20 +26,13 @@ function ChatList({ setChat }: IProp) {
           const msgNotiNum = msgNotis.filter((msgNoti) => msgNoti.from === chat.id).length;
 
           return (
-            <div
-              className="wrapper"
-              key={v4()}
-              onClick={(e) => {
-                setChat(chat);
-                localStorage.setItem('chatUser', JSON.stringify(chat));
-              }}
-            >
+            <div className="wrapper" key={v4()} onClick={onAddChatUser(chat)}>
               {msgNotiNum === 0 ? null : (
-                <div className="noti">
+                <div className="noti-wrapper">
                   <span className="noti-number">{msgNotiNum}</span>
                 </div>
               )}
-              <div className="avatar">
+              <div className="avatar-wrapper">
                 <img className="avatar-img" src={`${chat.avatar}`} alt="프사" />
               </div>
 

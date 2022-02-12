@@ -3,12 +3,8 @@ import { redButtonStyle, greenButtonStyle } from '@src/styles/GlobalStyles';
 
 export const Container = styled.div`
   width: 100%;
-  display: flex;
 
-  .infoWrapper {
-  }
-
-  .delAccount {
+  .list-wrapper {
     width: 70rem;
     display: flex;
     justify-content: space-between;
@@ -16,24 +12,30 @@ export const Container = styled.div`
     border-bottom: 1px solid;
     padding: 2rem;
   }
+
   .title {
     font-size: 2rem;
+  }
+  .email-subTitle {
+    color: ${({ theme }) => theme.palette.red};
+    font-size: 1.5rem;
   }
   .btn {
     ${greenButtonStyle};
     padding: 1rem 2rem;
   }
-
-  .avatar {
-    width: 70rem;
-    padding: 2rem;
+  .delAccount-btn {
+    ${redButtonStyle};
   }
+
   .avatar-wrapper {
     position: relative;
-    width: 30rem;
-    height: 30rem;
+    width: 20rem;
+    height: 20rem;
     overflow: hidden;
     margin-top: 2rem;
+    border-radius: 5px;
+    border: 3px dotted ${({ theme }) => theme.palette.gray6};
   }
   .background {
     position: absolute;
@@ -49,27 +51,27 @@ export const Container = styled.div`
     z-index: 1000;
   }
 
-  .default {
+  .default-btn {
     z-index: 1001;
     position: absolute;
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     padding: 1rem;
     ${redButtonStyle};
   }
-  .edit {
+  .edit-btn {
     z-index: 1001;
     position: absolute;
-    top: 60%;
+    top: 65%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     padding: 1rem;
     ${greenButtonStyle};
   }
-  .edit-input {
+  .input {
     display: none;
   }
   .avatar-img {

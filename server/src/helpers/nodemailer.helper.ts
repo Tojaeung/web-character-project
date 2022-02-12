@@ -23,7 +23,7 @@ export const sendRegisterEmail = async (req: Request, res: Response, email: stri
 
   if (!info) {
     logger.error('이메일 송신 실패하였습니다.');
-    return res.status(500).json({ message: '이메일 송신 에러' });
+    return res.status(500).json({ ok: false, message: '이메일 송신 에러' });
   } else {
     logger.info('이메일 송신 성공하였습니다.');
   }
@@ -52,7 +52,7 @@ export const sendFindEmail = async (req: Request, res: Response, email: string, 
 
   if (!info) {
     logger.error('이메일 송신 실패하였습니다.');
-    return res.status(500).json({ status: false, message: '이메일 송신 에러' });
+    return res.status(500).json({ ok: false, message: '이메일 송신 에러' });
   } else {
     logger.info('이메일 송신 성공하였습니다.');
   }
@@ -86,7 +86,7 @@ export const sendChangeEmail = async (
 
   if (!info) {
     logger.error('이메일 송신 실패하였습니다.');
-    return res.status(500).json({ status: false, message: '이메일 송신 에러' });
+    return res.status(500).json({ ok: false, message: '이메일 송신 에러' });
   } else {
     logger.info('이메일 송신 성공하였습니다.');
   }

@@ -15,7 +15,7 @@ export const Container = styled.div`
 export const ListWrapper = styled.div`
   width: 15rem;
   height: 40rem;
-  border-right: 1px solid ${({ theme }) => theme.palette.gray1};
+  border-right: 1px solid ${({ theme }) => theme.palette.gray3};
 `;
 
 export const WindowWrapper = styled.div`
@@ -26,16 +26,21 @@ export const WindowWrapper = styled.div`
 export const Header = styled.div`
   width: 35rem;
   height: 5rem;
-  border-bottom: 1px solid ${({ theme }) => theme.palette.gray1};
+  border-bottom: 1px solid ${({ theme }) => theme.palette.gray3};
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 1rem;
+  margin-bottom: 0.5rem;
 
   > span {
     font-size: 1.5rem;
   }
-
+  .exitChat-icon {
+    font-size: 2.5rem;
+    margin-right: 1rem;
+    cursor: pointer;
+  }
   .closeIcon {
     font-size: 2.5rem;
     cursor: pointer;

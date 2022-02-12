@@ -18,7 +18,7 @@ export const authorizeUser = async (defaultSocket: Socket, next: NextFunction) =
     await redisClient.hset(`user:${user.id}`, 'id', user.id, 'nickname', user.nickname, 'avatar', user.avatar);
   }
 
-  socket.join(user.nickname);
+  socket.join(user.id);
 
   next();
 };

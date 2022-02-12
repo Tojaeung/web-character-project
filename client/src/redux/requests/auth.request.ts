@@ -22,7 +22,7 @@ export const loginUser = createAsyncThunk<
     });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ message: err.response.data.message });
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
   }
 });
 
@@ -35,7 +35,7 @@ export const logoutUser = createAsyncThunk<logoutReturnType, void, { state: Root
       });
       return res.data;
     } catch (err: any) {
-      return thunkApi.rejectWithValue({ message: err.response.data.message });
+      return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
     }
   }
 );
@@ -51,6 +51,6 @@ export const refreshLogin = createAsyncThunk<
     });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ message: err.response.data.message });
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
   }
 });

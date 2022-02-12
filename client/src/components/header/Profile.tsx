@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import { CgProfile } from 'react-icons/cg';
 import { FiSettings, FiLogOut } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Container } from '@src/components/header/Profile.styled';
 import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
@@ -12,6 +12,7 @@ import { logoutUser } from '@src/redux/requests/auth.request';
 import socket from '@src/utils/socket';
 
 function Profile() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectAuthUser);
 
@@ -31,9 +32,9 @@ function Profile() {
 
   const onLogout = async (e: React.MouseEvent<HTMLLIElement>) => {
     await dispatch(logoutUser());
-    localStorage.removeItem('chat');
-    localStorage.removeItem('chatNickname');
+    localStorage.clear();
     socket.disconnect();
+    navigate(0);
   };
   return (
     <Container openProfile={openProfile}>
@@ -50,7 +51,7 @@ function Profile() {
       {openProfile && (
         <ul className="dropDown" ref={ref}>
           <li>
-            <Link to={`/`} className="list">
+            <Link to={`/profile/${user?.id}`} className="list">
               <CgProfile className="listIcon" />
               프로필
             </Link>

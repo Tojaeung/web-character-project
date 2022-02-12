@@ -10,6 +10,7 @@ export type loginParamType = {
   pw: string;
 };
 export type loginErrorType = {
+  ok: boolean;
   message: string;
 };
 
@@ -19,13 +20,17 @@ export type logoutReturnType = {
 };
 
 export type logoutErrorType = {
+  ok: boolean;
   message: string;
 };
 
 export type refreshLoginReturnType = {
-  ok: boolean | undefined;
+  ok: boolean;
   message: string;
   user: UserType | undefined;
 };
 
-export type refreshLoginErrorType = { message: string };
+export type refreshLoginErrorType = {
+  ok: boolean;
+  message: string;
+};

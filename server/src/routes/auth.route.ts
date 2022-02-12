@@ -14,6 +14,6 @@ authRouter.get('/auth/verifyUser', authController.verifyUser);
 // 비밀번호 찾는 API로 보내주는 라우터 입니다.
 authRouter.post('/auth/findPw', authController.findPw);
 authRouter.get('/auth/verifyPw', authController.verifyPw);
-authRouter.post('/auth/changePw', authController.changePw);
+authRouter.post('/auth/editPw', authController.editPw);
 
 export default authRouter;

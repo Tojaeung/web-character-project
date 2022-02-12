@@ -2,15 +2,6 @@ import styled from 'styled-components';
 import { redButtonStyle, greenInputStyle } from '@src/styles/GlobalStyles';
 
 export const Container = styled.div<{ confirmText: string }>`
-  .background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    z-index: 1000;
-  }
   .delAccount {
     width: 400px;
     height: 300px;

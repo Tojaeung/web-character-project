@@ -1,41 +1,37 @@
 import { SessionSocket } from '@src/types/index';
 import redisClient from '@src/helpers/redis.helper';
-import parseChatList from './parseChats';
 import { User } from '@src/entities/user.entity';
 
 /* 대화상대 추가 */
-const addChat = async (socket: SessionSocket, chatId: string, cb: Function) => {
+const addChat = async (socket: SessionSocket, chatId: string) => {
   const user = socket.request.session.user;
 
+  // 자기 자신을 채팅상대로 추가했는지 확인합니다.
   if (chatId === user.id) {
-    cb({ ok: false, errorMessage: '자신을 추가 할 수 없습니다.' });
+    const result = { ok: false, message: '자신을 추가 할 수 없습니다.' };
+    socket.emit('addChat', result);
+    return;
   }
 
+  // 추가한 채팅상대가 존재하는 유저인지 확인합니다.
   const chatUser = await User.findOne({ id: chatId });
   if (!chatUser) {
-    cb({ ok: false, errorMessage: '존재하지 않는 유저입니다.' });
+    const result = { ok: false, message: '존재하지 않는 유저입니다.' };
+    socket.emit('addChat', result);
     return;
   }
 
+  // 추가한 채팅상대가 이미 채팅상대인지 확인합니다.
   const chats = await redisClient.lrange(`chats:${user.id}`, 0, -1);
-  // const parsedChatList = await parseChatList(chatList);
-
-  // const existingChat = parsedChatList.filter((parsedChat) => parsedChat.nickname === chatNickname);
-
   const existingChat = chats.filter((chat) => chat === chatUser.id);
-
   if (existingChat.length > 0) {
-    cb({ ok: false, errorMessage: '이미 존재하는 유저입니다.' });
+    const result = { ok: false, message: '이미 존재하는 유저입니다.' };
+    socket.emit('addChat', result);
     return;
   }
 
-  // 나의 채팅 목록에 대화상대 추가
-  // const chatAvatar = await redisClient.hget(`user:${chatNickname}`, 'avatar');
-
-  // const newChat = { nickname: chatNickname, avatar: chatAvatar };
-  // const newChatStr = [newChat.nickname, newChat.avatar].join(',');
-
-  await redisClient.lpush(`chats:${user.id}`, chatUser.id);
+  // 채팅상대정보를 레디스에 저장합니다.
+  await redisClient.lpush(`chats:${user.id}`, chatId);
 
   const newChat = {
     id: chatUser.id,
@@ -43,11 +39,8 @@ const addChat = async (socket: SessionSocket, chatId: string, cb: Function) => {
     avatar: chatUser.avatar,
   };
 
-  // 상대의 채팅 목록에 나를 추가
-  // const meChatStr = [user.nickname, user.avatar].join(',');
-  // await redisClient.lpush(`chats:${chatNickname}`, meChatStr);
-
-  cb({ ok: true, newChat });
+  const result = { ok: true, message: '채팅 상대를 추가하였습니다.', newChat };
+  socket.emit('addChat', result);
   return;
 };
 
