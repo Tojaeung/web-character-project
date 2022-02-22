@@ -10,8 +10,13 @@ const ormconfig: ConnectionOptions = {
   username: process.env.PG_USERNAME as string,
   password: process.env.PG_PASSWORD as string,
   database: process.env.PG_DATABASE as string,
+  synchronize: (process.env.NODE_ENV as string) === 'production' ? false : true,
+  logging: ['query', 'error'],
   entities: [`${__dirname}/../entities/**/*.ts`],
-  synchronize: true,
+  migrations: [`${__dirname}/../migrations/**/*.ts`],
+  cli: {
+    migrationsDir: 'src/migrations',
+  },
 };
 
 export default ormconfig;

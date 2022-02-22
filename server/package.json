@@ -1,20 +1,22 @@
 {
-  "name": "web-character-study",
+  "name": "web-character-project",
   "version": "1.0.0",
   "description": "project",
   "authors": "Tojaeung",
   "main": "server.js",
+  "license": "ISC",
   "scripts": {
-    "start:dev": "nodemon",
+    "start:dev": "nodemon --exec ./node_modules/.bin/ts-node -r tsconfig-paths/register ./src/server.ts",
     "start:prod": "node -r ts-node/register/transpile-only -r tsconfig-paths/register --files ./dist/src/server.js",
     "build": "npx tsc -p tsconfig.prod.json",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "migration:generate": "ts-node ./node_modules/typeorm/cli.js --config ./src/config/orm.config.ts migration:generate -n test",
+    "migration:create": "ts-node ./node_modules/typeorm/cli.js --config ./src/config/orm.config.ts migration:create -n test",
+    "migration:run": "ts-node ./node_modules/typeorm/cli.js --config ./src/config/orm.config.ts migration:run",
+    "migration:revert": "ts-node ./node_modules/typeorm/cli.js --config ./src/config/orm.config.ts migration:revert"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@types/babel__core": "^7.1.18",
     "@types/bcrypt": "^5.0.0",

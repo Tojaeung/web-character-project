@@ -3,18 +3,21 @@ import logger from './winston.helper';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const redisClient = new Redis({
-  port: 6379,
-  host: 'localhost',
-  db: 0,
-});
+const cluster = new Redis.Cluster([
+  { port: 7000, host: '127.0.0.1' },
+  { port: 7001, host: '127.0.0.1' },
+  { port: 7002, host: '127.0.0.1' },
+  { port: 8000, host: '127.0.0.1' },
+  { port: 8001, host: '127.0.0.1' },
+  { port: 8002, host: '127.0.0.1' },
+]);
 
-redisClient.on('connect', () => {
+cluster.on('connect', () => {
   logger.info('redis 연결');
 });
 
-redisClient.on('error', () => {
+cluster.on('error', () => {
   logger.error('redis 연결실패');
 });
 
-export default redisClient;
+export default cluster;
