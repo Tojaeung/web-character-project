@@ -1,9 +1,8 @@
-import { AbstractRepository, EntityRepository } from 'typeorm';
-import { User } from '@src/entities/user.entity';
-import { Auth } from '@src/entities/auth.entity';
-import { Follower } from '@src/entities/follower.entity';
-import { Following } from '@src/entities/following.entity';
-import { Desc } from '@src/entities/desc.entitiy';
+import { AbstractRepository, EntityRepository, getConnection } from 'typeorm';
+import { User } from '@src/entities/profile/user.entity';
+import { Auth } from '@src/entities/profile/auth.entity';
+import { Follow } from '@src/entities/profile/follow.entity';
+import { Desc } from '@src/entities/profile/desc.entitiy';
 
 @EntityRepository(User)
 export class UserRepository extends AbstractRepository<User> {
@@ -19,36 +18,23 @@ export class UserRepository extends AbstractRepository<User> {
   }
 
   updateEmail(id: number, email: string) {
-    return this.createQueryBuilder('user').update(User).set({ email }).where('user.id=:id', { id }).execute();
+    return this.createQueryBuilder('user').update(User).set({ email }).where('id=:id', { id }).execute();
   }
 
   updateNickname(id: number, nickname: string) {
-    return this.createQueryBuilder('user').update(User).set({ nickname }).where('user.id = :id', { id }).execute();
+    return this.createQueryBuilder('user').update(User).set({ nickname }).where('id = :id', { id }).execute();
   }
 
   updatePw(id: number, pw: string) {
-    return this.createQueryBuilder('user').update(User).set({ pw }).where('user.id = :id', { id }).execute();
+    return this.createQueryBuilder('user').update(User).set({ pw }).where('id = :id', { id }).execute();
   }
 
   updateAvatar(id: number, avatar: string, avatarKey: string) {
-    return this.createQueryBuilder('user')
-      .update(User)
-      .set({ avatar, avatarKey })
-      .where('user.id = :id', { id })
-      .execute();
+    return this.createQueryBuilder('user').update(User).set({ avatar, avatarKey }).where('id = :id', { id }).execute();
   }
 
   deleteUser(id: number) {
-    return this.createQueryBuilder('user').delete().from(User).where('user.id = :id', { id }).execute();
-  }
-
-  getProfileUser(id: number) {
-    return this.createQueryBuilder('user')
-      .leftJoinAndSelect('user.desc', 'desc')
-      .leftJoinAndSelect('user.followers', 'follow')
-      .leftJoinAndSelect('user.followings', 'follow')
-      .where('user.id = :id', { id })
-      .getOne();
+    return this.createQueryBuilder('user').delete().from(User).where('id = :id', { id }).execute();
   }
 }
 
@@ -77,67 +63,55 @@ export class AuthRepository extends AbstractRepository<Auth> {
 
 @EntityRepository(Desc)
 export class DescRepository extends AbstractRepository<Desc> {
+  findDescByid(id: number) {
+    return this.createQueryBuilder('desc').where('desc.user_id = :id', { id }).getOne();
+  }
+
   updateDesc(id: number, content: string) {
-    return this.createQueryBuilder('desc').update(Desc).set({ content }).where('desc.user_id = :id', { id }).execute();
+    return this.createQueryBuilder('desc').update(Desc).set({ content }).where('user_id = :id', { id }).execute();
   }
 
   deleteDesc(id: number) {
-    return this.createQueryBuilder('desc').delete().from(Desc).where('desc.user_id = :id', { id }).execute();
+    return this.createQueryBuilder('desc').delete().from(Desc).where('user_id = :id', { id }).execute();
   }
 }
 
-@EntityRepository(Follower)
-export class FollowerRepository extends AbstractRepository<Follower> {
+@EntityRepository(Follow)
+export class FollowRepository extends AbstractRepository<Follow> {
+  getFolloweeNum(id: number) {
+    return this.createQueryBuilder('follow').select('count(*)').where('follow.from_id = :id', { id }).getRawOne();
+  }
+
+  getFollowerNum(id: number) {
+    return this.createQueryBuilder('follow').select('count(*)').where('follow.to_id = :id', { id }).getRawOne();
+  }
+
+  isFollowing(id: number, profileId: number) {
+    return this.createQueryBuilder('follow')
+      .where('follow.from_id = :id', { id })
+      .andWhere('follow.to_id = :profileId', { profileId })
+      .getOne();
+  }
+
   follow(id: number, profileId: number) {
-    return this.createQueryBuilder('follow')
-      .insert()
-      .into(Follower)
-      .values({ follower_id: profileId, user_id: id })
-      .execute();
+    return this.createQueryBuilder('follow').insert().into(Follow).values({ from_id: id, to_id: profileId }).execute();
   }
 
-  unfollow(id: number, profileId: number) {
+  unFollow(id: number, profileId: number) {
     return this.createQueryBuilder('follow')
       .delete()
-      .from(Follower)
-      .where('follower.follower_id = :profileId', { profileId })
-      .andWhere('follower.follower_id = :id', { id })
+      .from(Follow)
+      .where('from_id = :id', { id })
+      .andWhere('to_id = :profileId', { profileId })
       .execute();
   }
 
-  deleteFollower(id: number) {
-    return this.createQueryBuilder('follower')
-      .delete()
-      .from(Follower)
-      .where('follower.user_id = :id', { id })
-      .execute();
-  }
-}
-
-@EntityRepository(Following)
-export class FollowingRepository extends AbstractRepository<Following> {
-  follow(id: number, profileId: number) {
-    return this.createQueryBuilder('follow')
-      .insert()
-      .into(Following)
-      .values({ following_id: id, user_id: profileId })
-      .execute();
-  }
-
-  unfollow(id: number, profileId: number) {
+  deleteFollow(id: number) {
     return this.createQueryBuilder('follow')
       .delete()
-      .from(Following)
-      .where('following.following_id = :profileId', { profileId })
-      .andWhere('following.following_id = :id', { id })
-      .execute();
-  }
-
-  deleteFollowing(id: number) {
-    return this.createQueryBuilder('follower')
-      .delete()
-      .from(Following)
-      .where('following.user_id = :id', { id })
+      .from(Follow)
+      .where('from_id = :from_id', { from_id: id })
+      .orWhere('to_id = :to_id', { to_id: id })
       .execute();
   }
 }

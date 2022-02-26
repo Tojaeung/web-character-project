@@ -4,13 +4,8 @@ import bcrypt from 'bcrypt';
 import logger from '@src/helpers/winston.helper';
 import { sendChangeEmail } from '@src/helpers/nodemailer.helper';
 import { s3 } from '@src/helpers/s3.helper';
-import {
-  UserRepository,
-  AuthRepository,
-  DescRepository,
-  FollowerRepository,
-  FollowingRepository,
-} from '@src/repositorys/profile.repository';
+import { UserRepository, AuthRepository, DescRepository, FollowRepository } from '@src/repositorys/profile.repository';
+import cluster from '@src/helpers/redis.helper';
 
 const settingsController = {
   // 이메일 변경을 위한 API입니다. (변경을 위해서 이메일 인증이 필요합니다.)
@@ -179,8 +174,7 @@ const settingsController = {
     const userRepository = getCustomRepository(UserRepository);
     const authRepository = getCustomRepository(AuthRepository);
     const descRepository = getCustomRepository(DescRepository);
-    const followerRepository = getCustomRepository(FollowerRepository);
-    const followingRepository = getCustomRepository(FollowingRepository);
+    const followRepository = getCustomRepository(FollowRepository);
 
     try {
       const id = req.session.user?.id;
@@ -202,8 +196,12 @@ const settingsController = {
       await userRepository.deleteUser(Number(id));
       await authRepository.deleteAuth(Number(id));
       await descRepository.deleteDesc(Number(id));
-      await followerRepository.deleteFollower(Number(id));
-      await followingRepository.deleteFollowing(Number(id));
+      await followRepository.deleteFollow(Number(id));
+
+      // 레디스에 저장된 유저의 경험치 정보를 삭제합니다.
+      await cluster.zrem('exp', id as string);
+
+      // 레디스에 저장된 대화정보 등등 식제
 
       return res.status(200).json({ ok: true, message: '계정이 정상적으로 삭제되었습니다.' });
     } catch (err: any) {

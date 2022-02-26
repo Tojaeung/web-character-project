@@ -10,7 +10,7 @@ declare module 'express-session' {
       email: string;
       nickname: string;
       avatar: string;
-      exp: number;
+      level: number;
     };
   }
 }

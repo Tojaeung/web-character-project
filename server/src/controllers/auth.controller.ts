@@ -1,12 +1,14 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { User } from '@src/entities/user.entity';
-import { Auth } from '@src/entities/auth.entity';
-import { Desc } from '@src/entities/desc.entitiy';
 import { getCustomRepository, getRepository } from 'typeorm';
+import { User } from '@src/entities/profile/user.entity';
+import { Auth } from '@src/entities/profile/auth.entity';
+import { Desc } from '@src/entities/profile/desc.entitiy';
 import { UserRepository, AuthRepository } from '@src/repositorys/profile.repository';
 import logger from '@src/helpers/winston.helper';
 import { sendRegisterEmail, sendFindEmail } from '@src/helpers/nodemailer.helper';
+import cluster from '@src/helpers/redis.helper';
+import getLevel from '@src/utils/exp.util';
 
 const authController = {
   // 회원가입  API 입니다.
@@ -97,13 +99,27 @@ const authController = {
         return res.status(200).json({ ok: false, message: '인증되지 않은 사용자 입니다. 이메일 인증을 확인해주세요' });
       }
 
+      /*
+       * 레디스에 유저 경험치 정보가 있는지 확인합니다.
+       * 만약 없다면 유저 경험치 정보를 추가합니다.
+       */
+      const exp = await cluster.zscore('exp', String(user.id));
+
+      console.log(exp);
+      if (!exp) {
+        await cluster.zadd('exp', 0, String(user.id));
+      }
+
+      // getLevel은 exp(경험치)에 따라 레벨로 리턴하는 함수입니다.
+      const level = await getLevel(Number(exp));
+
       req.session.user = {
         // 소켓통신과 레디스 저장을 위해 문자열로 저장한다.
         id: String(user.id),
         email: user.email,
         nickname: user.nickname,
         avatar: user.avatar,
-        exp: user.exp,
+        level: level as number,
       };
 
       logger.info('로그인 되었습니다.');

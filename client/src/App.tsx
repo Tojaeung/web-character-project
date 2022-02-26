@@ -56,7 +56,7 @@ function App() {
               />
 
               <Route
-                path="/profile/:id"
+                path="/profile/:profileId"
                 element={
                   <ProfilePrivateRouter>
                     <ProfilePageRender />

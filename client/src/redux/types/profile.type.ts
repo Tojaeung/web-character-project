@@ -1,27 +1,54 @@
-import { UserType } from './user.type';
-
 export type ProfileType = {
   id: string;
   email: string;
   nickname: string;
   avatar: string;
-  exp: number;
-  desc: { id: number; content: string; user_id: number };
+  level: number;
+  desc: string;
+  isFollowing: boolean | undefined;
   followerNum: number;
-  followingNum: number;
+  followeeNum: number;
 };
 
 export type getUserReturnType = {
   ok: boolean;
-  user: ProfileType | undefined;
+  profile: ProfileType | undefined;
   message: string | undefined;
 };
 
 export type getUserParamType = {
-  id: string;
+  profileId: string;
 };
 
 export type getUserErrorType = {
+  ok: boolean;
+  message: string;
+};
+
+export type followReturnType = {
+  ok: boolean;
+  message: string | undefined;
+};
+
+export type followParamType = {
+  profileId: string;
+};
+
+export type followErrorType = {
+  ok: boolean;
+  message: string;
+};
+
+export type unFollowReturnType = {
+  ok: boolean;
+  message: string | undefined;
+};
+
+export type unFollowParamType = {
+  profileId: string;
+};
+
+export type unFollowErrorType = {
   ok: boolean;
   message: string;
 };

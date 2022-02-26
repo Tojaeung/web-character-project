@@ -8,10 +8,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Desc } from '@src/entities/desc.entitiy';
-import { Auth } from '@src/entities/auth.entity';
-import { Follower } from '@src/entities/follower.entity';
-import { Following } from '@src/entities/following.entity';
+import { Desc } from '@src/entities/profile/desc.entitiy';
+import { Auth } from '@src/entities/profile/auth.entity';
+import { Follow } from '@src/entities/profile/follow.entity';
 
 @Entity('user', { schema: 'profile' })
 export class User {
@@ -46,20 +45,17 @@ export class User {
   @Column({ default: 'user' })
   role: string;
 
-  @Column({ default: 0 })
-  exp: number;
-
   @OneToOne(() => Desc, (desc) => desc.user)
   desc: Desc;
 
   @OneToOne(() => Auth, (auth) => auth.user)
   auth: Auth;
 
-  @OneToMany(() => Follower, (follower) => follower.user)
-  followers: Follower[];
+  @OneToMany(() => Follow, (follow) => follow.followee_user)
+  followees: Follow[];
 
-  @OneToMany(() => Following, (following) => following.user)
-  followings: Following[];
+  @OneToMany(() => Follow, (follow) => follow.follower_user)
+  followers: Follow[];
 
   @CreateDateColumn()
   createAt: Date;

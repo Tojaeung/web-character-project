@@ -6,14 +6,14 @@ export class Desc {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 1000, nullable: true, default: null })
+  @Column({ type: 'text', nullable: true, default: null })
   content: string;
 
   @Index('user_id-descIdx')
   @Column()
   user_id: number;
 
-  @OneToOne(() => User, (user) => user.desc)
+  @OneToOne(() => User, (user) => user.desc, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
 }

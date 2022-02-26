@@ -1,11 +1,18 @@
 import { Container } from './[id].styled';
 import { useProfileGetUser } from '@src/hook/useProfileGetUser';
 import Info from '@src/components/profile/Info';
+import { selectProfileOk } from '@src/redux/slices/profile.slice';
+import { useAppSelector } from '@src/redux/app/hook';
+import NotFound from '@src/components/NotFound';
 
 function Profile() {
+  // 존재하지 않는 profileId를 url에서 조회할때 존재하지 않는경우 오류페이지를 보여준다.
+  const ok = useAppSelector(selectProfileOk);
   useProfileGetUser();
 
-  return (
+  return !ok ? (
+    <NotFound />
+  ) : (
     <Container>
       <div className="info">
         <Info />

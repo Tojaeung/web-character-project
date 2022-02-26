@@ -5,15 +5,16 @@ import { useNavigate } from 'react-router-dom';
 import { FiSettings } from 'react-icons/fi';
 import socket from '@src/utils/socket';
 import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
-import { selectProfileUser } from '@src/redux/slices/profile.slice';
+import { selectProfileProfile } from '@src/redux/slices/profile.slice';
 import { selectAuthUser } from '@src/redux/slices/auth.slice';
 import { selectChats } from '@src/redux/slices/chat.slice';
 import { openChatModal } from '@src/redux/slices/chat.slice';
+import { follow, unFollow } from '@src/redux/requests/profile.request';
 
 function Info() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const profile = useAppSelector(selectProfileUser);
+  const profile = useAppSelector(selectProfileProfile);
   const user = useAppSelector(selectAuthUser);
   const chats = useAppSelector(selectChats);
 
@@ -24,19 +25,13 @@ function Info() {
   };
 
   const onFollow = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const res = await axios.post('/api/profile/follow', { profileId: profile?.id }, { withCredentials: true });
-    const { ok, message } = res.data;
-    if (!ok) return alert(message);
-    alert(message);
-    navigate(0);
+    // 새로고침으로 전체를 다시 렌더링 X => 팔로우 숫자 등 리덕스 변수를 임의로 변경해준다.
+    await dispatch(follow({ profileId: profile!.id }));
   };
 
   const onUnFollow = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const res = await axios.post('/api/profile/unFollow', { profileId: profile?.id }, { withCredentials: true });
-    const { ok, message } = res.data;
-    if (!ok) return alert(message);
-    alert(message);
-    navigate(0);
+    // 새로고침으로 전체를 다시 렌더링 X => 팔로우 숫자 등 리덕스 변수를 임의로 변경해준다.
+    await dispatch(unFollow({ profileId: profile!.id }));
   };
 
   return (
@@ -46,7 +41,7 @@ function Info() {
       </div>
       <div className="info-wrapper">
         <div className="row1">
-          <span className="level">[Lv.{profile?.exp}]</span>
+          <span className="level">[Lv.{profile?.level}]</span>
           <div className="nickname">{profile?.nickname}</div>
           <div className="btn-wrapper">
             <div className="chatBtn-wrapper">
@@ -60,12 +55,12 @@ function Info() {
               )}
             </div>
             <div className="followBtn-wrapper">
-              {profile?.id !== user?.id && profile?.followers.filter((userId) => userId === user?.id).length === 0 && (
+              {profile?.id !== user?.id && profile?.isFollowing === false && (
                 <button className="follow-btn" onClick={onFollow}>
                   팔로우
                 </button>
               )}
-              {profile?.id !== user?.id && profile?.followers.filter((userId) => userId === user?.id).length !== 0 && (
+              {profile?.id !== user?.id && profile?.isFollowing === true && (
                 <button className="unFollow-btn" onClick={onUnFollow}>
                   언팔로우
                 </button>
@@ -75,10 +70,10 @@ function Info() {
         </div>
         <div className="follow-wrapper">
           <div className="follower">
-            <span>팔로워</span> {profile?.followers.length}
+            <span>팔로워</span> {profile?.followerNum}
           </div>
           <div className="following">
-            <span>팔로잉</span> {profile?.followings.length}
+            <span>팔로잉</span> {profile?.followeeNum}
           </div>
         </div>
         <hr />
@@ -90,7 +85,7 @@ function Info() {
             )}
           </div>
 
-          <div className="desc" dangerouslySetInnerHTML={{ __html: profile?.desc.content as string }}></div>
+          <div className="desc" dangerouslySetInnerHTML={{ __html: profile?.desc as string }}></div>
         </div>
       </div>
     </Container>

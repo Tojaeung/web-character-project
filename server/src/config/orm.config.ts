@@ -4,7 +4,6 @@ import { ConnectionOptions } from 'typeorm';
 dotenv.config();
 
 const ormconfig: ConnectionOptions = {
-  // name: 'default',
   type: 'postgres',
   host: process.env.PG_HOST as string,
   port: 5432,
