@@ -46,7 +46,7 @@ function Info() {
       </div>
       <div className="info-wrapper">
         <div className="row1">
-          <span className="level">[Lv.{profile?.level}]</span>
+          <span className="level">[Lv.{profile?.exp}]</span>
           <div className="nickname">{profile?.nickname}</div>
           <div className="btn-wrapper">
             <div className="chatBtn-wrapper">
@@ -90,7 +90,7 @@ function Info() {
             )}
           </div>
 
-          <div className="desc" dangerouslySetInnerHTML={{ __html: profile?.description as string }}></div>
+          <div className="desc" dangerouslySetInnerHTML={{ __html: profile?.desc.content as string }}></div>
         </div>
       </div>
     </Container>

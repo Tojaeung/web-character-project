@@ -1,25 +1,29 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { User } from '@src/entities/user.entity';
-import { UserType } from '@src/types/user.type';
+import { Auth } from '@src/entities/auth.entity';
+import { Desc } from '@src/entities/desc.entitiy';
+import { getCustomRepository, getRepository } from 'typeorm';
+import { UserRepository, AuthRepository } from '@src/repositorys/profile.repository';
 import logger from '@src/helpers/winston.helper';
 import { sendRegisterEmail, sendFindEmail } from '@src/helpers/nodemailer.helper';
 
 const authController = {
   // 회원가입  API 입니다.
   register: async (req: Request, res: Response) => {
+    const userRepository = getCustomRepository(UserRepository);
     try {
-      const { email, nickname, pw, bank, accountNumber } = req.body;
+      const { email, nickname, pw } = req.body;
 
       // 기존 이메일 존재 유무를 확인합니다.
-      const existingEmail = await User.findOne({ email });
+      const existingEmail = await userRepository.findUserByEmail(email);
       if (existingEmail) {
         logger.info('이미 존재하는 닉네임 입니다.');
         return res.status(200).json({ ok: false, message: '이미 존재하는 이메일 입니다.' });
       }
 
       // 기존 닉네임 존재 유무를 확인합니다.
-      const existingNickname = await User.findOne({ nickname });
+      const existingNickname = await userRepository.findUserByNickname(nickname);
       if (existingNickname) {
         logger.info('이미 존재하는 닉네임 입니다.');
         return res.status(200).json({ ok: false, message: '이미 존재하는 닉네임입니다.' });
@@ -30,16 +34,24 @@ const authController = {
       const emailToken = await bcrypt.hash(email, 8);
       const pwToken = await bcrypt.hash(nickname, 8);
 
-      // 데이터베이스에 가입정보를 저장합니다.
-      const user = await User.create({
-        email,
-        nickname,
-        pw: encryptedPw,
-        bank,
-        accountNumber,
-        emailToken,
-        pwToken,
-      }).save();
+      // 유저 테이블에 정보를 저장합니다.
+      const user = new User();
+      user.email = email;
+      user.nickname = nickname;
+      user.pw = encryptedPw;
+      await getRepository(User).save(user);
+
+      // 인증 테이블에 정보를 저장합니다.
+      const auth = new Auth();
+      auth.emailToken = emailToken;
+      auth.pwToken = pwToken;
+      auth.user_id = user.id;
+      await getRepository(Auth).save(auth);
+
+      // 자기소개 테이블에 정보를 저장합니다.
+      const desc = new Desc();
+      desc.user_id = user.id;
+      await getRepository(Desc).save(desc);
 
       // 인증이메일을 발송합니다.
       await sendRegisterEmail(req, res, email, emailToken);
@@ -58,42 +70,46 @@ const authController = {
 
   // 로그인 API 입니다.
   login: async (req: Request, res: Response) => {
+    const userRepository = getCustomRepository(UserRepository);
+    const authRepository = getCustomRepository(AuthRepository);
     try {
       const { email, pw } = req.body;
 
       // 유효한 email인지 확인하기 위해 email를 조회합니다.
-      const checkedUser = await User.findOne({ email });
-      if (!checkedUser) {
+      const user = await userRepository.findUserByEmail(email);
+      if (!user) {
         logger.info('회원 이메일이 존재하지 않습니다.');
         return res.status(200).json({ ok: false, message: '아이디 또는 비밀번호가 올바르지 않습니다.' });
       }
 
       // 유효한 이메일이라면 비밀번호가 맞는지 확인합니다.
-      const decryptedPw = await bcrypt.compare(pw, checkedUser.pw as string);
+      const decryptedPw = await bcrypt.compare(pw, user.pw as string);
       if (!decryptedPw) {
         logger.info('비밀번호가 틀렸습니다.');
         return res.status(200).json({ ok: false, message: '아이디 또는 비밀번호가 올바르지 않습니다.' });
       }
 
       // 인증되지 않은 회원일 경우에 다시 인증메일을 발송합니다.
-      if (!checkedUser.isVerified) {
-        await sendRegisterEmail(req, res, checkedUser.email, checkedUser.emailToken as string);
+      const auth = await authRepository.findAuthByUser_id(user.id);
+      if (!auth?.isVerified) {
+        await sendRegisterEmail(req, res, user.email, auth?.emailToken as string);
         logger.info('이메일 인증을 받지 않은 회원입니다.');
         return res.status(200).json({ ok: false, message: '인증되지 않은 사용자 입니다. 이메일 인증을 확인해주세요' });
       }
 
-      delete checkedUser.pw;
-      delete checkedUser.pwToken;
-
-      req.session.user = checkedUser;
-
-      const user = req.session.user;
+      req.session.user = {
+        // 소켓통신과 레디스 저장을 위해 문자열로 저장한다.
+        id: String(user.id),
+        email: user.email,
+        nickname: user.nickname,
+        avatar: user.avatar,
+        exp: user.exp,
+      };
 
       logger.info('로그인 되었습니다.');
       return res.status(200).json({ ok: true, message: '로그인 되었습니다.', user });
     } catch (err: any) {
       console.log(err);
-
       logger.error('로그인 에러:', err);
       return res.status(500).json({ ok: false, message: '로그인 에러' });
     }
@@ -129,22 +145,29 @@ const authController = {
 
   // 이메일 인증을 위한 API입니다.
   verifyUser: async (req: Request, res: Response) => {
+    const userRepository = getCustomRepository(UserRepository);
+    const authRepository = getCustomRepository(AuthRepository);
     try {
       // nodemailer.config.ts에서 보낸 쿼리 입니다.
-      const { emailToken } = req.query;
-      const user = await User.findOne({ emailToken: emailToken as string });
+      const { email, emailToken } = req.query;
 
-      if (!user) {
+      // 이메일 토큰으로 유저의 auth 정보를 가져온다.
+      const auth = await authRepository.findAuthByEmailToken(emailToken as string);
+      if (!auth) {
         logger.warn('이메일토큰 정보로 회원을 찾을 수 없습니다.');
         return res.status(400).json({ ok: false, message: '인증이 실패하였습니다.' });
       }
 
-      // 이메일토큰이 유효하다면 로그인이 가능 합니다.
-      const decryptedEmailToken = await bcrypt.compare(user.email, emailToken as string);
+      /*
+       *  이메일토큰이 유효하다면 로그인이 가능 합니다.
+       *  auth 테이블에 emailToken과 isVerified 정보를 수정해서 이메일 인증을 완료합니다.
+       *  로그인이 가능한 계정입니다.
+       */
+      const decryptedEmailToken = await bcrypt.compare(email as string, emailToken as string);
       if (decryptedEmailToken) {
-        user.emailToken = null;
-        user.isVerified = true;
-        await user.save();
+        auth.emailToken = null;
+        auth.isVerified = true;
+        await getRepository(Auth).save(auth);
       }
 
       // 로그인을 위해 클라이언트의 홈페이지로 리다이렉트 합니다.
@@ -158,17 +181,24 @@ const authController = {
 
   // 비밀번호를 찾기 위한 API입니다.
   findPw: async (req: Request, res: Response) => {
+    const userRepository = getCustomRepository(UserRepository);
+    const authRepository = getCustomRepository(AuthRepository);
     try {
       const { email } = req.body;
-      const user = await User.findOne({ email });
 
+      // 요청받은 email로 유저를 찾습니다.
+      const user = await userRepository.findUserByEmail(email);
       if (!user) {
         logger.info('이메일이 존재하지 않습니다.');
         return res.status(200).json({ ok: false, message: '이메일이 존재하지 않습니다.' });
       }
 
-      // 유저가 존재한다면 비밀번호 찾기 인증 메일을 발송합니다.
-      await sendFindEmail(req, res, email, user?.pwToken as string);
+      /*
+       * 유저가 존재한다면 비밀번호 찾기 인증 메일을 발송합니다.
+       * 비밀번호 인증을 위해 auth테이블에 pwToken이 필요합니다.
+       */
+      const auth = await authRepository.findAuthByUser_id(user.id);
+      await sendFindEmail(req, res, email, auth?.pwToken as string);
 
       return res.status(200).json({ ok: true, message: '인증 이메일을 발송하였습니다.' });
     } catch (err: any) {
@@ -179,11 +209,14 @@ const authController = {
 
   // 비밀번호 인증을 위한 API 입니다.
   verifyPw: async (req: Request, res: Response) => {
+    const userRepository = getCustomRepository(UserRepository);
+    const authRepository = getCustomRepository(AuthRepository);
     try {
       // nodemailer.config.ts에서 온 쿼리정보 입니다.
-      const { pwToken } = req.query;
-      const user = await User.findOne({ pwToken: pwToken as string });
+      const { email, pwToken } = req.query;
 
+      // 요청받은 이메일로 유저를 찾습니다.
+      const user = await userRepository.findUserByEmail(email as string);
       if (!user) {
         logger.info('비밀번호 인증확인이 실패하였습니다.');
         return res.status(200).json({ ok: false, message: '비밀번호 인증확인이 실패하였습니다.' });
@@ -206,24 +239,31 @@ const authController = {
 
   // 비밀번호를 변경하기 위한 API 입니다.
   editPw: async (req: Request, res: Response) => {
+    const userRepository = getCustomRepository(UserRepository);
+    const authRepository = getCustomRepository(AuthRepository);
     try {
       const { pw, pwToken } = req.body;
-      const user = await User.findOne({ pwToken: pwToken as string });
 
-      if (!user) {
+      // 요청받은 pwToken으로 auth 테이블 정보를 불러옵니다.
+      const auth = await authRepository.findAuthByPwToken(pwToken);
+      if (!auth) {
         logger.warn('비밀번호 토큰과 일치하는 유저가 없습니다.');
         return res.status(400).json({ ok: false, message: '비밀번호 변경 실패하였습니다.' });
       }
+
+      // 찾은 auth.user_id로 유저 정보를 찾는다.
+      const user = await userRepository.findUserById(auth.user_id);
 
       /*
        * 클라이언트에서 받아온 비밀번호를 헤싱하여 데이터베이스에 저장 합니다.
        *  보안을 위해 pwToken을 새롭게 발급하고 데이터베이스에 저장합니다.
        */
       const encryptedPw = await bcrypt.hash(pw, 8);
-      const newPwToken = await bcrypt.hash(user.nickname, 8);
-      user.pw = encryptedPw;
-      user.pwToken = newPwToken;
-      user.save();
+      const newPwToken = await bcrypt.hash(user?.nickname as string, 8);
+
+      // 변경된 pw, pwToken을 각각 user, auth 테이블에 업데이트한다.
+      await userRepository.updatePw(user?.id as number, encryptedPw);
+      await authRepository.updatePwToken(user?.id as number, newPwToken);
 
       logger.info('비밀번호가 재설정 되었습니다.');
       return res.status(200).json({ ok: true, message: '비밀번호가 재설정 되었습니다.' });

@@ -34,9 +34,9 @@ export const SettingsPageRender = () => {
 };
 
 export const ProfilePageRender = () => {
-  const { userId } = useParams();
+  const { id } = useParams();
 
-  if (!userId) return <h1>나다호다</h1>;
+  if (!id) return <h1>나다호다</h1>;
 
   const component = () => require(`../pages/profile/[id]`).default;
 

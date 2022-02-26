@@ -9,16 +9,8 @@ declare module 'express-session' {
       id: string;
       email: string;
       nickname: string;
-      description: string;
-      bank: string;
-      accountNumber: string;
-      emailToken: string | null | undefined;
       avatar: string;
-      avatarKey: string;
-      level: number;
-      isVerified: boolean;
-      followers: string[];
-      followings: string[];
+      exp: number;
     };
   }
 }

@@ -2,7 +2,7 @@ import { NextFunction } from 'express';
 import { SessionSocket } from '@src/types';
 import logger from '@src/helpers/winston.helper';
 import { Socket } from 'socket.io';
-import redisClient from '@src/helpers/redis.helper';
+import cluster from '@src/helpers/redis.helper';
 
 export const authorizeUser = async (defaultSocket: Socket, next: NextFunction) => {
   const socket = <SessionSocket>defaultSocket;
@@ -12,10 +12,10 @@ export const authorizeUser = async (defaultSocket: Socket, next: NextFunction) =
   }
 
   const user = socket.request.session.user;
-  const userInfo = await redisClient.hget(`user:${user.id}`, 'id');
+  const userInfo = await cluster.hget(`user:${user.id}`, 'id');
 
   if (!userInfo) {
-    await redisClient.hset(`user:${user.id}`, 'id', user.id, 'nickname', user.nickname, 'avatar', user.avatar);
+    await cluster.hset(`user:${user.id}`, 'id', user.id, 'nickname', user.nickname, 'avatar', user.avatar);
   }
 
   socket.join(user.id);

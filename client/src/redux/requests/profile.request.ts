@@ -7,9 +7,9 @@ export const getUser = createAsyncThunk<
   getUserReturnType,
   getUserParamType,
   { state: RootState; rejectValue: getUserErrorType }
->('GET_USER', async (data, thunkApi) => {
+>('GET_PROFILE_USER', async (data, thunkApi) => {
   try {
-    const res = await axios.post('/api/profile/getUser', data, {
+    const res = await axios.post('/api/profile/getProfileUser', data, {
       withCredentials: true,
     });
     return res.data;

@@ -4,6 +4,7 @@ import { ConnectionOptions } from 'typeorm';
 dotenv.config();
 
 const ormconfig: ConnectionOptions = {
+  // name: 'default',
   type: 'postgres',
   host: process.env.PG_HOST as string,
   port: 5432,
@@ -12,8 +13,8 @@ const ormconfig: ConnectionOptions = {
   database: process.env.PG_DATABASE as string,
   synchronize: (process.env.NODE_ENV as string) === 'production' ? false : true,
   logging: ['query', 'error'],
-  entities: [`${__dirname}/../entities/**/*.ts`],
-  migrations: [`${__dirname}/../migrations/**/*.ts`],
+  entities: ['src/entities/**/*.ts'],
+  migrations: ['src/migrations/**/*.ts'],
   cli: {
     migrationsDir: 'src/migrations',
   },

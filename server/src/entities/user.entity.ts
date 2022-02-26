@@ -1,33 +1,37 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Desc } from '@src/entities/desc.entitiy';
+import { Auth } from '@src/entities/auth.entity';
+import { Follower } from '@src/entities/follower.entity';
+import { Following } from '@src/entities/following.entity';
 
-@Entity('user')
-export class User extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+@Entity('user', { schema: 'profile' })
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
 
+  @Index('email-userIdx')
   @Column({
     unique: true,
   })
   email: string;
 
+  @Index('nickname-userIdx')
   @Column({
     unique: true,
   })
   nickname: string;
 
-  @Column({
-    nullable: true,
-  })
-  description: string;
-
-  @Column({ type: 'text' })
+  @Column({ type: 'varchar' })
   pw: string | undefined;
-
-  @Column()
-  bank: string;
-
-  @Column()
-  accountNumber: string;
 
   @Column({
     default: 'https://character.s3.ap-northeast-2.amazonaws.com/avatar/default-avatar.png',
@@ -39,28 +43,23 @@ export class User extends BaseEntity {
   })
   avatarKey: string;
 
-  @Column({ default: 1 })
-  level: number;
-
   @Column({ default: 'user' })
   role: string;
 
-  @Column({ type: 'text', nullable: true })
-  emailToken: string | null;
+  @Column({ default: 0 })
+  exp: number;
 
-  @Column({ type: 'text' })
-  pwToken: string | undefined;
+  @OneToOne(() => Desc, (desc) => desc.user)
+  desc: Desc;
 
-  @Column({
-    default: false,
-  })
-  isVerified: boolean;
+  @OneToOne(() => Auth, (auth) => auth.user)
+  auth: Auth;
 
-  @Column({ type: 'text', array: true, default: [] })
-  followers: string[];
+  @OneToMany(() => Follower, (follower) => follower.user)
+  followers: Follower[];
 
-  @Column({ type: 'text', array: true, default: [] })
-  followings: string[];
+  @OneToMany(() => Following, (following) => following.user)
+  followings: Following[];
 
   @CreateDateColumn()
   createAt: Date;

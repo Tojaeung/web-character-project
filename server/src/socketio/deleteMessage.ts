@@ -1,12 +1,12 @@
 import { SessionSocket } from '@src/types/index';
-import redisClient from '@src/helpers/redis.helper';
+import cluster from '@src/helpers/redis.helper';
 import parseMessages from '@src/socketio/parseMessages';
 
 const deleteMessage = async (socket: SessionSocket, chatId: string) => {
   const user = socket.request.session.user;
 
-  const messages = await redisClient.lrange(`messages:${user.id}`, 0, -1);
-  await redisClient.del(`messages:${user.id}`);
+  const messages = await cluster.lrange(`messages:${user.id}`, 0, -1);
+  await cluster.del(`messages:${user.id}`);
 
   const parsedMessages = await parseMessages(messages);
   // console.log(parsedMessages);
@@ -26,7 +26,7 @@ const deleteMessage = async (socket: SessionSocket, chatId: string) => {
         ','
       );
 
-      await redisClient.lpush(`messages:${user.id}`, newMessageStr);
+      await cluster.lpush(`messages:${user.id}`, newMessageStr);
     }
 
     socket.emit('initMessages', newMessages);

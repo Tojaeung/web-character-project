@@ -4,11 +4,11 @@ import { useAppDispatch } from '@src/redux/app/hook';
 import { getUser } from '@src/redux/requests/profile.request';
 
 export const useProfileGetUser = () => {
-  const { userId } = useParams();
-  console.log(userId);
+  const { id } = useParams();
+  console.log(id);
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getUser({ id: userId as string }));
-  }, [dispatch, userId]);
+    dispatch(getUser({ id: id as string }));
+  }, [dispatch, id]);
 };

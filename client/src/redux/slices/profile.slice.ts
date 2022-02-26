@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
-import { UserType } from '../types/user.type';
+import { ProfileType } from '../types/profile.type';
 import { getUser } from '../requests/profile.request';
 
 interface profileType {
   ok: boolean | undefined;
-  user: UserType | undefined;
+  user: ProfileType | undefined;
   message: string | undefined;
 }
 
