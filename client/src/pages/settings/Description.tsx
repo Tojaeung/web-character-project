@@ -10,17 +10,17 @@ import { useEditorConfig } from '@src/hook/useEditorConfig';
 function Description() {
   const navigate = useNavigate();
   const [destModules] = useEditorConfig();
-  const [content, setContent] = useState('');
+  const [desc, setDesc] = useState('');
 
   const onSubmitDesc = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const res = await axios.post('/api/settings/editDesc', { content }, { withCredentials: true });
+    const res = await axios.post('/api/settings/editDesc', { desc }, { withCredentials: true });
     const { ok, message } = res.data;
     if (!ok) return alert(message);
     alert(message);
   };
 
   const onCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setContent('');
+    setDesc('');
     navigate(-1);
   };
   return (
@@ -29,8 +29,8 @@ function Description() {
       <div className="wrapper">
         <ReactQuill
           className="ql-editor"
-          value={content}
-          onChange={setContent}
+          value={desc}
+          onChange={setDesc}
           modules={destModules}
           theme="snow"
           placeholder="내용을 입력하세요...."

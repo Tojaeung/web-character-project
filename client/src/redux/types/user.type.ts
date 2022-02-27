@@ -3,5 +3,7 @@ export type UserType = {
   email: string;
   nickname: string;
   avatar: string;
-  exp: number;
+  role: string;
+  desc: string;
+  level: number;
 };

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
-import { UserRepository, FollowRepository, DescRepository } from '@src/repositorys/profile.repository';
+import { UserRepository, FollowRepository } from '@src/repositorys/profile.repository';
 import logger from '@src/helpers/winston.helper';
 import cluster from '@src/helpers/redis.helper';
 import getLevel from '@src/utils/exp.util';
@@ -11,9 +11,8 @@ const profileController = {
    * desc(자기소개), follower, following 테이블이 user테이블과 결합됩니다.
    */
   getProfile: async (req: Request, res: Response) => {
-    const userRepository = getCustomRepository(UserRepository);
-    const descRepository = getCustomRepository(DescRepository);
-    const followRepository = getCustomRepository(FollowRepository);
+    const userRepo = getCustomRepository(UserRepository);
+    const followRepo = getCustomRepository(FollowRepository);
 
     try {
       const { profileId } = req.body;
@@ -21,16 +20,12 @@ const profileController = {
 
       // 프로필id와 유저id가 같다면(=본인 프로필 조회) 세션 유저정보를 활용한다.
       if (id === profileId) {
-        // 자기소개를 가져옵니다.
-        const desc = await descRepository.findDescByid(Number(id));
-        console.log(desc);
-
         // 유저를 팔로우 한 사람 수를 가져옵니다.
-        const followerNum = await followRepository.getFollowerNum(Number(id));
+        const followerNum = await followRepo.getFollowerNum(Number(id));
         console.log(followerNum);
 
         // 유저가 팔로우 한 사람 수를 가져옵니다.
-        const followeeNum = await followRepository.getFolloweeNum(Number(id));
+        const followeeNum = await followRepo.getFolloweeNum(Number(id));
         console.log(followeeNum);
 
         // exp(경험치)를 레벨로 리턴하는 함수입니다.
@@ -42,8 +37,8 @@ const profileController = {
           email: req.session.user?.email,
           nickname: req.session.user?.nickname,
           avatar: req.session.user?.avatar,
+          desc: req.session.user?.desc,
           level,
-          desc: desc?.content,
           followerNum: followerNum.count,
           followeeNum: followeeNum.count,
         };
@@ -51,27 +46,20 @@ const profileController = {
       }
 
       // 다른유저의 프로필을 조회한다면 유저의 정보를 db를 통해 찾는다.
-      const user = await userRepository.findUserById(Number(profileId));
-
+      const user = await userRepo.findUserById(Number(profileId));
       if (!user) {
         logger.warn('url를 이용해서 존재하지 않는 profileId에 접근하고 있습니다.');
         return res.status(400).json({ ok: false, message: '프로필 유저가 존재하지 않습니다.' });
       }
 
-      // 자기소개를 가져옵니다.
-      const desc = await descRepository.findDescByid(Number(profileId));
-
       // 내가 팔로우 했던 사람이였는지 확인합니다.
-      const isFollowing = await followRepository.isFollowing(Number(id), Number(profileId));
-      console.log({ isFollowing });
+      const isFollowing = await followRepo.isFollowing(Number(id), Number(profileId));
 
       // 유저를 팔로우 한 사람 수를 가져옵니다.
-      const followerNum = await followRepository.getFollowerNum(Number(profileId));
-      console.log(followerNum);
+      const followerNum = await followRepo.getFollowerNum(Number(profileId));
 
       // 유저가 팔로우 한 사람 수를 가져옵니다.
-      const followeeNum = await followRepository.getFolloweeNum(Number(profileId));
-      console.log(followeeNum);
+      const followeeNum = await followRepo.getFolloweeNum(Number(profileId));
 
       // exp(경험치)를 레벨로 리턴하는 함수입니다.
       const exp = await cluster.zscore('exp', profileId);
@@ -82,8 +70,8 @@ const profileController = {
         email: user?.email,
         nickname: user?.nickname,
         avatar: user?.avatar,
+        desc: user.desc,
         level,
-        desc: desc?.content,
         isFollowing: isFollowing ? true : false,
         followerNum: followerNum.count,
         followeeNum: followeeNum.count,

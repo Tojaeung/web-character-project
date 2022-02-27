@@ -4,19 +4,20 @@ import bcrypt from 'bcrypt';
 import logger from '@src/helpers/winston.helper';
 import { sendChangeEmail } from '@src/helpers/nodemailer.helper';
 import { s3 } from '@src/helpers/s3.helper';
-import { UserRepository, AuthRepository, DescRepository, FollowRepository } from '@src/repositorys/profile.repository';
+import { UserRepository, FollowRepository } from '@src/repositorys/profile.repository';
 import cluster from '@src/helpers/redis.helper';
 
 const settingsController = {
   // 이메일 변경을 위한 API입니다. (변경을 위해서 이메일 인증이 필요합니다.)
   editEmail: async (req: Request, res: Response) => {
-    const userRepository = getCustomRepository(UserRepository);
+    const userRepo = getCustomRepository(UserRepository);
     try {
       const newEmail = req.body.email;
+      const id = req.session.user?.id;
       const currentEmail = req.session.user?.email;
 
       // 변경할 이메일이 존재하는지 확인합니다.
-      const existingEmail = await userRepository.findUserByEmail(newEmail);
+      const existingEmail = await userRepo.findUserByEmail(newEmail);
       if (existingEmail) {
         return res.status(200).json({ ok: false, message: '이미 존재하는 이메일 입니다.' });
       }
@@ -39,16 +40,16 @@ const settingsController = {
 
   // 닉네임을 바꾸는 API입니다.
   editNickname: async (req: Request, res: Response) => {
-    const userRepository = getCustomRepository(UserRepository);
+    const userRepo = getCustomRepository(UserRepository);
     try {
       const newNickname = req.body.nickname;
       const id = req.session.user?.id;
 
       // 변경할 닉네임이 존재하는지 확인합니다.
-      const existingNickname = await userRepository.findUserByNickname(newNickname);
+      const existingNickname = await userRepo.findUserByNickname(newNickname);
       if (existingNickname) return res.status(200).json({ ok: false, message: '이미 존재하는 닉네임 입니다.' });
 
-      await userRepository.updateNickname(Number(id), newNickname);
+      await userRepo.updateNickname(Number(id), newNickname);
 
       // 재 로그인을 하지 않고 세션을 변경 해줍니다.
       req.session.user!.nickname = newNickname;
@@ -62,19 +63,19 @@ const settingsController = {
 
   // 비밀번호를 변경하는 API 입니다.
   editPw: async (req: Request, res: Response) => {
-    const userRepository = getCustomRepository(UserRepository);
+    const userRepo = getCustomRepository(UserRepository);
     try {
       const { currentPw, newPw } = req.body;
       const id = req.session.user?.id;
 
       // 비밀번호 일치 확인
-      const user = await userRepository.findUserById(Number(id));
+      const user = await userRepo.findUserById(Number(id));
       const decryptedPw = await bcrypt.compare(currentPw, user?.pw as string);
       if (!decryptedPw) return res.status(200).json({ ok: false, message: '비밀번호가 틀렸습니다.' });
 
       // 일치하면 비밀번호 변경
       const encryptedPw = await bcrypt.hash(newPw, 8);
-      await userRepository.updatePw(Number(id), encryptedPw);
+      await userRepo.updatePw(Number(id), encryptedPw);
 
       return res.status(200).json({ ok: true, message: '비밀번호가 변경되었습니다. 다시 로그인 해주세요.' });
     } catch (err: any) {
@@ -85,7 +86,7 @@ const settingsController = {
 
   // 프로필 사진을 변경하는 API 입니다.
   editAvatar: async (req: Request, res: Response) => {
-    const userRepository = getCustomRepository(UserRepository);
+    const userRepo = getCustomRepository(UserRepository);
     try {
       // s3 helper에서 받아온 file 속성
       const newAvatar = (req.file as Express.MulterS3.File).location;
@@ -118,11 +119,10 @@ const settingsController = {
       });
 
       // user테이블에 avatar, avatarKey 정보를 업데이트 합니다.
-      await userRepository.updateAvatar(Number(id), newAvatar, newAvatarKey);
+      await userRepo.updateAvatar(Number(id), newAvatar, newAvatarKey);
 
       // 재 로그인을 하지 않기 때문에 세션을 변경해줍니다.
       req.session.user!.avatar = newAvatar;
-      req.session.user!.avatarKey = newAvatarKey;
 
       return res.status(200).json({ ok: true, message: '프로필 사진을 변경하였습니다.' });
     } catch (err: any) {
@@ -133,7 +133,7 @@ const settingsController = {
 
   // 프로필이미지를 기본 이미지로 바꾸는 API입니다.
   defaultAvatar: async (req: Request, res: Response) => {
-    const userRepository = getCustomRepository(UserRepository);
+    const userRepo = getCustomRepository(UserRepository);
     try {
       const id = req.session.user?.id;
       const currentAvatarKey = req.session.user?.avatarKey;
@@ -157,7 +157,7 @@ const settingsController = {
       });
 
       // 기본 프로필 이미지로 바꾸기 위해 user테이블을 업데이트 시켜준다.
-      await userRepository.updateAvatar(Number(id), defaultAvatar, defaultAvatarKey);
+      await userRepo.updateAvatar(Number(id), defaultAvatar, defaultAvatarKey);
 
       // 재 로그인 하지 않기 때문에 세션을 변경 해줍니다.
       req.session.user!.avatar = defaultAvatar;
@@ -171,10 +171,8 @@ const settingsController = {
 
   // 계정탈퇴를 위해 유저의 모든 정보를 삭제하는 API입니다.
   delAccount: async (req: Request, res: Response) => {
-    const userRepository = getCustomRepository(UserRepository);
-    const authRepository = getCustomRepository(AuthRepository);
-    const descRepository = getCustomRepository(DescRepository);
-    const followRepository = getCustomRepository(FollowRepository);
+    const userRepo = getCustomRepository(UserRepository);
+    const followRepo = getCustomRepository(FollowRepository);
 
     try {
       const id = req.session.user?.id;
@@ -193,10 +191,8 @@ const settingsController = {
       }
 
       // 관련된 모든 유저정보를 삭제합니다.
-      await userRepository.deleteUser(Number(id));
-      await authRepository.deleteAuth(Number(id));
-      await descRepository.deleteDesc(Number(id));
-      await followRepository.deleteFollow(Number(id));
+      await userRepo.deleteUser(Number(id));
+      await followRepo.deleteFollow(Number(id));
 
       // 레디스에 저장된 유저의 경험치 정보를 삭제합니다.
       await cluster.zrem('exp', id as string);
@@ -212,13 +208,13 @@ const settingsController = {
 
   // 이메일 변경을 위해 이메일 인증메일을 확인하는 API입니다.
   verifyEmail: async (req: Request, res: Response) => {
-    const userRepository = getCustomRepository(UserRepository);
+    const userRepo = getCustomRepository(UserRepository);
     try {
       // 쿼리스트링 파싱
       const { newEmail } = req.query;
       const id = req.session.user?.id;
 
-      await userRepository.updateEmail(Number(id), newEmail as string);
+      await userRepo.updateEmail(Number(id), newEmail as string);
 
       /*
        * 재 로그인을 위해서 홈페이지로 이동합니다.
@@ -233,25 +229,25 @@ const settingsController = {
 
   // 자기소개(description)를 변경하는 API입니다.
   editDesc: async (req: Request, res: Response) => {
-    const descRepository = getCustomRepository(DescRepository);
+    const userRepo = getCustomRepository(UserRepository);
     try {
-      const { content } = req.body;
+      const { desc } = req.body;
       const id = req.session.user?.id;
 
       // 자기소개에 아무것도 입력하지 않고 수정버튼을 눌렀을때
-      if (content.length === 0) {
+      if (desc.length === 0) {
         logger.info('자기소개 변경 글자가 없습니다.');
         return res.status(200).json({ ok: false, message: '자기소개를 입력해주세요.' });
       }
 
       // 자기소개에 입력한 글자가 너무 많을때
-      if (content.length > 1000) {
+      if (desc.length > 1000) {
         logger.info('자기소개 변경 글자가 너무 많습니다.');
         return res.status(200).json({ ok: false, message: '자기소개가 너무 길어서 등록이 안되었습니다.' });
       }
 
       // 변경한 자기소개를 desc테이블에 업데이트합니다.
-      await descRepository.updateDesc(Number(id), content as string);
+      await userRepo.updateDesc(Number(id), desc as string);
 
       logger.info('자기소개 변경 완료되었습니다.');
       return res.status(200).json({ ok: true, message: '자기소개 변경 완료되었습니다.' });

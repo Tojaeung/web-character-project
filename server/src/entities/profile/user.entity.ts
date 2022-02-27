@@ -1,15 +1,4 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  Index,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { Desc } from '@src/entities/profile/desc.entitiy';
-import { Auth } from '@src/entities/profile/auth.entity';
+import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Follow } from '@src/entities/profile/follow.entity';
 
 @Entity('user', { schema: 'profile' })
@@ -17,20 +6,18 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Index('email-userIdx')
   @Column({
     unique: true,
   })
   email: string;
 
-  @Index('nickname-userIdx')
   @Column({
     unique: true,
   })
   nickname: string;
 
-  @Column({ type: 'varchar' })
-  pw: string | undefined;
+  @Column({ type: 'text', nullable: true, default: null })
+  desc: string;
 
   @Column({
     default: 'https://character.s3.ap-northeast-2.amazonaws.com/avatar/default-avatar.png',
@@ -45,11 +32,19 @@ export class User {
   @Column({ default: 'user' })
   role: string;
 
-  @OneToOne(() => Desc, (desc) => desc.user)
-  desc: Desc;
+  @Column({ type: 'varchar' })
+  pw: string | undefined;
 
-  @OneToOne(() => Auth, (auth) => auth.user)
-  auth: Auth;
+  @Column({ type: 'varchar', nullable: true })
+  emailToken: string | null;
+
+  @Column()
+  pwToken: string;
+
+  @Column({
+    default: false,
+  })
+  isVerified: boolean;
 
   @OneToMany(() => Follow, (follow) => follow.followee_user)
   followees: Follow[];

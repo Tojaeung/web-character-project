@@ -1,20 +1,29 @@
 import { AbstractRepository, EntityRepository, getConnection } from 'typeorm';
 import { User } from '@src/entities/profile/user.entity';
-import { Auth } from '@src/entities/profile/auth.entity';
+// import { Auth } from '@src/entities/profile/auth.entity';
 import { Follow } from '@src/entities/profile/follow.entity';
-import { Desc } from '@src/entities/profile/desc.entitiy';
+// import { Desc } from '@src/entities/profile/desc.entitiy';
 
 @EntityRepository(User)
 export class UserRepository extends AbstractRepository<User> {
+  // 이메일로 유저정보를 찾는 쿼리입니다.
   findUserByEmail(email: string) {
     return this.createQueryBuilder('user').where('user.email = :email', { email }).getOne();
   }
+
+  // 닉네임으로 유저정보를 찾는 쿼리입니다.
   findUserByNickname(nickname: string) {
     return this.createQueryBuilder('user').where('user.nickname = :nickname', { nickname }).getOne();
   }
 
+  // PK id로 유저정보를 찾는 쿼리입니다.
   findUserById(id: number) {
     return this.createQueryBuilder('user').where('user.id = :id', { id }).getOne();
+  }
+
+  // 비밀번호 변경시 사용되는 pwToken으로 유저정보를 찾는 쿼리입니다.
+  findUserByPwToken(pwToken: string) {
+    return this.createQueryBuilder('user').where('user.pwToken = :pwToken', { pwToken }).getOne();
   }
 
   updateEmail(id: number, email: string) {
@@ -25,54 +34,26 @@ export class UserRepository extends AbstractRepository<User> {
     return this.createQueryBuilder('user').update(User).set({ nickname }).where('id = :id', { id }).execute();
   }
 
+  // 로그인 상태에서 비밀번호변경으로 비밀번호를 변경하는 쿼리입니다.
   updatePw(id: number, pw: string) {
     return this.createQueryBuilder('user').update(User).set({ pw }).where('id = :id', { id }).execute();
+  }
+
+  // 로그인이 안된 상태에서 비밀번호찾기로 비밀번호를 변경하는 쿼리입니다.
+  updatePwAndPwToken(id: number, pw: string, pwToken: string) {
+    return this.createQueryBuilder('user').update(User).set({ pw, pwToken }).where('id = :id', { id }).execute();
   }
 
   updateAvatar(id: number, avatar: string, avatarKey: string) {
     return this.createQueryBuilder('user').update(User).set({ avatar, avatarKey }).where('id = :id', { id }).execute();
   }
 
+  updateDesc(id: number, desc: string) {
+    return this.createQueryBuilder('user').update(User).set({ desc }).where('user_id = :id', { id }).execute();
+  }
+
   deleteUser(id: number) {
     return this.createQueryBuilder('user').delete().from(User).where('id = :id', { id }).execute();
-  }
-}
-
-@EntityRepository(Auth)
-export class AuthRepository extends AbstractRepository<Auth> {
-  findAuthByEmailToken(emailToken: string) {
-    return this.createQueryBuilder('auth').where('auth.emailToken = :emailToken', { emailToken }).getOne();
-  }
-
-  findAuthByUser_id(id: number) {
-    return this.createQueryBuilder('auth').where('auth.user_id = :user_id', { user_id: id }).getOne();
-  }
-
-  findAuthByPwToken(pwToken: string) {
-    return this.createQueryBuilder('auth').where('auth.pwToken = :pwToken', { pwToken }).getOne();
-  }
-
-  updatePwToken(id: number, pwToken: string) {
-    return this.createQueryBuilder('auth').update(Auth).set({ pwToken }).where('auth.user_id = :id', { id }).execute();
-  }
-
-  deleteAuth(id: number) {
-    return this.createQueryBuilder('auth').delete().from(Auth).where('auth.user_id = :id', { id }).execute();
-  }
-}
-
-@EntityRepository(Desc)
-export class DescRepository extends AbstractRepository<Desc> {
-  findDescByid(id: number) {
-    return this.createQueryBuilder('desc').where('desc.user_id = :id', { id }).getOne();
-  }
-
-  updateDesc(id: number, content: string) {
-    return this.createQueryBuilder('desc').update(Desc).set({ content }).where('user_id = :id', { id }).execute();
-  }
-
-  deleteDesc(id: number) {
-    return this.createQueryBuilder('desc').delete().from(Desc).where('user_id = :id', { id }).execute();
   }
 }
 

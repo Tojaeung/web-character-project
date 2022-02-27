@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container } from './Info.styled';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FiSettings } from 'react-icons/fi';
 import socket from '@src/utils/socket';
