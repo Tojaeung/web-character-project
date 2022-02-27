@@ -2,14 +2,29 @@ import styled from 'styled-components';
 import { redButtonStyle, greenButtonStyle } from '@src/styles/GlobalStyles';
 
 export const Container = styled.div`
-  display: flex;
-  padding: 2rem;
   width: 100%;
-  border: 1px solid ${({ theme }) => theme.palette.gray1};
-  .avatar-wrapper {
-    width: 25rem;
-    height: 25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .cover-wrapper {
+    width: 70rem;
+    height: 30rem;
+    border-radius: 10px;
     overflow: hidden;
+  }
+  .cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .avatar-wrapper {
+    width: 20rem;
+    height: 20rem;
+    border-radius: 50%;
+    overflow: hidden;
+    position: absolute;
+    top: 25rem;
+    border: 3px solid ${({ theme }) => theme.palette.gray1};
   }
   .avatar-img {
     width: 100%;
@@ -17,11 +32,15 @@ export const Container = styled.div`
     object-fit: cover;
   }
   .info-wrapper {
-    padding: 2rem;
+    padding-top: 10rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .row1 {
     font-size: 3rem;
     display: flex;
+    justify-content: center;
     align-items: center;
   }
   .level {
@@ -29,19 +48,27 @@ export const Container = styled.div`
     margin-right: 1rem;
   }
   .nickname {
-    margin-right: 3rem;
+    font-weight: 700;
   }
 
-  .follow-wrapper {
-    padding: 2rem 2rem;
-    font-size: 1.8rem;
+  .row2 {
+    padding: 1rem 0rem;
+  }
+  .desc {
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  .row3 {
+    font-size: 1.3rem;
     display: flex;
+    font-weight: 500;
   }
   .follower {
-    margin-right: 5rem;
+    margin-right: 2rem;
   }
-  .btn-wrapper {
+  .row4 {
     display: flex;
+    padding: 1rem 0;
   }
   .chatBtn-wrapper {
     margin-right: 1rem;
@@ -61,25 +88,6 @@ export const Container = styled.div`
   }
   .unFollow-btn {
     ${redButtonStyle};
-    padding: 1rem;
-  }
-  .desc-wrapper {
-  }
-  .desc-title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-  }
-  .desc-icon {
-    margin-left: 0.5rem;
-    cursor: pointer;
-  }
-  .desc {
-    font-size: 1.5rem;
-  }
-  .desc-btn {
-    ${greenButtonStyle};
     padding: 1rem;
   }
 `;

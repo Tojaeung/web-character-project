@@ -1,5 +1,15 @@
-import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Follow } from '@src/entities/profile/follow.entity';
+import { Desc } from './desc.entity';
 
 @Entity('user', { schema: 'profile' })
 export class User {
@@ -16,9 +26,6 @@ export class User {
   })
   nickname: string;
 
-  @Column({ type: 'text', nullable: true, default: null })
-  desc: string;
-
   @Column({
     default: 'https://character.s3.ap-northeast-2.amazonaws.com/avatar/default-avatar.png',
   })
@@ -28,6 +35,16 @@ export class User {
     default: 'default-avatar.png',
   })
   avatarKey: string;
+
+  @Column({
+    default: 'https://character.s3.ap-northeast-2.amazonaws.com/cover/default-cover.jpg',
+  })
+  cover: string;
+
+  @Column({
+    default: 'default-cover.jpg',
+  })
+  coverKey: string;
 
   @Column({ default: 'user' })
   role: string;
@@ -46,6 +63,9 @@ export class User {
   })
   isVerified: boolean;
 
+  @OneToOne(() => Desc, (desc) => desc.user)
+  desc: Desc;
+
   @OneToMany(() => Follow, (follow) => follow.followee_user)
   followees: Follow[];
 
@@ -53,8 +73,8 @@ export class User {
   followers: Follow[];
 
   @CreateDateColumn()
-  createAt: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updateAt: Date;
+  updatedAt: Date;
 }

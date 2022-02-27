@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import logger from '@src/helpers/winston.helper';
 import { sendChangeEmail } from '@src/helpers/nodemailer.helper';
 import { s3 } from '@src/helpers/s3.helper';
-import { UserRepository, FollowRepository } from '@src/repositorys/profile.repository';
+import { UserRepository, FollowRepository, DescRepository } from '@src/repositorys/profile.repository';
 import cluster from '@src/helpers/redis.helper';
 
 const settingsController = {
@@ -96,14 +96,15 @@ const settingsController = {
 
       // s3 helper가 오류가 났을경우
       if (!newAvatar || !newAvatarKey) {
-        logger.warn('s3에서 변경할 프로필 사진을 받아오지 못했습니다.');
-        return res.status(400).json({ message: '변경할 프로필 사진을 찾지 못했습니다.' });
+        logger.warn('s3에서 변경할 프로필 이미지를 받아오지 못했습니다.');
+        return res.status(400).json({ message: '변경할 프로필 이미지를 찾지 못했습니다.' });
       }
 
       // 현재 아바타가 기본 아바타라면 삭제하지 않는다
       if (currentAvatarKey === defaultAvatarKey) {
         // 재 로그인을 하지 않기 때문에 세션을 변경해줍니다.
         req.session.user!.avatar = newAvatar;
+        req.session.user!.avatarKey = newAvatarKey;
         return res.status(200).json({ ok: true, message: '프로필 사진을 변경하였습니다.' });
       }
 
@@ -126,7 +127,7 @@ const settingsController = {
       return res.status(200).json({ ok: true, message: '프로필 사진을 변경하였습니다.' });
     } catch (err: any) {
       logger.error('프로필사진 변경 에러', err);
-      return res.status(500).json({ ok: false, message: '프로필사진 변경 에러' });
+      return res.status(500).json({ ok: false, message: '프로필 사진 변경 에러' });
     }
   },
 
@@ -143,7 +144,7 @@ const settingsController = {
 
       // 이미 기본 이미지일때
       if (currentAvatarKey === defaultAvatarKey) {
-        return res.status(200).json({ ok: false, message: '이미 기본 이미지입니다.' });
+        return res.status(200).json({ ok: false, message: '이미 기본 프로필 이미지입니다.' });
       }
 
       // 현재 프로필 사진이 기본 이미지가 아닐때 이전 프로필 사진을 s3 객체삭제 합니다.
@@ -162,10 +163,96 @@ const settingsController = {
       req.session.user!.avatar = defaultAvatar;
       req.session.user!.avatarKey = defaultAvatarKey;
 
-      return res.status(200).json({ ok: true, message: '기본 이미지로 변경되었습니다.' });
+      return res.status(200).json({ ok: true, message: '기본 프로필 이미지로 변경되었습니다.' });
     } catch (err: any) {
       logger.error('기본 프로필 사진 변경 에러', err);
-      return res.status(500).json({ ok: false, message: '기본 프로필 사진 변경 에러' });
+      return res.status(500).json({ ok: false, message: '기본 프로필 이미지 변경 에러' });
+    }
+  },
+
+  editCover: async (req: Request, res: Response) => {
+    const userRepo = getCustomRepository(UserRepository);
+    try {
+      // s3 helper에서 받아온 file 속성
+      const newCover = (req.file as Express.MulterS3.File).location;
+      const newCoverKey = (req.file as Express.MulterS3.File).key;
+
+      const id = req.session.user?.id;
+      const currentCoverKey = req.session.user?.avatarKey;
+      const defaultCoverKey = 'default-cover.jpg';
+
+      // s3 helper가 오류가 났을경우
+      if (!newCover || !newCoverKey) {
+        logger.warn('s3에서 변경할 커버 이미지을 받아오지 못했습니다.');
+        return res.status(400).json({ message: '변경할 커버 이미지를 찾지 못했습니다.' });
+      }
+
+      // 현재 아바타가 기본 아바타라면 삭제하지 않는다
+      if (currentCoverKey === defaultCoverKey) {
+        // 재 로그인을 하지 않기 때문에 세션을 변경해줍니다.
+        req.session.user!.cover = newCover;
+        req.session.user!.coverKey = newCoverKey;
+        return res.status(200).json({ ok: true, message: '커버 사진을 변경하였습니다.' });
+      }
+
+      // s3 최적화를 위해 현재 아바타가 기본 아바타가 아니라면 현재아바타를 삭제한다.
+      const bucketName = process.env.AWS_BUCKET_NAME as string;
+      s3.deleteObject({ Bucket: bucketName, Key: currentCoverKey as string }, (err) => {
+        if (err) {
+          logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
+          return res.status(400).json({ ok: false, message: 's3 최적화 실패하였습니다.' });
+        }
+      });
+
+      // user테이블에 avatar, avatarKey 정보를 업데이트 합니다.
+      await userRepo.updateCover(Number(id), newCover, newCoverKey);
+
+      // 재 로그인을 하지 않기 때문에 세션을 변경해줍니다.
+      req.session.user!.cover = newCover;
+      req.session.user!.coverKey = newCoverKey;
+
+      return res.status(200).json({ ok: true, message: '커버 이미지를 변경하였습니다.' });
+    } catch (err: any) {
+      logger.error('프로필사진 변경 에러', err);
+      return res.status(500).json({ ok: false, message: '커버 이미지 변경 에러' });
+    }
+  },
+
+  defaultCover: async (req: Request, res: Response) => {
+    const userRepo = getCustomRepository(UserRepository);
+    try {
+      const id = req.session.user?.id;
+      const currentCoverKey = req.session.user?.coverKey;
+
+      // 기본 프로필 사진 데이터입니다.
+      const defaultCover = 'https://character.s3.ap-northeast-2.amazonaws.com/cover/default-cover.jpg';
+      const defaultCoverKey = 'default-cover.jpg';
+
+      // 이미 기본 이미지일때
+      if (currentCoverKey === defaultCoverKey) {
+        return res.status(200).json({ ok: false, message: '이미 기본 커버 이미지입니다.' });
+      }
+
+      // 현재 프로필 사진이 기본 이미지가 아닐때 이전 프로필 사진을 s3 객체삭제 합니다.
+      const bucketName = process.env.AWS_BUCKET_NAME as string;
+      s3.deleteObject({ Bucket: bucketName, Key: currentCoverKey as string }, (err) => {
+        if (err) {
+          logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
+          return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
+        }
+      });
+
+      // 기본 프로필 이미지로 바꾸기 위해 user테이블을 업데이트 시켜준다.
+      await userRepo.updateCover(Number(id), defaultCover, defaultCoverKey);
+
+      // 재 로그인 하지 않기 때문에 세션을 변경 해줍니다.
+      req.session.user!.cover = defaultCover;
+      req.session.user!.coverKey = defaultCoverKey;
+
+      return res.status(200).json({ ok: true, message: '기본 커버 이미지로 변경되었습니다.' });
+    } catch (err: any) {
+      logger.error('기본 프로필 사진 변경 에러', err);
+      return res.status(500).json({ ok: false, message: '기본 커버 이미지 변경 에러' });
     }
   },
 
@@ -190,9 +277,8 @@ const settingsController = {
         });
       }
 
-      // 관련된 모든 유저정보를 삭제합니다.
+      // onDelete: cascade 때문에 관계된 모든 유저정보를 삭제합니다.
       await userRepo.deleteUser(Number(id));
-      await followRepo.deleteFollow(Number(id));
 
       // 레디스에 저장된 유저의 경험치 정보를 삭제합니다.
       await cluster.zrem('exp', id as string);
@@ -231,7 +317,7 @@ const settingsController = {
 
   // 자기소개(description)를 변경하는 API입니다.
   editDesc: async (req: Request, res: Response) => {
-    const userRepo = getCustomRepository(UserRepository);
+    const descRepo = getCustomRepository(DescRepository);
     try {
       const { desc } = req.body;
       const id = req.session.user?.id;
@@ -243,15 +329,13 @@ const settingsController = {
       }
 
       // 자기소개에 입력한 글자가 너무 많을때
-      if (desc.length > 1000) {
+      if (desc.length > 5000) {
         logger.info('자기소개 변경 글자가 너무 많습니다.');
         return res.status(200).json({ ok: false, message: '자기소개가 너무 길어서 등록이 안되었습니다.' });
       }
 
       // 변경한 자기소개를 desc테이블에 업데이트합니다.
-      await userRepo.updateDesc(Number(id), desc as string);
-      // 세션 정보 변경
-      req.session.user!.desc = desc;
+      await descRepo.updateDesc(Number(id), desc as string);
 
       logger.info('자기소개 변경 완료되었습니다.');
       return res.status(200).json({ ok: true, message: '자기소개 변경 완료되었습니다.' });

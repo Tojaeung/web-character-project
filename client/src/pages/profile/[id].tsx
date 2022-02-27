@@ -17,9 +17,9 @@ function Profile() {
       <div className="info">
         <Info />
       </div>
-      <div className="wrapper">
-        <div className="list"></div>
-        <div className="content"></div>
+      <div className="photo">
+        <div className="list">rfew</div>
+        <div className="content">fewrf</div>
       </div>
     </Container>
   );

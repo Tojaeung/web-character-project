@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
-import { UserRepository, FollowRepository } from '@src/repositorys/profile.repository';
+import { UserRepository, FollowRepository, DescRepository } from '@src/repositorys/profile.repository';
 import logger from '@src/helpers/winston.helper';
 import cluster from '@src/helpers/redis.helper';
 import getLevel from '@src/utils/exp.util';
@@ -8,7 +8,7 @@ import getLevel from '@src/utils/exp.util';
 const profileController = {
   /*
    * 프로필유저 정보를 클라이언트에 보내는 API입니다.
-   * desc(자기소개), follower, following 테이블이 user테이블과 결합됩니다.
+   * follow 테이블이 user테이블과 결합됩니다.
    */
   getProfile: async (req: Request, res: Response) => {
     const userRepo = getCustomRepository(UserRepository);
@@ -22,26 +22,21 @@ const profileController = {
       if (id === profileId) {
         // 유저를 팔로우 한 사람 수를 가져옵니다.
         const followerNum = await followRepo.getFollowerNum(Number(id));
-        console.log(followerNum);
 
         // 유저가 팔로우 한 사람 수를 가져옵니다.
         const followeeNum = await followRepo.getFolloweeNum(Number(id));
-        console.log(followeeNum);
 
         // exp(경험치)를 레벨로 리턴하는 함수입니다.
         const exp = await cluster.zscore('exp', id);
         const level = await getLevel(Number(exp));
 
         const profile = {
-          id: req.session.user?.id,
-          email: req.session.user?.email,
-          nickname: req.session.user?.nickname,
-          avatar: req.session.user?.avatar,
-          desc: req.session.user?.desc,
-          level,
+          ...req.session.user,
+          level: level as number,
           followerNum: followerNum.count,
           followeeNum: followeeNum.count,
         };
+
         return res.status(200).json({ ok: true, message: '프로필 유저를 가져왔습니다.', profile });
       }
 
@@ -66,11 +61,14 @@ const profileController = {
       const level = await getLevel(Number(exp));
 
       const profile = {
-        id: user?.id,
+        id: String(user?.id),
         email: user?.email,
         nickname: user?.nickname,
         avatar: user?.avatar,
-        desc: user.desc,
+        avatarKey: user?.avatarKey,
+        cover: user?.cover,
+        coverKey: user?.coverKey,
+        role: user?.role,
         level,
         isFollowing: isFollowing ? true : false,
         followerNum: followerNum.count,
@@ -84,24 +82,43 @@ const profileController = {
     }
   },
 
+  getDesc: async (req: Request, res: Response) => {
+    const descRepo = getCustomRepository(DescRepository);
+
+    try {
+      const id = req.session.user?.id;
+
+      const desc = await descRepo.getDesc(Number(id));
+      if (!desc) {
+        logger.warn('유저정보는 존재하지만 자기소개 정보가 존재 하지 않습니다.');
+        return res.status(400).json({ ok: false, message: '자기소개를 가져올수 없습니다.' });
+      }
+
+      return res.status(200).json({ ok: true, message: '자기소개를 가져왔습니다.', desc: desc?.desc });
+    } catch (err: any) {
+      logger.info('자기소개 가져오기 에러', err);
+      return res.status(500).json({ ok: false, message: '자기소개 가져오기 에러' });
+    }
+  },
+
   // 상대를 follower, following 테이블에 추가하기 위한 API입니다.
   follow: async (req: Request, res: Response) => {
-    const userRepository = getCustomRepository(UserRepository);
-    const followRepository = getCustomRepository(FollowRepository);
+    const userRepo = getCustomRepository(UserRepository);
+    const followRepo = getCustomRepository(FollowRepository);
 
     try {
       const { profileId } = req.body;
       const id = req.session.user?.id;
 
       // 프로필 유저가 존재하는지 확인한다.
-      const profileUser = await userRepository.findUserById(profileId);
+      const profileUser = await userRepo.findUserById(profileId);
       if (!profileUser) {
         logger.info('프로필 유저가 존재하지 않습니다.');
         return res.status(200).json({ ok: false, message: '유저가 존재 하지않습니다.' });
       }
 
       // follower, following 테이블에 나와 상대의 정보를 추가한다.
-      await followRepository.follow(Number(id), profileId);
+      await followRepo.follow(Number(id), profileId);
 
       logger.info(`${profileUser?.nickname}님을 팔로우 하였습니다.`);
       return res.status(200).json({ ok: true, message: `${profileUser?.nickname}님을 팔로우 하였습니다.` });
@@ -113,22 +130,22 @@ const profileController = {
 
   // 상대를 follower, following 테이블에 삭제하기 위한 API입니다.
   unFollow: async (req: Request, res: Response) => {
-    const userRepository = getCustomRepository(UserRepository);
-    const followRepository = getCustomRepository(FollowRepository);
+    const userRepo = getCustomRepository(UserRepository);
+    const followRepo = getCustomRepository(FollowRepository);
 
     try {
       const { profileId } = req.body;
       const id = req.session.user?.id;
 
       // 프로필 유저가 존재하는지 확인한다.
-      const profileUser = await userRepository.findUserById(profileId);
+      const profileUser = await userRepo.findUserById(profileId);
       if (!profileUser) {
         logger.info('프로필 유저가 존재하지 않습니다.');
         return res.status(200).json({ ok: false, message: '유저가 존재 하지않습니다.' });
       }
 
       // follower, following 테이블에 나와 상대의 정보를 삭제한다.
-      await followRepository.unFollow(Number(id), profileId);
+      await followRepo.unFollow(Number(id), profileId);
 
       logger.info(`${profileUser?.nickname}님을 언팔로우 하였습니다.`);
       return res.status(200).json({ ok: true, message: `${profileUser?.nickname}님을 언팔로우 하였습니다.` });

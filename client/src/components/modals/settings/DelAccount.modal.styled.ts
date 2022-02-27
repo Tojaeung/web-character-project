@@ -31,8 +31,9 @@ export const Container = styled.div<{ confirmText: string }>`
   }
 
   .caution-wrapper {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     font-size: 1.2rem;
     border-top: 1px solid ${({ theme }) => theme.palette.red};

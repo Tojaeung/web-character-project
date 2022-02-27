@@ -55,7 +55,7 @@ export const authSlice = createSlice({
   },
 });
 
-// export const {  } = authSlice.actions;
+// export const { } = authSlice.actions;
 export const selectAuthOk = (state: RootState) => state.auth.ok;
 export const selectAuthMessage = (state: RootState) => state.auth.message;
 export const selectAuthUser = (state: RootState) => state.auth.user;

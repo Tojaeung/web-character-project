@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import settingsController from '@src/controllers/settings.controller';
 import auth from '@src/middlewares/auth.middleware';
-import { avatarUpload } from '@src/helpers/s3.helper';
+import { avatarUpload, coverUpload } from '@src/helpers/s3.helper';
 
 const settingsRouter = Router();
 
@@ -16,10 +16,13 @@ settingsRouter.post(
 );
 settingsRouter.get('/settings/account/defaultAvatar', auth, settingsController.defaultAvatar);
 
+settingsRouter.post('/settings/account/editCover', auth, coverUpload.single('newCover'), settingsController.editCover);
+settingsRouter.get('/settings/account/defaultCover', auth, settingsController.defaultCover);
+
 settingsRouter.get('/settings/account/delAccount', auth, settingsController.delAccount);
 
 settingsRouter.get('/settings/account/verifyEmail', settingsController.verifyEmail);
 
-settingsRouter.post('/settings/editDesc', settingsController.editDesc);
+settingsRouter.post('/settings/editDesc', auth, settingsController.editDesc);
 
 export default settingsRouter;

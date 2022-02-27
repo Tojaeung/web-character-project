@@ -22,6 +22,7 @@ function DelAccountModal() {
     if (!ok) return alert(message);
     alert(message);
     socket.emit('deleteUser');
+    await dispatch(closeModal());
     await dispatch(logoutUser());
   };
 
@@ -32,7 +33,7 @@ function DelAccountModal() {
         <div className="title">정말 탈퇴하시겠습니까?</div>
         <div className="caution-wrapper">
           <AiOutlineWarning className="caution-icon" />
-          탈퇴시, 작성했던 글,댓글 등 모든것들은 타인의 것으로 간주됩니다.
+          탈퇴시, 작성했던 글,댓글 등 모든것들이 삭제됩
         </div>
         <div className="guide">
           <span>'계정탈퇴'</span> 를 입력하면 버튼이 활성화 됩니다.

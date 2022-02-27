@@ -1,7 +1,5 @@
 import React from 'react';
 import { Container } from './Info.styled';
-import { useNavigate } from 'react-router-dom';
-import { FiSettings } from 'react-icons/fi';
 import socket from '@src/utils/socket';
 import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
 import { selectProfileProfile } from '@src/redux/slices/profile.slice';
@@ -9,9 +7,9 @@ import { selectAuthUser } from '@src/redux/slices/auth.slice';
 import { selectChats } from '@src/redux/slices/chat.slice';
 import { openChatModal } from '@src/redux/slices/chat.slice';
 import { follow, unFollow } from '@src/redux/requests/profile.request';
+import { openModal } from '@src/redux/slices/modal.slice';
 
 function Info() {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const profile = useAppSelector(selectProfileProfile);
   const user = useAppSelector(selectAuthUser);
@@ -33,41 +31,31 @@ function Info() {
     await dispatch(unFollow({ profileId: profile!.id }));
   };
 
+  const onShowDesc = async (e: React.MouseEvent<HTMLDivElement>) => {
+    await dispatch(openModal({ mode: 'showDesc' }));
+  };
+
   return (
     <Container>
+      <div className="cover-wrapper">
+        <img className="cover-img" src={profile?.cover} alt="커버" />
+      </div>
       <div className="avatar-wrapper">
         <img className="avatar-img" src={profile?.avatar} alt="프사" />
       </div>
       <div className="info-wrapper">
         <div className="row1">
-          <span className="level">[Lv.{profile?.level}]</span>
+          <div className="level">[Lv.{profile?.level}]</div>
           <div className="nickname">{profile?.nickname}</div>
-          <div className="btn-wrapper">
-            <div className="chatBtn-wrapper">
-              {profile?.id !== user?.id && chats.filter((chat) => chat.id === profile?.id).length === 0 && (
-                <button className="startChat-btn" onClick={onAddChat}>
-                  채팅하기
-                </button>
-              )}
-              {profile?.id !== user?.id && chats.filter((chat) => chat.id === profile?.id).length !== 0 && (
-                <button className="chatting-btn">채팅중...💬</button>
-              )}
-            </div>
-            <div className="followBtn-wrapper">
-              {profile?.id !== user?.id && profile?.isFollowing === false && (
-                <button className="follow-btn" onClick={onFollow}>
-                  팔로우
-                </button>
-              )}
-              {profile?.id !== user?.id && profile?.isFollowing === true && (
-                <button className="unFollow-btn" onClick={onUnFollow}>
-                  언팔로우
-                </button>
-              )}
-            </div>
+        </div>
+
+        <div className="row2">
+          <div className="desc" onClick={onShowDesc}>
+            자기소개
           </div>
         </div>
-        <div className="follow-wrapper">
+
+        <div className="row3">
           <div className="follower">
             <span>팔로워</span> {profile?.followerNum}
           </div>
@@ -75,16 +63,30 @@ function Info() {
             <span>팔로잉</span> {profile?.followeeNum}
           </div>
         </div>
-        <hr />
-        <div className="desc-wrapper">
-          <div className="desc-title">
-            자기소개
-            {profile?.id === user?.id && (
-              <FiSettings className="desc-icon" onClick={(e) => navigate('/settings/description')} />
+
+        <div className="row4">
+          <div className="chatBtn-wrapper">
+            {profile?.id !== user?.id && chats.filter((chat) => chat.id === profile?.id).length === 0 && (
+              <button className="startChat-btn" onClick={onAddChat}>
+                채팅하기
+              </button>
+            )}
+            {profile?.id !== user?.id && chats.filter((chat) => chat.id === profile?.id).length !== 0 && (
+              <button className="chatting-btn">채팅중...💬</button>
             )}
           </div>
-
-          <div className="desc" dangerouslySetInnerHTML={{ __html: profile?.desc as string }}></div>
+          <div className="followBtn-wrapper">
+            {profile?.id !== user?.id && profile?.isFollowing === false && (
+              <button className="follow-btn" onClick={onFollow}>
+                팔로우
+              </button>
+            )}
+            {profile?.id !== user?.id && profile?.isFollowing === true && (
+              <button className="unFollow-btn" onClick={onUnFollow}>
+                언팔로우
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </Container>

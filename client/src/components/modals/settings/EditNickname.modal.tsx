@@ -1,11 +1,10 @@
-import React from 'react';
 import { Container } from './EditNickname.modal.styled';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { closeModal } from '@src/redux/slices/modal.slice';
 import { useAppDispatch } from '@src/redux/app/hook';
+import { refreshLogin } from '@src/redux/requests/auth.request';
 
 interface IFormInputType {
   nickname: string;
@@ -13,7 +12,6 @@ interface IFormInputType {
 
 function EditNicknameModal() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const {
     register,
@@ -29,9 +27,9 @@ function EditNicknameModal() {
     );
     const { ok, message } = res.data;
     if (!ok) return alert(message);
-    await dispatch(closeModal());
     alert(message);
-    navigate('/');
+    await dispatch(closeModal());
+    await dispatch(refreshLogin());
   };
 
   const onClose = async (e: any) => {

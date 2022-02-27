@@ -2,13 +2,12 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { User } from '@src/entities/profile/user.entity';
-// import { Auth } from '@src/entities/profile/auth.entity';
-// import { Desc } from '@src/entities/profile/desc.entitiy';
 import { UserRepository } from '@src/repositorys/profile.repository';
 import logger from '@src/helpers/winston.helper';
 import { sendRegisterEmail, sendFindEmail } from '@src/helpers/nodemailer.helper';
 import cluster from '@src/helpers/redis.helper';
 import getLevel from '@src/utils/exp.util';
+import { Desc } from '@src/entities/profile/desc.entity';
 
 const authController = {
   // 회원가입  API 입니다.
@@ -44,6 +43,11 @@ const authController = {
       user.emailToken = emailToken;
       user.pwToken = pwToken;
       await getRepository(User).save(user);
+
+      // 자기소개 테이블에 정보를 저장합니다.(유저테이블과 1:1관계)
+      const desc = new Desc();
+      desc.user_id = user.id;
+      await getRepository(Desc).save(desc);
 
       // 인증이메일을 발송합니다.
       await sendRegisterEmail(req, res, user.id, email, emailToken);
@@ -105,22 +109,14 @@ const authController = {
         nickname: existingUser.nickname,
         avatar: existingUser.avatar,
         avatarKey: existingUser.avatarKey,
+        cover: existingUser.cover,
+        coverKey: existingUser.coverKey,
         role: existingUser.role,
-        desc: existingUser.desc,
         level: level as number,
       };
 
       // 클라이언트에게 보내는 유저정보
-      const user = {
-        id: String(existingUser.id),
-        email: existingUser.email,
-        nickname: existingUser.nickname,
-        avatar: existingUser.avatar,
-        avatarKey: existingUser.avatarKey,
-        role: existingUser.role,
-        desc: existingUser.desc,
-        level: level as number,
-      };
+      const user = req.session.user;
 
       logger.info('로그인 되었습니다.');
       return res.status(200).json({ ok: true, message: '로그인 되었습니다.', user });

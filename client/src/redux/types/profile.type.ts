@@ -4,8 +4,10 @@ export type ProfileType = {
   nickname: string;
   avatar: string;
   avatarKey: string;
+  cover: string;
+  coverKey: string;
+  role: string;
   level: number;
-  desc: string;
   isFollowing: boolean | undefined;
   followerNum: number;
   followeeNum: number;

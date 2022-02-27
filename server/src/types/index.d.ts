@@ -11,7 +11,9 @@ declare module 'express-session' {
       nickname: string;
       avatar: string;
       avatarKey: string;
-      desc: string;
+      cover: string;
+      coverKey: string;
+      role: string;
       level: number;
     };
   }

@@ -20,6 +20,12 @@ export const Container = styled.div`
     color: ${({ theme }) => theme.palette.red};
     font-size: 1.5rem;
   }
+
+  .defaultBtn {
+    ${redButtonStyle};
+    padding: 1rem 2rem;
+    margin-right: 2rem;
+  }
   .btn {
     ${greenButtonStyle};
     padding: 1rem 2rem;

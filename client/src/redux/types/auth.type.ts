@@ -4,8 +4,9 @@ export type UserType = {
   nickname: string;
   avatar: string;
   avatarKey: string;
+  cover: string;
+  covetKey: string;
   role: string;
-  desc: string;
   level: number;
 };
 

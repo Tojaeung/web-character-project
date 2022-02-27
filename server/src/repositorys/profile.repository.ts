@@ -2,6 +2,7 @@ import { AbstractRepository, EntityRepository, getConnection } from 'typeorm';
 import { User } from '@src/entities/profile/user.entity';
 // import { Auth } from '@src/entities/profile/auth.entity';
 import { Follow } from '@src/entities/profile/follow.entity';
+import { Desc } from '@src/entities/profile/desc.entity';
 // import { Desc } from '@src/entities/profile/desc.entitiy';
 
 @EntityRepository(User)
@@ -48,12 +49,22 @@ export class UserRepository extends AbstractRepository<User> {
     return this.createQueryBuilder('user').update(User).set({ avatar, avatarKey }).where('id = :id', { id }).execute();
   }
 
-  updateDesc(id: number, desc: string) {
-    return this.createQueryBuilder('user').update(User).set({ desc }).where('user_id = :id', { id }).execute();
+  updateCover(id: number, cover: string, coverKey: string) {
+    return this.createQueryBuilder('user').update(User).set({ cover, coverKey }).where('id = :id', { id }).execute();
   }
 
   deleteUser(id: number) {
     return this.createQueryBuilder('user').delete().from(User).where('id = :id', { id }).execute();
+  }
+}
+
+@EntityRepository(Desc)
+export class DescRepository extends AbstractRepository<Desc> {
+  getDesc(id: number) {
+    return this.createQueryBuilder('desc').where('user_id = :id', { id }).getOne();
+  }
+  updateDesc(id: number, desc: string) {
+    return this.createQueryBuilder('desc').update(Desc).set({ desc }).where('user_id = :id', { id }).execute();
   }
 }
 
