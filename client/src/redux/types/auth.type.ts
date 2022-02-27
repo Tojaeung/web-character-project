@@ -1,4 +1,13 @@
-import { UserType } from './user.type';
+export type UserType = {
+  id: string;
+  email: string;
+  nickname: string;
+  avatar: string;
+  avatarKey: string;
+  role: string;
+  desc: string;
+  level: number;
+};
 
 export type loginReturnType = {
   ok: boolean | undefined;

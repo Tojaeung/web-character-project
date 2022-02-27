@@ -28,8 +28,6 @@ const settingsController = {
        */
       await sendChangeEmail(req, res, newEmail, currentEmail);
 
-      req.session.user!.email = newEmail;
-
       logger.info('이메일 변경 인증 메세지를 보냈습니다.');
       return res.status(200).json({ ok: true, message: '이메일 인증 메세지를 보냈습니다.' });
     } catch (err: any) {
@@ -123,6 +121,7 @@ const settingsController = {
 
       // 재 로그인을 하지 않기 때문에 세션을 변경해줍니다.
       req.session.user!.avatar = newAvatar;
+      req.session.user!.avatarKey = newAvatarKey;
 
       return res.status(200).json({ ok: true, message: '프로필 사진을 변경하였습니다.' });
     } catch (err: any) {
@@ -161,6 +160,7 @@ const settingsController = {
 
       // 재 로그인 하지 않기 때문에 세션을 변경 해줍니다.
       req.session.user!.avatar = defaultAvatar;
+      req.session.user!.avatarKey = defaultAvatarKey;
 
       return res.status(200).json({ ok: true, message: '기본 이미지로 변경되었습니다.' });
     } catch (err: any) {
@@ -215,6 +215,8 @@ const settingsController = {
       const id = req.session.user?.id;
 
       await userRepo.updateEmail(Number(id), newEmail as string);
+      // 세션에 변경된 이메일을 업데이트 한다.
+      req.session.user!.email = newEmail as string;
 
       /*
        * 재 로그인을 위해서 홈페이지로 이동합니다.
@@ -248,6 +250,8 @@ const settingsController = {
 
       // 변경한 자기소개를 desc테이블에 업데이트합니다.
       await userRepo.updateDesc(Number(id), desc as string);
+      // 세션 정보 변경
+      req.session.user!.desc = desc;
 
       logger.info('자기소개 변경 완료되었습니다.');
       return res.status(200).json({ ok: true, message: '자기소개 변경 완료되었습니다.' });

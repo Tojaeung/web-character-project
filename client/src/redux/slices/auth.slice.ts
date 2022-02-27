@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
-import { UserType } from '../types/user.type';
+import { UserType } from '../types/auth.type';
 import { loginUser, logoutUser, refreshLogin } from '../requests/auth.request';
 
 interface AuthType {

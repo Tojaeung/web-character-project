@@ -3,6 +3,7 @@ export type ProfileType = {
   email: string;
   nickname: string;
   avatar: string;
+  avatarKey: string;
   level: number;
   desc: string;
   isFollowing: boolean | undefined;
