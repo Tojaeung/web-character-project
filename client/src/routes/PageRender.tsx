@@ -46,3 +46,19 @@ export const ProfilePageRender = () => {
     return <h1>나다호다</h1>;
   }
 };
+
+export const PhotoPageRender = () => {
+  const { page } = useParams();
+
+  if (!page) return <h1>나다호다</h1>;
+
+  const modifiedPage = page?.charAt(0).toUpperCase() + page?.slice(1);
+
+  const component = () => require(`../pages/photo/${modifiedPage}`).default;
+
+  try {
+    return createElement(component());
+  } catch (err) {
+    return <h1>나다호다</h1>;
+  }
+};

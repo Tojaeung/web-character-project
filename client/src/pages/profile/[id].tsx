@@ -1,6 +1,7 @@
 import { Container } from './[id].styled';
 import { useProfileGetUser } from '@src/hook/useProfileGetUser';
 import Info from '@src/components/profile/Info';
+import Photo from '@src/components/profile/Photo';
 import { selectProfileOk } from '@src/redux/slices/profile.slice';
 import { useAppSelector } from '@src/redux/app/hook';
 import NotFound from '@src/components/NotFound';
@@ -18,8 +19,7 @@ function Profile() {
         <Info />
       </div>
       <div className="photo">
-        <div className="list">rfew</div>
-        <div className="content">fewrf</div>
+        <Photo />
       </div>
     </Container>
   );

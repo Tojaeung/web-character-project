@@ -6,6 +6,7 @@ import { getProfile, follow, unFollow } from '../requests/profile.request';
 interface profileType {
   ok: boolean | undefined;
   profile: ProfileType | undefined;
+  // photos:
   message: string | undefined;
 }
 

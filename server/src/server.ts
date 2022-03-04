@@ -22,6 +22,7 @@ import authRouter from '@src/routes/auth.route';
 import chatRouter from '@src/routes/chat.route';
 import settingsRouter from '@src/routes/settings.route';
 import profileRouter from '@src/routes/profile.route';
+import photoRouter from '@src/routes/photo.route';
 
 const app: Application = express();
 const http = createServer(app);
@@ -50,6 +51,7 @@ app.use('/api', authRouter);
 app.use('/api', chatRouter);
 app.use('/api', settingsRouter);
 app.use('/api', profileRouter);
+app.use('/api', photoRouter);
 
 // Server & DB listening
 const port = process.env.PORT as string;

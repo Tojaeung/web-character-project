@@ -10,6 +10,8 @@ import {
 } from 'typeorm';
 import { Follow } from '@src/entities/profile/follow.entity';
 import { Desc } from './desc.entity';
+import { Photo } from '../photo/photo.entity';
+import { Comment } from '../photo/comment.entity';
 
 @Entity('user', { schema: 'profile' })
 export class User {
@@ -71,6 +73,12 @@ export class User {
 
   @OneToMany(() => Follow, (follow) => follow.follower_user)
   followers: Follow[];
+
+  @OneToMany(() => Photo, (photo) => photo.user)
+  photos: Photo[];
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments: Comment[];
 
   @CreateDateColumn()
   createdAt: Date;

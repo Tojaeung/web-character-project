@@ -52,7 +52,6 @@ export const redButtonStyle = css`
     `;
   }}
 `;
-
 export const greenInputStyle = css`
   border-radius: 5px;
   width: 100%;
@@ -63,6 +62,17 @@ export const greenInputStyle = css`
   &:focus {
     border: 2px solid ${({ theme }) => theme.palette.green};
   }
+  &::placeholder {
+    font-size: 1.4rem;
+  }
+`;
+export const defaultInputStyle = css`
+  border-radius: 5px;
+  width: 100%;
+  height: 4rem;
+  font-size: 1.4rem;
+  outline: none;
+  border: 2px solid ${({ theme }) => theme.palette.gray2};
   &::placeholder {
     font-size: 1.4rem;
   }

@@ -6,11 +6,18 @@ import { useSocketSetup } from '@src/hook/useSocketSetup';
 
 import Header from '@src/components/header/Header';
 import Home from '@src/pages/Home';
-import { AuthPageRender, SettingsPageRender, ProfilePageRender } from '@src/routes/PageRender';
-import { AuthPrivateRouter, SettingsPrivateRouter, ProfilePrivateRouter } from '@src/routes/PrivateRouter';
+import { AuthPageRender, SettingsPageRender, ProfilePageRender, PhotoPageRender } from '@src/routes/PageRender';
+import {
+  AuthPrivateRouter,
+  SettingsPrivateRouter,
+  ProfilePrivateRouter,
+  PhotoPrivateRouter,
+} from '@src/routes/PrivateRouter';
 
 import Modal from '@src/components/modals/Modal';
 import ChatModal from '@src/components/modals/chat/Chat.modal';
+
+import Create from '@src/pages/photo/Create';
 
 const Container = styled.div`
   .fullScreen {
@@ -61,6 +68,15 @@ function App() {
                   <ProfilePrivateRouter>
                     <ProfilePageRender />
                   </ProfilePrivateRouter>
+                }
+              />
+
+              <Route
+                path="/photo/:page"
+                element={
+                  <PhotoPrivateRouter>
+                    <PhotoPageRender />
+                  </PhotoPrivateRouter>
                 }
               />
 

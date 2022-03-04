@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container } from './Info.styled';
+import { useNavigate } from 'react-router-dom';
 import socket from '@src/utils/socket';
 import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
 import { selectProfileProfile } from '@src/redux/slices/profile.slice';
@@ -11,14 +12,14 @@ import { openModal } from '@src/redux/slices/modal.slice';
 
 function Info() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const profile = useAppSelector(selectProfileProfile);
   const user = useAppSelector(selectAuthUser);
   const chats = useAppSelector(selectChats);
 
-  const onAddChat = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    socket.emit('addChat', profile?.id);
-    await dispatch(openChatModal());
-    localStorage.setItem('chat', 'on');
+  // 자기소개를 클릭하면 자기소개 모달창이 나타난다.
+  const onShowDesc = async (e: React.MouseEvent<HTMLDivElement>) => {
+    await dispatch(openModal({ mode: 'showDesc' }));
   };
 
   const onFollow = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -31,9 +32,16 @@ function Info() {
     await dispatch(unFollow({ profileId: profile!.id }));
   };
 
-  const onShowDesc = async (e: React.MouseEvent<HTMLDivElement>) => {
-    await dispatch(openModal({ mode: 'showDesc' }));
+  // 채팅목록에 상대를 추가합니다.
+  const onAddChat = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    socket.emit('addChat', profile?.id);
+    await dispatch(openChatModal());
+    localStorage.setItem('chat', 'on');
   };
+
+  // const onAddPhoto = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   await dispatch(openModal({ mode: 'addPhoto' }));
+  // };
 
   return (
     <Container>
@@ -65,28 +73,45 @@ function Info() {
         </div>
 
         <div className="row4">
-          <div className="chatBtn-wrapper">
-            {profile?.id !== user?.id && chats.filter((chat) => chat.id === profile?.id).length === 0 && (
+          {profile?.id !== user?.id && chats.filter((chat) => chat.id === profile?.id).length === 0 && (
+            <div className="chatBtn-wrapper">
               <button className="startChat-btn" onClick={onAddChat}>
                 채팅하기
               </button>
-            )}
-            {profile?.id !== user?.id && chats.filter((chat) => chat.id === profile?.id).length !== 0 && (
-              <button className="chatting-btn">채팅중...💬</button>
-            )}
-          </div>
-          <div className="followBtn-wrapper">
-            {profile?.id !== user?.id && profile?.isFollowing === false && (
+            </div>
+          )}
+
+          {profile?.id !== user?.id && chats.filter((chat) => chat.id === profile?.id).length !== 0 && (
+            <div className="chatBtn-wrapper">
+              <button className="startChat-btn" onClick={onAddChat}>
+                채팅하기
+              </button>
+            </div>
+          )}
+
+          {profile?.id !== user?.id && profile?.isFollowing === false && (
+            <div className="followBtn-wrapper">
               <button className="follow-btn" onClick={onFollow}>
                 팔로우
               </button>
-            )}
-            {profile?.id !== user?.id && profile?.isFollowing === true && (
+            </div>
+          )}
+
+          {profile?.id !== user?.id && profile?.isFollowing === true && (
+            <div className="followBtn-wrapper">
               <button className="unFollow-btn" onClick={onUnFollow}>
                 언팔로우
               </button>
-            )}
-          </div>
+            </div>
+          )}
+
+          {user?.id === profile?.id && (
+            <div className="addPhotoBtn-wrapper">
+              <button className="addPhoto-btn" onClick={() => navigate('/photo/create')}>
+                그림+
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </Container>

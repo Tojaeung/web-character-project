@@ -6,6 +6,9 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  z-index: 999;
+
   .cover-wrapper {
     width: 70rem;
     height: 30rem;
@@ -23,7 +26,7 @@ export const Container = styled.div`
     border-radius: 50%;
     overflow: hidden;
     position: absolute;
-    top: 25rem;
+    top: 20rem;
     border: 3px solid ${({ theme }) => theme.palette.gray1};
   }
   .avatar-img {
@@ -57,6 +60,9 @@ export const Container = styled.div`
   .desc {
     font-size: 1.5rem;
     cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
   }
   .row3 {
     font-size: 1.3rem;
@@ -68,6 +74,7 @@ export const Container = styled.div`
   }
   .row4 {
     display: flex;
+    justify-content: center;
     padding: 1rem 0;
   }
   .chatBtn-wrapper {
@@ -82,12 +89,19 @@ export const Container = styled.div`
     padding: 1rem;
   }
 
+  .followBtn-wrapper {
+    margin-right: 1rem;
+  }
   .follow-btn {
     ${greenButtonStyle};
     padding: 1rem;
   }
   .unFollow-btn {
     ${redButtonStyle};
+    padding: 1rem;
+  }
+  .addPhoto-btn {
+    ${greenButtonStyle};
     padding: 1rem;
   }
 `;

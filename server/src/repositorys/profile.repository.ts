@@ -1,9 +1,7 @@
-import { AbstractRepository, EntityRepository, getConnection } from 'typeorm';
+import { AbstractRepository, EntityRepository } from 'typeorm';
 import { User } from '@src/entities/profile/user.entity';
-// import { Auth } from '@src/entities/profile/auth.entity';
 import { Follow } from '@src/entities/profile/follow.entity';
 import { Desc } from '@src/entities/profile/desc.entity';
-// import { Desc } from '@src/entities/profile/desc.entitiy';
 
 @EntityRepository(User)
 export class UserRepository extends AbstractRepository<User> {

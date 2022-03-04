@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn, JoinColumn, Index } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity('desc', { schema: 'profile' })
@@ -9,6 +9,7 @@ export class Desc {
   @Column({ type: 'text', nullable: true, default: null })
   desc: string;
 
+  @Index('user_id-descIdx')
   @Column()
   user_id: number;
 

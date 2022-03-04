@@ -12,6 +12,7 @@ export const Container = styled.div`
   padding: 0 1rem;
   background: ${({ theme }) => theme.palette.white};
   border-bottom: 1px solid ${({ theme }) => theme.palette.gray3};
+  z-index: 1000;
   .logo {
     font-size: 2rem;
   }

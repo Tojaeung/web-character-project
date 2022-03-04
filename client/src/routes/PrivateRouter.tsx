@@ -18,3 +18,8 @@ export const ProfilePrivateRouter = ({ children }: IProp) => {
   const login = localStorage.getItem('login');
   return login ? children : <Navigate to="/" />;
 };
+
+export const PhotoPrivateRouter = ({ children }: IProp) => {
+  const login = localStorage.getItem('login');
+  return login ? children : <Navigate to="/" />;
+};
