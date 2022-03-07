@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BsChatLeftText } from 'react-icons/bs';
-import { Container } from '@src/components/header/Chat.styled';
+import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
 import { selectMsgNotis } from '@src/redux/slices/chat.slice';
 import { openChatModal, closeChatModal, selectChatOk } from '@src/redux/slices/chat.slice';
@@ -43,10 +43,38 @@ function Chat() {
           </div>
         )}
 
-        <BsChatLeftText className="chat-icon" />
+        <BsChatLeftText className="icon" />
       </Container>
     </>
   );
 }
+const Container = styled.div<{ chatOk: boolean }>`
+  position: relative;
+  padding: 0.5rem;
+  background: ${({ theme, chatOk }) => chatOk && theme.palette.gray};
+  cursor: pointer;
+  &:hover {
+    border: 1px solid ${({ theme }) => theme.palette.gray};
+  }
+
+  .noti {
+    position: absolute;
+    border-radius: 50%;
+    top: 25px;
+    left: 30px;
+    padding: 0.5rem;
+    background-color: red;
+  }
+
+  .noti-number {
+    color: white;
+  }
+
+  .icon {
+    font-size: 2.5rem;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+  }
+`;
 
 export default Chat;

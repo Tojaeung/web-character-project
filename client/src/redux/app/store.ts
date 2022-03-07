@@ -3,7 +3,7 @@ import authSlice from '../slices/auth.slice';
 import chatSlice from '../slices/chat.slice';
 import profileSlice from '../slices/profile.slice';
 import modalSlice from '../slices/modal.slice';
-import photoSlice from '../slices/photo.slice';
+import drawingSlice from '../slices/drawing.slice';
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +11,7 @@ export const store = configureStore({
     chat: chatSlice,
     profile: profileSlice,
     modal: modalSlice,
-    photo: photoSlice,
+    drawing: drawingSlice,
   },
 });
 

@@ -13,8 +13,23 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
+    background-color: ${({ theme }) => theme.palette.white};
+    color: ${({ theme }) => theme.palette.black};
     font-family: Noto Sans KR;  
+    a {
+      color: ${({ theme }) => theme.palette.black};
+    }
   }
+
+  ::-webkit-scrollbar {
+  background-color: white;
+  width: 0.4vw;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #fc4958, #e85d04, #fc4958);
+}
+
 `;
 
 export default GlobalStyles;
@@ -22,6 +37,7 @@ export default GlobalStyles;
 export const greenButtonStyle = css`
   font-weight: 800;
   border-radius: 5px;
+  white-space: nowrap;
   outline: none;
   border: 0;
   cursor: pointer;
@@ -39,6 +55,7 @@ export const greenButtonStyle = css`
 export const redButtonStyle = css`
   font-weight: 800;
   border-radius: 5px;
+  white-space: nowrap;
   outline: none;
   border: 0;
   cursor: pointer;
@@ -55,10 +72,10 @@ export const redButtonStyle = css`
 export const greenInputStyle = css`
   border-radius: 5px;
   width: 100%;
-  height: 4rem;
+  min-height: 4rem;
   font-size: 1.4rem;
   outline: none;
-  border: 2px solid ${({ theme }) => theme.palette.gray2};
+  border: 2px solid ${({ theme }) => theme.palette.borderColor};
   &:focus {
     border: 2px solid ${({ theme }) => theme.palette.green};
   }
@@ -69,7 +86,7 @@ export const greenInputStyle = css`
 export const defaultInputStyle = css`
   border-radius: 5px;
   width: 100%;
-  height: 4rem;
+  /* min-height: 4rem; */
   font-size: 1.4rem;
   outline: none;
   border: 2px solid ${({ theme }) => theme.palette.gray2};

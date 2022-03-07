@@ -6,31 +6,12 @@ import { useSocketSetup } from '@src/hook/useSocketSetup';
 
 import Header from '@src/components/header/Header';
 import Home from '@src/pages/Home';
-import { AuthPageRender, SettingsPageRender, ProfilePageRender, PhotoPageRender } from '@src/routes/PageRender';
-import {
-  AuthPrivateRouter,
-  SettingsPrivateRouter,
-  ProfilePrivateRouter,
-  PhotoPrivateRouter,
-} from '@src/routes/PrivateRouter';
+import { AuthPageRender, ProfilePageRender, PhotoPageRender } from '@src/routes/PageRender';
+import { AuthPrivateRouter, PrivateRouter } from '@src/routes/PrivateRouter';
 
 import Modal from '@src/components/modals/Modal';
 import ChatModal from '@src/components/modals/chat/Chat.modal';
-
-import Create from '@src/pages/photo/Create';
-
-const Container = styled.div`
-  .fullScreen {
-    width: 100%;
-    min-height: 100vh;
-    background-color: ghostwhite;
-  }
-  .appScreen {
-    max-width: 1200px;
-    width: 100%;
-    margin: 0 auto;
-  }
-`;
+import Settings from './pages/settings/Settings';
 
 function App() {
   useRefreshLogin();
@@ -54,29 +35,29 @@ function App() {
               />
 
               <Route
-                path="/settings/:page"
+                path="/settings"
                 element={
-                  <SettingsPrivateRouter>
-                    <SettingsPageRender />
-                  </SettingsPrivateRouter>
+                  <PrivateRouter>
+                    <Settings />
+                  </PrivateRouter>
                 }
               />
 
               <Route
                 path="/profile/:profileId"
                 element={
-                  <ProfilePrivateRouter>
+                  <PrivateRouter>
                     <ProfilePageRender />
-                  </ProfilePrivateRouter>
+                  </PrivateRouter>
                 }
               />
 
               <Route
                 path="/photo/:page"
                 element={
-                  <PhotoPrivateRouter>
+                  <PrivateRouter>
                     <PhotoPageRender />
-                  </PhotoPrivateRouter>
+                  </PrivateRouter>
                 }
               />
 
@@ -90,5 +71,18 @@ function App() {
     </Container>
   );
 }
+
+const Container = styled.div`
+  .fullScreen {
+    width: 100%;
+    min-height: 100vh;
+    background-color: ${({ theme }) => theme.palette.appBgColor};
+  }
+  .appScreen {
+    max-width: 1200px;
+    /* width: 100%; */
+    margin: 0 auto;
+  }
+`;
 
 export default App;

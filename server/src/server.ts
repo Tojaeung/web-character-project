@@ -10,11 +10,11 @@ import { createServer } from 'http';
 import { Server, Socket } from 'socket.io';
 import helmet from 'helmet';
 
-import ormconfig from '@src/config/orm.config';
-import corsConfig from '@src/config/cors.config';
+import ormconfig from '@src/configs/orm.config';
+import corsConfig from '@src/configs/cors.config';
 import logger, { stream } from '@src/helpers/winston.helper';
 
-import { sessionConfig, wrapper } from '@src/config/session.config';
+import { sessionConfig, wrapper } from '@src/configs/session.config';
 import { authorizeUser } from '@src/middlewares/socket.middleware';
 import socket from './socket';
 

@@ -4,7 +4,7 @@ import { ThemeProvider } from 'styled-components';
 import { lightTheme } from '@src/styles/Theme';
 import GlobalStyles from '@src/styles/GlobalStyles';
 import App from './App';
-import '@src/fonts/font.css';
+import '@src/assets/fonts/font.css';
 import { store } from '@src/redux/app/store';
 
 ReactDOM.render(

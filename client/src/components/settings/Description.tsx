@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Container } from './Description.styled';
 import ReactQuill from 'react-quill';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { greenButtonStyle, redButtonStyle } from '@src/styles/GlobalStyles';
 import axios from 'axios';
 import 'react-quill/dist/quill.snow.css';
-import SettingsList from '@src/components/settings/SettingsList';
 import { useEditorConfig } from '@src/hook/useEditorConfig';
 
 function Description() {
@@ -25,7 +25,6 @@ function Description() {
   };
   return (
     <Container>
-      <SettingsList />
       <div className="wrapper">
         <ReactQuill
           className="ql-editor"
@@ -47,5 +46,52 @@ function Description() {
     </Container>
   );
 }
+
+const Container = styled.div`
+  strong {
+    font-weight: 700;
+  }
+  em {
+    font-style: italic;
+  }
+  u {
+    text-decoration: underline;
+  }
+  s {
+    text-decoration: line-through;
+  }
+  .wrapper {
+    width: 70rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .ql-editor {
+    width: 100%;
+    min-height: 10rem;
+    font-size: 1.5rem;
+  }
+  .btn-wrapper {
+    align-self: flex-end;
+    padding: 1rem 2rem;
+  }
+  .submit-btn {
+    ${greenButtonStyle};
+    padding: 1rem 2rem;
+  }
+  .cancel-btn {
+    margin-left: 1rem;
+    ${redButtonStyle};
+    padding: 1rem 2rem;
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    .wrapper {
+      width: 32rem;
+    }
+    .ql-editor {
+      font-size: 1.2rem;
+    }
+  }
+`;
 
 export default Description;

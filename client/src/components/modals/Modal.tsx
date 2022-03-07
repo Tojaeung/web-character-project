@@ -1,6 +1,6 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
-import { Container } from './Modal.styled';
+import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
 import { selectModalOk, selectModalMode, closeModal } from '@src/redux/slices/modal.slice';
 import LoginModal from '@src/components/modals/auth/Login.modal';
@@ -11,8 +11,7 @@ import FindPw from '@src/components/modals/auth/FindPw';
 import EditEmailModal from '@src/components/modals/settings/EditEmail.modal';
 import EditNicknameModal from '@src/components/modals/settings/EditNickname.modal';
 import EditPwModal from '@src/components/modals/settings/EditPw.modal';
-import ShowDescModal from '@src/components/modals/profile/ShowDesc.modal';
-import AddPhotoModal from '@src/components/modals/profile/AddPhoto.modal';
+import SearchModal from '@src/components/modals/search/Search.modal';
 
 function Modal() {
   const dispatch = useAppDispatch();
@@ -36,11 +35,21 @@ function Modal() {
       {ok && mode === 'editEmail' && <EditEmailModal />}
       {ok && mode === 'editNickname' && <EditNicknameModal />}
       {ok && mode === 'editPw' && <EditPwModal />}
-      {ok && mode === 'showDesc' && <ShowDescModal />}
-      {ok && mode === 'addPhoto' && <AddPhotoModal />}
+      {ok && mode === 'search' && <SearchModal />}
     </Container>,
     document.getElementById('portal') as HTMLElement
   );
 }
+const Container = styled.div`
+  .background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+  }
+`;
 
 export default Modal;

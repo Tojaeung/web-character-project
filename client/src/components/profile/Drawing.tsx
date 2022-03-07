@@ -1,23 +1,23 @@
 import { useState, useEffect, useRef } from 'react';
-import { Container } from './Photo.styled';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
-import { getPhoto } from '@src/redux/requests/photo.request';
-import { selectPhotoPhotos, selectPhotoIsLoading } from '@src/redux/slices/photo.slice';
-import loading from '@src/images/loading.gif';
+import { getDrawing } from '@src/redux/requests/profile.request';
+import { selectDrawings, selectDrawingIsLoading } from '@src/redux/slices/drawing.slice';
+import loading from '@src/assets/images/loading.gif';
+import styled from 'styled-components';
 
-function Photo() {
+function Drawing() {
   const dispatch = useAppDispatch();
   const { profileId } = useParams();
 
-  const isLoading = useAppSelector(selectPhotoIsLoading);
-  const photos = useAppSelector(selectPhotoPhotos);
+  const isLoading = useAppSelector(selectDrawingIsLoading);
+  const drawings = useAppSelector(selectDrawings);
 
   const [cursor, setCursor] = useState<number | null>(null);
 
   // 처음 그림 가져오기 (cursor = null)
   useEffect(() => {
-    dispatch(getPhoto({ profileId, cursor: null }))
+    dispatch(getDrawing({ profileId, cursor: null }))
       .unwrap()
       .then((res) => {
         const { ok, message, newCursor } = res;
@@ -43,12 +43,12 @@ function Photo() {
 
   return (
     <Container>
-      {photos?.map((photo) => (
-        <div className="photo-container" key={photo.id}>
-          <div>{photo.title}</div>
-          <img className="photo-img" src={photo.url} alt="그림" />
-          <div>{photo.photoTags.tag}</div>
-          <div>{photo.content}</div>
+      {drawings?.map((drawing) => (
+        <div className="drawing-container" key={drawing.id}>
+          <div>{drawing.title}</div>
+          <img className="drawing-img" src={drawing.url} alt="그림" />
+          <div>{drawing.drawingTags.tag}</div>
+          <div>{drawing.content}</div>
         </div>
       ))}
       {isLoading ? <img src={loading} alt="로딩중..." /> : null}
@@ -57,4 +57,14 @@ function Photo() {
   );
 }
 
-export default Photo;
+const Container = styled.div`
+  width: 100%;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 0 2rem;
+  gap: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export default Drawing;

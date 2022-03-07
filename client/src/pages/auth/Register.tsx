@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Container } from './Register.styled';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { AiOutlineUser, AiOutlineEye, AiOutlineMail, AiOutlineEyeInvisible, AiOutlineBank } from 'react-icons/ai';
+import { AiOutlineUser, AiOutlineEye, AiOutlineMail, AiOutlineEyeInvisible } from 'react-icons/ai';
 import axios from 'axios';
+import styled from 'styled-components';
+import { greenButtonStyle, greenInputStyle } from '@src/styles/GlobalStyles';
 import { openModal } from '@src/redux/slices/modal.slice';
 import { useAppDispatch } from '@src/redux/app/hook';
 
@@ -11,8 +12,6 @@ interface IFormInputType {
   nickname: string;
   pw: string;
   confirmPw: string;
-  bank: string;
-  accountNumber: string;
 }
 
 function Register() {
@@ -46,6 +45,7 @@ function Register() {
           </label>
           <input
             className="input"
+            autoComplete="off"
             type="text"
             placeholder="이메일(Tojaeung@xxx.com)"
             style={{ borderColor: errors.email && 'red' }}
@@ -67,6 +67,7 @@ function Register() {
           </label>
           <input
             className="input"
+            autoComplete="off"
             type="text"
             placeholder="닉네임"
             style={{ borderColor: errors.nickname && 'red' }}
@@ -90,6 +91,7 @@ function Register() {
           </label>
           <input
             className="input"
+            autoComplete="off"
             type={hidePw ? 'password' : 'text'}
             placeholder="비밀번호"
             style={{ borderColor: errors.pw && 'red' }}
@@ -115,6 +117,7 @@ function Register() {
           </label>
           <input
             className="input"
+            autoComplete="off"
             type={hideConfirmPw ? 'password' : 'text'}
             placeholder="비밀번호 확인"
             style={{ borderColor: errors.confirmPw && 'red' }}
@@ -136,43 +139,6 @@ function Register() {
           )}
         </div>
 
-        <hr />
-
-        <div className="guide">
-          작가활동을 원하시는 분은 거래의 편리함을 위해
-          <br /> 아래의 은행과 계좌번호를 입력해주세요. (필수X)
-          <br />
-        </div>
-
-        <div className="input-wrapper">
-          <label className="label" htmlFor="bank">
-            은행
-          </label>
-          <select className="input" {...register('bank')}>
-            <option value="">------------------------은행선택---------------------------</option>
-            <option value="hyundai">현대카드</option>
-            <option value="shinhan">신한카드</option>
-            <option value="kookmin">국민카드</option>
-            <option value="bc">BC카드</option>
-            <option value="lotte">롯데카드</option>
-            <option value="hana">하나카드</option>
-            <option value="samsung">삼성카드</option>
-            <option value="wooli">우리카드</option>
-            <option value="city">씨티카드</option>
-            <option value="nh">농협카드</option>
-            <option value="kakao">카카오뱅크</option>
-            <option value="k">케이뱅크</option>
-          </select>
-        </div>
-
-        <div className="input-wrapper">
-          <label className="label" htmlFor="accountNumber">
-            계좌번호
-          </label>
-          <input className="input" type="text" placeholder="계좌번호" {...register('accountNumber')} />
-          <AiOutlineBank className="icon" />
-        </div>
-
         <button className="submitBtn" type="submit">
           회원가입
         </button>
@@ -180,5 +146,55 @@ function Register() {
     </Container>
   );
 }
+
+const Container = styled.div`
+  width: 32rem;
+  margin: 0 auto;
+  display: flex;
+  background-color: ${({ theme }) => theme.palette.white};
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  .form {
+    width: 32rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .title {
+    font-size: 3rem;
+  }
+  .input-wrapper {
+    position: relative;
+    width: 100%;
+    margin: 2rem 0;
+    align-self: flex-start;
+  }
+  .label {
+    font-size: 1.5rem;
+    align-self: flex-start;
+  }
+  .input {
+    ${greenInputStyle};
+  }
+  .errorMessage {
+    font-size: 1.3rem;
+    position: absolute;
+  }
+  .icon {
+    position: absolute;
+    right: 1.5rem;
+    top: 2.5rem;
+    font-size: 2rem;
+  }
+
+  .submitBtn {
+    ${greenButtonStyle}
+    width: 100%;
+    font-size: 2rem;
+    margin: 2rem 0;
+    padding: 1rem 0;
+  }
+`;
 
 export default Register;

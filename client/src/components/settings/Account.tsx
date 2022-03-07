@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
-import { Container } from './Account.styled';
 import axios from 'axios';
-import SettingsList from '@src/components/settings/SettingsList';
+import styled from 'styled-components';
 import { useAppDispatch } from '@src/redux/app/hook';
 import { refreshLogin } from '@src/redux/requests/auth.request';
 import { openModal } from '@src/redux/slices/modal.slice';
+import { redButtonStyle, greenButtonStyle } from '@src/styles/GlobalStyles';
 
 function Account() {
   const dispatch = useAppDispatch();
@@ -66,7 +66,7 @@ function Account() {
 
   return (
     <>
-      <SettingsList />
+      {/* <SettingsList /> */}
       <Container>
         <div className="list-wrapper">
           <div className="title">프로필 이미지 변경</div>
@@ -134,5 +134,106 @@ function Account() {
     </>
   );
 }
+
+const Container = styled.div`
+  width: 100%;
+  .list-wrapper {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid;
+    margin: 2rem 0;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+  .email-subTitle {
+    color: ${({ theme }) => theme.palette.red};
+    font-size: 1.5rem;
+  }
+
+  .defaultBtn {
+    ${redButtonStyle};
+    padding: 1rem 2rem;
+    margin-right: 2rem;
+  }
+  .btn {
+    ${greenButtonStyle};
+    padding: 1rem 2rem;
+  }
+  .delAccount-btn {
+    ${redButtonStyle};
+  }
+
+  .avatar-wrapper {
+    position: relative;
+    width: 20rem;
+    height: 20rem;
+    overflow: hidden;
+    margin-top: 2rem;
+    border-radius: 5px;
+    border: 3px dotted ${({ theme }) => theme.palette.gray6};
+  }
+  .background {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30rem;
+    height: 30rem;
+    background-color: ${({ theme }) => theme.palette.gray1};
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+
+  .default-btn {
+    z-index: 1001;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.3rem;
+    padding: 1rem;
+    ${redButtonStyle};
+  }
+  .edit-btn {
+    z-index: 1001;
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.3rem;
+    padding: 1rem;
+    ${greenButtonStyle};
+  }
+  .input {
+    display: none;
+  }
+  .avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    .title {
+      font-size: 1.5rem;
+    }
+    .email-subTitle {
+      font-size: 1rem;
+    }
+    .defaultBtn {
+      font-size: 1.2rem;
+      padding: 0.5rem;
+    }
+    .btn {
+      font-size: 1.2rem;
+      padding: 0.5rem;
+    }
+  }
+`;
 
 export default Account;

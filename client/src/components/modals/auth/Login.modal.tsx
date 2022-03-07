@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineClose, AiOutlineUser, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { Container } from './Login.modal.styled';
+import styled from 'styled-components';
+import { greenButtonStyle, greenInputStyle } from '@src/styles/GlobalStyles';
 import { loginUser } from '@src/redux/requests/auth.request';
 import { useAppDispatch } from '@src/redux/app/hook';
 import { openModal, closeModal } from '@src/redux/slices/modal.slice';
@@ -85,5 +86,74 @@ function LoginModal() {
     </Container>
   );
 }
+
+const Container = styled.div`
+  .form {
+    width: 300px;
+    height: 350px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: ${({ theme }) => theme.palette.white};
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    border-radius: 10px;
+  }
+  .closeBtn {
+    font-size: 2.5rem;
+    align-self: flex-end;
+    cursor: pointer;
+  }
+  .title {
+    font-size: 3rem;
+    margin: 2rem 0;
+  }
+  .input-wrapper {
+    width: 100%;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .input {
+    ${greenInputStyle};
+  }
+  .icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2rem;
+  }
+  .submitBtn {
+    width: 100%;
+    ${greenButtonStyle};
+    padding: 1rem;
+    font-size: 1.5rem;
+  }
+  .btn-wrapper {
+    text-align: center;
+    margin: 1rem 0;
+  }
+  .findPassword-btn {
+    font-size: 1.3rem;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  .boundary {
+    font-size: 1.3rem;
+  }
+  .register-btn {
+    font-size: 1.3rem;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
 
 export default LoginModal;

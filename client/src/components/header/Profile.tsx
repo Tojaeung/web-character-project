@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import { CgProfile } from 'react-icons/cg';
 import { FiSettings, FiLogOut } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
-
-import { Container } from '@src/components/header/Profile.styled';
+import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
 import { selectAuthUser } from '@src/redux/slices/auth.slice';
 import { logoutUser } from '@src/redux/requests/auth.request';
@@ -39,31 +37,36 @@ function Profile() {
   return (
     <Container openProfile={openProfile}>
       <div className="profile" onClick={(e) => setOpenProfile(!openProfile)}>
-        <div className="avatarWrapper">
-          <img className="avatarImg" src={user?.avatar} alt="프로필사진" />
+        <div className="avatar">
+          <img src={user?.avatar} alt="프로필사진" />
         </div>
-        <div className="infoWrapper">
-          <div className="nickname">{user?.nickname}</div>
-          <div className="level">Level: 1</div>
-        </div>
-        <div className="ChevronIcon">{openProfile ? <FaChevronDown /> : <FaChevronUp />}</div>
       </div>
       {openProfile && (
         <ul className="dropDown" ref={ref}>
-          <li>
-            <Link to={`/profile/${user?.id}`} className="list">
-              <CgProfile className="listIcon" />
+          <div className="user">
+            <div className="avatar">
+              <img src={user?.avatar} alt="프로필사진" />
+            </div>
+            <div className="info">
+              <span>[Lv.{user?.level}] </span>
+              {user?.nickname}
+            </div>
+          </div>
+          <Link to={`/profile/${user?.id}`}>
+            <li>
+              <CgProfile className="icon" />
               프로필
-            </Link>
-          </li>
-          <li>
-            <Link to={`/settings/account`} className="list">
-              <FiSettings className="listIcon" />
+            </li>
+          </Link>
+
+          <Link to={`/settings`}>
+            <li>
+              <FiSettings className="icon" />
               설정
-            </Link>
-          </li>
-          <li className="list" onClick={onLogout}>
-            <FiLogOut className="listIcon" />
+            </li>
+          </Link>
+          <li onClick={onLogout}>
+            <FiLogOut className="icon" />
             로그아웃
           </li>
         </ul>
@@ -71,5 +74,85 @@ function Profile() {
     </Container>
   );
 }
+
+const Container = styled.div<{ openProfile: boolean }>`
+  position: relative;
+  .profile {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .avatar {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid ${({ theme }) => theme.palette.black};
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .dropDown {
+    position: absolute;
+    width: 20rem;
+    top: 5rem;
+    right: 0.5rem;
+    font-size: 1.7rem;
+    border-radius: 5px;
+    background: ${({ theme }) => theme.palette.bgColor};
+    box-shadow: ${({ theme }) => theme.palette.shadowColor};
+
+    .user {
+      display: flex;
+      gap: 1rem;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 1rem;
+      border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
+      .avatar {
+        width: 10rem;
+        height: 10rem;
+      }
+      .info {
+        margin-bottom: 1rem;
+        span {
+          font-weight: 500;
+        }
+        font-weight: 800;
+      }
+    }
+
+    li {
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      &:hover {
+        background: ${({ theme }) => theme.palette.gray};
+        cursor: pointer;
+      }
+    }
+
+    .icon {
+      font-size: 2.5rem;
+    }
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    .avatar {
+      width: 3.5rem;
+      height: 3.5rem;
+    }
+    .dropDown {
+      top: -30rem;
+      right: 0rem;
+    }
+  }
+`;
 
 export default Profile;
