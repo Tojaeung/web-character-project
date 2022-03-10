@@ -1,18 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
+import { ChatUserType, MessageType, MsgNotiType } from '@src/redux/types/chat.type';
 
 interface ChatType {
   ok: boolean;
-  chatUser: { id: string; nickname: string; avatar: string } | undefined;
-  chats: { id: string; nickname: string; avatar: string }[];
-  messages: {
-    type: string;
-    to: string;
-    from: string;
-    content: string;
-    date: string;
-  }[];
-  msgNotis: { from: string; to: string }[];
+  chatUser: ChatUserType | undefined;
+  chats: ChatUserType[];
+  messages: MessageType[];
+  msgNotis: MsgNotiType[];
 }
 
 const initialState: ChatType = {

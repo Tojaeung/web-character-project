@@ -1,5 +1,6 @@
 export type ProfileType = {
-  id: string;
+  id: number;
+  userId: string;
   email: string;
   nickname: string;
   avatar: string;
@@ -13,17 +14,17 @@ export type ProfileType = {
   followeeNum: number;
 };
 
-export type getUserReturnType = {
+export type getProfileReturnType = {
   ok: boolean;
   profile: ProfileType | undefined;
   message: string | undefined;
 };
 
-export type getUserParamType = {
+export type getProfileParamType = {
   profileId: string;
 };
 
-export type getUserErrorType = {
+export type getProfileErrorType = {
   ok: boolean;
   message: string;
 };
@@ -34,7 +35,7 @@ export type followReturnType = {
 };
 
 export type followParamType = {
-  profileId: string;
+  profileId: number;
 };
 
 export type followErrorType = {
@@ -48,60 +49,10 @@ export type unFollowReturnType = {
 };
 
 export type unFollowParamType = {
-  profileId: string;
+  profileId: number;
 };
 
 export type unFollowErrorType = {
-  ok: boolean;
-  message: string;
-};
-
-interface DrawingTagType {
-  id: number;
-  tag: string;
-  drawing_id: number;
-}
-interface CommentType {
-  id: number;
-  comment: string;
-  user_id: number;
-  drawing_id: number;
-  createAt: Date;
-  user: UserType;
-}
-
-interface UserType {
-  id: number;
-  nickname: string;
-  level: number;
-  avatar: string;
-}
-
-export type DrawingType = {
-  id: number;
-  title: string;
-  content: string;
-  url: string;
-  key: string;
-  user_id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  drawingTags: DrawingTagType;
-  comments: CommentType;
-};
-export type getDrawingReturnType = {
-  ok: boolean;
-  drawings: DrawingType[] | undefined;
-  message: string | undefined;
-  newCursor: number;
-};
-
-export type getDrawingParamType = {
-  profileId: string | undefined;
-  cursor: number | null;
-};
-
-export type getDrawingErrorType = {
   ok: boolean;
   message: string;
 };

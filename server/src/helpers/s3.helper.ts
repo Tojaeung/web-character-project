@@ -82,7 +82,7 @@ export const coverUpload = multer({
   },
 });
 
-export const photoUpload = multer({
+export const drawingUpload = multer({
   fileFilter: (req, file, cb) => {
     if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
       return cb(null, true);
@@ -96,7 +96,7 @@ export const photoUpload = multer({
     acl: 'public-read',
     bucket: bucketName,
     key: (req, file, cb) => {
-      cb(null, `photo/${v4()}.${mime.extension(file.mimetype)}`);
+      cb(null, `drawing/${v4()}.${mime.extension(file.mimetype)}`);
     },
   }),
   limits: {

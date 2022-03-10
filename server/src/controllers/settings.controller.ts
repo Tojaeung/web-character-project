@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import logger from '@src/helpers/winston.helper';
 import { sendChangeEmail } from '@src/helpers/nodemailer.helper';
 import { s3 } from '@src/helpers/s3.helper';
-import { UserRepository, FollowRepository, DescRepository } from '@src/repositorys/profile.repository';
+import { UserRepository } from '@src/repositorys/user.repository';
 import cluster from '@src/helpers/redis.helper';
 
 const settingsController = {
@@ -13,7 +13,6 @@ const settingsController = {
     const userRepo = getCustomRepository(UserRepository);
     try {
       const newEmail = req.body.email;
-      const id = req.session.user?.id;
       const currentEmail = req.session.user?.email;
 
       // 변경할 이메일이 존재하는지 확인합니다.
@@ -47,7 +46,7 @@ const settingsController = {
       const existingNickname = await userRepo.findUserByNickname(newNickname);
       if (existingNickname) return res.status(200).json({ ok: false, message: '이미 존재하는 닉네임 입니다.' });
 
-      await userRepo.updateNickname(Number(id), newNickname);
+      await userRepo.updateNickname(id as number, newNickname);
 
       // 재 로그인을 하지 않고 세션을 변경 해줍니다.
       req.session.user!.nickname = newNickname;
@@ -67,13 +66,13 @@ const settingsController = {
       const id = req.session.user?.id;
 
       // 비밀번호 일치 확인
-      const user = await userRepo.findUserById(Number(id));
+      const user = await userRepo.findUserById(id as number);
       const decryptedPw = await bcrypt.compare(currentPw, user?.pw as string);
       if (!decryptedPw) return res.status(200).json({ ok: false, message: '비밀번호가 틀렸습니다.' });
 
       // 일치하면 비밀번호 변경
       const encryptedPw = await bcrypt.hash(newPw, 8);
-      await userRepo.updatePw(Number(id), encryptedPw);
+      await userRepo.updatePw(id as number, encryptedPw);
 
       return res.status(200).json({ ok: true, message: '비밀번호가 변경되었습니다. 다시 로그인 해주세요.' });
     } catch (err: any) {
@@ -118,7 +117,7 @@ const settingsController = {
       });
 
       // user테이블에 avatar, avatarKey 정보를 업데이트 합니다.
-      await userRepo.updateAvatar(Number(id), newAvatar, newAvatarKey);
+      await userRepo.updateAvatar(id as number, newAvatar, newAvatarKey);
 
       // 재 로그인을 하지 않기 때문에 세션을 변경해줍니다.
       req.session.user!.avatar = newAvatar;
@@ -157,7 +156,7 @@ const settingsController = {
       });
 
       // 기본 프로필 이미지로 바꾸기 위해 user테이블을 업데이트 시켜준다.
-      await userRepo.updateAvatar(Number(id), defaultAvatar, defaultAvatarKey);
+      await userRepo.updateAvatar(id as number, defaultAvatar, defaultAvatarKey);
 
       // 재 로그인 하지 않기 때문에 세션을 변경 해줍니다.
       req.session.user!.avatar = defaultAvatar;
@@ -205,7 +204,7 @@ const settingsController = {
       });
 
       // user테이블에 avatar, avatarKey 정보를 업데이트 합니다.
-      await userRepo.updateCover(Number(id), newCover, newCoverKey);
+      await userRepo.updateCover(id as number, newCover, newCoverKey);
 
       // 재 로그인을 하지 않기 때문에 세션을 변경해줍니다.
       req.session.user!.cover = newCover;
@@ -243,7 +242,7 @@ const settingsController = {
       });
 
       // 기본 프로필 이미지로 바꾸기 위해 user테이블을 업데이트 시켜준다.
-      await userRepo.updateCover(Number(id), defaultCover, defaultCoverKey);
+      await userRepo.updateCover(id as number, defaultCover, defaultCoverKey);
 
       // 재 로그인 하지 않기 때문에 세션을 변경 해줍니다.
       req.session.user!.cover = defaultCover;
@@ -259,10 +258,10 @@ const settingsController = {
   // 계정탈퇴를 위해 유저의 모든 정보를 삭제하는 API입니다.
   delAccount: async (req: Request, res: Response) => {
     const userRepo = getCustomRepository(UserRepository);
-    const followRepo = getCustomRepository(FollowRepository);
 
     try {
-      const id = req.session.user?.id;
+      const { id, userId } = req.session.user!;
+
       const currentAvatarKey = req.session.user?.avatarKey;
       const defaultAvatarKey = 'default-avatar.png';
 
@@ -278,10 +277,10 @@ const settingsController = {
       }
 
       // onDelete: cascade 때문에 관계된 모든 유저정보를 삭제합니다.
-      await userRepo.deleteUser(Number(id));
+      await userRepo.deleteUser(id as number);
 
       // 레디스에 저장된 유저의 경험치 정보를 삭제합니다.
-      await cluster.zrem('exp', id as string);
+      await cluster.zrem('exp', userId);
 
       // 레디스에 저장된 대화정보 등등 식제
 
@@ -300,7 +299,7 @@ const settingsController = {
       const { newEmail } = req.query;
       const id = req.session.user?.id;
 
-      await userRepo.updateEmail(Number(id), newEmail as string);
+      await userRepo.updateEmail(id as number, newEmail as string);
       // 세션에 변경된 이메일을 업데이트 한다.
       req.session.user!.email = newEmail as string;
 
@@ -317,7 +316,7 @@ const settingsController = {
 
   // 자기소개(description)를 변경하는 API입니다.
   editDesc: async (req: Request, res: Response) => {
-    const descRepo = getCustomRepository(DescRepository);
+    const userRepo = getCustomRepository(UserRepository);
     try {
       const { desc } = req.body;
       const id = req.session.user?.id;
@@ -335,7 +334,7 @@ const settingsController = {
       }
 
       // 변경한 자기소개를 desc테이블에 업데이트합니다.
-      await descRepo.updateDesc(Number(id), desc as string);
+      await userRepo.updateDesc(id as number, desc as string);
 
       logger.info('자기소개 변경 완료되었습니다.');
       return res.status(200).json({ ok: true, message: '자기소개 변경 완료되었습니다.' });

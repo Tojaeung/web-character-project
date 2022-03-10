@@ -39,9 +39,6 @@ const socket = ({ io }: { io: Server }) => {
     socket.on('deleteMessage', (chatId) => {
       deleteMessage(socket, chatId);
     });
-    // socket.on('deleteMsgNoti', (chatId) => {
-    //   deleteChat(socket, chatId);
-    // });
 
     socket.on('deleteUser', () => {
       deleteUser(socket);

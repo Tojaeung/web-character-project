@@ -21,14 +21,14 @@ function ChatBody() {
       {chatUser &&
         messages.length > 0 &&
         messages
-          .filter((message) => message.to === chatUser.id || message.from === chatUser.id)
+          .filter((message) => message.to === chatUser.userId || message.from === chatUser.userId)
           .map((message) => {
             const date = message.date;
             const parsedDate = date.split('-');
             return (
-              <div className={message.to === chatUser.id ? 'sent-wrapper' : 'received-wrapper'} key={v4()}>
-                <div className={message.to === chatUser.id ? 'sent-header' : 'received-header'}>
-                  {message.to === chatUser.id ? (
+              <div className={message.to === chatUser.userId ? 'sent-wrapper' : 'received-wrapper'} key={v4()}>
+                <div className={message.to === chatUser.userId ? 'sent-header' : 'received-header'}>
+                  {message.to === chatUser.userId ? (
                     <>
                       <div className="sent-time">{`${parsedDate[0]}-${parsedDate[1]}-${parsedDate[2]}(${parsedDate[3]}) ${parsedDate[4]}`}</div>
                       <div className="sent-from">{user?.nickname}</div>
@@ -40,7 +40,7 @@ function ChatBody() {
                     </>
                   )}
                 </div>
-                <div className={message.to === chatUser.id ? 'sent-body' : 'received-body'}>
+                <div className={message.to === chatUser.userId ? 'sent-body' : 'received-body'}>
                   {message.type === 'text' ? (
                     <div className="textMessage">{message.content}</div>
                   ) : (

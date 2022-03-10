@@ -6,7 +6,6 @@ import { getProfile, follow, unFollow } from '../requests/profile.request';
 interface profileType {
   ok: boolean | undefined;
   profile: ProfileType | undefined;
-  // photos:
   message: string | undefined;
 }
 
@@ -59,6 +58,7 @@ export const profileSlice = createSlice({
 });
 
 // export const {  } = authSlice.actions;
+
 export const selectProfileOk = (state: RootState) => state.profile.ok;
 export const selectProfileProfile = (state: RootState) => state.profile.profile;
 export const selectProfileMessage = (state: RootState) => state.profile.message;

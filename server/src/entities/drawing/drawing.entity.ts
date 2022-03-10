@@ -9,12 +9,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '@src/entities/profile/user.entity';
-import { PhotoTag } from './photoTag.entity';
+import { User } from '@src/entities/user/user.entity';
+import { Tag } from './tag.entity';
 import { Comment } from './comment.entity';
 
-@Entity('photo', { schema: 'photo' })
-export class Photo {
+@Entity('drawing', { schema: 'drawing' })
+export class Drawing {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -30,7 +30,7 @@ export class Photo {
   @Column()
   key: string;
 
-  @Index('user_id-photoIdx')
+  @Index('user_id-drawingIdx')
   @Column()
   user_id: number;
 
@@ -40,13 +40,13 @@ export class Photo {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.photos, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.drawings, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @OneToMany(() => PhotoTag, (photoTag) => photoTag.photo)
-  photoTags: PhotoTag[];
+  @OneToMany(() => Tag, (tag) => tag.drawing)
+  tags: Tag[];
 
-  @OneToMany(() => Comment, (comment) => comment.photo)
+  @OneToMany(() => Comment, (comment) => comment.drawing)
   comments: Comment[];
 }

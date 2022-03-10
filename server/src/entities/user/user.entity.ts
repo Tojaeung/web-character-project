@@ -2,21 +2,22 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
+  Generated,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Follow } from '@src/entities/profile/follow.entity';
-import { Desc } from './desc.entity';
-import { Photo } from '../photo/photo.entity';
-import { Comment } from '../photo/comment.entity';
+import { Follow } from '@src/entities/user/follow.entity';
+import { Drawing } from '../drawing/drawing.entity';
 
-@Entity('user', { schema: 'profile' })
+@Entity('user', { schema: 'user' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  @Generated('uuid')
+  userId: string;
 
   @Column({
     unique: true,
@@ -27,6 +28,9 @@ export class User {
     unique: true,
   })
   nickname: string;
+
+  @Column({ nullable: true, default: null })
+  desc: string;
 
   @Column({
     default: 'https://character.s3.ap-northeast-2.amazonaws.com/avatar/default-avatar.png',
@@ -57,16 +61,19 @@ export class User {
   @Column({ type: 'varchar', nullable: true })
   emailToken: string | null;
 
-  @Column()
-  pwToken: string;
+  @Column({ type: 'varchar' })
+  pwToken: string | undefined;
 
   @Column({
     default: false,
   })
   isVerified: boolean;
 
-  @OneToOne(() => Desc, (desc) => desc.user)
-  desc: Desc;
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @OneToMany(() => Follow, (follow) => follow.followee_user)
   followees: Follow[];
@@ -74,15 +81,6 @@ export class User {
   @OneToMany(() => Follow, (follow) => follow.follower_user)
   followers: Follow[];
 
-  @OneToMany(() => Photo, (photo) => photo.user)
-  photos: Photo[];
-
-  @OneToMany(() => Comment, (comment) => comment.user)
-  comments: Comment[];
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @OneToMany(() => Drawing, (drawing) => drawing.user)
+  drawings: Drawing[];
 }

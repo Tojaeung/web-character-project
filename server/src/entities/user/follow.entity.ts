@@ -1,7 +1,7 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user.entity';
 
-@Entity('follow', { schema: 'profile' })
+@Entity('follow', { schema: 'user' })
 export class Follow {
   @PrimaryGeneratedColumn()
   id: number;

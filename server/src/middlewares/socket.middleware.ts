@@ -18,7 +18,7 @@ export const authorizeUser = async (defaultSocket: Socket, next: NextFunction) =
     await cluster.hset(`user:${user.id}`, 'id', user.id, 'nickname', user.nickname, 'avatar', user.avatar);
   }
 
-  socket.join(user.id);
+  socket.join(user.userId);
 
   next();
 };

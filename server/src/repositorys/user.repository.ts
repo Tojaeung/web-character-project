@@ -1,7 +1,6 @@
 import { AbstractRepository, EntityRepository } from 'typeorm';
-import { User } from '@src/entities/profile/user.entity';
-import { Follow } from '@src/entities/profile/follow.entity';
-import { Desc } from '@src/entities/profile/desc.entity';
+import { User } from '@src/entities/user/user.entity';
+import { Follow } from '@src/entities/user/follow.entity';
 
 @EntityRepository(User)
 export class UserRepository extends AbstractRepository<User> {
@@ -20,6 +19,10 @@ export class UserRepository extends AbstractRepository<User> {
     return this.createQueryBuilder('user').where('user.id = :id', { id }).getOne();
   }
 
+  findUserByuserId(userId: string) {
+    return this.createQueryBuilder('user').where('user.id = :userId', { userId }).getOne();
+  }
+
   // 비밀번호 변경시 사용되는 pwToken으로 유저정보를 찾는 쿼리입니다.
   findUserByPwToken(pwToken: string) {
     return this.createQueryBuilder('user').where('user.pwToken = :pwToken', { pwToken }).getOne();
@@ -31,6 +34,10 @@ export class UserRepository extends AbstractRepository<User> {
 
   updateNickname(id: number, nickname: string) {
     return this.createQueryBuilder('user').update(User).set({ nickname }).where('id = :id', { id }).execute();
+  }
+
+  updateDesc(id: number, desc: string) {
+    return this.createQueryBuilder('user').update(User).set({ desc }).where('id = :id', { id }).execute();
   }
 
   // 로그인 상태에서 비밀번호변경으로 비밀번호를 변경하는 쿼리입니다.
@@ -54,15 +61,18 @@ export class UserRepository extends AbstractRepository<User> {
   deleteUser(id: number) {
     return this.createQueryBuilder('user').delete().from(User).where('id = :id', { id }).execute();
   }
-}
 
-@EntityRepository(Desc)
-export class DescRepository extends AbstractRepository<Desc> {
-  getDesc(id: number) {
-    return this.createQueryBuilder('desc').where('user_id = :id', { id }).getOne();
-  }
-  updateDesc(id: number, desc: string) {
-    return this.createQueryBuilder('desc').update(Desc).set({ desc }).where('user_id = :id', { id }).execute();
+  /*
+   * getProfile API에 사용된다.
+   * 프로필유저 정보와 프로필유저의 팔로우, 팔로잉 정보를 가져온다.
+   * user테이블과 follow 테이블이 결합한다.
+   */
+  getProfile(profileId: number) {
+    return this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.followers', 'follow')
+      .leftJoinAndSelect('user.followees', 'follow')
+      .where('user.id = :profileId', { profileId })
+      .getOne();
   }
 }
 

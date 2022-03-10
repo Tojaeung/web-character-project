@@ -1,13 +1,12 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { getCustomRepository, getRepository } from 'typeorm';
-import { User } from '@src/entities/profile/user.entity';
-import { UserRepository } from '@src/repositorys/profile.repository';
+import { User } from '@src/entities/user/user.entity';
+import { UserRepository } from '@src/repositorys/user.repository';
 import logger from '@src/helpers/winston.helper';
 import { sendRegisterEmail, sendFindEmail } from '@src/helpers/nodemailer.helper';
 import cluster from '@src/helpers/redis.helper';
 import getLevel from '@src/utils/exp.util';
-import { Desc } from '@src/entities/profile/desc.entity';
 
 const authController = {
   // 회원가입  API 입니다.
@@ -43,11 +42,6 @@ const authController = {
       user.emailToken = emailToken;
       user.pwToken = pwToken;
       await getRepository(User).save(user);
-
-      // 자기소개 테이블에 정보를 저장합니다.(유저테이블과 1:1관계)
-      const desc = new Desc();
-      desc.user_id = user.id;
-      await getRepository(Desc).save(desc);
 
       // 인증이메일을 발송합니다.
       await sendRegisterEmail(req, res, user.id, email, emailToken);
@@ -96,22 +90,18 @@ const authController = {
        * 레디스에 유저 경험치 정보가 있는지 확인합니다.
        * 만약 없다면 유저 경험치 정보를 추가합니다.
        */
-      const exp = await cluster.zscore('exp', String(existingUser.id));
-      if (!exp) await cluster.zadd('exp', 0, String(existingUser.id));
+      const exp = await cluster.zscore('exp', existingUser.userId);
+      if (!exp) await cluster.zadd('exp', 0, existingUser.userId);
 
       // getLevel은 exp(경험치)에 따라 레벨로 리턴하는 함수입니다.
       const level = await getLevel(Number(exp));
 
+      // 보안상 중요한 내용은 클라이언트에 보내지 않는다.
+      delete existingUser.pw;
+      delete existingUser.pwToken;
+
       req.session.user = {
-        // 소켓통신과 레디스 저장을 위해 문자열로 저장한다.
-        id: String(existingUser.id),
-        email: existingUser.email,
-        nickname: existingUser.nickname,
-        avatar: existingUser.avatar,
-        avatarKey: existingUser.avatarKey,
-        cover: existingUser.cover,
-        coverKey: existingUser.coverKey,
-        role: existingUser.role,
+        ...existingUser,
         level: level as number,
       };
 
@@ -147,7 +137,14 @@ const authController = {
   // refresh시 다시 유저정보를 보내주는 API입니다.
   refreshLogin: async (req: Request, res: Response) => {
     try {
-      const user = req.session.user;
+      const id = req.session.user;
+
+      // exp(경험치)와 레벨을 업데이트 시켜준다.
+      const exp = await cluster.zscore('exp', String(id));
+      const level = await getLevel(Number(exp));
+
+      const user = { ...req.session.user, level };
+
       return res.status(200).json({ ok: true, message: '로그인 정보가 갱신되었습니다.', user });
     } catch (err: any) {
       logger.error('리프레쉬 로그인 에러', err);
@@ -223,7 +220,10 @@ const authController = {
       // nodemailer.config.ts에서 온 쿼리정보 입니다.
       const { id, pwToken } = req.query;
 
-      // 요청받은 이메일로 유저를 찾습니다.
+      /*
+       * 요청받은 이메일로 유저를 찾습니다.
+       * 쿼리스트링을 숫자형으로 바꿔준다.
+       */
       const user = await userRepo.findUserById(Number(id));
       if (!user) {
         logger.info('비밀번호 인증확인이 실패하였습니다.');
@@ -266,7 +266,7 @@ const authController = {
       const newPwToken = await bcrypt.hash(user?.nickname as string, 8);
 
       // 변경된 pw, pwToken을 각각 user, auth 테이블에 업데이트한다.
-      await userRepo.updatePwAndPwToken(user?.id as number, encryptedPw, newPwToken);
+      await userRepo.updatePwAndPwToken(user?.id, encryptedPw, newPwToken);
 
       logger.info('비밀번호가 재설정 되었습니다.');
       return res.status(200).json({ ok: true, message: '비밀번호가 재설정 되었습니다.' });

@@ -1,10 +1,10 @@
 import { AbstractRepository, EntityRepository } from 'typeorm';
-import { Comment } from '@src/entities/photo/comment.entity';
-import { Photo } from '@src/entities/photo/photo.entity';
-import { PhotoTag } from '@src/entities/photo/photoTag.entity';
+import { Drawing } from '@src/entities/drawing/drawing.entity';
+import { Comment } from '@src/entities/drawing/comment.entity';
+import { Tag } from '@src/entities/drawing/tag.entity';
 
-@EntityRepository(Photo)
-export class PhotoRepository extends AbstractRepository<Photo> {
+@EntityRepository(Drawing)
+export class DrawingRepository extends AbstractRepository<Drawing> {
   findPhotoById(id: number) {
     return (
       this.createQueryBuilder('photo')
@@ -27,8 +27,8 @@ export class PhotoRepository extends AbstractRepository<Photo> {
   }
 }
 
-@EntityRepository(PhotoTag)
-export class PhotoTagRepository extends AbstractRepository<PhotoTag> {
+@EntityRepository(Tag)
+export class TagRepository extends AbstractRepository<Tag> {
   findPhotoTagById(id: number) {
     return this.createQueryBuilder('photoTag').select('photoTag.tag').where('photo_id = :id', { id }).getOne();
   }

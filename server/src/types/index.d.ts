@@ -6,7 +6,8 @@ declare module 'express-session' {
   interface SessionData {
     user: {
       [key: string]: any;
-      id: string;
+      id: number;
+      userId: string;
       email: string;
       nickname: string;
       avatar: string;
@@ -14,6 +15,10 @@ declare module 'express-session' {
       cover: string;
       coverKey: string;
       role: string;
+      emailToken: string | null;
+      isVerified: boolean;
+      createdAt: Date;
+      updatedAt: Date;
       level: number;
     };
   }

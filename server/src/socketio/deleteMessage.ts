@@ -5,8 +5,8 @@ import parseMessages from '@src/socketio/parseMessages';
 const deleteMessage = async (socket: SessionSocket, chatId: string) => {
   const user = socket.request.session.user;
 
-  const messages = await cluster.lrange(`messages:${user.id}`, 0, -1);
-  await cluster.del(`messages:${user.id}`);
+  const messages = await cluster.lrange(`messages:${user.userId}`, 0, -1);
+  await cluster.del(`messages:${user.userId}`);
 
   const parsedMessages = await parseMessages(messages);
   // console.log(parsedMessages);
@@ -26,7 +26,7 @@ const deleteMessage = async (socket: SessionSocket, chatId: string) => {
         ','
       );
 
-      await cluster.lpush(`messages:${user.id}`, newMessageStr);
+      await cluster.lpush(`messages:${user.userId}`, newMessageStr);
     }
 
     socket.emit('initMessages', newMessages);

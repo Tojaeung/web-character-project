@@ -2,12 +2,7 @@ import { Container } from './ChatList.styled';
 import { v4 } from 'uuid';
 import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
 import { selectChats, isChatUser, selectMsgNotis } from '@src/redux/slices/chat.slice';
-
-interface ChatUserType {
-  id: string;
-  nickname: string;
-  avatar: string;
-}
+import { ChatUserType } from '@src/redux/types/chat.type';
 
 function ChatList() {
   const dispatch = useAppDispatch();
@@ -23,7 +18,7 @@ function ChatList() {
     <Container>
       {chats.length > 0 &&
         chats.map((chat) => {
-          const msgNotiNum = msgNotis.filter((msgNoti) => msgNoti.from === chat.id).length;
+          const msgNotiNum = msgNotis.filter((msgNoti) => msgNoti.from === chat.userId).length;
 
           return (
             <div className="wrapper" key={v4()} onClick={onAddChatUser(chat)}>

@@ -1,19 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
-import { getDrawing } from '@src/redux/requests/profile.request';
-import { DrawingType } from '@src/redux/types/profile.type';
+import { DrawingType } from '../types/drawing.type';
+import { getDrawing } from '../requests/drawing.request';
 
-interface profileType {
-  isLoding: boolean;
+interface DrawingSliceType {
+  isLoading: boolean;
   ok: boolean | undefined;
-  drawings: DrawingType[] | undefined;
+  drawings: DrawingType[];
   message: string | undefined;
 }
 
-const initialState: profileType = {
-  isLoding: false,
+const initialState: DrawingSliceType = {
+  isLoading: false,
   ok: undefined,
-  drawings: undefined,
+  drawings: [],
   message: undefined,
 };
 
@@ -23,27 +23,28 @@ export const drawingSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getDrawing.pending, (state) => {
-      state.isLoding = true;
+      state.isLoading = true;
     });
     builder.addCase(getDrawing.fulfilled, (state, { payload }) => {
-      state.isLoding = false;
+      state.isLoading = false;
       state.ok = payload.ok;
       state.message = payload.message;
       state.drawings?.concat(payload.drawings!);
     });
     builder.addCase(getDrawing.rejected, (state, { payload }) => {
-      state.isLoding = false;
+      state.isLoading = false;
       state.ok = payload?.ok;
       state.message = payload?.message;
-      state.drawings = undefined;
+      state.drawings = [];
     });
   },
 });
 
 // export const {  } = authSlice.actions;
-export const selectDrawingIsLoading = (state: RootState) => state.drawing.isLoding;
+
+export const selectDrawingIsLoading = (state: RootState) => state.drawing.isLoading;
 export const selectDrawingOk = (state: RootState) => state.drawing.ok;
-export const selectDrawings = (state: RootState) => state.drawing.drawings;
+export const selectDrawingDrawings = (state: RootState) => state.drawing.drawings;
 export const selectDrawingMessage = (state: RootState) => state.drawing.message;
 
 export default drawingSlice.reducer;

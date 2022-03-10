@@ -35,7 +35,7 @@ function Info() {
 
   // 채팅목록에 상대를 추가합니다.
   const onAddChat = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    socket.emit('addChat', profile?.id);
+    socket.emit('addChat', profile?.userId);
     await dispatch(openChatModal());
     localStorage.setItem('chat', 'on');
   };
@@ -74,7 +74,7 @@ function Info() {
         </div>
 
         <div className="row4">
-          {profile?.id !== user?.id && chats.filter((chat) => chat.id === profile?.id).length === 0 && (
+          {profile?.id !== user?.id && chats.filter((chat) => chat.userId === profile?.userId).length === 0 && (
             <div className="chatBtn-wrapper">
               <button className="startChat-btn" onClick={onAddChat}>
                 채팅하기
@@ -82,7 +82,7 @@ function Info() {
             </div>
           )}
 
-          {profile?.id !== user?.id && chats.filter((chat) => chat.id === profile?.id).length !== 0 && (
+          {profile?.id !== user?.id && chats.filter((chat) => chat.userId === profile?.userId).length !== 0 && (
             <div className="chatBtn-wrapper">
               <button className="startChat-btn" onClick={onAddChat}>
                 채팅하기

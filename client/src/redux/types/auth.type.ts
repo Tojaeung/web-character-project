@@ -1,12 +1,17 @@
 export type UserType = {
-  id: string;
+  id: number;
+  userId: string;
   email: string;
   nickname: string;
   avatar: string;
   avatarKey: string;
   cover: string;
-  covetKey: string;
+  coverKey: string;
   role: string;
+  emailToken: string | null;
+  isVerified: boolean;
+  createdAt: Date;
+  updatedAt: Date;
   level: number;
 };
 

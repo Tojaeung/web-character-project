@@ -25,7 +25,7 @@ const addMessage = async (socket: SessionSocket, message: MessageType) => {
     await cluster.lpush(`chats:${message.to}`, message.from);
 
     const newChat = {
-      id: user.id,
+      userId: user.userId,
       nickname: user.nickname,
       avatar: user.avatar,
     };
