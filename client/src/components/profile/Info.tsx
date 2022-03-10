@@ -40,15 +40,14 @@ function Info() {
     localStorage.setItem('chat', 'on');
   };
 
-  // const onAddPhoto = async (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   await dispatch(openModal({ mode: 'addPhoto' }));
-  // };
-
   return (
     <Container>
       <div className="cover-wrapper">
         <img className="cover-img" src={profile?.cover} alt="커버" />
       </div>
+
+      <div className="bg" />
+
       <div className="avatar-wrapper">
         <img className="avatar-img" src={profile?.avatar} alt="프사" />
       </div>
@@ -69,7 +68,7 @@ function Info() {
             <span>팔로워</span> {profile?.followerNum}
           </div>
           <div className="following">
-            <span>팔로잉</span> {profile?.followeeNum}
+            <span>팔로잉</span> {profile?.followingNum}
           </div>
         </div>
 
@@ -84,13 +83,11 @@ function Info() {
 
           {profile?.id !== user?.id && chats.filter((chat) => chat.userId === profile?.userId).length !== 0 && (
             <div className="chatBtn-wrapper">
-              <button className="startChat-btn" onClick={onAddChat}>
-                채팅하기
-              </button>
+              <button className="existingChat-btn">채팅중..</button>
             </div>
           )}
 
-          {profile?.id !== user?.id && profile?.isFollowing === false && (
+          {profile?.id !== user?.id && profile?.follow === false && (
             <div className="followBtn-wrapper">
               <button className="follow-btn" onClick={onFollow}>
                 팔로우
@@ -98,7 +95,7 @@ function Info() {
             </div>
           )}
 
-          {profile?.id !== user?.id && profile?.isFollowing === true && (
+          {profile?.id !== user?.id && profile?.follow === true && (
             <div className="followBtn-wrapper">
               <button className="unFollow-btn" onClick={onUnFollow}>
                 언팔로우
@@ -128,12 +125,15 @@ const Container = styled.div`
   z-index: 999;
 
   .cover-wrapper {
+    // 이미지 맞춰서 커졋다 작아졋다
+    max-width: 100%;
     width: 60rem;
     height: 30rem;
     border-radius: 10px;
     overflow: hidden;
   }
   .cover-img {
+    max-width: 100%;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -202,7 +202,8 @@ const Container = styled.div`
     ${greenButtonStyle};
     padding: 1rem;
   }
-  .chatting-btn {
+
+  .existingChat-btn {
     ${redButtonStyle};
     padding: 1rem;
   }

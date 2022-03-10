@@ -33,9 +33,10 @@ export const profileSlice = createSlice({
     builder.addCase(follow.fulfilled, (state, { payload }) => {
       state.ok = payload.ok;
       state.message = payload.message;
-      // 새로고침 대신에 리덕스 값을 임의로 변경해줘서 업데이트 시켜준다.
+      // 팔로워 사람 수를 늘려준다.
       state.profile!.followerNum++;
-      state.profile!.isFollowing = true;
+      // 팔로워가 되었다.
+      state.profile!.follow = true;
     });
     builder.addCase(follow.rejected, (state, { payload }) => {
       state.ok = payload?.ok;
@@ -45,9 +46,10 @@ export const profileSlice = createSlice({
     builder.addCase(unFollow.fulfilled, (state, { payload }) => {
       state.ok = payload.ok;
       state.message = payload.message;
-      // 새로고침 대신에 리덕스 값을 임의로 변경해줘서 업데이트 시켜준다.
+      // 팔로워 사람 수를 줄려준다.
       state.profile!.followerNum--;
-      state.profile!.isFollowing = false;
+      // 팔로우가 취소 되었다.
+      state.profile!.follow = false;
     });
     builder.addCase(unFollow.rejected, (state, { payload }) => {
       state.ok = payload?.ok;

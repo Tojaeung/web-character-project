@@ -3,15 +3,16 @@ export type ProfileType = {
   userId: string;
   email: string;
   nickname: string;
+  desc: string;
   avatar: string;
-  avatarKey: string;
   cover: string;
-  coverKey: string;
   role: string;
   level: number;
-  isFollowing: boolean | undefined;
+  follow: boolean;
   followerNum: number;
-  followeeNum: number;
+  followingNum: number;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type getProfileReturnType = {
@@ -21,7 +22,7 @@ export type getProfileReturnType = {
 };
 
 export type getProfileParamType = {
-  profileId: string;
+  profileId: number;
 };
 
 export type getProfileErrorType = {

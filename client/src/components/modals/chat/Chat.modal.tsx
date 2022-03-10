@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import * as S from './Chat.modal.styled';
+import styled from 'styled-components';
 import { AiOutlineClose } from 'react-icons/ai';
 import { ImExit } from 'react-icons/im';
 import ChatList from './ChatList';
@@ -34,13 +34,12 @@ function ChatModal() {
 
   if (!chatOk) return null;
   return createPortal(
-    <S.Container>
-      <S.ListWrapper>
+    <Container>
+      <div className="list">
         <ChatList />
-      </S.ListWrapper>
-
-      <S.WindowWrapper>
-        <S.Header>
+      </div>
+      <div className="window">
+        <div className="header">
           <span>
             {chats.length === 0 && !chatUser && '채팅상대를 추가해주세요!! 🔍'}
             {chats.length > 0 && !chatUser && '왼쪽 채팅상대를 클릭하세요!! 📢'}
@@ -50,19 +49,73 @@ function ChatModal() {
             <ImExit className="exitChat-icon" onClick={onExitChat} />
             <AiOutlineClose className="closeIcon" onClick={onClose} />
           </div>
-        </S.Header>
-
-        <S.Body>
+        </div>
+        <div className="body">
           <ChatBody />
-        </S.Body>
-
-        <S.Footer>
+        </div>
+        <div className="footer">
           <ChatFooter />
-        </S.Footer>
-      </S.WindowWrapper>
-    </S.Container>,
+        </div>
+      </div>
+    </Container>,
     document.getElementById('portal') as HTMLElement
   );
 }
+
+const Container = styled.div`
+  position: fixed;
+  bottom: 0;
+  right: 1rem;
+  width: 50rem;
+  height: 70vh;
+  border-radius: 10px;
+  box-shadow: ${({ theme }) => theme.palette.shadowColor};
+  display: flex;
+  justify-content: space-between;
+  background: ${({ theme }) => theme.palette.white};
+  z-index: 1002;
+
+  .list {
+    width: 15rem;
+    border-right: 1px solid ${({ theme }) => theme.palette.borderColor};
+  }
+  .window {
+    display: flex;
+    flex-direction: column;
+
+    .header {
+      width: 35rem;
+      height: 5rem;
+      border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1rem;
+      margin-bottom: 0.5rem;
+      span {
+        font-size: 1.5rem;
+      }
+      .exitChat-icon {
+        font-size: 2.5rem;
+        margin-right: 1rem;
+        cursor: pointer;
+      }
+      .closeIcon {
+        font-size: 2.5rem;
+        cursor: pointer;
+      }
+    }
+    .body {
+      width: 100%;
+      height: calc(100% - 10rem);
+    }
+    .footer {
+      margin-bottom: 0.5rem;
+    }
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 30rem;
+  }
+`;
 
 export default ChatModal;

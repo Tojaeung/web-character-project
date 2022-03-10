@@ -10,6 +10,7 @@ declare module 'express-session' {
       userId: string;
       email: string;
       nickname: string;
+      desc: string;
       avatar: string;
       avatarKey: string;
       cover: string;

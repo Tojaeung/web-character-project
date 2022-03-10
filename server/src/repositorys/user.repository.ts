@@ -19,8 +19,8 @@ export class UserRepository extends AbstractRepository<User> {
     return this.createQueryBuilder('user').where('user.id = :id', { id }).getOne();
   }
 
-  findUserByuserId(userId: string) {
-    return this.createQueryBuilder('user').where('user.id = :userId', { userId }).getOne();
+  findUserByUserId(userId: string) {
+    return this.createQueryBuilder('user').where('user.userId = :userId', { userId }).getOne();
   }
 
   // 비밀번호 변경시 사용되는 pwToken으로 유저정보를 찾는 쿼리입니다.
@@ -78,7 +78,7 @@ export class UserRepository extends AbstractRepository<User> {
 
 @EntityRepository(Follow)
 export class FollowRepository extends AbstractRepository<Follow> {
-  getFolloweeNum(id: number) {
+  getFollowingNum(id: number) {
     return this.createQueryBuilder('follow').select('count(*)').where('follow.from_id = :id', { id }).getRawOne();
   }
 

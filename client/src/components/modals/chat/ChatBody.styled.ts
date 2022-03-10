@@ -7,16 +7,6 @@ export const Container = styled.div`
   flex-direction: column;
   padding: 0 1rem;
   overflow-y: scroll;
-  ::-webkit-scrollbar {
-    width: 1rem;
-  }
-  ::-webkit-scrollbar-thumb {
-    background-color: ${({ theme }) => theme.palette.gray3};
-    border-radius: 10px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: ${({ theme }) => theme.palette.gray5};
-  }
 
   .sent-wrapper {
     width: 100%;

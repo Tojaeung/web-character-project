@@ -5,7 +5,7 @@ const parseChats = async (chats: string[]) => {
   const userRepository = getCustomRepository(UserRepository);
   const newChats = [];
   for (const chat of chats) {
-    const chatUser = await userRepository.findUserByuserId(chat);
+    const chatUser = await userRepository.findUserByUserId(chat);
     newChats.push({
       userId: chatUser?.userId,
       nickname: chatUser?.nickname,

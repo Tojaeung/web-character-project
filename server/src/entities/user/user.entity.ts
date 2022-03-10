@@ -75,8 +75,8 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => Follow, (follow) => follow.followee_user)
-  followees: Follow[];
+  @OneToMany(() => Follow, (follow) => follow.following_user)
+  followings: Follow[];
 
   @OneToMany(() => Follow, (follow) => follow.follower_user)
   followers: Follow[];

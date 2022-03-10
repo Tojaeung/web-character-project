@@ -32,7 +32,7 @@ export type getDrawingReturnType = {
 };
 
 export type getDrawingParamType = {
-  profileId: string | undefined;
+  profileId: number | undefined;
   cursor: number | null;
 };
 

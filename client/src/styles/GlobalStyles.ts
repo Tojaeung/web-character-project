@@ -19,16 +19,21 @@ const GlobalStyles = createGlobalStyle`
     a {
       color: ${({ theme }) => theme.palette.black};
     }
+    img {
+      max-width: 100%;
+    }
   }
 
   ::-webkit-scrollbar {
-  background-color: white;
-  width: 0.4vw;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #fc4958, #e85d04, #fc4958);
-}
+    width: 0.5rem;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.palette.green};
+    
+  }
+  /* ::-webkit-scrollbar-thumb:hover {
+    background-color: ${({ theme }) => theme.palette.gray};
+  } */
 
 `;
 

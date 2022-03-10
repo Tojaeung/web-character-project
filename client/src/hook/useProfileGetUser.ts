@@ -8,6 +8,6 @@ export const useProfileGetUser = () => {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getProfile({ profileId: profileId as string }));
+    dispatch(getProfile({ profileId: Number(profileId) }));
   }, [dispatch, profileId]);
 };
