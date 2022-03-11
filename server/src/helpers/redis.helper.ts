@@ -4,12 +4,12 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const cluster = new Redis.Cluster([
-  { port: 7000, host: '127.0.0.1' },
-  { port: 7001, host: '127.0.0.1' },
-  { port: 7002, host: '127.0.0.1' },
-  { port: 8000, host: '127.0.0.1' },
-  { port: 8001, host: '127.0.0.1' },
-  { port: 8002, host: '127.0.0.1' },
+  { port: Number(process.env.REDIS_CLUSTER_MASTER_PORT1), host: process.env.REDIS_CLUSTER_HOST },
+  { port: Number(process.env.REDIS_CLUSTER_MASTER_PORT2), host: process.env.REDIS_CLUSTER_HOST },
+  { port: Number(process.env.REDIS_CLUSTER_MASTER_PORT3), host: process.env.REDIS_CLUSTER_HOST },
+  { port: Number(process.env.REDIS_CLUSTER_SLAVE_PORT1), host: process.env.REDIS_CLUSTER_HOST },
+  { port: Number(process.env.REDIS_CLUSTER_SLAVE_PORT2), host: process.env.REDIS_CLUSTER_HOST },
+  { port: Number(process.env.REDIS_CLUSTER_SLAVE_PORT3), host: process.env.REDIS_CLUSTER_HOST },
 ]);
 
 cluster.on('connect', () => {

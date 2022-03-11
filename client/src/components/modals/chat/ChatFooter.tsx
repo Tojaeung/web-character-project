@@ -2,12 +2,13 @@ import React, { useState, useRef } from 'react';
 import { IoIosSend } from 'react-icons/io';
 import { AiOutlineCamera } from 'react-icons/ai';
 import axios from 'axios';
-import * as S from './ChatFooter.styled';
+import styled from 'styled-components';
 import socket from '@src/utils/socket';
 import { messageDate } from '@src/utils/date';
 import { selectAuthUser } from '@src/redux/slices/auth.slice';
 import { selectChatUser } from '@src/redux/slices/chat.slice';
 import { useAppSelector } from '@src/redux/app/hook';
+import { greenInputStyle, greenButtonStyle } from '@src/styles/GlobalStyles';
 
 function ChatFooter() {
   const user = useAppSelector(selectAuthUser);
@@ -56,28 +57,69 @@ function ChatFooter() {
     const { ok, imgMsgObj } = response.data;
     if (!ok) return;
     socket.emit('addMessage', imgMsgObj);
+    socket.emit('addMsgNoti', { from: user?.userId, to: chatUser?.userId });
+    socket.emit('deleteMsgNoti', chatUser?.userId);
   };
 
   return (
-    <S.Container>
-      <S.imgWrapper>
-        <input type="file" accept="image/png, image/jpeg" ref={inputRef} onChange={onSendImgMsg} />
-        <AiOutlineCamera className="imgIcon" onClick={(e) => inputRef.current?.click()} />
-      </S.imgWrapper>
+    <Container>
+      <input
+        className="file-input"
+        type="file"
+        accept="image/png, image/jpeg.image/jpg"
+        ref={inputRef}
+        onChange={onSendImgMsg}
+      />
+      <AiOutlineCamera className="camera-icon" onClick={(e) => inputRef.current?.click()} />
 
-      <S.textWrapper>
+      <div className="text">
         <input
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && onSendTextMsg(e)}
         />
-        <button onClick={onSendTextMsg}>
-          <IoIosSend className="textIcon" />
+        <button disabled={!message ? true : false} onClick={onSendTextMsg}>
+          <IoIosSend className="send-icon" />
         </button>
-      </S.textWrapper>
-    </S.Container>
+      </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem 0 1rem;
+  .file-input {
+    display: none;
+  }
+  .camera-icon {
+    font-size: 3rem;
+    cursor: pointer;
+    &:hover {
+      background-color: ${({ theme }) => theme.palette.gray};
+    }
+  }
+  .text {
+    display: flex;
+    width: 100%;
+    input {
+      ${greenInputStyle};
+      margin: 0rem 1rem;
+    }
+    button {
+      ${greenButtonStyle};
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0.6rem;
+    }
+    .send-icon {
+      font-size: 2.5rem;
+    }
+  }
+`;
 
 export default ChatFooter;

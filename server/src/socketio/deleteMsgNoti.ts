@@ -21,17 +21,15 @@ const deleteMsgNoti = async (socket: SessionSocket, chatId: string) => {
     return;
   }
 
+  // 새롭게 메세지알림 정보를 레디스에 저장한다.
   if (newMsgNotis.length > 0) {
-    // 새롭게 메세지알림 정보를 레디스에 저장한다.
-    if (newMsgNotis.length > 0) {
-      for (const newMsgNoti of newMsgNotis) {
-        const msgNotiStr = [newMsgNoti.from, newMsgNoti.to].join(',');
-        await cluster.lpush(`msgNotis:${user.userId}`, msgNotiStr);
-      }
+    for (const newMsgNoti of newMsgNotis) {
+      const msgNotiStr = [newMsgNoti.from, newMsgNoti.to].join(',');
+      await cluster.lpush(`msgNotis:${user.userId}`, msgNotiStr);
     }
-    socket.emit('initMsgNotis', newMsgNotis);
-    return;
   }
+  socket.emit('initMsgNotis', newMsgNotis);
+  return;
 };
 
 export default deleteMsgNoti;

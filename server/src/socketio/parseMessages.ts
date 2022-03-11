@@ -7,7 +7,8 @@ const parseMessages = async (messages: string[]) => {
       to: parsedMsg[1],
       from: parsedMsg[2],
       content: parsedMsg[3],
-      date: parsedMsg[4],
+      imgKey: parsedMsg[4],
+      date: parsedMsg[5],
     });
   }
   return newMessages;

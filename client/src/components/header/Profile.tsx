@@ -150,7 +150,7 @@ const Container = styled.div<{ openProfile: boolean }>`
     }
     .dropDown {
       top: -30rem;
-      right: 0rem;
+      right: -1rem;
     }
   }
 `;
