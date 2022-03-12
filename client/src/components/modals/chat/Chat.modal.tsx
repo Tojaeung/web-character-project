@@ -7,7 +7,7 @@ import { ImExit } from 'react-icons/im';
 import ChatList from './ChatList';
 import ChatFooter from './ChatFooter';
 import ChatBody from './ChatBody';
-import { isChatUser, selectChatUser, selectChatOk, closeChatModal, removeChatUser } from '@src/redux/slices/chat.slice';
+import { isChatUser, selectChatUser, selectChatOk, closeChatModal } from '@src/redux/slices/chat.slice';
 import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
 import { openModal } from '@src/redux/slices/modal.slice';
 
@@ -24,7 +24,8 @@ function ChatModal() {
 
   // 대화창에서 대화목록으로 뒤로가기 됩니다.
   const onBack = async (e: React.MouseEvent<SVGElement>) => {
-    dispatch(removeChatUser());
+    dispatch(isChatUser({ chatUser: undefined }));
+    localStorage.removeItem('chatUser');
   };
 
   const onExitChat = async (e: React.MouseEvent<SVGElement>) => {
@@ -85,7 +86,6 @@ const Container = styled.div`
   bottom: 0;
   right: 1rem;
   width: 32rem;
-  /* height: 66.5rem; */
   border-radius: 10px;
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
   background: ${({ theme }) => theme.palette.white};

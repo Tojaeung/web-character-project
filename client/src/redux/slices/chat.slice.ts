@@ -31,9 +31,6 @@ export const chatSlice = createSlice({
     isChatUser: (state, action) => {
       state.chatUser = action.payload.chatUser;
     },
-    removeChatUser: (state) => {
-      state.chatUser = undefined;
-    },
 
     initChats: (state, action) => {
       state.chats = action.payload.newChats;
@@ -61,7 +58,6 @@ export const {
   openChatModal,
   closeChatModal,
   isChatUser,
-  removeChatUser,
   initChats,
   addChat,
   initMessages,

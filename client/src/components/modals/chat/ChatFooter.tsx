@@ -4,13 +4,14 @@ import { AiOutlineCamera } from 'react-icons/ai';
 import axios from 'axios';
 import styled from 'styled-components';
 import socket from '@src/utils/socket';
-import { messageDate } from '@src/utils/date';
 import { selectAuthUser } from '@src/redux/slices/auth.slice';
 import { selectChatUser } from '@src/redux/slices/chat.slice';
-import { useAppSelector } from '@src/redux/app/hook';
+import { useAppSelector, useAppDispatch } from '@src/redux/app/hook';
 import { greenInputStyle, greenButtonStyle } from '@src/styles/GlobalStyles';
+import moment from 'moment';
 
 function ChatFooter() {
+  const dispatch = useAppDispatch();
   const user = useAppSelector(selectAuthUser);
   const chatUser = useAppSelector(selectChatUser);
 
@@ -18,13 +19,13 @@ function ChatFooter() {
   const [message, setMessage] = useState<string | undefined>(undefined);
 
   // 텍스트 메세지
-  const onSendTextMsg = (e: any) => {
+  const onSendTextMsg = async (e: any) => {
     const textMsgObj = {
       type: 'text',
       to: chatUser?.userId,
       from: user?.userId,
       content: message,
-      date: messageDate(),
+      date: moment().format(),
     };
 
     if (message === '') return;
@@ -52,7 +53,7 @@ function ChatFooter() {
     formData.append('imgMessage', e.target?.files[0]);
     formData.append('chatId', chatUser?.userId);
     formData.append('userId', user?.userId as string);
-    formData.append('messageDate', messageDate());
+    formData.append('messageDate', moment().format());
     const response = await axios.post('/api/chat/imgMessage', formData, { withCredentials: true });
     const { ok, imgMsgObj } = response.data;
     if (!ok) return;

@@ -24,7 +24,7 @@ const deleteChat = async (socket: SessionSocket, chatId: string) => {
    */
   await cluster.lrem(`chats:${user.userId}`, 1, chatId);
   const updatedChats = await cluster.lrange(`chats:${user.userId}`, 0, -1);
-  const parsedChats = await parseChats(updatedChats);
+  const parsedChats = await parseChats(user.userId, updatedChats);
   socket.emit('initChats', parsedChats);
 };
 

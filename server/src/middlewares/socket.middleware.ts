@@ -12,11 +12,11 @@ export const authorizeUser = async (defaultSocket: Socket, next: NextFunction) =
   }
 
   const user = socket.request.session.user;
-  const userInfo = await cluster.hget(`user:${user.id}`, 'id');
+  // const userInfo = await cluster.hget(`user:${user.id}`, 'id');
 
-  if (!userInfo) {
-    await cluster.hset(`user:${user.id}`, 'id', user.id, 'nickname', user.nickname, 'avatar', user.avatar);
-  }
+  // if (!userInfo) {
+  //   await cluster.hset(`user:${user.id}`, 'id', user.id, 'nickname', user.nickname, 'avatar', user.avatar);
+  // }
 
   socket.join(user.userId);
 

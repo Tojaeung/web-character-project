@@ -8,6 +8,7 @@ import deleteMsgNoti from '@src/socketio/deleteMsgNoti';
 import deleteUser from '@src/socketio/deleteUser';
 import deleteChat from '@src/socketio/deleteChat';
 import deleteMessage from '@src/socketio/deleteMessage';
+import updateLastMessage from '@src/socketio/updateLastMessage';
 
 const socket = ({ io }: { io: Server }) => {
   io.on('connect', async (defaultSocket: Socket) => {
@@ -42,6 +43,10 @@ const socket = ({ io }: { io: Server }) => {
 
     socket.on('deleteUser', () => {
       deleteUser(socket);
+    });
+
+    socket.on('updateLastMessage', async () => {
+      updateLastMessage(socket);
     });
 
     socket.on('disconnect', () => {

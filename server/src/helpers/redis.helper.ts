@@ -15,7 +15,7 @@ const cluster = new Redis.Cluster([
 cluster.on('connect', () => {
   logger.info('redis 연결');
 });
-
+1;
 cluster.on('error', () => {
   logger.error('redis 연결실패');
 });

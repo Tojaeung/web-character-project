@@ -1,12 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { v4 } from 'uuid';
 import styled from 'styled-components';
+import moment from 'moment';
+import 'moment/locale/ko';
 import { useAppSelector } from '@src/redux/app/hook';
 import { selectChatUser, selectMessages } from '@src/redux/slices/chat.slice';
-import { selectAuthUser } from '@src/redux/slices/auth.slice';
 
 function ChatBody() {
-  const user = useAppSelector(selectAuthUser);
   const messages = useAppSelector(selectMessages);
   const chatUser = useAppSelector(selectChatUser);
 
@@ -23,23 +23,8 @@ function ChatBody() {
         messages
           .filter((message) => message.to === chatUser.userId || message.from === chatUser.userId)
           .map((message) => {
-            const date = message.date;
-            const parsedDate = date.split('-');
             return (
               <div className={message.to === chatUser.userId ? 'sent-wrapper' : 'received-wrapper'} key={v4()}>
-                <div className={message.to === chatUser.userId ? 'sent-header' : 'received-header'}>
-                  {message.to === chatUser.userId ? (
-                    <>
-                      <div className="sent-time">{`${parsedDate[0]}-${parsedDate[1]}-${parsedDate[2]}(${parsedDate[3]}) ${parsedDate[4]}`}</div>
-                      <div className="sent-from">{user?.nickname}</div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="received-from">{chatUser.nickname}</div>
-                      <div className="received-time">{`${parsedDate[0]}-${parsedDate[1]}-${parsedDate[2]}(${parsedDate[3]}) ${parsedDate[4]}`}</div>
-                    </>
-                  )}
-                </div>
                 <div className={message.to === chatUser.userId ? 'sent-body' : 'received-body'}>
                   {message.type === 'text' ? (
                     <div className="textMessage">{message.content}</div>
@@ -47,6 +32,7 @@ function ChatBody() {
                     <img className="imgMessage" src={message.content} alt="이미지" />
                   )}
                 </div>
+                <div>{moment(message.date).fromNow()}</div>
               </div>
             );
           })}
@@ -71,9 +57,8 @@ const Container = styled.div`
     justify-content: center;
     align-items: flex-end;
     background-color: ${({ theme }) => theme.palette.white};
-    border: 1px solid ${({ theme }) => theme.palette.gray3};
-    border-radius: 10px;
-    margin-bottom: 1rem;
+
+    margin-bottom: 0.2rem;
   }
 
   .received-wrapper {
@@ -84,53 +69,22 @@ const Container = styled.div`
     justify-content: center;
     align-items: flex-start;
     background-color: ${({ theme }) => theme.palette.white};
-    border: 1px solid ${({ theme }) => theme.palette.gray3};
-    border-radius: 10px;
-    margin-bottom: 1rem;
-  }
 
-  .sent-header {
-    width: 100%;
-    display: flex;
-    padding: 0.3rem;
-    align-items: center;
-    justify-content: flex-end;
-  }
-
-  .received-header {
-    width: 100%;
-    display: flex;
-    padding: 0.3rem;
-    align-items: center;
-    justify-content: flex-start;
-  }
-  .sent-time {
-    margin-right: 0.5rem;
-    color: ${({ theme }) => theme.palette.gray5};
-  }
-  .sent-from {
-    font-size: 1.2rem;
-    font-weight: 700;
-  }
-  .received-from {
-    margin-right: 0.5rem;
-    font-size: 1.2rem;
-    font-weight: 700;
-  }
-  .received-time {
-    color: ${({ theme }) => theme.palette.gray5};
+    margin-bottom: 0.2rem;
   }
 
   .sent-body {
-    width: 100%;
     padding: 1rem;
     display: flex;
     justify-content: flex-end;
+    background-color: ${({ theme }) => theme.palette.green};
+    border-radius: 10px;
   }
   .received-body {
-    width: 100%;
     padding: 1rem;
     display: flex;
+    background-color: ${({ theme }) => theme.palette.red};
+    border-radius: 10px;
     justify-content: flex-start;
   }
   .textMessage {
@@ -139,7 +93,7 @@ const Container = styled.div`
     word-break: break-all;
   }
   .imgMessage {
-    width: 50%;
+    /* width: 50%; */
   }
 `;
 

@@ -60,8 +60,8 @@ const Container = styled.div<{ chatOk: boolean }>`
   .noti {
     position: absolute;
     border-radius: 50%;
-    top: 25px;
-    left: 30px;
+    top: 2rem;
+    left: 2.5rem;
     padding: 0.5rem;
     background-color: red;
   }
