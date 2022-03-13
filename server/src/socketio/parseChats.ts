@@ -2,6 +2,7 @@ import { getCustomRepository } from 'typeorm';
 import { UserRepository } from '@src/repositorys/user.repository';
 import cluster from '@src/helpers/redis.helper';
 import parseMessages from '@src/socketio/parseMessages';
+import moment from 'moment';
 
 const parseChats = async (userId: string, chats: string[]) => {
   const userRepository = getCustomRepository(UserRepository);
@@ -23,7 +24,7 @@ const parseChats = async (userId: string, chats: string[]) => {
         avatar: chatUser?.avatar,
         lastType: undefined,
         lastMessage: undefined,
-        lastDate: undefined,
+        lastDate: moment().format(),
       });
     } else {
       // 가장 마지막에 대화한 정보를 가져온다.
