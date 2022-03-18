@@ -1,77 +1,88 @@
-// import { useState, useEffect, useRef } from 'react';
-// import { useParams } from 'react-router-dom';
-// import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
-// // import { getDrawing } from '@src/redux/requests/profile.request';
-// // import { selectDrawings, selectDrawingIsLoading } from '@src/redux/slices/drawing.slice';
-// import loading from '@src/assets/images/loading.gif';
-// import styled from 'styled-components';
-
-// function Drawing() {
-//   const dispatch = useAppDispatch();
-//   const { profileId } = useParams();
-
-//   // const isLoading = useAppSelector(selectDrawingIsLoading);
-//   // const drawings = useAppSelector(selectDrawings);
-
-//   const [cursor, setCursor] = useState<number | null>(null);
-
-//   // 처음 그림 가져오기 (cursor = null)
-//   useEffect(() => {
-//     dispatch(getDrawing({ profileId, cursor: null }))
-//       .unwrap()
-//       .then((res) => {
-//         const { ok, message, newCursor } = res;
-//         if (!ok) return alert(message);
-//         setCursor(newCursor);
-//       });
-//   }, []);
-
-//   // 다음부터 cursor의 값에 따라 무한스크롤
-//   const pageEnd = useRef<HTMLInputElement>(null);
-//   const observer = new IntersectionObserver(
-//     async (entries) => {
-//       // if (entries[0].isIntersecting) {
-//       //   const res = await dispatch(getPhoto({ profileId, cursor })).unwrap();
-//       //   const { ok, message, newCursor } = res;
-//       //   if (!ok) return alert(message);
-//       //   setCursor(newCursor);
-//       // }
-//     },
-//     { threshold: 1 }
-//   );
-//   // observer.observe(pageEnd.current as HTMLInputElement);
-
-//   return (
-//     <Container>
-//       {drawings?.map((drawing) => (
-//         <div className="drawing-container" key={drawing.id}>
-//           <div>{drawing.title}</div>
-//           <img className="drawing-img" src={drawing.url} alt="그림" />
-//           <div>{drawing.drawingTags.tag}</div>
-//           <div>{drawing.content}</div>
-//         </div>
-//       ))}
-//       {isLoading ? <img src={loading} alt="로딩중..." /> : null}
-//       <input type="hidden" ref={pageEnd} />
-//     </Container>
-//   );
-// }
-
-// const Container = styled.div`
-//   width: 100%;
-//   grid-template-columns: repeat(4, 1fr);
-//   padding: 0 2rem;
-//   gap: 1rem;
-//   @media ${({ theme }) => theme.device.mobile} {
-//     grid-template-columns: 1fr;
-//   }
-// `;
-
-// export default Drawing;
-import React from 'react';
+import { useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
+import { getDrawings, getDrawing } from '@src/redux/requests/drawing.request';
+import { selectProfileProfile } from '@src/redux/slices/profile.slice';
+import { selectDrawingDrawings, selectDrawingIsLoading } from '@src/redux/slices/drawing.slice';
+import loading from '@src/assets/images/loading.gif';
+import { useObserver } from '@src/hook/useObserver';
+import { openModal } from '@src/redux/slices/modal.slice';
 
 function Drawing() {
-  return <div>Drawing</div>;
+  const dispatch = useAppDispatch();
+  const profile = useAppSelector(selectProfileProfile);
+  const isLoading = useAppSelector(selectDrawingIsLoading);
+  const drawings = useAppSelector(selectDrawingDrawings);
+
+  const targetRef = useRef<HTMLDivElement>(null);
+  const [cursor, setCursor] = useState<number | null>(null);
+
+  // useObserver는 커스텀 훅이다.
+  const isVisible = useObserver(targetRef);
+
+  const importDrawings = async (profileId: number, cursor: number | null) => {
+    const res = await dispatch(getDrawings({ profileId: profile?.id, cursor })).unwrap();
+    setCursor(res.newCursor);
+  };
+
+  useEffect(() => {
+    /*
+     * isVisible이 false일때는 getDrawing이 작동되지 않게 한다. (오직 true일때만)
+     * cursor가 0 일때는 더이상 drawing 데이터가 없기 때문이다.
+     */
+    if (!isVisible || cursor === 0) {
+      return;
+    }
+    importDrawings(profile?.id!, cursor);
+  }, [isVisible]);
+
+  const openDrawing = (index: number) => async (e: React.MouseEvent<HTMLLIElement>) => {
+    await dispatch(openModal({ mode: 'showDrawing' }));
+    await dispatch(getDrawing({ drawingId: drawings[index].id }));
+  };
+
+  return (
+    <Container>
+      <ul>
+        {drawings?.map((drawing, index) => (
+          <li className="drawing" key={index} onClick={openDrawing(index)}>
+            <img src={drawing.url} alt="그림" />
+          </li>
+        ))}
+        {isLoading ? <img src={loading} alt="로딩중..." /> : null}
+
+        <div className="observer" ref={targetRef} />
+      </ul>
+    </Container>
+  );
 }
+
+const Container = styled.div`
+  width: 100%;
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+
+    .drawing {
+      cursor: pointer;
+      &:hover {
+        transform: scale(1.2);
+        transition: all 0.3s ease-in-out;
+      }
+    }
+  }
+
+  .observer {
+    opacity: 0;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    ul {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+`;
 
 export default Drawing;

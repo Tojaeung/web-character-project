@@ -18,7 +18,7 @@ function Profile() {
       <div className="info">
         <Info />
       </div>
-      <div className="photo">
+      <div className="drawing">
         <Drawing />
       </div>
     </Container>

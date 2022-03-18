@@ -6,7 +6,7 @@ import { useSocketSetup } from '@src/hook/useSocketSetup';
 
 import Header from '@src/components/header/Header';
 import Home from '@src/pages/Home';
-import { AuthPageRender, ProfilePageRender, PhotoPageRender } from '@src/routes/PageRender';
+import { AuthPageRender, ProfilePageRender, DrawingPageRender } from '@src/routes/PageRender';
 import { AuthPrivateRouter, PrivateRouter } from '@src/routes/PrivateRouter';
 
 import Modal from '@src/components/modals/Modal';
@@ -53,10 +53,10 @@ function App() {
               />
 
               <Route
-                path="/photo/:page"
+                path="/drawing/:page"
                 element={
                   <PrivateRouter>
-                    <PhotoPageRender />
+                    <DrawingPageRender />
                   </PrivateRouter>
                 }
               />

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { v4 } from 'uuid';
 import styled from 'styled-components';
-import moment from 'moment';
-import 'moment/locale/ko';
 import socket from '@src/utils/socket';
+import 'moment/locale/ko';
+import relativeTime from '@src/utils/date.util';
 import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
 import { selectChats, isChatUser, selectMsgNotis } from '@src/redux/slices/chat.slice';
 import { ChatUserType } from '@src/redux/types/chat.type';
@@ -13,9 +13,9 @@ function ChatList() {
   const chats = useAppSelector(selectChats);
   const msgNotis = useAppSelector(selectMsgNotis);
 
-  // useEffect(() => {
-  //   socket.emit('updateLastMessage');
-  // }, []);
+  useEffect(() => {
+    socket.emit('updateLastMessage');
+  }, []);
 
   const onAddChatUser = (chat: ChatUserType) => async (e: React.MouseEvent<HTMLLIElement>) => {
     await dispatch(isChatUser({ chatUser: chat }));
@@ -47,7 +47,7 @@ function ChatList() {
                     <span className="lastMessage">{chat.lastType === 'image' ? '이미지' : chat.lastMessage}</span>
                   </div>
                 </div>
-                <span className="lastDate">{moment(chat.lastDate).fromNow()}</span>
+                <span className="lastDate">{relativeTime(chat.lastDate!)}</span>
               </li>
             );
           })
@@ -113,15 +113,16 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    max-width: 20rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    max-width: 18rem;
+
     .nickname {
       font-size: 1.5rem;
       font-weight: 500;
     }
     .lastMessage {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       font-size: 1.2rem;
     }
   }

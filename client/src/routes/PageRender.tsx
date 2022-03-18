@@ -31,14 +31,14 @@ export const ProfilePageRender = () => {
   }
 };
 
-export const PhotoPageRender = () => {
+export const DrawingPageRender = () => {
   const { page } = useParams();
 
   if (!page) return <h1>나다호다</h1>;
 
   const modifiedPage = page?.charAt(0).toUpperCase() + page?.slice(1);
 
-  const component = () => require(`../pages/photo/${modifiedPage}`).default;
+  const component = () => require(`../pages/drawing/${modifiedPage}`).default;
 
   try {
     return createElement(component());

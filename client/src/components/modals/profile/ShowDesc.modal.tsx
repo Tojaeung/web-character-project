@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { greenButtonStyle, redButtonStyle } from '@src/styles/GlobalStyles';
 import { AiOutlineClose } from 'react-icons/ai';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { closeModal } from '@src/redux/slices/modal.slice';
 import { useAppDispatch } from '@src/redux/app/hook';

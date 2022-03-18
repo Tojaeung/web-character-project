@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { v4 } from 'uuid';
 import styled from 'styled-components';
-import moment from 'moment';
 import 'moment/locale/ko';
+import relativeTime from '@src/utils/date.util';
 import { useAppSelector } from '@src/redux/app/hook';
 import { selectChatUser, selectMessages } from '@src/redux/slices/chat.slice';
 
@@ -32,7 +32,7 @@ function ChatBody() {
                     <img className="imgMessage" src={message.content} alt="이미지" />
                   )}
                 </div>
-                <div>{moment(message.date).fromNow()}</div>
+                <div>{relativeTime(message.date)}</div>
               </div>
             );
           })}

@@ -6,6 +6,7 @@ import { greenButtonStyle, greenInputStyle } from '@src/styles/GlobalStyles';
 import { loginUser } from '@src/redux/requests/auth.request';
 import { useAppDispatch } from '@src/redux/app/hook';
 import { openModal, closeModal } from '@src/redux/slices/modal.slice';
+import logo from '@src/assets/images/logo.jpg';
 
 function LoginModal() {
   const navigate = useNavigate();
@@ -51,7 +52,9 @@ function LoginModal() {
     <Container>
       <form className="form" onSubmit={onSubmit}>
         <AiOutlineClose className="closeBtn" onClick={onCloseModal} />
-        <div className="title">기업로고</div>
+        <div className="logo">
+          <img src={logo} alt="펜슬힐러" />
+        </div>
 
         <div className="input-wrapper">
           <input className="input" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="이메일" />
@@ -102,19 +105,26 @@ const Container = styled.div`
     align-items: center;
     padding: 2rem;
     border-radius: 10px;
+    gap: 1rem;
   }
+
   .closeBtn {
     font-size: 2.5rem;
     align-self: flex-end;
     cursor: pointer;
   }
-  .title {
-    font-size: 3rem;
-    margin: 2rem 0;
+  .logo {
+    width: 15rem;
+    height: 7rem;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
   .input-wrapper {
     width: 100%;
-    margin-bottom: 1rem;
     position: relative;
   }
 
@@ -135,7 +145,6 @@ const Container = styled.div`
   }
   .btn-wrapper {
     text-align: center;
-    margin: 1rem 0;
   }
   .findPassword-btn {
     font-size: 1.3rem;

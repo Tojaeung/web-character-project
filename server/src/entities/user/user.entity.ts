@@ -4,11 +4,13 @@ import {
   Entity,
   Generated,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Follow } from '@src/entities/user/follow.entity';
 import { Drawing } from '../drawing/drawing.entity';
+import { Comment } from '../drawing/comment.entity';
 
 @Entity('user', { schema: 'user' })
 export class User {
@@ -69,11 +71,14 @@ export class User {
   })
   isVerified: boolean;
 
+  @Column({ default: 0 })
+  exp: number;
+
   @CreateDateColumn()
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updated_at: Date;
 
   @OneToMany(() => Follow, (follow) => follow.following_user)
   followings: Follow[];
@@ -83,4 +88,7 @@ export class User {
 
   @OneToMany(() => Drawing, (drawing) => drawing.user)
   drawings: Drawing[];
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments: Comment[];
 }

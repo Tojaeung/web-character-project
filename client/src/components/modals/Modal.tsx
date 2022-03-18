@@ -13,6 +13,7 @@ import EditNicknameModal from '@src/components/modals/settings/EditNickname.moda
 import EditPwModal from '@src/components/modals/settings/EditPw.modal';
 import SearchModal from '@src/components/modals/search/Search.modal';
 import ShowDescModal from '@src/components/modals/profile/ShowDesc.modal';
+import ShowDrawingModal from '@src/components/modals/profile/ShowDrawing.modal';
 
 function Modal() {
   const dispatch = useAppDispatch();
@@ -38,6 +39,7 @@ function Modal() {
       {ok && mode === 'editPw' && <EditPwModal />}
       {ok && mode === 'search' && <SearchModal />}
       {ok && mode === 'showDesc' && <ShowDescModal />}
+      {ok && mode === 'showDrawing' && <ShowDrawingModal />}
     </Container>,
     document.getElementById('portal') as HTMLElement
   );

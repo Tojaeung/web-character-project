@@ -6,7 +6,6 @@ import { UserRepository } from '@src/repositorys/user.repository';
 import logger from '@src/helpers/winston.helper';
 import { sendRegisterEmail, sendFindEmail } from '@src/helpers/nodemailer.helper';
 import cluster from '@src/helpers/redis.helper';
-import getLevel from '@src/utils/exp.util';
 
 const authController = {
   // 회원가입  API 입니다.
@@ -85,25 +84,11 @@ const authController = {
         logger.info('이메일 인증을 받지 않은 회원입니다.');
         return res.status(200).json({ ok: false, message: '인증되지 않은 사용자 입니다. 이메일 인증을 확인해주세요' });
       }
-
-      /*
-       * 레디스에 유저 경험치 정보가 있는지 확인합니다.
-       * 만약 없다면 유저 경험치 정보를 추가합니다.
-       */
-      const exp = await cluster.zscore('exp', existingUser.userId);
-      if (!exp) await cluster.zadd('exp', 0, existingUser.userId);
-
-      // getLevel은 exp(경험치)에 따라 레벨로 리턴하는 함수입니다.
-      const level = await getLevel(Number(exp));
-
       // 보안상 중요한 내용은 클라이언트에 보내지 않는다.
       delete existingUser.pw;
       delete existingUser.pwToken;
 
-      req.session.user = {
-        ...existingUser,
-        level: level as number,
-      };
+      req.session.user = existingUser;
 
       // 클라이언트에게 보내는 유저정보
       const user = req.session.user;
@@ -137,13 +122,7 @@ const authController = {
   // refresh시 다시 유저정보를 보내주는 API입니다.
   refreshLogin: async (req: Request, res: Response) => {
     try {
-      const id = req.session.user;
-
-      // exp(경험치)와 레벨을 업데이트 시켜준다.
-      const exp = await cluster.zscore('exp', String(id));
-      const level = await getLevel(Number(exp));
-
-      const user = { ...req.session.user, level };
+      const user = req.session.user;
 
       return res.status(200).json({ ok: true, message: '로그인 정보가 갱신되었습니다.', user });
     } catch (err: any) {

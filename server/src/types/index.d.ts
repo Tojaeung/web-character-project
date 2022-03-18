@@ -18,9 +18,9 @@ declare module 'express-session' {
       role: string;
       emailToken: string | null;
       isVerified: boolean;
-      createdAt: Date;
-      updatedAt: Date;
-      level: number;
+      exp: number;
+      created_at: Date;
+      updated_at: Date;
     };
   }
 }

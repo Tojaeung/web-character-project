@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
 import { selectAuthUser } from '@src/redux/slices/auth.slice';
 import { logoutUser } from '@src/redux/requests/auth.request';
+import getLevel from '@src/utils/exp.util';
 
 import socket from '@src/utils/socket';
 
@@ -48,7 +49,7 @@ function Profile() {
               <img src={user?.avatar} alt="프로필사진" />
             </div>
             <div className="info">
-              <span>[Lv.{user?.level}] </span>
+              <span>[Lv.{getLevel(user?.exp!)}] </span>
               {user?.nickname}
             </div>
           </div>

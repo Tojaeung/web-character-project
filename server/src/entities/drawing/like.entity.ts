@@ -1,19 +1,19 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Drawing } from './drawing.entity';
 
-@Entity('tag', { schema: 'drawing' })
-export class Tag {
+@Entity('like', { schema: 'drawing' })
+export class Like {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  tag: string;
+  user_id: number;
 
-  @Index('drawing_id-tagIdx')
+  @Index('drawing_id-likeIdx')
   @Column()
   drawing_id: number;
 
-  @ManyToOne(() => Drawing, (drawing) => drawing.tags, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @ManyToOne(() => Drawing, (drawing) => drawing.likes, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'drawing_id' })
   drawing: Drawing;
 }

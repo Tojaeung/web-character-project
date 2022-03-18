@@ -7,12 +7,12 @@ export type ProfileType = {
   avatar: string;
   cover: string;
   role: string;
-  level: number;
+  exp: number;
   follow: boolean;
   followerNum: number;
   followingNum: number;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 };
 
 export type getProfileReturnType = {

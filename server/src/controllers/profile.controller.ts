@@ -2,8 +2,6 @@ import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
 import { UserRepository, FollowRepository } from '@src/repositorys/user.repository';
 import logger from '@src/helpers/winston.helper';
-import cluster from '@src/helpers/redis.helper';
-import getLevel from '@src/utils/exp.util';
 
 const profileController = {
   /*
@@ -28,10 +26,6 @@ const profileController = {
         return res.status(400).json({ ok: false, message: '프로필 유저가 존재하지 않습니다.' });
       }
 
-      // exp(경험치)를 레벨로 리턴하는 함수입니다.
-      const exp = await cluster.zscore('exp', profileUser?.userId as string);
-      const level = await getLevel(Number(exp));
-
       // 내가 팔로우 했던 사람이였는지 확인합니다.
       const isFollowing = await followRepo.isFollowing(id as number, profileId);
 
@@ -50,12 +44,12 @@ const profileController = {
         avatar: profileUser?.avatar,
         cover: profileUser?.cover,
         role: profileUser?.role,
-        level,
+        exp: profileUser.exp,
         follow: isFollowing ? true : false,
         followerNum: followerNum.count,
         followingNum: followingNum.count,
-        createdAt: profileUser.createdAt,
-        updatedAt: profileUser.updatedAt,
+        created_at: profileUser.created_at,
+        updated_at: profileUser.updated_at,
       };
 
       logger.info('프로필 유저 정보를 가져왔습니다.');

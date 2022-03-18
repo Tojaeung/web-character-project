@@ -3,15 +3,14 @@ import { IoIosSend } from 'react-icons/io';
 import { AiOutlineCamera } from 'react-icons/ai';
 import axios from 'axios';
 import styled from 'styled-components';
+import moment from 'moment';
 import socket from '@src/utils/socket';
 import { selectAuthUser } from '@src/redux/slices/auth.slice';
 import { selectChatUser } from '@src/redux/slices/chat.slice';
-import { useAppSelector, useAppDispatch } from '@src/redux/app/hook';
+import { useAppSelector } from '@src/redux/app/hook';
 import { greenInputStyle, greenButtonStyle } from '@src/styles/GlobalStyles';
-import moment from 'moment';
 
 function ChatFooter() {
-  const dispatch = useAppDispatch();
   const user = useAppSelector(selectAuthUser);
   const chatUser = useAppSelector(selectChatUser);
 

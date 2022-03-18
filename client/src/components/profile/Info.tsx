@@ -10,6 +10,7 @@ import { openChatModal } from '@src/redux/slices/chat.slice';
 import { follow, unFollow } from '@src/redux/requests/profile.request';
 import { openModal } from '@src/redux/slices/modal.slice';
 import { redButtonStyle, greenButtonStyle } from '@src/styles/GlobalStyles';
+import getLevel from '@src/utils/exp.util';
 
 function Info() {
   const dispatch = useAppDispatch();
@@ -53,7 +54,7 @@ function Info() {
       </div>
       <div className="info-wrapper">
         <div className="row1">
-          <div className="level">[Lv.{profile?.level}]</div>
+          <div className="level">[Lv.{getLevel(profile?.exp!)}]</div>
           <div className="nickname">{profile?.nickname}</div>
         </div>
 
@@ -105,8 +106,8 @@ function Info() {
 
           {user?.id === profile?.id && (
             <div className="addPhotoBtn-wrapper">
-              <button className="addPhoto-btn" onClick={() => navigate('/photo/create')}>
-                그림+
+              <button className="addPhoto-btn" onClick={() => navigate('/drawing/create')}>
+                추가
               </button>
             </div>
           )}

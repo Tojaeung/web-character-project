@@ -275,14 +275,11 @@ const settingsController = {
           }
         });
       }
-
       // onDelete: cascade 때문에 관계된 모든 유저정보를 삭제합니다.
       await userRepo.deleteUser(id as number);
 
-      // 레디스에 저장된 유저의 경험치 정보를 삭제합니다.
-      await cluster.zrem('exp', userId);
-
       // 레디스에 저장된 대화정보 등등 식제
+      await cluster.del(`chats:${userId}`, `messages:${userId}`, `msgNotis:${userId}`);
 
       return res.status(200).json({ ok: true, message: '계정이 정상적으로 삭제되었습니다.' });
     } catch (err: any) {

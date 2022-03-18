@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
 import { selectAuthUser } from '@src/redux/slices/auth.slice';
 import { openModal } from '@src/redux/slices/modal.slice';
 import { greenButtonStyle, redButtonStyle } from '@src/styles/GlobalStyles';
+import logo from '@src/assets/images/logo.jpg';
 
 function Header() {
   const dispatch = useAppDispatch();
@@ -27,7 +28,11 @@ function Header() {
   return (
     <Container>
       <AiOutlineMenu className="hamburger-icon" />
-      <div className="logo">케어펜슬</div>
+      <div className="logo">
+        <Link to={'/'}>
+          <img src={logo} alt="펜슬힐러" />
+        </Link>
+      </div>
 
       <div className="search">
         <Search />
@@ -84,6 +89,14 @@ const Container = styled.div`
     display: none;
   }
   .logo {
+    width: 10rem;
+    height: 5rem;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   .search {

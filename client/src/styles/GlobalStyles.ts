@@ -94,7 +94,7 @@ export const defaultInputStyle = css`
   /* min-height: 4rem; */
   font-size: 1.4rem;
   outline: none;
-  border: 2px solid ${({ theme }) => theme.palette.gray2};
+  border: 2px solid ${({ theme }) => theme.palette.gray};
   &::placeholder {
     font-size: 1.4rem;
   }

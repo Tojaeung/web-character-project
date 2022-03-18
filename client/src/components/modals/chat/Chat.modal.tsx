@@ -86,9 +86,10 @@ const Container = styled.div`
   bottom: 0;
   right: 1rem;
   width: 32rem;
+  height: 70rem;
   border-radius: 10px;
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
-  background: ${({ theme }) => theme.palette.white};
+  background-color: ${({ theme }) => theme.palette.white};
   z-index: 999;
 
   .header {
@@ -97,6 +98,7 @@ const Container = styled.div`
     justify-content: space-between;
     border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
     padding: 1rem;
+    background-color: ${({ theme }) => theme.palette.white};
     span {
       font-size: 1.5rem;
       font-weight: 500;
@@ -107,30 +109,20 @@ const Container = styled.div`
     }
   }
   .list {
-    min-height: 30rem;
-    max-height: 60rem;
+    height: 60rem;
     overflow-y: scroll;
-    ::-webkit-scrollbar {
-      width: 0.5rem;
-    }
-    ::-webkit-scrollbar-thumb {
-      background-color: ${({ theme }) => theme.palette.green};
-    }
   }
   .window {
-    min-height: 30rem;
-    max-height: 60rem;
+    height: 60rem;
     overflow-y: scroll;
-    ::-webkit-scrollbar {
-      width: 0.5rem;
-    }
-    ::-webkit-scrollbar-thumb {
-      background-color: ${({ theme }) => theme.palette.green};
-    }
   }
   .footer {
+    background-color: ${({ theme }) => theme.palette.white};
+    width: 32rem;
+    position: fixed;
+    bottom: 0;
     border-top: 1px solid ${({ theme }) => theme.palette.borderColor};
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
   }
   .chatUser {
     display: flex;
@@ -138,6 +130,7 @@ const Container = styled.div`
     align-items: center;
     border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
     padding: 1rem;
+
     div {
       display: flex;
       gap: 1rem;
@@ -174,11 +167,18 @@ const Container = styled.div`
   }
 
   @media ${({ theme }) => theme.device.mobile} {
-    bottom: 5rem;
+    bottom: 4.5rem;
     right: 0;
+    height: 50rem;
 
+    .list {
+      height: 40rem;
+    }
     .window {
-      height: 50rem;
+      height: 40rem;
+    }
+    .footer {
+      bottom: 5rem;
     }
   }
 `;
