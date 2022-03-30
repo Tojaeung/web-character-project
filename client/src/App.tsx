@@ -43,8 +43,8 @@ function App() {
             </Route>
 
             <Route element={<PrivateRouter />}>
+              <Route path="/auth/editPw" element={<EditPw />} />
               <Route path="settings" element={<Settings />} />
-              <Route path="editPw" element={<EditPw />} />
               <Route path="createDrawingForm" element={<CreateDrawingForm />} />
               <Route path="createPostForm/:board" element={<CreatePostForm />} />
             </Route>

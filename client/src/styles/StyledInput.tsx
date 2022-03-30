@@ -1,6 +1,5 @@
 import { InputHTMLAttributes } from 'react';
 import styled, { css } from 'styled-components';
-import {} from 'react-hook-form';
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   color?: 'green';
