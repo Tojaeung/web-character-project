@@ -70,9 +70,7 @@ const Form = styled.form`
   align-items: center;
   gap: 2.5rem;
 `;
-const Logo = styled.span`
-  font-size: 3rem;
-`;
+const Logo = styled.h1``;
 
 const LoginButton = styled(StyledButton)`
   width: 100%;

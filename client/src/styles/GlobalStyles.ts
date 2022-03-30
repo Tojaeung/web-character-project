@@ -28,7 +28,7 @@ const GlobalStyles = createGlobalStyle`
         font-weight: 700;
         font-size: 2.2rem;
         @media ${({ theme }) => theme.device.mobile} {
-          font-size: 1.8rem;
+          font-size: 2rem;
         }
         
     }
@@ -37,6 +37,24 @@ const GlobalStyles = createGlobalStyle`
         font-size: 1.8rem;
         @media ${({ theme }) => theme.device.mobile} {
           font-size: 1.5rem;
+        }
+    }
+    p {
+      font-size: 1.6rem;
+      @media ${({ theme }) => theme.device.mobile} {
+          font-size: 1.4rem;
+        }
+    }
+    label {
+      font-size: 1.5rem;
+      @media ${({ theme }) => theme.device.mobile} {
+          font-size: 1.3rem;
+        }
+    }
+    input {
+      font-size: 1.4rem;
+      @media ${({ theme }) => theme.device.mobile} {
+          font-size: 1.3rem;
         }
     }
   strong {
@@ -50,6 +68,9 @@ const GlobalStyles = createGlobalStyle`
   }
   s {
     text-decoration: line-through;
+  }
+  i {
+    font-weight: bold;
   }
 
     a {

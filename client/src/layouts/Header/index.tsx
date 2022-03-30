@@ -71,6 +71,7 @@ function Header() {
 }
 
 const Container = styled.div`
+  width: 100%;
   display: flex;
   position: sticky;
   gap: 0.5rem;

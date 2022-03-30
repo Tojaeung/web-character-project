@@ -1,10 +1,10 @@
-import { AiOutlineClose } from 'react-icons/ai';
 import { MdMarkEmailRead } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-// import { greenButtonStyle } from '@src/styles/GlobalStyles';
+import ModalContainer from '@src/components/ModalContainer';
 import { useAppDispatch } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
+import StyledButton from '@src/styles/StyledButton';
 
 function RegisterGuide() {
   const navigate = useNavigate();
@@ -16,70 +16,46 @@ function RegisterGuide() {
   };
 
   return (
-    <Container>
-      <AiOutlineClose className="closeBtn" onClick={onClose} />
-      <MdMarkEmailRead className="icon" />
-      <div className="content">
-        가입하신 이메일로 <span className="content-text">"인증메일"</span>을 보내드렸습니다.📫
-      </div>
+    <ModalContainer width={40}>
+      <Container>
+        <Title>가입완료</Title>
+        <EmailIcon />
+        <Content>
+          가입하신 이메일로 <i>"인증메일"</i>을 보내드렸습니다.📫
+        </Content>
 
-      <button className="confirmBtn" onClick={onClose}>
-        확인
-      </button>
-    </Container>
+        <ConfirmButton color="green" size="medium" responsive={true} onClick={onClose}>
+          확인
+        </ConfirmButton>
+      </Container>
+    </ModalContainer>
   );
 }
 
 const Container = styled.div`
-  width: 40rem;
-  border-radius: 10px;
-  padding: 1rem;
-  position: fixed;
-  top: 25%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1001;
-  background-color: ${({ theme }) => theme.palette.white};
+  width: 100%;
   display: flex;
-  align-items: center;
   flex-direction: column;
-  gap: 1rem;
-
-  .closeBtn {
-    align-self: flex-end;
-    top: 1.5rem;
-    right: 1.5rem;
-    font-size: 2rem;
-    cursor: pointer;
-  }
-  .icon {
-    font-size: 8rem;
-    color: ${({ theme }) => theme.palette.green};
-  }
-  .content {
-    font-size: 1.5rem;
-  }
-  .content-text {
-    font-weight: 700;
-  }
-
-  .confirmBtn {
-    width: 50%;
-    font-size: 1.7rem;
-    cursor: pointer;
-    padding: 1rem;
-    margin: 1rem 0;
-  }
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+`;
+const Title = styled.h1`
+  align-self: flex-start;
+`;
+const EmailIcon = styled(MdMarkEmailRead)`
+  font-size: 12rem;
+  color: ${({ theme }) => theme.palette.green};
   @media ${({ theme }) => theme.device.mobile} {
-    width: 30rem;
-    .content {
-      font-size: 1.5rem;
-    }
-    .confirmBtn {
-      font-size: 1.2rem;
-      padding: 1rem;
-    }
+    font-size: 10rem;
   }
 `;
+const Content = styled.p`
+  font-size: 1.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.3rem;
+  }
+`;
+const ConfirmButton = styled(StyledButton)``;
 
 export default RegisterGuide;

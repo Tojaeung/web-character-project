@@ -128,4 +128,5 @@ export type AuthFormTypes = {
   nickname?: string;
   pw?: string;
   confirmPw?: string;
+  currentPw?: string;
 };

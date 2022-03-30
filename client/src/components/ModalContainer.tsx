@@ -5,7 +5,7 @@ import { closeModal } from '@src/store/slices/modal.slice';
 interface IProps {
   width: number; // 모달창 너비
   height?: number; // 모달창 높이
-  children: JSX.Element; // 자식컴포넌트
+  children: React.ReactNode; // 자식컴포넌트
 }
 
 function ModalContainer({ width, height, children }: IProps) {
