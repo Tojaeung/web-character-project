@@ -6,7 +6,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import StyledButton from '@src/styles/StyledButton';
 import StyledInput from '@src/styles/StyledInput';
-import NotFound from '@src/components/common/NotFound';
+import NotFound from '@src/components/NotFound';
 import boardTitle from '@src/utils/boardTitle.util';
 import { useImageUploadConfig } from '@src/hook/useReactQuillConfig';
 import { boardCategory } from '@src/utils/boardCategory.util';

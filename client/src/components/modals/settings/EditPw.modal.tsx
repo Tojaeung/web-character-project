@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { logoutUser } from '@src/store/requests/auth.request';
 import { useAppDispatch } from '@src/store/app/hook';
-import ModalContainer from '@src/components/ModalContainer';
+import ModalContainer from '@src/components/modals/ModalContainer';
 import { PwInput, ConfirmPwInput } from '@src/components/react-hook-form/AuthForm';
 import { AuthFormTypes } from '@src/types';
 import StyledButton from '@src/styles/StyledButton';

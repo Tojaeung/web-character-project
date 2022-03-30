@@ -7,7 +7,7 @@ import relativeTime from '@src/utils/date.util';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectChats, isChatUser, selectMsgNotis } from '@src/store/slices/chat.slice';
 import { ChatUserType } from '@src/store/types/chat.type';
-import Avatar from '@src/components/common/Avatar';
+import Avatar from '@src/components/Avatar';
 
 function ChatList() {
   const dispatch = useAppDispatch();

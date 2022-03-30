@@ -6,7 +6,7 @@ import socket from '@src/utils/socket';
 import { logoutUser } from '@src/store/requests/auth.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
-import ModalContainer from '@src/components/ModalContainer';
+import ModalContainer from '@src/components/modals/ModalContainer';
 import StyledInput from '@src/styles/StyledInput';
 
 function DelAccountModal() {

@@ -4,7 +4,7 @@ import Info from '@src/pages/profile/[id]/Info';
 import Drawing from '@src/pages/profile/[id]/Drawing';
 import { selectProfileOk } from '@src/store/slices/profile.slice';
 import { useAppSelector } from '@src/store/app/hook';
-import NotFound from '@src/components/common/NotFound';
+import NotFound from '@src/components/NotFound';
 
 function Profile() {
   // 존재하지 않는 profileId를 url에서 조회할때 존재하지 않는경우 오류페이지를 보여준다.

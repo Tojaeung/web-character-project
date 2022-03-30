@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
 import { refreshLogin } from '@src/store/requests/auth.request';
-import ModalContainer from '@src/components/ModalContainer';
+import ModalContainer from '@src/components/modals/ModalContainer';
 import { NicknameInput } from '@src/components/react-hook-form/AuthForm';
 import { AuthFormTypes } from '@src/types';
 import StyledButton from '@src/styles/StyledButton';

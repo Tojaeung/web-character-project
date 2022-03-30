@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import ModalContainer from '@src/components/ModalContainer';
+import ModalContainer from '@src/components/modals/ModalContainer';
 import { EmailInput } from '@src/components/react-hook-form/AuthForm';
 import { AuthFormTypes } from '@src/types';
 import { closeModal } from '@src/store/slices/modal.slice';

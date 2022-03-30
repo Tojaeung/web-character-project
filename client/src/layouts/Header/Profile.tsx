@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { logoutUser } from '@src/store/requests/auth.request';
-import Avatar from '@src/components/common/Avatar';
-import Nickname from '@src/components/common/Nickname';
+import Avatar from '@src/components/Avatar';
+import Nickname from '@src/components/Nickname';
 import socket from '@src/utils/socket';
 import useDropDown from '@src/hook/useDropDown';
 

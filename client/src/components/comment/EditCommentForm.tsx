@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch } from '@src/store/app/hook';
 import { editDrawingComment } from '@src/store/requests/drawing.request';
-// import { greenButtonStyle, redButtonStyle } from '@src/styles/GlobalStyles';
+import StyledButton from '@src/styles/StyledButton';
 
 interface IProp {
   commentId: number;
@@ -23,8 +23,8 @@ function EditCommentForm({ commentId, category }: IProp) {
 
   return (
     <Container>
-      <div className="textarea-background">
-        <textarea
+      <Background>
+        <TextArea
           placeholder="댓글을 입력하세요.."
           cols={20}
           rows={3}
@@ -32,13 +32,15 @@ function EditCommentForm({ commentId, category }: IProp) {
           value={editedContent}
           onChange={(e) => setEditedContent(e.target.value)}
         />
-        <div className="btn">
-          <button className="editComment-btn" onClick={onEditComment}>
+        <ButtonBox>
+          <EditButton color="green" size="small" onClick={onEditComment}>
             등록
-          </button>
-          <button className="cancel-btn">취소</button>
-        </div>
-      </div>
+          </EditButton>
+          <CancelButton color="green" size="small" inverse={true}>
+            취소
+          </CancelButton>
+        </ButtonBox>
+      </Background>
     </Container>
   );
 }
@@ -47,29 +49,26 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  .textarea-background {
-    background-color: ${({ theme }) => theme.palette.gray};
-    padding: 1rem 0.5rem 0rem 0.5rem;
-
-    textarea {
-      width: 100%;
-      min-height: 5rem;
-      resize: none;
-      outline: none;
-      border: 0;
-    }
-    .btn {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 0.5rem;
-      padding: 0.5rem 0;
-      .editComment-btn {
-      }
-      .cancel-btn {
-      }
-    }
-  }
 `;
+const Background = styled.div`
+  background-color: ${({ theme }) => theme.palette.gray};
+  padding: 1rem 0.5rem 0rem 0.5rem;
+`;
+const TextArea = styled.textarea`
+  width: 100%;
+  min-height: 5rem;
+  resize: none;
+  outline: none;
+  border: 0;
+`;
+const ButtonBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+`;
+const EditButton = styled(StyledButton)``;
+const CancelButton = styled(StyledButton)``;
 
 export default EditCommentForm;

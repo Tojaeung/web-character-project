@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import Avatar from '@src/components/common/Avatar';
-import Nickname from '@src/components/common/Nickname';
-import FollowBtn from '@src/components/common/FollowBtn';
-import ChatBtn from '@src/components/common/ChatBtn';
+import Avatar from '@src/components/Avatar';
+import Nickname from '@src/components/Nickname';
+import FollowBtn from '@src/components/FollowBtn';
+import ChatBtn from '@src/components/ChatBtn';
 import StyledInput from '@src/styles/StyledInput';
 import StyledButton from '@src/styles/StyledButton';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';

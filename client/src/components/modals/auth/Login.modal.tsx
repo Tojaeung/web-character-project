@@ -8,7 +8,7 @@ import { AuthFormTypes } from '@src/types';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { EmailInput, PwInput } from '@src/components/react-hook-form/AuthForm';
 import StyledButton from '@src/styles/StyledButton';
-import ModalContainer from '@src/components/ModalContainer';
+import ModalContainer from '@src/components/modals/ModalContainer';
 
 function LoginModal() {
   const navigate = useNavigate();

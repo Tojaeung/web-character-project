@@ -18,7 +18,7 @@ import EditPw from '@src/pages/auth/EditPw';
 import SignUp from '@src/pages/auth/SignUp';
 import Board from '@src/pages/board/[board]';
 import Post from '@src/pages/post/[id]';
-import NotFound from '@src/components/common/NotFound';
+import NotFound from '@src/components/NotFound';
 
 function App() {
   useRefreshLogin();

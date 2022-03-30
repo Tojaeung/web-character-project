@@ -35,61 +35,56 @@ function ImageSide() {
   };
 
   return (
-    <Container selectedIndex={selectedIndex} drawingsLength={drawings.length}>
-      <div className="prev" onClick={onPrevDrawing}>
-        <AiOutlineLeft className="prev-icon" />
-      </div>
+    <Container>
+      <Prev selectedIndex={selectedIndex} onClick={onPrevDrawing}>
+        <PrevIcon />
+      </Prev>
 
-      <div className="image">
-        <img src={drawings[selectedIndex!]?.url} alt="이미지" />
-      </div>
+      <Image src={drawings[selectedIndex!]?.url} alt="이미지" />
 
-      <div className="next" onClick={onNextDrawing}>
-        <AiOutlineRight className="next-icon" />
-      </div>
+      <Next selectedIndex={selectedIndex} drawingsLength={drawings.length} onClick={onNextDrawing}>
+        <NextIcon />
+      </Next>
     </Container>
   );
 }
 
-const Container = styled.div<{ selectedIndex: number | null; drawingsLength: number | null }>`
+const Container = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  .prev {
-    width: 10rem;
-    height: 40rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: ${(props) => (props.selectedIndex === 0 ? 0 : 1)};
-    &:hover {
-      background-color: ${({ theme }) => theme.palette.gray};
-    }
-    .prev-icon {
-      font-size: 5rem;
-      color: ${({ theme }) => theme.palette.white};
-    }
-  }
-
-  .image {
-    max-width: 100%;
-  }
-  .next {
-    width: 10rem;
-    height: 40rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: ${(props) => (props.selectedIndex! + 1 === props.drawingsLength ? 0 : 1)};
-    &:hover {
-      background-color: ${({ theme }) => theme.palette.gray};
-    }
-    .next-icon {
-      font-size: 5rem;
-      color: ${({ theme }) => theme.palette.white};
-    }
+`;
+const Prev = styled.div<{ selectedIndex: number | null }>`
+  width: 10rem;
+  height: 40rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: ${(props) => (props.selectedIndex === 0 ? 0 : 1)};
+  &:hover {
+    background-color: ${({ theme }) => theme.palette.gray};
   }
 `;
+const Next = styled.div<{ selectedIndex: number | null; drawingsLength: number | null }>`
+  width: 10rem;
+  height: 40rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: ${(props) => (props.selectedIndex! + 1 === props.drawingsLength ? 0 : 1)};
+  &:hover {
+    background-color: ${({ theme }) => theme.palette.gray};
+  }
+`;
+const PrevIcon = styled(AiOutlineLeft)`
+  font-size: 5rem;
+  color: ${({ theme }) => theme.palette.white};
+`;
+const NextIcon = styled(AiOutlineRight)`
+  font-size: 5rem;
+  color: ${({ theme }) => theme.palette.white};
+`;
+const Image = styled.img``;
 
 export default ImageSide;
