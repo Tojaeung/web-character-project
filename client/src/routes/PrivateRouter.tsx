@@ -1,17 +1,12 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
-interface IProp {
-  children: JSX.Element;
-}
-
-export const AuthPrivateRouter = ({ children }: IProp) => {
+export const PrivateRouter = () => {
   const login = localStorage.getItem('login');
-
-  return login === 'on' ? <Navigate to="/" /> : children;
+  return login === 'on' ? <Outlet /> : <Navigate to="/" />;
 };
 
-export const PrivateRouter = ({ children }: IProp) => {
+export const AuthRouter = () => {
   const login = localStorage.getItem('login');
 
-  return login === 'on' ? children : <Navigate to="/" />;
+  return login === 'on' ? <Navigate to="/" /> : <Outlet />;
 };

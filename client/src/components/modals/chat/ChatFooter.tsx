@@ -5,10 +5,10 @@ import axios from 'axios';
 import styled from 'styled-components';
 import moment from 'moment';
 import socket from '@src/utils/socket';
-import { selectAuthUser } from '@src/redux/slices/auth.slice';
-import { selectChatUser } from '@src/redux/slices/chat.slice';
-import { useAppSelector } from '@src/redux/app/hook';
-import { greenInputStyle, greenButtonStyle } from '@src/styles/GlobalStyles';
+import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectChatUser } from '@src/store/slices/chat.slice';
+import { useAppSelector } from '@src/store/app/hook';
+// import { greenInputStyle, greenButtonStyle } from '@src/styles/GlobalStyles';
 
 function ChatFooter() {
   const user = useAppSelector(selectAuthUser);
@@ -106,11 +106,9 @@ const Container = styled.div`
     display: flex;
     width: 100%;
     input {
-      ${greenInputStyle};
       margin: 0rem 1rem;
     }
     button {
-      ${greenButtonStyle};
       display: flex;
       justify-content: center;
       align-items: center;

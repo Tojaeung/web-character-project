@@ -23,6 +23,7 @@ import chatRouter from '@src/routes/chat.route';
 import settingsRouter from '@src/routes/settings.route';
 import profileRouter from '@src/routes/profile.route';
 import drawingRouter from '@src/routes/drawing.route';
+import boardRouter from '@src/routes/board.route';
 
 const app: Application = express();
 const http = createServer(app);
@@ -52,6 +53,7 @@ app.use('/api', chatRouter);
 app.use('/api', settingsRouter);
 app.use('/api', profileRouter);
 app.use('/api', drawingRouter);
+app.use('/api', boardRouter);
 
 // Server & DB listening
 const port = process.env.PORT as string;

@@ -4,10 +4,10 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineClose } from 'react-icons/ai';
 import axios from 'axios';
-import { greenButtonStyle, greenInputStyle, redButtonStyle } from '@src/styles/GlobalStyles';
-import { logoutUser } from '@src/redux/requests/auth.request';
-import { useAppDispatch } from '@src/redux/app/hook';
-import { closeModal } from '@src/redux/slices/modal.slice';
+// import { greenButtonStyle, greenInputStyle, redButtonStyle } from '@src/styles/GlobalStyles';
+import { logoutUser } from '@src/store/requests/auth.request';
+import { useAppDispatch } from '@src/store/app/hook';
+import { closeModal } from '@src/store/slices/modal.slice';
 
 interface IFormInputType {
   currentPw: string;
@@ -150,7 +150,6 @@ const Container = styled.div`
     padding-bottom: 2rem;
   }
   .input {
-    ${greenInputStyle};
   }
 
   .errorMessage {
@@ -181,14 +180,13 @@ const Container = styled.div`
   .submitBtn {
     font-size: 1.5rem;
     padding: 1rem;
-    ${greenButtonStyle};
+
     margin-right: 1rem;
   }
   .cancelBtn {
     font-size: 1.5rem;
     padding: 1rem;
     cursor: pointer;
-    ${redButtonStyle};
   }
 
   @media ${({ theme }) => theme.device.mobile} {

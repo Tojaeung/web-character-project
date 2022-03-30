@@ -4,9 +4,9 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AiOutlineClose } from 'react-icons/ai';
-import { greenInputStyle, greenButtonStyle, redButtonStyle } from '@src/styles/GlobalStyles';
-import { closeModal } from '@src/redux/slices/modal.slice';
-import { useAppDispatch } from '@src/redux/app/hook';
+// import { greenInputStyle, greenButtonStyle, redButtonStyle } from '@src/styles/GlobalStyles';
+import { closeModal } from '@src/store/slices/modal.slice';
+import { useAppDispatch } from '@src/store/app/hook';
 
 interface IFormInputType {
   email: string;
@@ -82,9 +82,7 @@ const Container = styled.div`
   transform: translate(-50%, -50%);
   z-index: 1001;
   background-color: ${({ theme }) => theme.palette.white};
-  /* display: flex;
-    justify-content: center;
-    flex-direction: column; */
+
   .form {
     display: flex;
     flex-direction: column;
@@ -110,7 +108,6 @@ const Container = styled.div`
     position: relative;
   }
   .input {
-    ${greenInputStyle};
   }
 
   .errorMessage {
@@ -138,14 +135,13 @@ const Container = styled.div`
   .submitBtn {
     font-size: 1.5rem;
     padding: 1.2rem;
-    ${greenButtonStyle};
+
     margin-right: 1rem;
   }
   .cancelBtn {
     font-size: 1.5rem;
     padding: 1.2rem;
     cursor: pointer;
-    ${redButtonStyle};
   }
 
   @media ${({ theme }) => theme.device.mobile} {

@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import { AiOutlineClose } from 'react-icons/ai';
-import { closeModal } from '@src/redux/slices/modal.slice';
-import { useAppDispatch } from '@src/redux/app/hook';
-import { logoutUser } from '@src/redux/requests/auth.request';
-import { greenButtonStyle, greenInputStyle, redButtonStyle } from '@src/styles/GlobalStyles';
+import { closeModal } from '@src/store/slices/modal.slice';
+import { useAppDispatch } from '@src/store/app/hook';
+import { logoutUser } from '@src/store/requests/auth.request';
+// import { greenButtonStyle, greenInputStyle, redButtonStyle } from '@src/styles/GlobalStyles';
 
 interface IFormInputType {
   email: string;
@@ -115,7 +115,6 @@ const Container = styled.div`
     position: relative;
   }
   .input {
-    ${greenInputStyle};
   }
 
   .errorMessage {
@@ -146,13 +145,12 @@ const Container = styled.div`
   .submitBtn {
     font-size: 1.5rem;
     padding: 1rem;
-    ${greenButtonStyle};
+
     margin-right: 1rem;
   }
   .cancelBtn {
     font-size: 1.5rem;
     padding: 1rem;
-    ${redButtonStyle};
   }
   @media ${({ theme }) => theme.device.mobile} {
     width: 30rem;

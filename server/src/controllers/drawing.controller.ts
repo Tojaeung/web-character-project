@@ -1,13 +1,9 @@
 import { Request, Response } from 'express';
 import { getRepository, getCustomRepository } from 'typeorm';
 import logger from '@src/helpers/winston.helper';
-import {
-  DrawingRepository,
-  CommentRepository,
-  LikeRepository,
-  DisLikeRepository,
-} from '@src/repositorys/drawing.repository';
+import { DrawingRepository, DrawingCommentRepository } from '@src/repositorys/drawing.repository';
 import { Drawing } from '@src/entities/drawing/drawing.entity';
+import { DrawingComment } from '@src/entities/drawing/drawingComment.entity';
 import { Like } from '@src/entities/drawing/like.entity';
 import { DisLike } from '@src/entities/drawing/dislike.entity';
 
@@ -79,45 +75,36 @@ const drawingController = {
       return res.status(500).json({ ok: false, message: '그림 불러오기 에러' });
     }
   },
-
-  getDrawing: async (req: Request, res: Response) => {
+  addView: async (req: Request, res: Response) => {
     const drawingRepo = getCustomRepository(DrawingRepository);
-
     try {
       const { drawingId } = req.body;
 
-      // 그림을 클릭한 후 그림의 세부정보를 가져오기 때문에 그림에 대한 조회수를 업데이트한다.
-      await drawingRepo.addViews(drawingId);
+      await drawingRepo.addView(drawingId);
 
-      // 댓글, 좋아요, 싫어요 결합
-      const drawing = await drawingRepo.getDrawing(drawingId);
-
-      logger.info('그림 세부정보 불러오기 성공');
-      return res.status(200).json({ ok: true, message: '그림 세부정보 불러오기 성공', drawing });
+      logger.info('그림 조회수 추가하기 성공');
+      return res.status(200).json({ ok: true, message: '그림 조회수 추가하기 성공' });
     } catch (err: any) {
-      logger.info('그림 세부정보 불러오기 에러', err);
-      return res.status(500).json({ ok: false, message: '그림 세부정보 불러오기 에러' });
+      logger.info('그림 조회수 추가하기 에러', err);
+      return res.status(500).json({ ok: false, message: '그림 조회수 추가하기 에러' });
     }
   },
 
   addComment: async (req: Request, res: Response) => {
-    const commentRepo = getCustomRepository(CommentRepository);
-
+    const drawingCommentRepo = getCustomRepository(DrawingCommentRepository);
     try {
-      const { userId, drawingId, comment } = req.body;
+      const { userId, drawingId, content } = req.body;
 
-      // 댓글을 comment 테이블에 insert 한다.
-      const result = await commentRepo.addComment(userId, drawingId, comment);
+      const drawingComment = new DrawingComment();
+      drawingComment.user_id = userId;
+      drawingComment.drawing_id = drawingId;
+      drawingComment.content = content;
+      await getRepository(DrawingComment).save(drawingComment);
 
-      // insert한후 다시 자료를 찾기보다는
-      if (result.raw[0].id) {
-        const insertedComment = await commentRepo.findComment(result.raw[0].id);
-        logger.info('그림 댓글 추가하기 성공');
-        return res.status(200).json({ ok: true, message: '그림 댓글 추가하기 성공', insertedComment });
-      } else {
-        logger.info('그림 댓글 추가가 실패하였습니다.');
-        return res.status(400).json({ ok: false, message: '그림 댓글 추가가 실패하였습니다.' });
-      }
+      const addedComment = await drawingCommentRepo.drawingCommentJoinUser(drawingComment.id);
+
+      logger.info('그림 댓글 추가하기 성공');
+      return res.status(200).json({ ok: true, message: '그림 댓글 추가하기 성공', addedComment });
     } catch (err: any) {
       logger.info('그림 댓글 추가하기 에러', err);
       return res.status(500).json({ ok: false, message: '그림 댓글 추가하기 에러' });
@@ -125,93 +112,125 @@ const drawingController = {
   },
 
   addLike: async (req: Request, res: Response) => {
-    const likeRepo = getCustomRepository(LikeRepository);
-
     try {
       const { userId, drawingId } = req.body;
 
-      const result = await likeRepo.addLike(userId, drawingId);
+      const addedLike = new Like();
+      addedLike.user_id = userId;
+      addedLike.drawing_id = drawingId;
+      await getRepository(Like).save(addedLike);
 
-      // insert한후 다시 자료를 찾기보다는
-      if (result.raw[0].id) {
-        const insertedLike = {
-          id: result.raw[0].id,
-          user_id: userId,
-          drawing_id: drawingId,
-        };
-        logger.info('그림 댓글 추가하기 성공');
-        return res.status(200).json({ ok: true, message: '그림 댓글 추가하기 성공', insertedLike });
-      } else {
-        logger.info('그림 댓글 추가가 실패하였습니다.');
-        return res.status(400).json({ ok: false, message: '그림 댓글 추가가 실패하였습니다.' });
-      }
+      logger.info('그림 좋아요 추가하기 성공');
+      return res.status(200).json({ ok: true, message: '그림 좋아요 추가하기 성공', addedLike });
     } catch (err: any) {
-      logger.info('그림 댓글 추가하기 에러', err);
-      return res.status(500).json({ ok: false, message: '그림 댓글 추가하기 에러' });
+      logger.info('그림 좋아요 추가하기 에러', err);
+      return res.status(500).json({ ok: false, message: '그림 좋아요 추가하기 에러' });
     }
   },
   addDisLike: async (req: Request, res: Response) => {
-    const dislikeRepo = getCustomRepository(DisLikeRepository);
-
     try {
       const { userId, drawingId } = req.body;
 
-      // 댓글을 comment 테이블에 insert 한다.
-      const result = await dislikeRepo.addDisLike(userId, drawingId);
+      const addedDislike = new DisLike();
+      addedDislike.user_id = userId;
+      addedDislike.drawing_id = drawingId;
+      await getRepository(DisLike).save(addedDislike);
 
-      // insert한후 다시 자료를 찾기보다는
-      if (result.raw[0].id) {
-        const insertedDisLike = { id: result.raw[0].id, user_id: userId, drawing_id: drawingId };
-        logger.info('그림 댓글 추가하기 성공');
-        return res.status(200).json({ ok: true, message: '그림 댓글 추가하기 성공', insertedDisLike });
-      } else {
-        logger.info('그림 댓글 추가가 실패하였습니다.');
-        return res.status(400).json({ ok: false, message: '그림 댓글 추가가 실패하였습니다.' });
-      }
+      logger.info('그림 싫어요 추가하기 성공');
+      return res.status(200).json({ ok: true, message: '그림 싫어요 추가하기 성공', addedDislike });
     } catch (err: any) {
-      logger.info('그림 댓글 추가하기 에러', err);
-      return res.status(500).json({ ok: false, message: '그림 댓글 추가하기 에러' });
+      logger.info('그림 싫어요 추가하기 에러', err);
+      return res.status(500).json({ ok: false, message: '그림 싫어요 추가하기 에러' });
     }
   },
   removeLike: async (req: Request, res: Response) => {
-    const likeRepo = getCustomRepository(LikeRepository);
-
     try {
-      const { userId } = req.body;
+      const { userId, drawingId } = req.body;
 
-      // 댓글을 comment 테이블에 insert 한다.
-      await likeRepo.removeLike(userId);
+      const removedLike = await getRepository(Like).findOne({
+        where: { user_id: userId, drawing_id: drawingId },
+      });
 
-      // insert한후 다시 자료를 찾기보다는
-      const deletedUser = userId;
+      if (!removedLike) {
+        logger.info('해당하는 그림 좋아요가 존재하지 않습니다.');
+        return res.status(400).json({ ok: false, message: '그림 좋아요 제거하기 실패' });
+      }
 
-      logger.info('그림 댓글 제거하기 성공');
-      return res.status(200).json({ ok: true, message: '그림 댓글 제거하기 성공', deletedUser });
+      // removedLike 제거시 PK도 객체에서 제거되기 때문에 따라 PK정보를 뺴내준다.
+      const removedLikeId = removedLike.id;
+      await getRepository(Like).remove(removedLike);
+
+      logger.info('그림 좋아요 제거하기 성공');
+      return res.status(200).json({ ok: true, message: '그림 좋아요 제거하기 성공', removedLikeId });
     } catch (err: any) {
-      logger.info('그림 댓글 제거하기 에러', err);
-      return res.status(500).json({ ok: false, message: '그림 댓글 제거하기 에러' });
+      logger.info('그림 좋아요 제거하기 에러', err);
+      return res.status(500).json({ ok: false, message: '그림 좋아요 제거하기 에러' });
     }
   },
   removeDisLike: async (req: Request, res: Response) => {
-    const dislikeRepo = getCustomRepository(DisLikeRepository);
-
     try {
-      const { userId } = req.body;
+      const { userId, drawingId } = req.body;
 
-      // 댓글을 comment 테이블에 insert 한다.
-      await dislikeRepo.removeDisLike(userId);
-      // insert한후 다시 자료를 찾기보다는
+      const removedDisLike = await getRepository(DisLike).findOne({
+        where: { user_id: userId, drawing_id: drawingId },
+      });
 
-      const deletedUser = userId;
-      logger.info('그림 댓글 제거하기 성공');
-      return res.status(200).json({ ok: true, message: '그림 댓글 제거하기 성공', deletedUser });
+      if (!removedDisLike) {
+        logger.info('해당하는 그림 싫어요가 존재하지 않습니다.');
+        return res.status(400).json({ ok: false, message: '그림 싫어요 제거하기 실패' });
+      }
+
+      const removedDisLikeId = removedDisLike?.id;
+      await getRepository(DisLike).remove(removedDisLike);
+
+      logger.info('그림 싫어요 제거하기 성공');
+      return res.status(200).json({ ok: true, message: '그림 싫어요 제거하기 성공', removedDisLikeId });
     } catch (err: any) {
-      logger.info('그림 댓글 제거하기 에러', err);
-      return res.status(500).json({ ok: false, message: '그림 댓글 제거하기 에러' });
+      logger.info('그림 싫어요 제거하기 에러', err);
+      return res.status(500).json({ ok: false, message: '그림 싫어요 제거하기 에러' });
     }
   },
-  edit: async (req: Request, res: Response) => {},
-  delete: async (req: Request, res: Response) => {},
+
+  removeComment: async (req: Request, res: Response) => {
+    try {
+      const { drawingCommentId } = req.body;
+
+      const removedComment = await getRepository(DrawingComment).findOne({ id: drawingCommentId });
+
+      if (!removedComment) {
+        logger.info('해당하는 그림 댓글이 존재하지 않습니다.');
+        return res.status(400).json({ ok: false, message: '그림 댓글 삭제하기 실패' });
+      }
+
+      const removedCommentId = removedComment.id;
+      await getRepository(DrawingComment).remove(removedComment);
+
+      logger.info('그림 댓글 삭제하기 성공');
+      return res.status(200).json({ ok: true, message: '그림 댓글 삭제하기 성공', removedCommentId });
+    } catch (err: any) {
+      logger.info('그림 댓글 삭제하기 에러', err);
+      return res.status(500).json({ ok: false, message: '그림 댓글 삭제하기 에러' });
+    }
+  },
+  editComment: async (req: Request, res: Response) => {
+    try {
+      const { drawingCommentId, editedContent } = req.body;
+
+      const editedComment = await getRepository(DrawingComment).findOne({ id: drawingCommentId });
+      if (!editedComment) {
+        logger.info('해당하는 그림 댓글이 존재하지 않습니다.');
+        return res.status(400).json({ ok: false, message: '그림 댓글 수정하기 실패' });
+      }
+      editedComment.content = editedContent;
+      await getRepository(DrawingComment).save(editedComment);
+
+      logger.info('그림 댓글 수정하기 완료');
+      return res.status(200).json({ ok: true, message: '그림 댓글 수정하기 완료', editedComment });
+    } catch (err: any) {
+      logger.info('그림 댓글 수정하기 에러', err);
+      return res.status(500).json({ ok: false, message: '그림 댓글 수정하기 에러' });
+    }
+  },
 };
 
 export default drawingController;

@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import socket from '@src/utils/socket';
-import { useAppDispatch } from '@src/redux/app/hook';
-import { logoutUser } from '@src/redux/requests/auth.request';
-import { addChat, initChats, initMessages, addMessage, initMsgNotis, addMsgNoti } from '@src/redux/slices/chat.slice';
+import { useAppDispatch } from '@src/store/app/hook';
+import { logoutUser } from '@src/store/requests/auth.request';
+import { addChat, initChats, initMessages, addMessage, initMsgNotis, addMsgNoti } from '@src/store/slices/chat.slice';
 
 export const useSocketSetup = () => {
   const dispatch = useAppDispatch();

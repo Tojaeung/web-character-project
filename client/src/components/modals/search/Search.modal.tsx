@@ -1,14 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { AiOutlineSearch, AiOutlineClose } from 'react-icons/ai';
-import { useAppDispatch } from '@src/redux/app/hook';
-import { closeModal } from '@src/redux/slices/modal.slice';
 
-import Search from '@src/components/header/Search';
+import Search from '@src/layouts/Header/Search';
 
 function SearchModal() {
-  const dispatch = useAppDispatch();
-
   return (
     <Container>
       <Search />

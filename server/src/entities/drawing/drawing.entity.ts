@@ -10,7 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '@src/entities/user/user.entity';
-import { Comment } from '@src/entities/drawing/comment.entity';
+import { DrawingComment } from '@src/entities/drawing/drawingComment.entity';
 import { Like } from '@src/entities/drawing/like.entity';
 import { DisLike } from '@src/entities/drawing/dislike.entity';
 
@@ -48,8 +48,8 @@ export class Drawing {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @OneToMany(() => Comment, (comment) => comment.drawing)
-  comments: Comment[];
+  @OneToMany(() => DrawingComment, (drawingComment) => drawingComment.drawing)
+  drawingComments: DrawingComment[];
   @OneToMany(() => Like, (like) => like.drawing)
   likes: Like[];
   @OneToMany(() => DisLike, (dislike) => dislike.drawing)

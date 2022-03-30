@@ -4,9 +4,10 @@ import styled from 'styled-components';
 import socket from '@src/utils/socket';
 import 'moment/locale/ko';
 import relativeTime from '@src/utils/date.util';
-import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
-import { selectChats, isChatUser, selectMsgNotis } from '@src/redux/slices/chat.slice';
-import { ChatUserType } from '@src/redux/types/chat.type';
+import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
+import { selectChats, isChatUser, selectMsgNotis } from '@src/store/slices/chat.slice';
+import { ChatUserType } from '@src/store/types/chat.type';
+import Avatar from '@src/components/common/Avatar';
 
 function ChatList() {
   const dispatch = useAppDispatch();
@@ -39,9 +40,8 @@ function ChatList() {
                   </div>
                 )}
                 <div className="wrapper">
-                  <div className="avatar">
-                    <img src={`${chat.avatar}`} alt="프사" />
-                  </div>
+                  <Avatar src={chat.avatar} size="small" />
+
                   <div className="info">
                     <span className="nickname">{chat.nickname}</span>
                     <span className="lastMessage">{chat.lastType === 'image' ? '이미지' : chat.lastMessage}</span>
@@ -92,19 +92,6 @@ const Container = styled.div`
     color: white;
   }
 
-  .avatar {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-    border: 1px solid ${({ theme }) => theme.palette.black};
-    overflow: hidden;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-
   .wrapper {
     display: flex;
     gap: 1rem;
@@ -113,7 +100,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    max-width: 18rem;
+    max-width: 12rem;
 
     .nickname {
       font-size: 1.5rem;
@@ -125,6 +112,9 @@ const Container = styled.div`
       white-space: nowrap;
       font-size: 1.2rem;
     }
+  }
+  .lastDate {
+    white-space: nowrap;
   }
 `;
 export default ChatList;

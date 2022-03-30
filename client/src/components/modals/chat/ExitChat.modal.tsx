@@ -1,11 +1,11 @@
 import React from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
-import { closeModal } from '@src/redux/slices/modal.slice';
-import { selectChatUser, isChatUser } from '@src/redux/slices/chat.slice';
+import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
+import { closeModal } from '@src/store/slices/modal.slice';
+import { selectChatUser, isChatUser } from '@src/store/slices/chat.slice';
 import socket from '@src/utils/socket';
-import { greenButtonStyle, redButtonStyle } from '@src/styles/GlobalStyles';
+// import { greenButtonStyle, redButtonStyle } from '@src/styles/GlobalStyles';
 
 function ExitChatModal() {
   const dispatch = useAppDispatch();
@@ -76,7 +76,7 @@ const Container = styled.div`
     padding: 1rem;
     cursor: pointer;
     align-self: flex-end;
-    ${greenButtonStyle};
+
     margin-right: 1rem;
   }
   .cancelBtn {
@@ -84,8 +84,6 @@ const Container = styled.div`
     padding: 1rem;
     cursor: pointer;
     align-self: flex-end;
-
-    ${redButtonStyle};
   }
 `;
 

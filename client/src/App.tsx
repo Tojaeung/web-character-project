@@ -4,84 +4,70 @@ import styled from 'styled-components';
 import { useRefreshLogin } from '@src/hook/useRefreshLogin';
 import { useSocketSetup } from '@src/hook/useSocketSetup';
 
-import Header from '@src/components/header/Header';
-import Home from '@src/pages/Home';
-import { AuthPageRender, ProfilePageRender, DrawingPageRender } from '@src/routes/PageRender';
-import { AuthPrivateRouter, PrivateRouter } from '@src/routes/PrivateRouter';
+import { AuthRouter, PrivateRouter } from '@src/routes/PrivateRouter';
 
+import Header from '@src/layouts/Header';
+import Home from '@src/pages/Home';
+import CreatePostForm from '@src/pages/CreatePostForm';
+import CreateDrawingForm from '@src/pages/CreateDrawingForm';
 import Modal from '@src/components/modals/Modal';
-import ChatModal from '@src/components/modals/chat/Chat.modal';
+import Chat from '@src/components/modals/chat';
 import Settings from './pages/settings/Settings';
+import Profile from '@src/pages/profile/[id]';
+import EditPw from '@src/pages/auth/EditPw';
+import SignUp from '@src/pages/auth/SignUp';
+import Board from '@src/pages/board/[board]';
+import Post from '@src/pages/post/[id]';
+import NotFound from '@src/components/common/NotFound';
 
 function App() {
   useRefreshLogin();
   useSocketSetup();
 
   return (
-    <Container>
-      <BrowserRouter>
-        <div className="fullScreen">
-          <Header />
-          <div className="appScreen">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route
-                path="/auth/:page"
-                element={
-                  <AuthPrivateRouter>
-                    <AuthPageRender />
-                  </AuthPrivateRouter>
-                }
-              />
+    <BrowserRouter>
+      <FullScreen>
+        <Header />
+        <AppScreen>
+          <Routes>
+            <Route path="/" element={<Home />} />
 
-              <Route
-                path="/settings"
-                element={
-                  <PrivateRouter>
-                    <Settings />
-                  </PrivateRouter>
-                }
-              />
+            <Route path="profile/:profileId" element={<Profile />} />
 
-              <Route
-                path="/profile/:profileId"
-                element={
-                  <PrivateRouter>
-                    <ProfilePageRender />
-                  </PrivateRouter>
-                }
-              />
+            <Route path="/board/:boardName" element={<Board />}>
+              <Route path="post/:postId" element={<Post />} />
+            </Route>
 
-              <Route
-                path="/drawing/:page"
-                element={
-                  <PrivateRouter>
-                    <DrawingPageRender />
-                  </PrivateRouter>
-                }
-              />
+            <Route path="/auth" element={<AuthRouter />}>
+              <Route path="signUp" element={<SignUp />} />
+            </Route>
 
-              <Route path="*" element={<h1>나다호다</h1>} />
-            </Routes>
-            <Modal />
-            <ChatModal />
-          </div>
-        </div>
-      </BrowserRouter>
-    </Container>
+            <Route element={<PrivateRouter />}>
+              <Route path="settings" element={<Settings />} />
+              <Route path="editPw" element={<EditPw />} />
+              <Route path="createDrawingForm" element={<CreateDrawingForm />} />
+              <Route path="createPostForm/:board" element={<CreatePostForm />} />
+            </Route>
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <Modal />
+          <Chat />
+        </AppScreen>
+      </FullScreen>
+    </BrowserRouter>
   );
 }
 
-const Container = styled.div`
-  .fullScreen {
-    width: 100%;
-    min-height: 100vh;
-    background-color: ${({ theme }) => theme.palette.appBgColor};
-  }
-  .appScreen {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
+const FullScreen = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: ${({ theme }) => theme.palette.appBgColor};
+`;
+const AppScreen = styled.div`
+  width: 100%;
+  max-width: 120rem;
+  margin: 0 auto;
 `;
 
 export default App;

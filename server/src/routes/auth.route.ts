@@ -4,7 +4,7 @@ import auth from '@src/middlewares/auth.middleware';
 
 const authRouter = Router();
 
-authRouter.post('/auth/register', authController.register);
+authRouter.post('/auth/signUp', authController.signUp);
 authRouter.route('/auth/login').post(authController.login).get(auth, authController.refreshLogin);
 authRouter.get('/auth/logout', auth, authController.logout);
 

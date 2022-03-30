@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import { greenButtonStyle, redButtonStyle } from '@src/styles/GlobalStyles';
+// import { greenButtonStyle, redButtonStyle } from '@src/styles/GlobalStyles';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
-import { closeModal } from '@src/redux/slices/modal.slice';
-import { useAppDispatch } from '@src/redux/app/hook';
-import { selectAuthUser } from '@src/redux/slices/auth.slice';
-import { selectProfileProfile } from '@src/redux/slices/profile.slice';
-import { useAppSelector } from '@src/redux/app/hook';
+import { closeModal } from '@src/store/slices/modal.slice';
+import { useAppDispatch } from '@src/store/app/hook';
+import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectProfileProfile } from '@src/store/slices/profile.slice';
+import { useAppSelector } from '@src/store/app/hook';
 
 function ShowDescModal() {
   const dispatch = useAppDispatch();
@@ -82,13 +82,11 @@ const Container = styled.div`
     align-self: flex-start;
   }
   .modifyBtn {
-    ${greenButtonStyle};
     font-size: 1.5rem;
     padding: 1rem 2rem;
     margin-right: 1rem;
   }
   .cancelBtn {
-    ${redButtonStyle};
     font-size: 1.5rem;
     padding: 1rem 2rem;
   }

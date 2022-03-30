@@ -4,13 +4,14 @@ import {
   Entity,
   Generated,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Follow } from '@src/entities/user/follow.entity';
 import { Drawing } from '../drawing/drawing.entity';
-import { Comment } from '../drawing/comment.entity';
+import { DrawingComment } from '../drawing/drawingComment.entity';
+import { Post } from '../board/post.entity';
+import { PostComment } from '../board/postComment.entity';
 
 @Entity('user', { schema: 'user' })
 export class User {
@@ -89,6 +90,12 @@ export class User {
   @OneToMany(() => Drawing, (drawing) => drawing.user)
   drawings: Drawing[];
 
-  @OneToMany(() => Comment, (comment) => comment.user)
-  comments: Comment[];
+  @OneToMany(() => DrawingComment, (drawingComment) => drawingComment.user)
+  drawingComments: DrawingComment[];
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
+
+  @OneToMany(() => PostComment, (postComment) => postComment.user)
+  postComments: PostComment[];
 }

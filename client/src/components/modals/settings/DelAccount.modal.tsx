@@ -3,10 +3,10 @@ import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai';
 import axios from 'axios';
 import styled from 'styled-components';
 import socket from '@src/utils/socket';
-import { logoutUser } from '@src/redux/requests/auth.request';
-import { useAppDispatch } from '@src/redux/app/hook';
-import { closeModal } from '@src/redux/slices/modal.slice';
-import { redButtonStyle, greenInputStyle } from '@src/styles/GlobalStyles';
+import { logoutUser } from '@src/store/requests/auth.request';
+import { useAppDispatch } from '@src/store/app/hook';
+import { closeModal } from '@src/store/slices/modal.slice';
+// import { redButtonStyle, greenInputStyle } from '@src/styles/GlobalStyles';
 
 function DelAccountModal() {
   const dispatch = useAppDispatch();
@@ -90,7 +90,7 @@ const Container = styled.div<{ confirmText: string }>`
     font-size: 1.2rem;
     border-top: 1px solid ${({ theme }) => theme.palette.red};
     border-bottom: 1px solid ${({ theme }) => theme.palette.red};
-    background-color: ${({ theme }) => theme.palette.pink1};
+    background-color: ${({ theme }) => theme.palette.gray};
     margin-bottom: 2rem;
   }
 
@@ -107,16 +107,15 @@ const Container = styled.div<{ confirmText: string }>`
     }
   }
   .input {
-    ${greenInputStyle};
     margin-bottom: 2rem;
   }
   .btn {
-    ${({ confirmText }) => {
+    /* ${({ confirmText }) => {
       if (confirmText !== '계정탈퇴') {
         return null;
       }
-      return redButtonStyle;
-    }}
+      return;
+    }} */
     padding: 0.5rem;
     width: 70%;
   }

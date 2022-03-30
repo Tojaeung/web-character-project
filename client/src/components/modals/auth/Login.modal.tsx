@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineClose, AiOutlineUser, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import styled from 'styled-components';
-import { greenButtonStyle, greenInputStyle } from '@src/styles/GlobalStyles';
-import { loginUser } from '@src/redux/requests/auth.request';
-import { useAppDispatch } from '@src/redux/app/hook';
-import { openModal, closeModal } from '@src/redux/slices/modal.slice';
+// import { greenButtonStyle, greenInputStyle } from '@src/styles/GlobalStyles';
+import { loginUser } from '@src/store/requests/auth.request';
+import { useAppDispatch } from '@src/store/app/hook';
+import { openModal, closeModal } from '@src/store/slices/modal.slice';
 import logo from '@src/assets/images/logo.jpg';
 
 function LoginModal() {
@@ -129,7 +129,6 @@ const Container = styled.div`
   }
 
   .input {
-    ${greenInputStyle};
   }
   .icon {
     position: absolute;
@@ -139,7 +138,7 @@ const Container = styled.div`
   }
   .submitBtn {
     width: 100%;
-    ${greenButtonStyle};
+
     padding: 1rem;
     font-size: 1.5rem;
   }

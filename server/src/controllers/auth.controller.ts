@@ -9,7 +9,7 @@ import cluster from '@src/helpers/redis.helper';
 
 const authController = {
   // 회원가입  API 입니다.
-  register: async (req: Request, res: Response) => {
+  signUp: async (req: Request, res: Response) => {
     const userRepo = getCustomRepository(UserRepository);
     try {
       const { email, nickname, pw } = req.body;

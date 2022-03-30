@@ -3,8 +3,8 @@ import { v4 } from 'uuid';
 import styled from 'styled-components';
 import 'moment/locale/ko';
 import relativeTime from '@src/utils/date.util';
-import { useAppSelector } from '@src/redux/app/hook';
-import { selectChatUser, selectMessages } from '@src/redux/slices/chat.slice';
+import { useAppSelector } from '@src/store/app/hook';
+import { selectChatUser, selectMessages } from '@src/store/slices/chat.slice';
 
 function ChatBody() {
   const messages = useAppSelector(selectMessages);

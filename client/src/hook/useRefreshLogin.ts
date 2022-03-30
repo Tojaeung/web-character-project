@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useAppDispatch } from '@src/redux/app/hook';
-import { refreshLogin } from '@src/redux/requests/auth.request';
+import { useAppDispatch } from '@src/store/app/hook';
+import { refreshLogin } from '@src/store/requests/auth.request';
 
 export const useRefreshLogin = () => {
   const dispatch = useAppDispatch();

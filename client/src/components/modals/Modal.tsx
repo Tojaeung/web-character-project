@@ -1,8 +1,8 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '@src/redux/app/hook';
-import { selectModalOk, selectModalMode, closeModal } from '@src/redux/slices/modal.slice';
+import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
+import { selectModalOk, selectModalMode, closeModal } from '@src/store/slices/modal.slice';
 import LoginModal from '@src/components/modals/auth/Login.modal';
 import DelAccountModal from '@src/components/modals/settings/DelAccount.modal';
 import ExitChatModal from '@src/components/modals/chat/ExitChat.modal';

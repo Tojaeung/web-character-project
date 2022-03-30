@@ -67,10 +67,10 @@ export class UserRepository extends AbstractRepository<User> {
    * 프로필유저 정보와 프로필유저의 팔로우, 팔로잉 정보를 가져온다.
    * user테이블과 follow 테이블이 결합한다.
    */
-  getProfile(profileId: number) {
+  findProfile(profileId: number) {
     return this.createQueryBuilder('user')
-      .leftJoinAndSelect('user.followers', 'follow')
-      .leftJoinAndSelect('user.followees', 'follow')
+      .leftJoinAndSelect('user.followers', 'followers')
+      .leftJoinAndSelect('user.followings', 'followings')
       .where('user.id = :profileId', { profileId })
       .getOne();
   }
@@ -78,34 +78,16 @@ export class UserRepository extends AbstractRepository<User> {
 
 @EntityRepository(Follow)
 export class FollowRepository extends AbstractRepository<Follow> {
-  getFollowingNum(id: number) {
-    return this.createQueryBuilder('follow').select('count(*)').where('follow.from_id = :id', { id }).getRawOne();
-  }
-
-  getFollowerNum(id: number) {
-    return this.createQueryBuilder('follow').select('count(*)').where('follow.to_id = :id', { id }).getRawOne();
-  }
-
-  isFollowing(id: number, profileId: number) {
-    return this.createQueryBuilder('follow')
-      .where('follow.from_id = :id', { id })
-      .andWhere('follow.to_id = :profileId', { profileId })
-      .getOne();
-  }
-
-  follow(id: number, profileId: number) {
-    return this.createQueryBuilder('follow').insert().into(Follow).values({ from_id: id, to_id: profileId }).execute();
-  }
-
-  unFollow(id: number, profileId: number) {
+  unFollow(userId: number, profileId: number) {
     return this.createQueryBuilder('follow')
       .delete()
       .from(Follow)
-      .where('from_id = :id', { id })
+      .where('from_id = :userId', { userId })
       .andWhere('to_id = :profileId', { profileId })
       .execute();
   }
 
+  // 계정삭제 할때 모든 팔로우 정보 삭제
   deleteFollow(id: number) {
     return this.createQueryBuilder('follow')
       .delete()

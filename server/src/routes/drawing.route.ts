@@ -7,11 +7,12 @@ const drawingRouter = Router();
 
 drawingRouter.post('/drawing/create', auth, drawingUpload.single('drawing'), drawingController.create);
 drawingRouter.post('/drawing/getDrawings', drawingController.getDrawings);
-drawingRouter.post('/drawing/getDrawing', drawingController.getDrawing);
+drawingRouter.post('/drawing/addView', auth, drawingController.addView);
 drawingRouter.post('/drawing/addComment', auth, drawingController.addComment);
 drawingRouter.post('/drawing/addLike', auth, drawingController.addLike);
 drawingRouter.post('/drawing/addDisLike', auth, drawingController.addDisLike);
 drawingRouter.post('/drawing/removeLike', auth, drawingController.removeLike);
 drawingRouter.post('/drawing/removeDisLike', auth, drawingController.removeDisLike);
-
+drawingRouter.post('/drawing/removeComment', auth, drawingController.removeComment);
+drawingRouter.patch('/drawing/editComment', auth, drawingController.editComment);
 export default drawingRouter;
