@@ -53,16 +53,14 @@ function SignUp() {
 }
 
 const Form = styled.form`
-  width: 42.5rem;
+  width: 32rem;
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.palette.white};
   align-items: center;
   margin: 0 auto;
   gap: 3rem;
   @media ${({ theme }) => theme.device.mobile} {
-    width: 100%;
   }
 `;
 
