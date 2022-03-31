@@ -36,8 +36,6 @@ function Comment({ comments }: IProp) {
 }
 
 const Container = styled.ul`
-  overflow-y: scroll;
-  height: calc(100vh - 32rem);
   padding-bottom: 0.5rem;
 `;
 const CommentBox = styled.li`

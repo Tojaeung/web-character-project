@@ -6,7 +6,6 @@ import socket from '@src/utils/socket';
 import { logoutUser } from '@src/store/requests/auth.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
-import ModalContainer from '@src/components/modals/ModalContainer';
 import StyledInput from '@src/styles/StyledInput';
 
 function DelAccountModal() {
@@ -24,41 +23,39 @@ function DelAccountModal() {
   };
 
   return (
-    <ModalContainer width={40}>
-      <Container>
-        <Title>정말 탈퇴하시겠습니까?</Title>
+    <Container>
+      <Title>정말 탈퇴하시겠습니까?</Title>
 
-        <WarningBox>
-          <WarnIcon />
-          <WarningText>탈퇴시, 작성했던 글,댓글 등 모든것들이 삭제됩니다.</WarningText>
-        </WarningBox>
+      <WarningBox>
+        <WarnIcon />
+        <WarningText>탈퇴시, 작성했던 글,댓글 등 모든것들이 삭제됩니다.</WarningText>
+      </WarningBox>
 
-        <GuideText>
-          <i>'계정탈퇴'</i> 를 입력하면 버튼이 활성화 됩니다.
-        </GuideText>
+      <GuideText>
+        <i>'계정탈퇴'</i> 를 입력하면 버튼이 활성화 됩니다.
+      </GuideText>
 
-        <StyledInput
-          className="input"
-          type="text"
-          placeholder="계정탈퇴"
-          value={confirmText}
-          onChange={(e) => setConfirmText(e.target.value)}
-        />
+      <StyledInput
+        className="input"
+        type="text"
+        placeholder="계정탈퇴"
+        value={confirmText}
+        onChange={(e) => setConfirmText(e.target.value)}
+      />
 
-        <SubmitButton
-          disabled={confirmText === '계정탈퇴' ? false : true}
-          confirmText={confirmText}
-          onClick={onDelAccount}
-        >
-          계정탈퇴
-        </SubmitButton>
-      </Container>
-    </ModalContainer>
+      <SubmitButton
+        disabled={confirmText === '계정탈퇴' ? false : true}
+        confirmText={confirmText}
+        onClick={onDelAccount}
+      >
+        계정탈퇴
+      </SubmitButton>
+    </Container>
   );
 }
 
 const Container = styled.div`
-  width: 100%;
+  width: 40rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

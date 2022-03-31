@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
 import { refreshLogin } from '@src/store/requests/auth.request';
-import ModalContainer from '@src/components/modals/ModalContainer';
 import { NicknameInput } from '@src/components/react-hook-form/AuthForm';
 import { AuthFormTypes } from '@src/types';
 import StyledButton from '@src/styles/StyledButton';
@@ -32,22 +31,20 @@ function EditNicknameModal() {
   };
 
   return (
-    <ModalContainer width={40}>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Title>닉네임 변경</Title>
-        <Content>변경할 닉네임을 입력해주세요.😮😮</Content>
-        <NicknameInput label="닉네임" name="nickname" register={register} error={errors.nickname} />
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <Title>닉네임 변경</Title>
+      <Content>변경할 닉네임을 입력해주세요.😮😮</Content>
+      <NicknameInput label="닉네임" name="nickname" register={register} error={errors.nickname} />
 
-        <SubmitButton type="submit" color="green" size="medium">
-          닉네임 변경하기
-        </SubmitButton>
-      </Form>
-    </ModalContainer>
+      <SubmitButton type="submit" color="green" size="medium">
+        닉네임 변경하기
+      </SubmitButton>
+    </Form>
   );
 }
 
 const Form = styled.form`
-  width: 100%;
+  width: 32rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

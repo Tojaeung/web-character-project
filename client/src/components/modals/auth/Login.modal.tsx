@@ -8,7 +8,6 @@ import { AuthFormTypes } from '@src/types';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { EmailInput, PwInput } from '@src/components/react-hook-form/AuthForm';
 import StyledButton from '@src/styles/StyledButton';
-import ModalContainer from '@src/components/modals/ModalContainer';
 
 function LoginModal() {
   const navigate = useNavigate();
@@ -39,31 +38,28 @@ function LoginModal() {
     navigate('/auth/register');
   };
 
-  // if (!openModal) return null;
   return (
-    <ModalContainer width={32}>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Logo>기업로고</Logo>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <Logo>기업로고</Logo>
 
-        <EmailInput label="이메일" name="email" register={register} error={errors.email} />
-        <PwInput label="비밀번호" name="pw" register={register} error={errors.pw} />
+      <EmailInput label="이메일" name="email" register={register} error={errors.email} />
+      <PwInput label="비밀번호" name="pw" register={register} error={errors.pw} />
 
-        <LoginButton type="submit" color="green" size="medium">
-          로그인
-        </LoginButton>
+      <LoginButton type="submit" color="green" size="medium">
+        로그인
+      </LoginButton>
 
-        <GuideBox>
-          <FindPw onClick={onClickFindPw}>비밀번호찾기</FindPw>
-          <Boundary> | </Boundary>
-          <SignUp onClick={onClickRegister}>회원가입</SignUp>
-        </GuideBox>
-      </Form>
-    </ModalContainer>
+      <GuideBox>
+        <FindPw onClick={onClickFindPw}>비밀번호찾기</FindPw>
+        <Boundary> | </Boundary>
+        <SignUp onClick={onClickRegister}>회원가입</SignUp>
+      </GuideBox>
+    </Form>
   );
 }
 
 const Form = styled.form`
-  width: 100%;
+  width: 32rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

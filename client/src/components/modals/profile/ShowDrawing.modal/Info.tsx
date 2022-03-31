@@ -7,13 +7,11 @@ import LikeBtn from '@src/components/LikeBtn';
 import DisLikeBtn from '@src/components/DisLikeBtn';
 import { useAppSelector } from '@src/store/app/hook';
 import { selectProfileProfile } from '@src/store/slices/profile.slice';
-import { selectDrawingDrawings } from '@src/store/slices/drawing.slice';
-import { selectDrawingIndex } from '@src/store/slices/drawing.slice';
+import { selectDrawingSelectedDrawing } from '@src/store/slices/drawing.slice';
 
 function Info() {
   const profile = useAppSelector(selectProfileProfile);
-  const drawings = useAppSelector(selectDrawingDrawings);
-  const selectedIndex = useAppSelector(selectDrawingIndex);
+  const selectedDrawing = useAppSelector(selectDrawingSelectedDrawing);
 
   return (
     <Container>
@@ -22,27 +20,27 @@ function Info() {
           <Avatar src={profile?.avatar} size="small" />
           <Nickname exp={profile?.exp!} nickname={profile?.nickname!} size="small" />
         </UserInfoBox>
-        <CreatedTime createdTime={drawings[selectedIndex!]?.created_at!} size="small" />
+        <CreatedTime createdTime={selectedDrawing?.created_at!} size="small" />
       </UserBox>
 
-      <Content dangerouslySetInnerHTML={{ __html: drawings[selectedIndex!]?.content as string }} />
+      <Content dangerouslySetInnerHTML={{ __html: selectedDrawing?.content as string }} />
 
       <DrawingInfoBox>
         <ViewsBox>
-          <ViewIcon /> {drawings[selectedIndex!]?.views}
+          <ViewIcon /> {selectedDrawing?.views}
         </ViewsBox>
 
         <LikeBtn
-          id={drawings[selectedIndex!]?.id!}
-          likes={drawings[selectedIndex!]?.likes!}
-          dislikes={drawings[selectedIndex!]?.dislikes!}
+          id={selectedDrawing?.id!}
+          likes={selectedDrawing?.likes!}
+          dislikes={selectedDrawing?.dislikes!}
           category="drawing"
         />
 
         <DisLikeBtn
-          id={drawings[selectedIndex!]?.id!}
-          likes={drawings[selectedIndex!]?.likes!}
-          dislikes={drawings[selectedIndex!]?.dislikes!}
+          id={selectedDrawing?.id!}
+          likes={selectedDrawing?.likes!}
+          dislikes={selectedDrawing?.dislikes!}
           category="drawing"
         />
       </DrawingInfoBox>
@@ -50,6 +48,7 @@ function Info() {
   );
 }
 const Container = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;

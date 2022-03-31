@@ -23,7 +23,7 @@ function SignUp() {
     const response = await axios.post('/api/auth/signUp', data);
     const { ok, message } = response.data;
     if (!ok) return alert(message);
-    await dispatch(openModal({ mode: 'registerGuide' }));
+    await dispatch(openModal({ mode: 'signUpGuideModal' }));
   };
 
   return (

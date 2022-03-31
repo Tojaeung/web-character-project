@@ -77,7 +77,7 @@ function ChatModal() {
         </>
       )}
     </Container>,
-    document.getElementById('portal') as HTMLElement
+    document.getElementById('chatPortal') as HTMLElement
   );
 }
 

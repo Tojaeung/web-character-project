@@ -12,7 +12,7 @@ function SearchModal() {
 }
 
 const Container = styled.div`
-  width: 100%;
+  width: 100vw;
   min-height: 5rem;
   position: fixed;
   top: 0;

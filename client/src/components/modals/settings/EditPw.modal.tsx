@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { logoutUser } from '@src/store/requests/auth.request';
 import { useAppDispatch } from '@src/store/app/hook';
-import ModalContainer from '@src/components/modals/ModalContainer';
 import { PwInput, ConfirmPwInput } from '@src/components/react-hook-form/AuthForm';
 import { AuthFormTypes } from '@src/types';
 import StyledButton from '@src/styles/StyledButton';
@@ -33,25 +32,23 @@ function AccountPw() {
   };
 
   return (
-    <ModalContainer width={40}>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Title>비밀번호 변경</Title>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <Title>비밀번호 변경</Title>
 
-        <Content>변경할 비밀번호를 입력해주세요 🔒🔒</Content>
+      <Content>변경할 비밀번호를 입력해주세요 🔒🔒</Content>
 
-        <PwInput label="현재 비밀번호" name="currentPw" register={register} error={errors.currentPw} />
-        <PwInput label="변경할 비밀번호" name="pw" register={register} error={errors.pw} />
-        <ConfirmPwInput label="비밀번호 확인" name="confirmPw" register={register} error={errors.confirmPw} />
+      <PwInput label="현재 비밀번호" name="currentPw" register={register} error={errors.currentPw} />
+      <PwInput label="변경할 비밀번호" name="pw" register={register} error={errors.pw} />
+      <ConfirmPwInput label="비밀번호 확인" name="confirmPw" register={register} error={errors.confirmPw} />
 
-        <SubmitButton type="submit" color="green" size="medium">
-          비밀번호 변경하기
-        </SubmitButton>
-      </Form>
-    </ModalContainer>
+      <SubmitButton type="submit" color="green" size="medium">
+        비밀번호 변경하기
+      </SubmitButton>
+    </Form>
   );
 }
 const Form = styled.form`
-  width: 100%;
+  width: 32rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

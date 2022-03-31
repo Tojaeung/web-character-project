@@ -5,7 +5,6 @@ import { useAppDispatch } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { selectProfileProfile } from '@src/store/slices/profile.slice';
 import { useAppSelector } from '@src/store/app/hook';
-import ModalContainer from '@src/components/modals/ModalContainer';
 import StyledButton from '@src/styles/StyledButton';
 
 function ShowDescModal() {
@@ -20,26 +19,24 @@ function ShowDescModal() {
     await dispatch(closeModal());
   };
   return (
-    <ModalContainer width={50}>
-      <Container>
-        <Title>자기소개🌟</Title>
+    <Container>
+      <Title>자기소개🌟</Title>
 
-        <Content dangerouslySetInnerHTML={{ __html: profile?.desc as string }} />
+      <Content dangerouslySetInnerHTML={{ __html: profile?.desc as string }} />
 
-        {user?.id === profile?.id && (
-          <ModifyButton
-            color="green"
-            size="medium"
-            onClick={(e) => {
-              navigate('/settings');
-              onClose(e);
-            }}
-          >
-            수정
-          </ModifyButton>
-        )}
-      </Container>
-    </ModalContainer>
+      {user?.id === profile?.id && (
+        <ModifyButton
+          color="green"
+          size="medium"
+          onClick={(e) => {
+            navigate('/settings');
+            onClose(e);
+          }}
+        >
+          수정
+        </ModifyButton>
+      )}
+    </Container>
   );
 }
 

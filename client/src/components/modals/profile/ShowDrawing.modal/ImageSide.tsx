@@ -2,47 +2,53 @@ import React from 'react';
 import styled from 'styled-components';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
-import { selectIndex, selectDrawingIndex, selectDrawingDrawings } from '@src/store/slices/drawing.slice';
+import { selectDrawing, selectDrawingDrawings, selectDrawingSelectedDrawing } from '@src/store/slices/drawing.slice';
 import { addView } from '@src/store/requests/drawing.request';
 
 function ImageSide() {
   const dispatch = useAppDispatch();
-
   const drawings = useAppSelector(selectDrawingDrawings);
-  const selectedIndex = useAppSelector(selectDrawingIndex);
+  const selectedDrawing = useAppSelector(selectDrawingSelectedDrawing);
+
+  // 햔제 선택된 그림의 인덱스를 구하는 함수
+  const getSelectedDrawingIndex = () => {
+    const index = drawings.findIndex((drawing) => drawing.id === selectedDrawing?.id);
+    return index;
+  };
 
   // 이전 그림
   const onPrevDrawing = async (e: React.MouseEvent<HTMLDivElement>) => {
-    if (selectedIndex! - 1 < 0) {
-      await dispatch(selectIndex({ index: 0 }));
-      // await dispatch(addView({ drawingId: drawings[selectedIndex!].id }));
+    const selectedDrawingIndex = getSelectedDrawingIndex();
+    if (selectedDrawingIndex - 1 < 0) {
+      await dispatch(selectDrawing({ index: 0 }));
       return;
     }
-    await dispatch(selectIndex({ index: selectedIndex! - 1 }));
-    await dispatch(addView({ drawingId: drawings[selectedIndex!].id }));
+    await dispatch(selectDrawing({ index: selectedDrawingIndex - 1 }));
+    await dispatch(addView({ drawingId: selectedDrawing!.id }));
   };
 
   // 다음 그림
   const onNextDrawing = async (e: React.MouseEvent<HTMLDivElement>) => {
-    if (selectedIndex! + 1 === drawings.length) {
-      await dispatch(selectIndex({ index: drawings.length - 1 }));
+    const selectedDrawingIndex = getSelectedDrawingIndex();
+    if (selectedDrawingIndex + 1 === drawings.length) {
+      await dispatch(selectDrawing({ index: drawings.length - 1 }));
       // await dispatch(addView({ drawingId: drawings[selectedIndex!].id }));
       return;
     }
 
-    await dispatch(selectIndex({ index: selectedIndex! + 1 }));
-    await dispatch(addView({ drawingId: drawings[selectedIndex!].id }));
+    await dispatch(selectDrawing({ index: selectedDrawingIndex + 1 }));
+    await dispatch(addView({ drawingId: selectedDrawing!.id }));
   };
 
   return (
     <Container>
-      <Prev selectedIndex={selectedIndex} onClick={onPrevDrawing}>
+      <Prev selectedIndex={getSelectedDrawingIndex()} onClick={onPrevDrawing}>
         <PrevIcon />
       </Prev>
 
-      <Image src={drawings[selectedIndex!]?.url} alt="이미지" />
+      <Image src={selectedDrawing?.url} alt="이미지" />
 
-      <Next selectedIndex={selectedIndex} drawingsLength={drawings.length} onClick={onNextDrawing}>
+      <Next selectedIndex={getSelectedDrawingIndex()} drawingsLength={drawings.length} onClick={onNextDrawing}>
         <NextIcon />
       </Next>
     </Container>

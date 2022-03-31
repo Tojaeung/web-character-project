@@ -1,9 +1,7 @@
-import React from 'react';
 import styled from 'styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import ModalContainer from '@src/components/modals/ModalContainer';
 import { EmailInput } from '@src/components/react-hook-form/AuthForm';
 import { AuthFormTypes } from '@src/types';
 import { closeModal } from '@src/store/slices/modal.slice';
@@ -30,25 +28,23 @@ function FindPw() {
   };
 
   return (
-    <ModalContainer width={40}>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Title>비밀번호를 잃어버리셨나요?😂😂</Title>
-        <Content>
-          기업이름에 가입한 이메일을 정확히 입력해 주세요.🌙 이메일을 통해 비밀번호 수정 링크가 전송됩니다.🌤
-        </Content>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <Title>비밀번호를 잃어버리셨나요?😂😂</Title>
+      <Content>
+        기업이름에 가입한 이메일을 정확히 입력해 주세요.🌙 이메일을 통해 비밀번호 수정 링크가 전송됩니다.🌤
+      </Content>
 
-        <EmailInput label="이메일" name="email" register={register} error={errors.email} />
+      <EmailInput label="이메일" name="email" register={register} error={errors.email} />
 
-        <SubmitButton type="submit" color="green" size="medium">
-          인증메일 보내기
-        </SubmitButton>
-      </Form>
-    </ModalContainer>
+      <SubmitButton type="submit" color="green" size="medium">
+        인증메일 보내기
+      </SubmitButton>
+    </Form>
   );
 }
 
 const Form = styled.form`
-  width: 100%;
+  width: 40rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;

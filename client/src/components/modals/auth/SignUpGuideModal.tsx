@@ -1,39 +1,36 @@
 import { MdMarkEmailRead } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import ModalContainer from '@src/components/modals/ModalContainer';
-import { useAppDispatch } from '@src/store/app/hook';
-import { closeModal } from '@src/store/slices/modal.slice';
 import StyledButton from '@src/styles/StyledButton';
+import { closeModal } from '@src/store/slices/modal.slice';
+import { useAppDispatch } from '@src/store/app/hook';
 
-function RegisterGuide() {
-  const navigate = useNavigate();
+function SignUpGuideModal() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const onClose = async (e: any) => {
+  const handleConfirm = async (e: any) => {
     await dispatch(closeModal());
     navigate('/');
   };
 
   return (
-    <ModalContainer width={40}>
-      <Container>
-        <Title>가입완료</Title>
-        <EmailIcon />
-        <Content>
-          가입하신 이메일로 <i>"인증메일"</i>을 보내드렸습니다.📫
-        </Content>
+    <Container>
+      <Title>가입완료</Title>
+      <EmailIcon />
+      <Content>
+        가입하신 이메일로 <i>"인증메일"</i>을 보내드렸습니다.📫
+      </Content>
 
-        <ConfirmButton color="green" size="medium" responsive={true} onClick={onClose}>
-          확인
-        </ConfirmButton>
-      </Container>
-    </ModalContainer>
+      <ConfirmButton color="green" size="medium" responsive={true} onClick={handleConfirm}>
+        확인
+      </ConfirmButton>
+    </Container>
   );
 }
 
 const Container = styled.div`
-  width: 100%;
+  width: 40rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -58,4 +55,4 @@ const Content = styled.p`
 `;
 const ConfirmButton = styled(StyledButton)``;
 
-export default RegisterGuide;
+export default SignUpGuideModal;

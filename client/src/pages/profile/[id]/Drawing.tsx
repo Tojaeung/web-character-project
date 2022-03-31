@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { getDrawings, addView } from '@src/store/requests/drawing.request';
 import { selectProfileProfile } from '@src/store/slices/profile.slice';
-import { selectIndex, selectDrawingDrawings, selectDrawingIsLoading } from '@src/store/slices/drawing.slice';
+import { selectDrawing, selectDrawingDrawings, selectDrawingIsLoading } from '@src/store/slices/drawing.slice';
+import { openModal } from '@src/store/slices/modal.slice';
 import loading from '@src/assets/images/loading.gif';
 import { useObserver } from '@src/hook/useObserver';
-import { openModal } from '@src/store/slices/modal.slice';
 
 function Drawing() {
   const dispatch = useAppDispatch();
@@ -37,9 +37,9 @@ function Drawing() {
   }, [isVisible]);
 
   const openDrawing = (index: number) => async (e: React.MouseEvent<HTMLLIElement>) => {
-    await dispatch(openModal({ mode: 'showDrawing' }));
-    await dispatch(selectIndex({ index }));
+    await dispatch(selectDrawing({ index }));
     await dispatch(addView({ drawingId: drawings[index].id }));
+    await dispatch(openModal({ mode: 'showDrawingModal' }));
   };
 
   return (
