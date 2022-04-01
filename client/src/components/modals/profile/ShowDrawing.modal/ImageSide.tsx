@@ -37,7 +37,7 @@ function ImageSide() {
 
       <Image src={drawings[index!]?.url} alt="이미지" />
 
-      <NextIcon index={index} drawingsLength={drawings.length} onClick={onNextDrawing} />
+      <NextIcon index={index} total={drawings.length} onClick={onNextDrawing} />
     </Container>
   );
 }
@@ -70,17 +70,17 @@ const PrevIcon = styled(AiOutlineLeft)<{ index: number | null }>`
     font-size: 5rem;
   }
 `;
-const NextIcon = styled(AiOutlineRight)<{ index: number | null; drawingsLength: number | null }>`
+const NextIcon = styled(AiOutlineRight)<{ index: number | null; total: number | null }>`
   font-size: 7rem;
   position: absolute;
   left: 95%;
   top: 50%;
   transform: translate(-50%, -50%);
   color: ${({ theme }) => theme.palette.white};
-  display: ${({ index, drawingsLength }) => (index! + 1 === drawingsLength ? 'none' : 'block')};
+  display: ${({ index, total }) => (index! + 1 === total ? 'none' : 'block')};
   cursor: pointer;
   &:hover {
-    opacity: ${({ index, drawingsLength }) => (index! + 1 === drawingsLength ? 0 : 0.7)};
+    opacity: ${({ index, total }) => (index! + 1 === total ? 0 : 0.7)};
   }
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 5rem;
