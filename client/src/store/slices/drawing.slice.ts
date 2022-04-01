@@ -18,7 +18,7 @@ interface DrawingSliceType {
   ok: boolean;
   message: string | null;
   drawings: DrawingType[];
-  selectedDrawing: DrawingType | null;
+  index: number | null;
 }
 
 const initialState: DrawingSliceType = {
@@ -26,15 +26,15 @@ const initialState: DrawingSliceType = {
   ok: false,
   message: null,
   drawings: [],
-  selectedDrawing: null,
+  index: null,
 };
 
 export const drawingSlice = createSlice({
   name: 'drawing',
   initialState,
   reducers: {
-    selectDrawing: (state, action: PayloadAction<{ index: number }>) => {
-      state.selectedDrawing = state.drawings[action.payload.index];
+    selectDrawing: (state, action: PayloadAction<{ selectedIndex: number }>) => {
+      state.index = action.payload.selectedIndex;
     },
   },
   extraReducers: (builder) => {
@@ -58,7 +58,8 @@ export const drawingSlice = createSlice({
     builder.addCase(addView.fulfilled, (state, { payload }) => {
       state.ok = payload.ok;
       state.message = payload.message;
-      state.selectedDrawing!.views += 1;
+      const index = state.index;
+      state.drawings[index!]!.views += 1;
     });
     builder.addCase(addView.rejected, (state, { payload }) => {
       state.ok = payload!.ok;
@@ -68,8 +69,8 @@ export const drawingSlice = createSlice({
     builder.addCase(addDrawingComment.fulfilled, (state, { payload }) => {
       state.ok = payload.ok;
       state.message = payload.message;
-
-      state.selectedDrawing!.drawingComments?.unshift(payload.addedComment);
+      const index = state.index;
+      state.drawings[index!]!.drawingComments?.unshift(payload.addedComment);
     });
     builder.addCase(addDrawingComment.rejected, (state, { payload }) => {
       state.ok = payload!.ok;
@@ -78,8 +79,8 @@ export const drawingSlice = createSlice({
     builder.addCase(addDrawingLike.fulfilled, (state, { payload }) => {
       state.ok = payload.ok;
       state.message = payload.message;
-
-      state.selectedDrawing!.likes?.push(payload.addedLike);
+      const index = state.index;
+      state.drawings[index!]!.likes?.push(payload.addedLike);
     });
     builder.addCase(addDrawingLike.rejected, (state, { payload }) => {
       state.ok = payload!.ok;
@@ -88,7 +89,8 @@ export const drawingSlice = createSlice({
     builder.addCase(addDrawingDisLike.fulfilled, (state, { payload }) => {
       state.ok = payload.ok;
       state.message = payload.message;
-      state.selectedDrawing!.dislikes?.push(payload.addedDislike);
+      const index = state.index;
+      state.drawings[index!]!.dislikes?.push(payload.addedDislike);
     });
     builder.addCase(addDrawingDisLike.rejected, (state, { payload }) => {
       state.ok = payload!.ok;
@@ -97,8 +99,9 @@ export const drawingSlice = createSlice({
     builder.addCase(removeDrawingLike.fulfilled, (state, { payload }) => {
       state.ok = payload.ok;
       state.message = payload.message;
-      const filteredLikes = state.selectedDrawing?.likes?.filter((like) => like.id !== payload.removedLikeId);
-      state.selectedDrawing!.likes = filteredLikes!;
+      const index = state.index;
+      const filteredLikes = state.drawings[index!]?.likes?.filter((like) => like.id !== payload.removedLikeId);
+      state.drawings[index!]!.likes = filteredLikes!;
     });
     builder.addCase(removeDrawingLike.rejected, (state, { payload }) => {
       state.ok = payload!.ok;
@@ -107,10 +110,11 @@ export const drawingSlice = createSlice({
     builder.addCase(removeDrawingDisLike.fulfilled, (state, { payload }) => {
       state.ok = payload.ok;
       state.message = payload.message;
-      const filteredDisLikes = state.selectedDrawing?.dislikes?.filter(
+      const index = state.index;
+      const filteredDisLikes = state.drawings[index!]?.dislikes?.filter(
         (dislike) => dislike.id !== payload.removedDisLikeId
       );
-      state.selectedDrawing!.dislikes = filteredDisLikes!;
+      state.drawings[index!]!.dislikes = filteredDisLikes!;
     });
     builder.addCase(removeDrawingDisLike.rejected, (state, { payload }) => {
       state.ok = payload!.ok;
@@ -120,10 +124,11 @@ export const drawingSlice = createSlice({
     builder.addCase(removeDrawingComment.fulfilled, (state, { payload }) => {
       state.ok = payload.ok;
       state.message = payload.message;
-      const filteredDrawingComment = state.selectedDrawing?.drawingComments?.filter(
+      const index = state.index;
+      const filteredDrawingComment = state.drawings[index!]?.drawingComments?.filter(
         (drawingComment) => drawingComment.id !== payload.removedCommentId
       );
-      state.selectedDrawing!.drawingComments = filteredDrawingComment!;
+      state.drawings[index!]!.drawingComments = filteredDrawingComment!;
     });
     builder.addCase(removeDrawingComment.rejected, (state, { payload }) => {
       state.ok = payload!.ok;
@@ -132,11 +137,11 @@ export const drawingSlice = createSlice({
     builder.addCase(editDrawingComment.fulfilled, (state, { payload }) => {
       state.ok = payload.ok;
       state.message = payload.message;
-
-      const editedCommentIndex = state.selectedDrawing?.drawingComments?.findIndex(
+      const index = state.index;
+      const editedCommentIndex = state.drawings[index!]?.drawingComments?.findIndex(
         (drawingComment) => drawingComment.id === payload.editedComment.id
       );
-      state.selectedDrawing!.drawingComments![editedCommentIndex!].content! = payload.editedComment.content;
+      state.drawings[index!]!.drawingComments![editedCommentIndex!].content! = payload.editedComment.content;
     });
     builder.addCase(editDrawingComment.rejected, (state, { payload }) => {
       state.ok = payload!.ok;
@@ -151,6 +156,6 @@ export const selectDrawingIsLoading = (state: RootState) => state.drawing.isLoad
 export const selectDrawingOk = (state: RootState) => state.drawing.ok;
 export const selectDrawingMessage = (state: RootState) => state.drawing.message;
 export const selectDrawingDrawings = (state: RootState) => state.drawing.drawings;
-export const selectDrawingSelectedDrawing = (state: RootState) => state.drawing.selectedDrawing;
+export const selectDrawingIndex = (state: RootState) => state.drawing.index;
 
 export default drawingSlice.reducer;

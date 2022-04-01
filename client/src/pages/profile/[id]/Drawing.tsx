@@ -37,7 +37,7 @@ function Drawing() {
   }, [isVisible]);
 
   const openDrawing = (index: number) => async (e: React.MouseEvent<HTMLLIElement>) => {
-    await dispatch(selectDrawing({ index }));
+    await dispatch(selectDrawing({ selectedIndex: index }));
     await dispatch(addView({ drawingId: drawings[index].id }));
     await dispatch(openModal({ mode: 'showDrawingModal' }));
   };

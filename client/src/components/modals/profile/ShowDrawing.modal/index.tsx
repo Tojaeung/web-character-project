@@ -6,25 +6,26 @@ import Comment from '@src/components/comment';
 import CommentForm from '@src/components/CommentForm';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
-import { selectDrawingSelectedDrawing } from '@src/store/slices/drawing.slice';
+import { selectDrawingDrawings, selectDrawingIndex } from '@src/store/slices/drawing.slice';
 
 function ShowDrawingModal() {
   const dispatch = useAppDispatch();
-  const selectedDrawing = useAppSelector(selectDrawingSelectedDrawing);
+  const drawings = useAppSelector(selectDrawingDrawings);
+  const index = useAppSelector(selectDrawingIndex);
 
   return (
     <Container>
       <ImageSide />
       <InfoSide>
         <Header>
-          <Title>제목: {selectedDrawing?.title}</Title>
+          <Title>제목: {drawings[index!]?.title}</Title>
           <CloseIcon onClick={(e) => dispatch(closeModal())} />
         </Header>
 
         <Info />
 
-        <CommentForm id={selectedDrawing?.id!} comments={selectedDrawing?.drawingComments!} category="drawing" />
-        <Comment comments={selectedDrawing?.drawingComments!} />
+        <CommentForm id={drawings[index!]?.id!} comments={drawings[index!]?.drawingComments!} category="drawing" />
+        <Comment comments={drawings[index!]?.drawingComments!} />
       </InfoSide>
     </Container>
   );

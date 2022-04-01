@@ -7,11 +7,12 @@ import LikeBtn from '@src/components/LikeBtn';
 import DisLikeBtn from '@src/components/DisLikeBtn';
 import { useAppSelector } from '@src/store/app/hook';
 import { selectProfileProfile } from '@src/store/slices/profile.slice';
-import { selectDrawingSelectedDrawing } from '@src/store/slices/drawing.slice';
+import { selectDrawingDrawings, selectDrawingIndex } from '@src/store/slices/drawing.slice';
 
 function Info() {
   const profile = useAppSelector(selectProfileProfile);
-  const selectedDrawing = useAppSelector(selectDrawingSelectedDrawing);
+  const drawings = useAppSelector(selectDrawingDrawings);
+  const index = useAppSelector(selectDrawingIndex);
 
   return (
     <Container>
@@ -20,27 +21,27 @@ function Info() {
           <Avatar src={profile?.avatar} size="small" />
           <Nickname exp={profile?.exp!} nickname={profile?.nickname!} size="small" />
         </UserInfoBox>
-        <CreatedTime createdTime={selectedDrawing?.created_at!} size="small" />
+        <CreatedTime createdTime={drawings[index!]?.created_at!} size="small" />
       </UserBox>
 
-      <Content dangerouslySetInnerHTML={{ __html: selectedDrawing?.content as string }} />
+      <Content dangerouslySetInnerHTML={{ __html: drawings[index!]?.content as string }} />
 
       <DrawingInfoBox>
         <ViewsBox>
-          <ViewIcon /> {selectedDrawing?.views}
+          <ViewIcon /> {drawings[index!]?.views}
         </ViewsBox>
 
         <LikeBtn
-          id={selectedDrawing?.id!}
-          likes={selectedDrawing?.likes!}
-          dislikes={selectedDrawing?.dislikes!}
+          id={drawings[index!]?.id!}
+          likes={drawings[index!]?.likes!}
+          dislikes={drawings[index!]?.dislikes!}
           category="drawing"
         />
 
         <DisLikeBtn
-          id={selectedDrawing?.id!}
-          likes={selectedDrawing?.likes!}
-          dislikes={selectedDrawing?.dislikes!}
+          id={drawings[index!]?.id!}
+          likes={drawings[index!]?.likes!}
+          dislikes={drawings[index!]?.dislikes!}
           category="drawing"
         />
       </DrawingInfoBox>
