@@ -17,7 +17,7 @@ function ImageSide() {
   };
 
   // 이전 그림
-  const onPrevDrawing = async (e: React.MouseEvent<HTMLDivElement>) => {
+  const onPrevDrawing = async (e: any) => {
     const selectedDrawingIndex = getSelectedDrawingIndex();
     if (selectedDrawingIndex - 1 < 0) {
       await dispatch(selectDrawing({ index: 0 }));
@@ -28,11 +28,10 @@ function ImageSide() {
   };
 
   // 다음 그림
-  const onNextDrawing = async (e: React.MouseEvent<HTMLDivElement>) => {
+  const onNextDrawing = async (e: any) => {
     const selectedDrawingIndex = getSelectedDrawingIndex();
     if (selectedDrawingIndex + 1 === drawings.length) {
       await dispatch(selectDrawing({ index: drawings.length - 1 }));
-      // await dispatch(addView({ drawingId: drawings[selectedIndex!].id }));
       return;
     }
 
@@ -42,15 +41,11 @@ function ImageSide() {
 
   return (
     <Container>
-      <Prev selectedIndex={getSelectedDrawingIndex()} onClick={onPrevDrawing}>
-        <PrevIcon />
-      </Prev>
+      <PrevIcon selectedIndex={getSelectedDrawingIndex()} onClick={onPrevDrawing} />
 
       <Image src={selectedDrawing?.url} alt="이미지" />
 
-      <Next selectedIndex={getSelectedDrawingIndex()} drawingsLength={drawings.length} onClick={onNextDrawing}>
-        <NextIcon />
-      </Next>
+      <NextIcon selectedIndex={getSelectedDrawingIndex()} drawingsLength={drawings.length} onClick={onNextDrawing} />
     </Container>
   );
 }
@@ -58,39 +53,54 @@ function ImageSide() {
 const Container = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
-`;
-const Prev = styled.div<{ selectedIndex: number | null }>`
-  width: 10rem;
-  height: 40rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: ${(props) => (props.selectedIndex === 0 ? 0 : 1)};
-  &:hover {
-    background-color: ${({ theme }) => theme.palette.gray};
+  position: relative;
+  @media ${({ theme }) => theme.device.mobile} {
+    max-height: 30rem;
+    justify-content: center;
   }
 `;
-const Next = styled.div<{ selectedIndex: number | null; drawingsLength: number | null }>`
-  width: 10rem;
-  height: 40rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: ${(props) => (props.selectedIndex! + 1 === props.drawingsLength ? 0 : 1)};
+
+const PrevIcon = styled(AiOutlineLeft)<{ selectedIndex: number | null }>`
+  font-size: 7rem;
+  position: absolute;
+  left: 5%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: ${({ theme }) => theme.palette.white};
+  display: ${({ selectedIndex }) => (selectedIndex === 0 ? 'none' : 'block')};
+  cursor: pointer;
   &:hover {
-    background-color: ${({ theme }) => theme.palette.gray};
+    opacity: ${({ selectedIndex }) => (selectedIndex === 0 ? 0 : 0.7)};
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 5rem;
   }
 `;
-const PrevIcon = styled(AiOutlineLeft)`
-  font-size: 5rem;
+const NextIcon = styled(AiOutlineRight)<{ selectedIndex: number | null; drawingsLength: number | null }>`
+  font-size: 7rem;
+  position: absolute;
+  left: 95%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   color: ${({ theme }) => theme.palette.white};
+  display: ${({ selectedIndex, drawingsLength }) => (selectedIndex! + 1 === drawingsLength ? 'none' : 'block')};
+  cursor: pointer;
+  &:hover {
+    opacity: ${({ selectedIndex, drawingsLength }) => (selectedIndex! + 1 === drawingsLength ? 0 : 0.7)};
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 5rem;
+  }
 `;
-const NextIcon = styled(AiOutlineRight)`
-  font-size: 5rem;
-  color: ${({ theme }) => theme.palette.white};
+
+const Image = styled.img`
+  object-fit: contain;
+  height: 100vh;
+  @media ${({ theme }) => theme.device.mobile} {
+    max-height: 30rem;
+  }
 `;
-const Image = styled.img``;
 
 export default ImageSide;

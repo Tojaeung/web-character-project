@@ -41,8 +41,7 @@ const Container = styled.div`
   @media ${({ theme }) => theme.device.mobile} {
     flex-direction: column;
     align-items: center;
-    height: 100%;
-    overflow-y: scroll;
+    height: 100vh;
     flex-direction: column;
   }
 `;

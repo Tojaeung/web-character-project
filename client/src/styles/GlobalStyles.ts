@@ -10,9 +10,11 @@ const GlobalStyles = createGlobalStyle`
   
   html {
     font-size: 62.5%;
+    overflow-x: hidden;
   }
 
   body {
+    width: 100vw;
     background-color: ${({ theme }) => theme.palette.white};
     color: ${({ theme }) => theme.palette.black};
     font-family: 'Noto Sans KR', sans-serif;

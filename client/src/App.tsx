@@ -61,7 +61,6 @@ function App() {
 
 const FullScreen = styled.div`
   width: 100%;
-  height: 100vh;
   background-color: ${({ theme }) => theme.palette.appBgColor};
 `;
 const AppScreen = styled.div`

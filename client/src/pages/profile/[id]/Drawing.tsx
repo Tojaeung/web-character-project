@@ -77,10 +77,6 @@ const DrawingBox = styled.ul`
 `;
 const DrawingList = styled.li`
   cursor: pointer;
-  &:hover {
-    transform: scale(1.2);
-    transition: all 0.3s ease-in-out;
-  }
 `;
 const Image = styled.img``;
 
