@@ -16,7 +16,7 @@ function Comment({ comments }: IProp) {
   };
 
   // 선택된 댓글 인덱스
-  const [selectedCommentIndex, setSelectedCommentIndex] = useState<number>();
+  const [commentIndex, setCommentIndex] = useState<number>();
 
   return (
     <Container>
@@ -25,8 +25,8 @@ function Comment({ comments }: IProp) {
           <CommentList
             comment={comment}
             index={index}
-            setSelectedCommentIndex={setSelectedCommentIndex}
-            isSelected={selectedCommentIndex === index ? true : false}
+            setCommentIndex={setCommentIndex}
+            isSelected={commentIndex === index ? true : false}
           />
         </CommentBox>
       ))}

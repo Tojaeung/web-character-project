@@ -11,13 +11,13 @@ import StyledButton from '@src/styles/StyledButton';
 interface IProps {
   comment: DrawingCommentType | PostCommentType;
   index: number;
-  setSelectedCommentIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
+  setCommentIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
   isSelected: boolean;
 }
 
-function CommentList({ comment, index, setSelectedCommentIndex, isSelected }: IProps) {
-  const onSelectCommentIndex = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setSelectedCommentIndex(index);
+function CommentList({ comment, index, setCommentIndex, isSelected }: IProps) {
+  const openEditCommemtForm = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setCommentIndex(index);
   };
 
   return (
@@ -34,13 +34,14 @@ function CommentList({ comment, index, setSelectedCommentIndex, isSelected }: IP
         <Content>{comment.content}</Content>
 
         <ButtonBox>
-          <OpenEditCommentButton color="green" size="small" inverse={true} onClick={onSelectCommentIndex}>
+          <OpenEditCommentButton color="green" size="small" inverse={true} onClick={openEditCommemtForm}>
             수정
           </OpenEditCommentButton>
           <RemoveCommentBtn id={comment.id} />
         </ButtonBox>
       </ContentBox>
 
+      {/* 수정폼  */}
       {isSelected && <EditCommentForm commentId={comment.id} category="drawing" />}
     </Container>
   );
