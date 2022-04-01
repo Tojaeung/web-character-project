@@ -1,56 +1,42 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { v4 } from 'uuid';
 import CommentList from '@src/components/comment/CommentList';
 import { DrawingCommentType, PostCommentType } from '@src/types';
+import Pagination from './Pagination';
 
 interface IProp {
   comments: DrawingCommentType[] | PostCommentType[];
 }
 
 function Comment({ comments }: IProp) {
-  // 댓글 더보기 기능
-  const [visible, setVisible] = useState(10);
-  const onCommentMore = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setVisible((prevVisible) => prevVisible + 30);
-  };
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * 20;
 
-  // 선택된 댓글 인덱스
+  // 댓글 수정하기 위한 선택된 댓글 인덱스
   const [commentIndex, setCommentIndex] = useState<number>();
 
   return (
     <Container>
-      {comments!.slice(0, visible).map((comment, index) => (
-        <CommentBox key={v4()}>
-          <CommentList
-            comment={comment}
-            index={index}
-            setCommentIndex={setCommentIndex}
-            isSelected={commentIndex === index ? true : false}
-          />
-        </CommentBox>
+      {comments!.slice(offset, offset + 20).map((comment, index) => (
+        <CommentList
+          key={v4()}
+          comment={comment}
+          index={index}
+          setCommentIndex={setCommentIndex}
+          isSelected={commentIndex === index ? true : false}
+        />
       ))}
-      {(comments!.length as number) < visible ? null : <MoreButton onClick={onCommentMore}>댓글 더보기</MoreButton>}
+      <Pagination total={comments.length} page={page} setPage={setPage} />
     </Container>
   );
 }
 
 const Container = styled.ul`
-  padding-bottom: 0.5rem;
-`;
-const CommentBox = styled.li`
-  border-bottom: 1px solid ${({ theme }) => theme.palette.black};
-  margin-bottom: 0.5rem;
-`;
-const MoreButton = styled.button`
   width: 100%;
-  outline: none;
-  border: 0;
-  cursor: pointer;
-  padding: 0.5rem 0;
-  &:hover {
-    text-decoration: underline;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export default Comment;

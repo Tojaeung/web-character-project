@@ -43,7 +43,7 @@ function CommentForm({ id, comments, category }: IProp) {
         <div className="btn">
           <span>
             <AiOutlineComment />
-            {/* {comments.length} */}
+            {comments.length}
           </span>
 
           <button onClick={onAddComment}>등록</button>

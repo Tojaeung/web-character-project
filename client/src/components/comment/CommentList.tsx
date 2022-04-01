@@ -47,10 +47,13 @@ function CommentList({ comment, index, setCommentIndex, isSelected }: IProps) {
   );
 }
 const Container = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px dotted ${({ theme }) => theme.palette.black};
 `;
 const UserBox = styled.div`
   display: flex;
