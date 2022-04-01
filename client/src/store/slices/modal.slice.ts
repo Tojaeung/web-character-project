@@ -18,10 +18,12 @@ export const modalSlice = createSlice({
     openModal: (state, action) => {
       state.isOpen = true;
       state.mode = action.payload.mode;
+      document.body.style.overflow = 'hidden'; // 모달 뒤에 화면 고정
     },
     closeModal: (state) => {
       state.isOpen = false;
       state.mode = undefined;
+      document.body.style.overflow = 'unset'; // 모달 뒤에 화면 고정 해제
     },
   },
 });

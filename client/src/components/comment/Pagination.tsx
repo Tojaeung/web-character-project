@@ -38,10 +38,12 @@ const Container = styled.div`
 const PrevButton = styled.button`
   outline: 0;
   border: 0;
+  cursor: pointer;
 `;
 const NextButton = styled.button`
   outline: 0;
   border: 0;
+  cursor: pointer;
 `;
 const PageButton = styled.button<{ isSelected: boolean }>`
   outline: 0;
@@ -52,6 +54,9 @@ const PageButton = styled.button<{ isSelected: boolean }>`
         color: ${({ theme }) => theme.palette.black};
         background-color: ${({ theme }) => theme.palette.white};
         cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
       `;
     } else {
       return css`
