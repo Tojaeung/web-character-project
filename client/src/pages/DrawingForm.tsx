@@ -8,10 +8,10 @@ import { GrAddCircle } from 'react-icons/gr';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import StyledButton from '@src/styles/StyledButton';
-import StyledInput from '@src/styles/StyledInput';
 import { useDefaultConfig } from '@src/hook/useReactQuillConfig';
 import { useAppSelector } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
+import LengthCountInput from '@src/components/LengthCountInput';
 
 function DrawingForm() {
   const navigate = useNavigate();
@@ -33,17 +33,25 @@ function DrawingForm() {
   };
 
   const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('drawing', drawing as File);
-    formData.append('title', title);
-    formData.append('content', content);
+    if (title.length > 50) {
+      return alert('제목 글자 수를 초과하였습니다.');
+    } else if (content.length > 10000) {
+      return alert('내용 글자 수를 초과하였습니다.');
+    } else if (!drawing) {
+      return alert('그림파일을 업로드 하지 않았습니다.');
+    } else {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append('drawing', drawing as File);
+      formData.append('title', title);
+      formData.append('content', content);
 
-    const res = await axios.post('/api/drawing/create', formData, { withCredentials: true });
-    const { ok, message } = res.data;
-    if (!ok) return alert(message);
-    alert(message);
-    navigate(`/profile/${user?.id}`);
+      const res = await axios.post('/api/drawing/create', formData, { withCredentials: true });
+      const { ok, message } = res.data;
+      if (!ok) return alert(message);
+      alert(message);
+      navigate(`/profile/${user?.id}`);
+    }
   };
 
   return (
@@ -68,7 +76,12 @@ function DrawingForm() {
       </Drawing>
 
       <Form>
-        <StyledInput placeholder="제목" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <LengthCountInput
+          limit={50}
+          placeholder="제목"
+          valueLength={title.length}
+          onChange={(e) => setTitle(e.target.value)}
+        />
         <ReactQuill
           className="ql-editor"
           value={content}
@@ -107,7 +120,7 @@ const Container = styled.div`
   gap: 2rem;
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
 
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     width: 100%;
     box-shadow: none;
   }
