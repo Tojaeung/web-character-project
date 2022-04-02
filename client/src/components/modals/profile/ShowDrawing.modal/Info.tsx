@@ -3,8 +3,8 @@ import { AiOutlineEye } from 'react-icons/ai';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import CreatedTime from '@src/components/CreatedTime';
-import LikeBtn from '@src/components/LikeBtn';
-import DisLikeBtn from '@src/components/DisLikeBtn';
+import LikeBtn from '@src/components/drawing/LikeButton';
+import DisLikeBtn from '@src/components/drawing/DisLikeButton';
 import { useAppSelector } from '@src/store/app/hook';
 import { selectProfileProfile } from '@src/store/slices/profile.slice';
 import { selectDrawingDrawings, selectDrawingIndex } from '@src/store/slices/drawing.slice';
@@ -31,18 +31,12 @@ function Info() {
           <ViewIcon /> {drawings[index!]?.views}
         </ViewsBox>
 
-        <LikeBtn
-          id={drawings[index!]?.id!}
-          likes={drawings[index!]?.likes!}
-          dislikes={drawings[index!]?.dislikes!}
-          category="drawing"
-        />
+        <LikeBtn id={drawings[index!]?.id!} likes={drawings[index!]?.likes!} dislikes={drawings[index!]?.dislikes!} />
 
         <DisLikeBtn
           id={drawings[index!]?.id!}
           likes={drawings[index!]?.likes!}
           dislikes={drawings[index!]?.dislikes!}
-          category="drawing"
         />
       </DrawingInfoBox>
     </Container>

@@ -10,31 +10,28 @@ interface IProps {
   id: number;
   likes: DrawingLikeType[] | PostLikeType[];
   dislikes: DrawingDisLikeType[] | PostDisLikeType[];
-  category: string;
 }
 
-function LikeBtn({ id, likes, dislikes, category }: IProps) {
+function LikeBtn({ id, likes, dislikes }: IProps) {
   const dispatch = useAppDispatch();
 
   const user = useAppSelector(selectAuthUser);
 
   const onAddLike = async (e: React.MouseEvent<HTMLSpanElement>) => {
-    if (category === 'drawing') {
-      const existingLike = likes.some((like) => like.user_id === user?.id);
-      const existingDisLike = dislikes.some((dislike) => dislike.user_id === user?.id);
-      if (existingLike && !existingDisLike) {
-        await dispatch(removeDrawingLike({ userId: user?.id!, drawingId: id }));
-        return;
-      } else if (!existingLike && existingDisLike) {
-        await dispatch(addDrawingLike({ userId: user?.id!, drawingId: id }));
-        await dispatch(removeDrawingDisLike({ userId: user?.id!, drawingId: id }));
-        return;
-      } else if (!existingLike && !existingDisLike) {
-        await dispatch(addDrawingLike({ userId: user?.id!, drawingId: id }));
-        return;
-      }
+    const existingLike = likes.some((like) => like.user_id === user?.id);
+    const existingDisLike = dislikes.some((dislike) => dislike.user_id === user?.id);
+    if (existingLike && !existingDisLike) {
+      await dispatch(removeDrawingLike({ userId: user?.id!, drawingId: id }));
+      return;
+    } else if (!existingLike && existingDisLike) {
+      await dispatch(addDrawingLike({ userId: user?.id!, drawingId: id }));
+      await dispatch(removeDrawingDisLike({ userId: user?.id!, drawingId: id }));
+      return;
+    } else if (!existingLike && !existingDisLike) {
+      await dispatch(addDrawingLike({ userId: user?.id!, drawingId: id }));
       return;
     }
+    return;
   };
 
   return (
