@@ -2,6 +2,7 @@ import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectModalIsOpen, selectModalMode, closeModal } from '@src/store/slices/modal.slice';
+import { AiOutlineClose } from 'react-icons/ai';
 import LoginModal from '@src/modals/auth/Login.modal';
 import DelAccountModal from '@src/modals/settings/DelAccount.modal';
 import ExitChatModal from '@src/modals/chat/ExitChat.modal';
@@ -13,7 +14,6 @@ import EditPwModal from '@src/modals/settings/EditPw.modal';
 import SearchModal from '@src/modals/search/Search.modal';
 import ShowDescModal from '@src/modals/profile/ShowDesc.modal';
 import ShowDrawingModal from '@src/modals/profile/ShowDrawing.modal';
-import { AiOutlineClose } from 'react-icons/ai';
 
 function Modal() {
   const dispatch = useAppDispatch();

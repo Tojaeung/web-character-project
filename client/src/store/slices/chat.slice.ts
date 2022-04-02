@@ -4,7 +4,7 @@ import { ChatUserType, MessageType, MsgNotiType } from '@src/store/types/chat.ty
 
 interface ChatType {
   ok: boolean;
-  chatUser: ChatUserType | undefined;
+  chatUser: ChatUserType | null;
   chats: ChatUserType[];
   messages: MessageType[];
   msgNotis: MsgNotiType[];
@@ -12,7 +12,7 @@ interface ChatType {
 
 const initialState: ChatType = {
   ok: false,
-  chatUser: undefined,
+  chatUser: null,
   chats: [],
   messages: [],
   msgNotis: [],

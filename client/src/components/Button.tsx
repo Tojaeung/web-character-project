@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { lighten, darken } from 'polished';
 
 interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: string;
+  children: string | JSX.Element;
   color: 'green' | 'red' | 'black';
   size: 'small' | 'medium' | 'large';
   inverse?: boolean;

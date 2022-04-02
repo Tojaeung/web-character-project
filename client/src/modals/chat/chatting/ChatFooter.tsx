@@ -8,13 +8,14 @@ import socket from '@src/utils/socket';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { selectChatUser } from '@src/store/slices/chat.slice';
 import { useAppSelector } from '@src/store/app/hook';
-// import { greenInputStyle, greenButtonStyle } from '@src/styles/GlobalStyles';
+import Input from '@src/components/Input';
+import Button from '@src/components/Button';
 
 function ChatFooter() {
   const user = useAppSelector(selectAuthUser);
   const chatUser = useAppSelector(selectChatUser);
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const targetRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState<string | undefined>(undefined);
 
   // 텍스트 메세지
@@ -63,31 +64,58 @@ function ChatFooter() {
 
   return (
     <Container>
-      <input
+      <FileInput
         className="file-input"
         type="file"
         accept="image/png, image/jpeg.image/jpg"
-        ref={inputRef}
+        ref={targetRef}
         onChange={onSendImgMsg}
       />
-      <AiOutlineCamera className="camera-icon" onClick={(e) => inputRef.current?.click()} />
+      <CameraIcon onClick={(e) => targetRef.current?.click()} />
 
-      <div className="text">
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && onSendTextMsg(e)}
-        />
-        <button disabled={!message ? true : false} onClick={onSendTextMsg}>
-          <IoIosSend className="send-icon" />
-        </button>
-      </div>
+      <Input
+        type="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        onKeyPress={(e) => e.key === 'Enter' && onSendTextMsg(e)}
+      />
+      <SendButton color="green" size="small" disabled={!message ? true : false} onClick={onSendTextMsg}>
+        <SendIcon />
+      </SendButton>
     </Container>
   );
 }
 
 const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  gap: 1rem;
+  background-color: ${({ theme }) => theme.palette.bgColor};
+  border-top: 1px solid ${({ theme }) => theme.palette.gray};
+`;
+const FileInput = styled.input`
+  display: none;
+`;
+const CameraIcon = styled(AiOutlineCamera)`
+  font-size: 4rem;
+  cursor: pointer;
+`;
+const SendButton = styled(Button)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.6rem !important;
+  border: 0;
+  background-color: ${({ theme }) => theme.palette.green};
+`;
+const SendIcon = styled(IoIosSend)`
+  font-size: 2.5rem;
+  color: ${({ theme }) => theme.palette.white};
+`;
+
+const Container1 = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
