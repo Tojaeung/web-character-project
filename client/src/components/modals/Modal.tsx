@@ -1,6 +1,5 @@
-import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectModalIsOpen, selectModalMode, closeModal } from '@src/store/slices/modal.slice';
 import LoginModal from '@src/components/modals/auth/Login.modal';
@@ -25,22 +24,23 @@ function Modal() {
   return createPortal(
     <Container>
       <Background onClick={(e) => dispatch(closeModal())} />
+      {!isOpen && !mode && null}
       {isOpen && mode === 'showDrawingModal' && <ShowDrawingModal />}
       {isOpen && mode === 'search' && <SearchModal />}
-
-      <ModalBox mode={mode}>
-        <CloseIcon onClick={(e) => dispatch(closeModal())} />
-        {!isOpen && !mode && null}
-        {isOpen && mode === 'login' && <LoginModal />}
-        {isOpen && mode === 'delAccount' && <DelAccountModal />}
-        {isOpen && mode === 'exitChat' && <ExitChatModal />}
-        {isOpen && mode === 'signUpGuideModal' && <SignUpGuideModal />}
-        {isOpen && mode === 'findPw' && <FindPw />}
-        {isOpen && mode === 'editEmail' && <EditEmailModal />}
-        {isOpen && mode === 'editNickname' && <EditNicknameModal />}
-        {isOpen && mode === 'editPw' && <EditPwModal />}
-        {isOpen && mode === 'showDesc' && <ShowDescModal />}
-      </ModalBox>
+      {isOpen && (mode !== 'showDrawingModal' || 'search') && (
+        <ModalBox>
+          <CloseIcon onClick={(e) => dispatch(closeModal())} />
+          {isOpen && mode === 'login' && <LoginModal />}
+          {isOpen && mode === 'delAccount' && <DelAccountModal />}
+          {isOpen && mode === 'exitChat' && <ExitChatModal />}
+          {isOpen && mode === 'signUpGuideModal' && <SignUpGuideModal />}
+          {isOpen && mode === 'findPw' && <FindPw />}
+          {isOpen && mode === 'editEmail' && <EditEmailModal />}
+          {isOpen && mode === 'editNickname' && <EditNicknameModal />}
+          {isOpen && mode === 'editPw' && <EditPwModal />}
+          {isOpen && mode === 'showDesc' && <ShowDescModal />}
+        </ModalBox>
+      )}
     </Container>,
     document.getElementById('modalPortal') as HTMLElement
   );
@@ -55,18 +55,8 @@ const Background = styled.div`
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 1000;
 `;
-const ModalBox = styled.div<{ mode?: string }>`
-  ${({ mode }) => {
-    if (mode === 'showDrawingModal' || 'search') {
-      return css`
-        display: none;
-      `;
-    } else {
-      return css`
-        display: flex;
-      `;
-    }
-  }}
+const ModalBox = styled.div`
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
