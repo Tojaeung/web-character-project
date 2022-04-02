@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import StyledButton from '@src/styles/StyledButton';
+import StyledButton from '@src/components/Button';
 
 const handelSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
   // 검색어 제출

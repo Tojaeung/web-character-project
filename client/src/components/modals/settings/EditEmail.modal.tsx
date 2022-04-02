@@ -7,7 +7,7 @@ import { useAppDispatch } from '@src/store/app/hook';
 import { logoutUser } from '@src/store/requests/auth.request';
 import { EmailInput } from '@src/components/react-hook-form/AuthForm';
 import { AuthFormTypes } from '@src/types';
-import StyledButton from '@src/styles/StyledButton';
+import Button from '@src/components/Button';
 
 function EditEmailModal() {
   const navigate = useNavigate();
@@ -60,6 +60,6 @@ const Title = styled.h1`
 const Content = styled.p`
   font-size: 1.5rem;
 `;
-const SubmitButton = styled(StyledButton)``;
+const SubmitButton = styled(Button)``;
 
 export default EditEmailModal;

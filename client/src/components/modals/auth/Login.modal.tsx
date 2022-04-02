@@ -7,7 +7,7 @@ import { openModal, closeModal } from '@src/store/slices/modal.slice';
 import { AuthFormTypes } from '@src/types';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { EmailInput, PwInput } from '@src/components/react-hook-form/AuthForm';
-import StyledButton from '@src/styles/StyledButton';
+import Button from '@src/components/Button';
 
 function LoginModal() {
   const navigate = useNavigate();
@@ -68,7 +68,7 @@ const Form = styled.form`
 `;
 const Logo = styled.h1``;
 
-const LoginButton = styled(StyledButton)`
+const LoginButton = styled(Button)`
   width: 100%;
 `;
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch } from '@src/store/app/hook';
 import { editDrawingComment } from '@src/store/requests/drawing.request';
-import StyledButton from '@src/styles/StyledButton';
+import Button from '@src/components/Button';
 
 interface IProp {
   commentId: number;
@@ -68,7 +68,7 @@ const ButtonBox = styled.div`
   gap: 0.5rem;
   padding: 0.5rem 0;
 `;
-const EditButton = styled(StyledButton)``;
-const CancelButton = styled(StyledButton)``;
+const EditButton = styled(Button)``;
+const CancelButton = styled(Button)``;
 
 export default EditCommentForm;

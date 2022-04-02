@@ -3,7 +3,7 @@ import qs from 'qs';
 import styled from 'styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
-import StyledButton from '@src/styles/StyledButton';
+import Button from '@src/components/Button';
 import { AuthFormTypes } from '@src/types';
 import { PwInput, ConfirmPwInput } from '@src/components/react-hook-form/AuthForm';
 
@@ -71,7 +71,7 @@ const Content = styled.p`
   line-height: 2rem;
 `;
 
-const SubmitButton = styled(StyledButton)`
+const SubmitButton = styled(Button)`
   width: 100%;
 `;
 

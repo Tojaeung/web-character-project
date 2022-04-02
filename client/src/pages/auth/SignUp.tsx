@@ -1,7 +1,7 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import axios from 'axios';
 import styled from 'styled-components';
-import StyledButton from '@src/styles/StyledButton';
+import Button from '@src/components/Button';
 
 import { openModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
@@ -64,7 +64,7 @@ const Form = styled.form`
 `;
 
 const Title = styled.h1``;
-const SubmitButton = styled(StyledButton)`
+const SubmitButton = styled(Button)`
   width: 80%;
 `;
 

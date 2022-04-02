@@ -6,7 +6,7 @@ import CreatedTime from '@src/components/CreatedTime';
 import RemoveCommentBtn from '@src/components/RemoveCommentBtn';
 import { DrawingCommentType, PostCommentType } from '@src/types';
 import EditCommentForm from '@src/components/comment/EditCommentForm';
-import StyledButton from '@src/styles/StyledButton';
+import Button from '@src/components/Button';
 
 interface IProps {
   comment: DrawingCommentType | PostCommentType;
@@ -79,6 +79,6 @@ const ButtonBox = styled.div`
   align-items: center;
   gap: 1rem;
 `;
-const OpenEditCommentButton = styled(StyledButton)``;
+const OpenEditCommentButton = styled(Button)``;
 
 export default CommentList;

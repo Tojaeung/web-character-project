@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import StyledButton from '@src/styles/StyledButton';
+import Button from '@src/components/Button';
 import NotFound from '@src/components/NotFound';
 import boardTitle from '@src/utils/boardTitle.util';
 import { useImageUploadConfig } from '@src/hook/useReactQuillConfig';
@@ -115,7 +115,7 @@ const ButtonBox = styled.div`
   margin-right: 2rem;
   gap: 1rem;
 `;
-const RegisterButton = styled(StyledButton)``;
-const BackToListButton = styled(StyledButton)``;
+const RegisterButton = styled(Button)``;
+const BackToListButton = styled(Button)``;
 
 export default PostForm;

@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { GrAddCircle } from 'react-icons/gr';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
-import StyledButton from '@src/styles/StyledButton';
+import Button from '@src/components/Button';
 import { useDefaultConfig } from '@src/hook/useReactQuillConfig';
 import { useAppSelector } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
@@ -202,7 +202,7 @@ const AddIcon = styled(GrAddCircle)`
   }
 `;
 
-const SubmitButton = styled(StyledButton)``;
-const CancelButton = styled(StyledButton)``;
+const SubmitButton = styled(Button)``;
+const CancelButton = styled(Button)``;
 
 export default DrawingForm;

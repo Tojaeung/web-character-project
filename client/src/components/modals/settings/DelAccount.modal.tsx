@@ -6,7 +6,7 @@ import socket from '@src/utils/socket';
 import { logoutUser } from '@src/store/requests/auth.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
-import StyledInput from '@src/styles/StyledInput';
+import Input from '@src/components/Input';
 
 function DelAccountModal() {
   const dispatch = useAppDispatch();
@@ -35,13 +35,7 @@ function DelAccountModal() {
         <i>'계정탈퇴'</i> 를 입력하면 버튼이 활성화 됩니다.
       </GuideText>
 
-      <StyledInput
-        className="input"
-        type="text"
-        placeholder="계정탈퇴"
-        value={confirmText}
-        onChange={(e) => setConfirmText(e.target.value)}
-      />
+      <Input type="text" placeholder="계정탈퇴" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} />
 
       <SubmitButton
         disabled={confirmText === '계정탈퇴' ? false : true}

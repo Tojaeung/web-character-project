@@ -1,7 +1,7 @@
 import { MdMarkEmailRead } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import StyledButton from '@src/styles/StyledButton';
+import Button from '@src/components/Button';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
 
@@ -53,6 +53,6 @@ const Content = styled.p`
     font-size: 1.3rem;
   }
 `;
-const ConfirmButton = styled(StyledButton)``;
+const ConfirmButton = styled(Button)``;
 
 export default SignUpGuideModal;

@@ -5,8 +5,7 @@ import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import FollowBtn from '@src/components/FollowBtn';
 import ChatBtn from '@src/components/ChatBtn';
-import StyledInput from '@src/styles/StyledInput';
-import StyledButton from '@src/styles/StyledButton';
+import Button from '@src/components/Button';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectProfileProfile } from '@src/store/slices/profile.slice';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
@@ -103,6 +102,6 @@ const ButtonBox = styled.div`
   display: flex;
   gap: 1rem;
 `;
-const AddDrawingButton = styled(StyledButton)``;
+const AddDrawingButton = styled(Button)``;
 
 export default Info;

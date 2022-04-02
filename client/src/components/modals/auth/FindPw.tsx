@@ -6,7 +6,7 @@ import { EmailInput } from '@src/components/react-hook-form/AuthForm';
 import { AuthFormTypes } from '@src/types';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
-import StyledButton from '@src/styles/StyledButton';
+import Button from '@src/components/Button';
 
 function FindPw() {
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const Title = styled.h2``;
 const Content = styled.p`
   font-size: 1.5rem;
 `;
-const SubmitButton = styled(StyledButton)`
+const SubmitButton = styled(Button)`
   width: 100%;
 `;
 

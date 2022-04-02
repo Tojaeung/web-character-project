@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { openModal } from '@src/store/slices/modal.slice';
 import logo from '@src/assets/images/logo.jpg';
-import StyledButton from '@src/styles/StyledButton';
+import Button from '@src/components/Button';
 
 function Header() {
   const dispatch = useAppDispatch();
@@ -155,10 +155,10 @@ const ButtonBox = styled.div`
   gap: 0.5rem;
 `;
 
-const LoginButton = styled(StyledButton)`
+const LoginButton = styled(Button)`
   white-space: nowrap;
 `;
-const SignUpButton = styled(StyledButton)`
+const SignUpButton = styled(Button)`
   white-space: nowrap;
 `;
 

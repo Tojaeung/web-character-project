@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import StyledInput from '@src/styles/StyledInput';
+import Input from '@src/components/Input';
 import { BsSearch } from 'react-icons/bs';
 import { IoMdClose } from 'react-icons/io';
 import SearchButton from '@src/components/header/SearchButton';
@@ -40,7 +40,7 @@ const Container = styled.div`
   gap: 0.5rem;
 `;
 
-const ModifiedInput = styled(StyledInput)`
+const ModifiedInput = styled(Input)`
   padding: 0rem 4rem;
 `;
 const SearchIcon = styled(BsSearch)`

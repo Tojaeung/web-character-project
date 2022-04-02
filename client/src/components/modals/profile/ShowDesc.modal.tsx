@@ -5,7 +5,7 @@ import { useAppDispatch } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { selectProfileProfile } from '@src/store/slices/profile.slice';
 import { useAppSelector } from '@src/store/app/hook';
-import StyledButton from '@src/styles/StyledButton';
+import Button from '@src/components/Button';
 
 function ShowDescModal() {
   const dispatch = useAppDispatch();
@@ -52,6 +52,6 @@ const Title = styled.h1`
   align-self: flex-start;
 `;
 const Content = styled.p``;
-const ModifyButton = styled(StyledButton)``;
+const ModifyButton = styled(Button)``;
 
 export default ShowDescModal;
