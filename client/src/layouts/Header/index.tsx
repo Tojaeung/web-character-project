@@ -25,34 +25,23 @@ function Header() {
   };
 
   return (
-    <Container>
-      <MenuIcon />
-      <LogoLink to="/">
-        <img src={logo} alt="펜슬힐러" />
-      </LogoLink>
+    <>
+      <Container>
+        <Link to="/">
+          <img src={logo} alt="펜슬힐러" />
+        </Link>
 
-      <SearchBox>
-        <Search />
-      </SearchBox>
+        <SearchBox>
+          <Search />
+        </SearchBox>
 
-      {user ? (
-        <>
+        {user ? (
           <ToolsBox>
-            <Link to="/">
-              <HomeIcon />
-            </Link>
-
             <Chat />
             <Alert />
             <Profile />
           </ToolsBox>
-          <IconBox>
-            <SearchIcon onClick={openSearchModal} />
-            {!user && <KeyIcon onClick={openLoginModal} />}
-          </IconBox>
-        </>
-      ) : (
-        <>
+        ) : (
           <ButtonBox>
             <LoginButton color="black" size="small" inverse={true} responsive={true} onClick={openLoginModal}>
               로그인
@@ -64,9 +53,32 @@ function Header() {
               </SignUpButton>
             </Link>
           </ButtonBox>
-        </>
-      )}
-    </Container>
+        )}
+      </Container>
+      <Responsive>
+        <MenuIcon />
+        <Link to="/">
+          <img src={logo} alt="펜슬힐러" />
+        </Link>
+
+        <IconBox>
+          <SearchIcon onClick={openSearchModal} />
+          {!user && <KeyIcon onClick={openLoginModal} />}
+        </IconBox>
+
+        {user && (
+          <ToolsBox>
+            <Link to="/">
+              <HomeIcon />
+            </Link>
+
+            <Chat />
+            <Alert />
+            <Profile />
+          </ToolsBox>
+        )}
+      </Responsive>
+    </>
   );
 }
 
@@ -84,13 +96,14 @@ const Container = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
   z-index: 1000;
   min-height: 5rem;
-  margin-bottom: 1rem;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    display: none;
+  }
 `;
 
 const MenuIcon = styled(AiOutlineMenu)`
-  display: none;
   @media ${({ theme }) => theme.device.mobile} {
-    display: block;
     font-size: 2.5rem;
     cursor: pointer;
   }
@@ -106,12 +119,8 @@ const HomeIcon = styled(AiOutlineHome)`
     cursor: pointer;
   }
 `;
-
-const LogoLink = styled(Link)``;
 const IconBox = styled.div`
-  display: none;
   @media ${({ theme }) => theme.device.mobile} {
-    display: block;
     font-size: 2.5rem;
     color: ${({ theme }) => theme.palette.black};
   }
@@ -144,8 +153,6 @@ const ToolsBox = styled.div`
 const ButtonBox = styled.div`
   display: flex;
   gap: 0.5rem;
-  @media ${({ theme }) => theme.device.mobile} {
-  }
 `;
 
 const LoginButton = styled(StyledButton)`
@@ -153,6 +160,20 @@ const LoginButton = styled(StyledButton)`
 `;
 const SignUpButton = styled(StyledButton)`
   white-space: nowrap;
+`;
+
+const Responsive = styled.div`
+  display: none;
+  @media ${({ theme }) => theme.device.mobile} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
+    z-index: 1000;
+    min-height: 5rem;
+    background: ${({ theme }) => theme.palette.bgColor};
+  }
 `;
 
 export default Header;
