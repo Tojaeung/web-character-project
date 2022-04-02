@@ -24,8 +24,12 @@ function PostForm() {
   const onAddPost = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (title.length > 50) {
       return alert('제목 글자 수를 초과하였습니다.');
+    } else if (title.length === 0) {
+      return alert('제목을 입력해주세요.');
     } else if (content.length > 10000) {
       return alert('내용 글자 수를 초과하였습니다.');
+    } else if (content.length === 0) {
+      return alert('내용을 입력해주세요.');
     } else {
       const res = await axios.post(
         '/api/board/addPost',
