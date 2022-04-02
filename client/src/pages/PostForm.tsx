@@ -11,7 +11,7 @@ import boardTitle from '@src/utils/boardTitle.util';
 import { useImageUploadConfig } from '@src/hook/useReactQuillConfig';
 import { boardCategory } from '@src/utils/boardCategory.util';
 
-function CreateForm() {
+function PostForm() {
   const navigate = useNavigate();
   const { board } = useParams();
 
@@ -99,4 +99,4 @@ const ButtonBox = styled.div`
 const RegisterButton = styled(StyledButton)``;
 const BackToListButton = styled(StyledButton)``;
 
-export default CreateForm;
+export default PostForm;

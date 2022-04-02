@@ -13,7 +13,7 @@ import { useDefaultConfig } from '@src/hook/useReactQuillConfig';
 import { useAppSelector } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 
-function CreateDrawingForm() {
+function DrawingForm() {
   const navigate = useNavigate();
   const [defaultModules] = useDefaultConfig();
   const user = useAppSelector(selectAuthUser);
@@ -188,4 +188,4 @@ const AddIcon = styled(GrAddCircle)`
 const SubmitButton = styled(StyledButton)``;
 const CancelButton = styled(StyledButton)``;
 
-export default CreateDrawingForm;
+export default DrawingForm;

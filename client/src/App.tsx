@@ -8,8 +8,8 @@ import { AuthRouter, PrivateRouter } from '@src/routes/PrivateRouter';
 
 import Header from '@src/layouts/Header';
 import Home from '@src/pages/Home';
-import CreatePostForm from '@src/pages/CreatePostForm';
-import CreateDrawingForm from '@src/pages/CreateDrawingForm';
+import PostForm from '@src/pages/PostForm';
+import DrawingForm from '@src/pages/DrawingForm';
 import Modal from '@src/components/modals/Modal';
 import Chat from '@src/components/modals/chat';
 import Settings from './pages/settings/Settings';
@@ -45,8 +45,10 @@ function App() {
             <Route element={<PrivateRouter />}>
               <Route path="/auth/editPw" element={<EditPw />} />
               <Route path="settings" element={<Settings />} />
-              <Route path="createDrawingForm" element={<CreateDrawingForm />} />
-              <Route path="createPostForm/:board" element={<CreatePostForm />} />
+              <Route path="/create">
+                <Route path="drawingForm" element={<DrawingForm />} />
+                <Route path="postForm/:board" element={<PostForm />} />
+              </Route>
             </Route>
 
             <Route path="*" element={<NotFound />} />
