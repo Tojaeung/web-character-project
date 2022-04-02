@@ -57,6 +57,14 @@ const GlobalStyles = createGlobalStyle`
           font-size: 1.3rem;
         }
     }
+
+    span {
+      font-size: 1.4rem;
+      @media ${({ theme }) => theme.device.mobile} {
+          font-size: 1.3rem;
+        }
+    }
+
   strong {
     font-weight: 700;
   }

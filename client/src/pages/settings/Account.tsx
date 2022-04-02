@@ -4,14 +4,15 @@ import styled from 'styled-components';
 import { useAppDispatch } from '@src/store/app/hook';
 import { refreshLogin } from '@src/store/requests/auth.request';
 import { openModal } from '@src/store/slices/modal.slice';
-// import { redButtonStyle, greenButtonStyle } from '@src/styles/GlobalStyles';
+import TabMenu from './TabMenu';
+import Button from '@src/components/Button';
 
 function Account() {
   const dispatch = useAppDispatch();
 
   // 프로필 사진 변경
-  const avatarInputRef = useRef<HTMLInputElement>(null);
-  const onEditAvatar = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const avatarRef = useRef<HTMLInputElement>(null);
+  const handleEditAvatar = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target?.files) return;
     const formData = new FormData();
     formData.append('newAvatar', e.target?.files[0]);
@@ -23,7 +24,7 @@ function Account() {
     await dispatch(refreshLogin());
   };
 
-  const onDefaultAvatar = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDefaultAvatar = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const res = await axios.get('/api/settings/account/defaultAvatar', { withCredentials: true });
     const { ok, message } = res.data;
     if (!ok) return alert(message);
@@ -32,8 +33,8 @@ function Account() {
   };
 
   // 커버 사진 변경
-  const coverInputRef = useRef<HTMLInputElement>(null);
-  const onEditCover = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const coverRef = useRef<HTMLInputElement>(null);
+  const handleEditCover = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target?.files) return;
     const formData = new FormData();
     formData.append('newCover', e.target?.files[0]);
@@ -45,7 +46,7 @@ function Account() {
     await dispatch(refreshLogin());
   };
 
-  const onDefaultCover = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDefaultCover = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const res = await axios.get('/api/settings/account/defaultCover', { withCredentials: true });
     const { ok, message } = res.data;
     if (!ok) return alert(message);
@@ -53,182 +54,113 @@ function Account() {
     await dispatch(refreshLogin());
   };
 
-  const onEditEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleEditEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
     await dispatch(openModal({ mode: 'editEmail' }));
   };
 
-  const onEditNickname = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleEditNickname = async (e: React.MouseEvent<HTMLButtonElement>) => {
     await dispatch(openModal({ mode: 'editNickname' }));
   };
-  const onEditPw = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleEditPw = async (e: React.MouseEvent<HTMLButtonElement>) => {
     await dispatch(openModal({ mode: 'editPw' }));
+  };
+
+  const handleDelAccount = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    await dispatch(openModal({ mode: 'delAccount' }));
   };
 
   return (
     <>
-      {/* <SettingsList /> */}
+      <TabMenu />
       <Container>
-        <div className="list-wrapper">
-          <div className="title">프로필 이미지 변경</div>
-          <div className="btn-wrapper">
-            <button className="defaultBtn" onClick={onDefaultAvatar}>
-              기본이미지
-            </button>
-            <button className="btn" onClick={(e) => avatarInputRef.current?.click()}>
+        <EditBox>
+          <Title>프로필 사진</Title>
+          <ButtonBox>
+            <DefaultButton color="red" size="small" inverse={true} responsive={true} onClick={handleDefaultAvatar}>
+              기본 프로필 사진
+            </DefaultButton>
+            <EditButton color="green" size="small" responsive={true}>
               변경
-            </button>
-          </div>
-          <input
-            className="input"
-            type="file"
-            accept="image/png, image/jpeg,image/jpg"
-            ref={avatarInputRef}
-            onChange={onEditAvatar}
-          />
-        </div>
-        <div className="list-wrapper">
-          <div className="title">커버 이미지 변경</div>
-          <div className="btn-wrapper">
-            <button className="defaultBtn" onClick={onDefaultCover}>
-              기본이미지
-            </button>
-            <button className="btn" onClick={(e) => coverInputRef.current?.click()}>
+            </EditButton>
+          </ButtonBox>
+          <Input type="file" accept="image/png, image/jpeg,image/jpg" ref={avatarRef} onChange={handleEditAvatar} />
+        </EditBox>
+
+        <EditBox>
+          <Title>커버 사진</Title>
+          <ButtonBox>
+            <DefaultButton color="red" size="small" inverse={true} responsive={true} onClick={handleDefaultCover}>
+              기본 커버 사진
+            </DefaultButton>
+            <EditButton color="green" size="small" responsive={true}>
               변경
-            </button>
-          </div>
-          <input
-            className="input"
-            type="file"
-            accept="image/png, image/jpeg,image/jpg"
-            ref={coverInputRef}
-            onChange={onEditCover}
-          />
-        </div>
-        <div className="list-wrapper">
-          <div className="title">
-            이메일 변경<span className="email-subTitle">(※ 이메일 인증이 필요합니다.)</span>
-          </div>
-          <button className="btn" onClick={onEditEmail}>
+            </EditButton>
+          </ButtonBox>
+          <Input type="file" accept="image/png, image/jpeg,image/jpg" ref={coverRef} onChange={handleEditCover} />
+        </EditBox>
+
+        <EditBox>
+          <Title>이메일</Title>
+          <EditButton color="green" size="small" responsive={true} onClick={handleEditEmail}>
             변경
-          </button>
-        </div>
-        <div className="list-wrapper">
-          <div className="title">닉네임 변경</div>
-          <button className="btn" onClick={onEditNickname}>
+          </EditButton>
+        </EditBox>
+
+        <EditBox>
+          <Title>닉네임</Title>
+          <EditButton color="green" size="small" responsive={true} onClick={handleEditNickname}>
             변경
-          </button>
-        </div>
-        <div className="list-wrapper">
-          <div className="title">비밀번호 변경</div>
-          <button className="btn" onClick={onEditPw}>
+          </EditButton>
+        </EditBox>
+
+        <EditBox>
+          <Title>이메일</Title>
+          <EditButton color="green" size="small" responsive={true} onClick={handleEditPw}>
             변경
-          </button>
-        </div>
-        <div className="list-wrapper">
-          <div className="title">계정탈퇴</div>
-          <button className="btn delAccount-btn" onClick={() => dispatch(openModal({ mode: 'delAccount' }))}>
-            계정탈퇴
-          </button>
-        </div>
+          </EditButton>
+        </EditBox>
+
+        <EditBox>
+          <Title>계정탈퇴</Title>
+          <EditButton color="red" size="small" responsive={true} onClick={handleDelAccount}>
+            탈퇴하기
+          </EditButton>
+        </EditBox>
       </Container>
     </>
   );
 }
-
 const Container = styled.div`
   width: 100%;
-  .list-wrapper {
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid;
-    margin: 2rem 0;
-  }
-
-  .title {
-    font-size: 2rem;
-  }
-  .email-subTitle {
-    color: ${({ theme }) => theme.palette.red};
-    font-size: 1.5rem;
-  }
-
-  .defaultBtn {
-    padding: 1rem 2rem;
-    margin-right: 2rem;
-  }
-  .btn {
-    padding: 1rem 2rem;
-  }
-  .delAccount-btn {
-  }
-
-  .avatar-wrapper {
-    position: relative;
-    width: 20rem;
-    height: 20rem;
-    overflow: hidden;
-    margin-top: 2rem;
-    border-radius: 5px;
-    border: 3px dotted ${({ theme }) => theme.palette.gray};
-  }
-  .background {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 30rem;
-    height: 30rem;
-    background-color: ${({ theme }) => theme.palette.gray};
-    opacity: 0.5;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-  }
-
-  .default-btn {
-    z-index: 1001;
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1.3rem;
-    padding: 1rem;
-  }
-  .edit-btn {
-    z-index: 1001;
-    position: absolute;
-    top: 65%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1.3rem;
-    padding: 1rem;
-  }
-  .input {
-    display: none;
-  }
-  .avatar-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+  display: flex;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.palette.bgColor};
+`;
+const EditBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
+`;
+const Title = styled.span`
+  font-size: 2rem;
   @media ${({ theme }) => theme.device.mobile} {
-    .title {
-      font-size: 1.5rem;
-    }
-    .email-subTitle {
-      font-size: 1rem;
-    }
-    .defaultBtn {
-      font-size: 1.2rem;
-      padding: 0.5rem;
-    }
-    .btn {
-      font-size: 1.2rem;
-      padding: 0.5rem;
-    }
+    font-size: 1.6rem;
   }
+`;
+const ButtonBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    gap: 1rem;
+  }
+`;
+const EditButton = styled(Button)``;
+const DefaultButton = styled(Button)``;
+const Input = styled.input`
+  display: none;
 `;
 
 export default Account;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Account from '@src/pages/settings/Account';
 import Alert from '@src/pages/settings/Alert';
-import Description from '@src/pages/settings/Description';
+import Description from '@src/pages/settings/Desc';
 
 function Settings() {
   const [selectIndex, setSelectIndex] = useState(0);

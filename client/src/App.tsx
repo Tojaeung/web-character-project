@@ -12,13 +12,15 @@ import PostForm from '@src/pages/PostForm';
 import DrawingForm from '@src/pages/DrawingForm';
 import Modal from '@src/modals/Modal';
 import Chat from '@src/modals/chat';
-import Settings from './pages/settings/Settings';
 import Profile from '@src/pages/profile/[id]';
 import EditPw from '@src/pages/auth/EditPw';
 import SignUp from '@src/pages/auth/SignUp';
 import Board from '@src/pages/board/[board]';
 import Post from '@src/pages/post/[id]';
 import NotFound from '@src/components/NotFound';
+import Account from './pages/settings/Account';
+import Alert from './pages/settings/Alert';
+import Desc from './pages/settings/Desc';
 
 function App() {
   useRefreshLogin();
@@ -44,7 +46,12 @@ function App() {
 
             <Route element={<PrivateRouter />}>
               <Route path="/auth/editPw" element={<EditPw />} />
-              <Route path="settings" element={<Settings />} />
+              <Route path="/settings">
+                <Route path="account" element={<Account />} />
+                <Route path="alert" element={<Alert />} />
+                <Route path="desc" element={<Desc />} />
+              </Route>
+              <Route path="/editPw" element={<EditPw />} />
               <Route path="/create">
                 <Route path="drawingForm" element={<DrawingForm />} />
                 <Route path="postForm/:board" element={<PostForm />} />
