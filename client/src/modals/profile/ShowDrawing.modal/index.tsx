@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { AiOutlineClose } from 'react-icons/ai';
-import ImageSide from '@src/components/modals/profile/ShowDrawing.modal/ImageSide';
-import Info from '@src/components/modals/profile/ShowDrawing.modal/Info';
+import ImageSide from '@src/modals/profile/ShowDrawing.modal/ImageSide';
+import Info from '@src/modals/profile/ShowDrawing.modal/Info';
 import Comment from '@src/components/comment';
 import CommentForm from '@src/components/CommentForm';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
