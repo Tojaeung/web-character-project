@@ -4,8 +4,7 @@ import styled from 'styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@src/components/Button';
-import { AuthFormTypes } from '@src/types';
-import { PwInput, ConfirmPwInput } from '@src/components/react-hook-form/AuthForm';
+import { AuthInputsType, PwInput, ConfirmPwInput } from '@src/components/AuthInputs';
 
 function EditPw() {
   const location = useLocation();
@@ -16,9 +15,9 @@ function EditPw() {
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<AuthFormTypes>({ mode: 'onChange' });
+  } = useForm<AuthInputsType>({ mode: 'onChange' });
 
-  const onSubmit: SubmitHandler<AuthFormTypes> = async (data) => {
+  const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
     const query = qs.parse(location.search, {
       ignoreQueryPrefix: true,
     });

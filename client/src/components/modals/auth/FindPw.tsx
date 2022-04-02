@@ -2,8 +2,7 @@ import styled from 'styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { EmailInput } from '@src/components/react-hook-form/AuthForm';
-import { AuthFormTypes } from '@src/types';
+import { AuthInputsType, EmailInput } from '@src/components/AuthInputs';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
 import Button from '@src/components/Button';
@@ -16,9 +15,9 @@ function FindPw() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AuthFormTypes>({ mode: 'onChange' });
+  } = useForm<AuthInputsType>({ mode: 'onChange' });
 
-  const onSubmit: SubmitHandler<AuthFormTypes> = async (data) => {
+  const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
     const response = await axios.post('/api/auth/findPw', data);
     const { ok, message } = response.data;
     if (!ok) return alert(message);

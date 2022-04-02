@@ -122,11 +122,3 @@ export type PostCommentType = {
   user: UserType;
   post: PostType;
 };
-
-export type AuthFormTypes = {
-  email?: string;
-  nickname?: string;
-  pw?: string;
-  confirmPw?: string;
-  currentPw?: string;
-};

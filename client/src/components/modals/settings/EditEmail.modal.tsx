@@ -5,8 +5,7 @@ import axios from 'axios';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
 import { logoutUser } from '@src/store/requests/auth.request';
-import { EmailInput } from '@src/components/react-hook-form/AuthForm';
-import { AuthFormTypes } from '@src/types';
+import { AuthInputsType, EmailInput } from '@src/components/AuthInputs';
 import Button from '@src/components/Button';
 
 function EditEmailModal() {
@@ -17,9 +16,9 @@ function EditEmailModal() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AuthFormTypes>({ mode: 'onChange' });
+  } = useForm<AuthInputsType>({ mode: 'onChange' });
 
-  const onSubmit: SubmitHandler<AuthFormTypes> = async (data) => {
+  const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
     const res = await axios.post('/api/settings/account/editEmail', { email: data.email }, { withCredentials: true });
     const { ok, message } = res.data;
     if (!ok) return alert(message);

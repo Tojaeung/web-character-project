@@ -6,8 +6,7 @@ import Button from '@src/components/Button';
 import { openModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
 
-import { AuthFormTypes } from '@src/types';
-import { EmailInput, NicknameInput, PwInput, ConfirmPwInput } from '@src/components/react-hook-form/AuthForm';
+import { EmailInput, NicknameInput, PwInput, ConfirmPwInput, AuthInputsType } from '@src/components/AuthInputs';
 
 function SignUp() {
   const dispatch = useAppDispatch();
@@ -17,9 +16,9 @@ function SignUp() {
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<AuthFormTypes>({ mode: 'onChange' });
+  } = useForm<AuthInputsType>({ mode: 'onChange' });
 
-  const onSubmit: SubmitHandler<AuthFormTypes> = async (data) => {
+  const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
     const response = await axios.post('/api/auth/signUp', data);
     const { ok, message } = response.data;
     if (!ok) return alert(message);

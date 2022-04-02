@@ -21,11 +21,6 @@ const drawingController = {
       const id = req.session.user?.id;
       const { title, content } = req.body;
 
-      if (!title) {
-        logger.info('제목을 입력하지 않았습니다.');
-        return res.status(200).json({ ok: false, message: '제목을 입력하지 않았습니다.' });
-      }
-
       // drawing 테이블에 정보를 저장합니다.
       const drawing = new Drawing();
       drawing.title = title;

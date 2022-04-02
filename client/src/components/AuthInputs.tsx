@@ -2,12 +2,19 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Path, UseFormRegister, FieldError } from 'react-hook-form';
 import { AiOutlineUser, AiOutlineEye, AiOutlineMail, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { AuthFormTypes } from '@src/types';
+
+export type AuthInputsType = {
+  email?: string;
+  nickname?: string;
+  pw?: string;
+  confirmPw?: string;
+  currentPw?: string;
+};
 
 interface IProps {
   label: string;
-  name: Path<AuthFormTypes>;
-  register: UseFormRegister<AuthFormTypes>;
+  name: Path<AuthInputsType>;
+  register: UseFormRegister<AuthInputsType>;
   error: FieldError | undefined;
   watch?: string;
 }

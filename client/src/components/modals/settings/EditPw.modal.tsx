@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { logoutUser } from '@src/store/requests/auth.request';
 import { useAppDispatch } from '@src/store/app/hook';
-import { PwInput, ConfirmPwInput } from '@src/components/react-hook-form/AuthForm';
-import { AuthFormTypes } from '@src/types';
+import { AuthInputsType, PwInput, ConfirmPwInput } from '@src/components/AuthInputs';
 import Button from '@src/components/Button';
 
 function AccountPw() {
@@ -16,9 +15,9 @@ function AccountPw() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AuthFormTypes>({ mode: 'onChange' });
+  } = useForm<AuthInputsType>({ mode: 'onChange' });
 
-  const onSubmit: SubmitHandler<AuthFormTypes> = async (data) => {
+  const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
     const res = await axios.post(
       '/api/settings/account/editPw',
       { currentPw: data.currentPw, newPw: data.pw },

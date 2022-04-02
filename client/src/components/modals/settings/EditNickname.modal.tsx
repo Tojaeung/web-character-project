@@ -4,8 +4,7 @@ import styled from 'styled-components';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
 import { refreshLogin } from '@src/store/requests/auth.request';
-import { NicknameInput } from '@src/components/react-hook-form/AuthForm';
-import { AuthFormTypes } from '@src/types';
+import { NicknameInput, AuthInputsType } from '@src/components/AuthInputs';
 import Button from '@src/components/Button';
 
 function EditNicknameModal() {
@@ -15,9 +14,9 @@ function EditNicknameModal() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AuthFormTypes>({ mode: 'onChange' });
+  } = useForm<AuthInputsType>({ mode: 'onChange' });
 
-  const onSubmit: SubmitHandler<AuthFormTypes> = async (data) => {
+  const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
     const res = await axios.post(
       '/api/settings/account/editNickname',
       { nickname: data.nickname },

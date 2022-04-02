@@ -4,9 +4,8 @@ import styled from 'styled-components';
 import { loginUser } from '@src/store/requests/auth.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { openModal, closeModal } from '@src/store/slices/modal.slice';
-import { AuthFormTypes } from '@src/types';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { EmailInput, PwInput } from '@src/components/react-hook-form/AuthForm';
+import { AuthInputsType, EmailInput, PwInput } from '@src/components/AuthInputs';
 import Button from '@src/components/Button';
 
 function LoginModal() {
@@ -17,9 +16,9 @@ function LoginModal() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AuthFormTypes>({ mode: 'onChange' });
+  } = useForm<AuthInputsType>({ mode: 'onChange' });
 
-  const onSubmit: SubmitHandler<AuthFormTypes> = async (data) => {
+  const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
     const response = await dispatch(loginUser({ email: data.email!, pw: data.pw! })).unwrap();
     const { ok, message } = response;
     if (!ok) return alert(message);
