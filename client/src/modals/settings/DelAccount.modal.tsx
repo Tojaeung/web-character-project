@@ -37,11 +37,7 @@ function DelAccountModal() {
 
       <Input type="text" placeholder="계정탈퇴" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} />
 
-      <SubmitButton
-        disabled={confirmText === '계정탈퇴' ? false : true}
-        confirmText={confirmText}
-        onClick={onDelAccount}
-      >
+      <SubmitButton disabled={confirmText === '계정탈퇴' ? false : true} onClick={onDelAccount}>
         계정탈퇴
       </SubmitButton>
     </Container>
@@ -75,28 +71,21 @@ const WarnIcon = styled(AiOutlineWarning)`
 `;
 const WarningText = styled.p``;
 const GuideText = styled.p``;
-const SubmitButton = styled.button<{ confirmText: string }>`
-  ${({ theme, confirmText }) => {
-    if (confirmText === '계정탈퇴') {
-      return css`
-        border: 0;
-        outline: 0;
-        padding: 1rem 2rem;
-        border-radius: 5px;
-        color: ${({ theme }) => theme.palette.white};
-        font-weight: bold;
-        background-color: ${theme.palette.red};
-      `;
-    } else {
-      return css`
-        border: 0;
-        outline: 0;
-        padding: 1rem 2rem;
-        border-radius: 5px;
-        background-color: ${theme.palette.gray};
-      `;
-    }
-  }}
+const SubmitButton = styled.button`
+  border: 0;
+  outline: 0;
+  padding: 1rem 2rem;
+  border-radius: 5px;
+  color: ${({ theme }) => theme.palette.white};
+  font-weight: bold;
+  background-color: ${({ theme }) => theme.palette.red};
+  &[disabled] {
+    border: 0;
+    outline: 0;
+    padding: 1rem 2rem;
+    border-radius: 5px;
+    background-color: ${({ theme }) => theme.palette.gray};
+  }
 `;
 
 export default DelAccountModal;
