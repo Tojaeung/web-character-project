@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import CreatedTime from '@src/components/CreatedTime';
-import RemoveCommentBtn from '@src/components/comment/RemoveCommentButton';
+import { useAppDispatch } from '@src/store/app/hook';
+import { removeDrawingComment } from '@src/store/requests/drawing.request';
 import { DrawingCommentType, PostCommentType } from '@src/types';
 import EditCommentForm from '@src/components/comment/EditCommentForm';
 import Button from '@src/components/Button';
@@ -17,8 +18,19 @@ interface IProps {
 }
 
 function CommentList({ type, comment, index, setCommentIndex, isSelected }: IProps) {
+  const dispatch = useAppDispatch();
+
+  // 댓글 수정폼 나타내기
   const openEditCommemtForm = (e: React.MouseEvent<HTMLButtonElement>) => {
     setCommentIndex(index);
+  };
+
+  // 댓글 삭제하기
+  const handleRemoveComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (type === 'drawing') {
+      await dispatch(removeDrawingComment({ drawingCommentId: comment.id }));
+    } else if (type === 'board') {
+    }
   };
 
   return (
@@ -35,15 +47,17 @@ function CommentList({ type, comment, index, setCommentIndex, isSelected }: IPro
         <Content>{comment.content}</Content>
 
         <ButtonBox>
-          <EditCommentButton color="green" size="small" inverse={true} onClick={openEditCommemtForm}>
+          <EditButton color="green" size="small" inverse={true} onClick={openEditCommemtForm}>
             수정
-          </EditCommentButton>
-          <RemoveCommentBtn id={comment.id} />
+          </EditButton>
+          <RemoveButton color="red" size="small" onClick={handleRemoveComment}>
+            삭제
+          </RemoveButton>
         </ButtonBox>
       </ContentBox>
 
       {/* 수정폼  */}
-      {isSelected && <EditCommentForm type={type} commentId={comment.id} />}
+      {isSelected && <EditCommentForm type={type} commentId={comment.id} setCommentIndex={setCommentIndex} />}
     </Container>
   );
 }
@@ -72,6 +86,8 @@ const ContentBox = styled.div`
   align-items: center;
 `;
 const Content = styled.pre`
+  white-space: pre-wrap;
+  word-break: break-all;
   font-size: 1.3rem;
   padding: 1rem;
 `;
@@ -80,6 +96,11 @@ const ButtonBox = styled.div`
   align-items: center;
   gap: 1rem;
 `;
-const EditCommentButton = styled(Button)``;
+const EditButton = styled(Button)`
+  padding: 0.5rem;
+`;
+const RemoveButton = styled(Button)`
+  padding: 0.5rem;
+`;
 
 export default CommentList;

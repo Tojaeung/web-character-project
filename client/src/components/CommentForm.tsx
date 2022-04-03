@@ -75,7 +75,9 @@ const CommentCount = styled.span`
   display: flex;
   align-items: center;
 `;
-const AddCommentButton = styled(Button)``;
+const AddCommentButton = styled(Button)`
+  padding: 0.5rem;
+`;
 const CommentIcon = styled(AiOutlineComment)`
   font-size: 2rem;
 `;

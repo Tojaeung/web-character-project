@@ -7,9 +7,10 @@ import Button from '@src/components/Button';
 interface IProp {
   type: 'drawing' | 'board';
   commentId: number;
+  setCommentIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
-function EditCommentForm({ type, commentId }: IProp) {
+function EditCommentForm({ type, commentId, setCommentIndex }: IProp) {
   const dispatch = useAppDispatch();
 
   const [editedContent, setEditedContent] = useState('');
@@ -22,11 +23,16 @@ function EditCommentForm({ type, commentId }: IProp) {
     }
   };
 
+  // 수정폼을 닫는다.
+  const closeEditCommentForm = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    setCommentIndex(-1); // 배열 인덱스에 존재하지 않는 -1
+  };
+
   return (
     <Container>
       <Background>
         <TextArea
-          placeholder="댓글을 입력하세요.."
+          placeholder="수정하세요.."
           cols={20}
           rows={3}
           wrap="hard"
@@ -35,9 +41,9 @@ function EditCommentForm({ type, commentId }: IProp) {
         />
         <ButtonBox>
           <EditButton color="green" size="small" onClick={handleEditComment}>
-            등록
+            수정
           </EditButton>
-          <CancelButton color="green" size="small" inverse={true}>
+          <CancelButton color="green" size="small" inverse={true} onClick={closeEditCommentForm}>
             취소
           </CancelButton>
         </ButtonBox>
@@ -69,7 +75,11 @@ const ButtonBox = styled.div`
   gap: 0.5rem;
   padding: 0.5rem 0;
 `;
-const EditButton = styled(Button)``;
-const CancelButton = styled(Button)``;
+const EditButton = styled(Button)`
+  padding: 0.5rem;
+`;
+const CancelButton = styled(Button)`
+  padding: 0.5rem;
+`;
 
 export default EditCommentForm;
