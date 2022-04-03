@@ -41,17 +41,20 @@ function ShowDescModal() {
 }
 
 const Container = styled.div`
-  width: 100%;
+  width: 50rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 `;
 
 const Title = styled.h1`
   align-self: flex-start;
 `;
-const Content = styled.p``;
+const Content = styled.p`
+  align-self: flex-start;
+  padding: 1rem;
+`;
 const ModifyButton = styled(Button)``;
 
 export default ShowDescModal;
