@@ -20,7 +20,7 @@ function Pagination({ total, page, setPage }: IProps) {
   // 페이지 수 범위에서 가장 큰 수
   const [maxPageLimit, setMaxPageLimit] = useState(5);
 
-  const onPrev = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (page % pageRange === 1) {
       setMinPageLimit(minPageLimit - pageRange);
       setMaxPageLimit(maxPageLimit - pageRange);
@@ -29,7 +29,7 @@ function Pagination({ total, page, setPage }: IProps) {
     setPage(page - 1);
   };
 
-  const onNext = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleNext = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (page % pageRange === 0) {
       setMinPageLimit(minPageLimit + pageRange);
       setMaxPageLimit(maxPageLimit + pageRange);
@@ -41,7 +41,7 @@ function Pagination({ total, page, setPage }: IProps) {
     <>
       {pageNum === 0 ? null : (
         <Container>
-          <PrevButton disabled={page === 1} onClick={onPrev}>
+          <PrevButton disabled={page === 1} onClick={handlePrev}>
             이전
           </PrevButton>
           {Array(pageNum)
@@ -56,7 +56,7 @@ function Pagination({ total, page, setPage }: IProps) {
                 {index + minPageLimit + 1}
               </PageButton>
             ))}
-          <NextButton disabled={page === pageNum} onClick={onNext}>
+          <NextButton disabled={page === pageNum} onClick={handleNext}>
             다음
           </NextButton>
         </Container>

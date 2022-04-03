@@ -39,11 +39,10 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
+    display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
-    flex-direction: column;
   }
 `;
 const InfoSide = styled.div`
@@ -55,7 +54,7 @@ const InfoSide = styled.div`
   flex-direction: column;
   gap: 1rem;
   padding: 0 1rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     width: 100%;
   }
 `;

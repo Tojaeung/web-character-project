@@ -35,7 +35,9 @@ function ImageSide() {
     <Container>
       <PrevIcon index={index} onClick={onPrevDrawing} />
 
-      <Image src={drawings[index!]?.url} alt="이미지" />
+      <ImageBox>
+        <Image src={drawings[index!]?.url} alt="이미지" />
+      </ImageBox>
 
       <NextIcon index={index} total={drawings.length} onClick={onNextDrawing} />
     </Container>
@@ -44,13 +46,15 @@ function ImageSide() {
 
 const Container = styled.div`
   width: 100%;
+  height: 100vh;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   position: relative;
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     max-height: 30rem;
     justify-content: center;
+    overflow: hidden;
   }
 `;
 
@@ -86,13 +90,22 @@ const NextIcon = styled(AiOutlineRight)<{ index: number | null; total: number | 
     font-size: 5rem;
   }
 `;
-
-const Image = styled.img`
-  object-fit: contain;
+const ImageBox = styled.div`
+  width: 100%;
   height: 100vh;
-  @media ${({ theme }) => theme.device.mobile} {
-    max-height: 30rem;
+  overflow: hidden;
+  @media ${({ theme }) => theme.device.tablet} {
+    width: 100%;
+    height: 100%;
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+  }
+`;
+const Image = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 `;
 
 export default ImageSide;
