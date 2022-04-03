@@ -41,30 +41,32 @@ const drawingController = {
     const drawingRepo = getCustomRepository(DrawingRepository);
 
     try {
-      const { profileId } = req.body;
-      const { cursor } = req.query;
+      const { profileId, cursor } = req.body;
 
-      if (cursor === 'null') {
-        const drawings = await drawingRepo.findDrawingById(profileId);
-        let newCursor;
-        if (drawings.length < 30) {
-          newCursor = 0;
+      // 무한스크롤 작동할때마다 몇개의 그림이 뜨는지 정하는 변수
+      const drawingsLimit = 10;
+
+      let drawings;
+      let newCursor;
+      // 처음 drawings를 받아올때 cursor는 0이다.
+      if (cursor === 0) {
+        drawings = await drawingRepo.getDrawingsById(profileId, drawingsLimit);
+        if (drawings.length < drawingsLimit) {
+          newCursor = null;
         } else {
-          newCursor = drawings[29].id;
+          newCursor = drawings[drawingsLimit - 1].id;
         }
-        logger.info('그림을 얻었습니다.');
-        return res.status(200).json({ ok: true, message: '그림을 얻었습니다.', drawings, newCursor });
       } else {
-        const drawings = await drawingRepo.findDrawingByIdAndCursor(profileId, Number(cursor));
-        let newCursor;
-        if (drawings.length < 30) {
-          newCursor = 0;
+        drawings = await drawingRepo.getDrawingsByCursor(profileId, Number(cursor), drawingsLimit);
+        if (drawings.length < drawingsLimit) {
+          newCursor = null;
         } else {
-          newCursor = drawings[29].id;
+          newCursor = drawings[drawingsLimit - 1].id;
         }
-        logger.info('그림을 얻었습니다.');
-        return res.status(200).json({ ok: true, message: '그림을 얻었습니다.', drawings, newCursor });
       }
+
+      logger.info('그림을 얻었습니다.');
+      return res.status(200).json({ ok: true, message: '그림을 얻었습니다.', drawings, newCursor });
     } catch (err: any) {
       logger.info('그림 불러오기 에러', err);
       return res.status(500).json({ ok: false, message: '그림 불러오기 에러' });

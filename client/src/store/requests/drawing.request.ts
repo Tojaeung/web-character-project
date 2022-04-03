@@ -37,13 +37,9 @@ export const getDrawings = createAsyncThunk<
   { state: RootState; rejectValue: getDrawingsErrorType }
 >('GET_DRAWINGS', async (data, thunkApi) => {
   try {
-    const res = await axios.post(
-      `/api/drawing/getDrawings?cursor=${data.cursor}`,
-      { profileId: data.profileId },
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await axios.post('/api/drawing/getDrawings', data, {
+      withCredentials: true,
+    });
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });

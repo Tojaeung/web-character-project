@@ -4,7 +4,7 @@ export type getDrawingsReturnType = {
   ok: boolean;
   message: string;
   drawings: DrawingType[];
-  newCursor: number;
+  newCursor: number | null;
 };
 
 export type getDrawingsParamType = {

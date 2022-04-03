@@ -6,7 +6,18 @@ import { DisLike } from '@src/entities/drawing/dislike.entity';
 
 @EntityRepository(Drawing)
 export class DrawingRepository extends AbstractRepository<Drawing> {
-  findDrawingByIdAndCursor(profileId: number, cursor: number) {
+  getDrawingsById(profileId: number, drawingsLimit: number) {
+    return this.createQueryBuilder('drawing')
+      .leftJoinAndSelect('drawing.drawingComments', 'drawingComment')
+      .leftJoinAndSelect('drawingComment.user', 'user')
+      .leftJoinAndSelect('drawing.likes', 'like')
+      .leftJoinAndSelect('drawing.dislikes', 'dislike')
+      .where('drawing.user_id = :profileId', { profileId })
+      .orderBy('drawing.id', 'DESC')
+      .limit(drawingsLimit)
+      .getMany();
+  }
+  getDrawingsByCursor(profileId: number, cursor: number, drawingsLimit: number) {
     return this.createQueryBuilder('drawing')
       .leftJoinAndSelect('drawing.drawingComments', 'drawingComment')
       .leftJoinAndSelect('drawingComment.user', 'user')
@@ -15,19 +26,7 @@ export class DrawingRepository extends AbstractRepository<Drawing> {
       .where('drawing.user_id = :profileId', { profileId })
       .andWhere('drawing.id < :cursor', { cursor })
       .orderBy('drawing.id', 'DESC')
-      .limit(30)
-      .getMany();
-  }
-
-  findDrawingById(profileId: number) {
-    return this.createQueryBuilder('drawing')
-      .leftJoinAndSelect('drawing.drawingComments', 'drawingComment')
-      .leftJoinAndSelect('drawingComment.user', 'user')
-      .leftJoinAndSelect('drawing.likes', 'like')
-      .leftJoinAndSelect('drawing.dislikes', 'dislike')
-      .where('drawing.user_id = :profileId', { profileId })
-      .orderBy('drawing.id', 'DESC')
-      .limit(30)
+      .limit(drawingsLimit)
       .getMany();
   }
 
