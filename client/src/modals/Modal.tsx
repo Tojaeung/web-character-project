@@ -27,7 +27,7 @@ function Modal() {
       {!isOpen && !mode && null}
       {isOpen && mode === 'showDrawingModal' && <ShowDrawingModal />}
       {isOpen && mode === 'search' && <SearchModal />}
-      {isOpen && (mode !== 'showDrawingModal' || 'search') && (
+      {isOpen && mode !== 'showDrawingModal' && 'search' && (
         <ModalBox>
           <CloseIcon onClick={(e) => dispatch(closeModal())} />
           {isOpen && mode === 'login' && <LoginModal />}
