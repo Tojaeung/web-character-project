@@ -47,7 +47,7 @@ function ChatList() {
               <ListBox key={v4()} onClick={onAddChatUser(chat)}>
                 {msgNotiNum === 0 ? null : (
                   <NotiBox>
-                    <NotiCount notiNum={msgNotiNum} size="small" />
+                    <NotiCount notiNum={msgNotiNum} />
                   </NotiBox>
                 )}
                 <ChatUser>

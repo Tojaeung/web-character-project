@@ -4,12 +4,12 @@ import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectMsgNotis } from '@src/store/slices/chat.slice';
 import { openChatModal, closeChatModal, selectChatOk } from '@src/store/slices/chat.slice';
+import NotiCount from '@src/components/NotiCount';
 
 function Chat() {
   // 확인 안한 메세지 알림 수
   const dispatch = useAppDispatch();
   const chatOk = useAppSelector(selectChatOk);
-
   const msgNotis = useAppSelector(selectMsgNotis);
   const [totalMsgNotiNum, setTotalMsgNotiNum] = useState<number>();
 
@@ -37,9 +37,9 @@ function Chat() {
   return (
     <Container chatOk={chatOk} onClick={onChatModal}>
       {totalMsgNotiNum === 0 ? null : (
-        <NotiBackground>
-          <NotiNum className="noti-number">{totalMsgNotiNum}</NotiNum>
-        </NotiBackground>
+        <NotiBox>
+          <NotiCount notiNum={totalMsgNotiNum!} />
+        </NotiBox>
       )}
 
       {chatOk ? <ChatFillIcon /> : <ChatIcon />}
@@ -53,16 +53,11 @@ const Container = styled.div<{ chatOk: boolean }>`
 
   cursor: pointer;
 `;
-const NotiBackground = styled.div`
+
+const NotiBox = styled.div`
   position: absolute;
-  border-radius: 50%;
   top: 2rem;
-  left: 2.5rem;
-  padding: 0.5rem;
-  background-color: red;
-`;
-const NotiNum = styled.span`
-  color: white;
+  left: 2rem;
 `;
 const ChatIcon = styled(BsChatLeftText)`
   font-size: 2.5rem;
