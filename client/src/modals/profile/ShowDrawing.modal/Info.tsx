@@ -32,12 +32,14 @@ function Info() {
         </ViewsBox>
 
         <LikeButton
+          type="drawing"
           id={drawings[index!]?.id!}
           likes={drawings[index!]?.likes!}
           dislikes={drawings[index!]?.dislikes!}
         />
 
         <DisLikeButton
+          type="drawing"
           id={drawings[index!]?.id!}
           likes={drawings[index!]?.likes!}
           dislikes={drawings[index!]?.dislikes!}

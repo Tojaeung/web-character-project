@@ -8,12 +8,12 @@ import { addDrawingComment } from '@src/store/requests/drawing.request';
 import Button from '@src/components/Button';
 
 interface IProp {
+  type: 'drawing' | 'board';
   id: number;
   comments: DrawingCommentType[] | PostCommentType[];
-  category: string;
 }
 
-function CommentForm({ id, comments, category }: IProp) {
+function CommentForm({ id, comments, type }: IProp) {
   const dispatch = useAppDispatch();
 
   const user = useAppSelector(selectAuthUser);
@@ -21,10 +21,11 @@ function CommentForm({ id, comments, category }: IProp) {
   const [content, setContent] = useState('');
 
   const onAddComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (category === 'drawing') {
+    if (type === 'drawing') {
       await dispatch(addDrawingComment({ userId: user?.id!, drawingId: id, content }));
       setContent('');
       return;
+    } else if (type === 'board') {
     }
     return;
   };

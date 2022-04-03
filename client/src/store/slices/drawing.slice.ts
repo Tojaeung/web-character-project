@@ -36,9 +36,6 @@ export const drawingSlice = createSlice({
     selectDrawing: (state, action: PayloadAction<{ selectedIndex: number }>) => {
       state.index = action.payload.selectedIndex;
     },
-    closeDrawing: (state) => {
-      state.index = null;
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(getDrawings.pending, (state) => {

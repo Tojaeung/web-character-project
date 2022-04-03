@@ -7,9 +7,10 @@ import Pagination from './Pagination';
 
 interface IProp {
   comments: DrawingCommentType[] | PostCommentType[];
+  type: 'drawing' | 'board';
 }
 
-function Comment({ comments }: IProp) {
+function Comment({ comments, type }: IProp) {
   const [page, setPage] = useState(1);
   const offset = (page - 1) * 20;
 
@@ -21,6 +22,7 @@ function Comment({ comments }: IProp) {
       {comments!.slice(offset, offset + 20).map((comment, index) => (
         <CommentList
           key={v4()}
+          type={type}
           comment={comment}
           index={index}
           setCommentIndex={setCommentIndex}

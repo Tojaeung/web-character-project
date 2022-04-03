@@ -5,7 +5,7 @@ interface IProp {
   id: number;
 }
 
-function EditCommentBtn({ id }: IProp) {
+function EditCommentButton({ id }: IProp) {
   return <StyledButton>수정</StyledButton>;
 }
 
@@ -13,4 +13,4 @@ const StyledButton = styled.button`
   color: ${({ theme }) => theme.palette.white};
 `;
 
-export default EditCommentBtn;
+export default EditCommentButton;

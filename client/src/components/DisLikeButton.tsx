@@ -7,6 +7,7 @@ import { addDrawingDisLike, removeDrawingLike, removeDrawingDisLike } from '@src
 import { AiFillDislike, AiOutlineDislike } from 'react-icons/ai';
 
 interface IProps {
+  type: 'drawing' | 'board';
   id: number;
   likes: DrawingLikeType[] | PostLikeType[];
   dislikes: DrawingDisLikeType[] | PostDisLikeType[];

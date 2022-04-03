@@ -9,13 +9,14 @@ import EditCommentForm from '@src/components/comment/EditCommentForm';
 import Button from '@src/components/Button';
 
 interface IProps {
+  type: 'drawing' | 'board';
   comment: DrawingCommentType | PostCommentType;
   index: number;
   setCommentIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
   isSelected: boolean;
 }
 
-function CommentList({ comment, index, setCommentIndex, isSelected }: IProps) {
+function CommentList({ type, comment, index, setCommentIndex, isSelected }: IProps) {
   const openEditCommemtForm = (e: React.MouseEvent<HTMLButtonElement>) => {
     setCommentIndex(index);
   };
@@ -42,7 +43,7 @@ function CommentList({ comment, index, setCommentIndex, isSelected }: IProps) {
       </ContentBox>
 
       {/* 수정폼  */}
-      {isSelected && <EditCommentForm commentId={comment.id} />}
+      {isSelected && <EditCommentForm type={type} commentId={comment.id} />}
     </Container>
   );
 }

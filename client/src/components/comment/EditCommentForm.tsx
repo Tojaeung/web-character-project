@@ -1,27 +1,24 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectDrawingIndex } from '@src/store/slices/drawing.slice';
-import { selectBoardPost } from '@src/store/slices/board.slice';
+import { useAppDispatch } from '@src/store/app/hook';
 import { editDrawingComment } from '@src/store/requests/drawing.request';
 import Button from '@src/components/Button';
 
 interface IProp {
+  type: 'drawing' | 'board';
   commentId: number;
 }
 
-function EditCommentForm({ commentId }: IProp) {
+function EditCommentForm({ type, commentId }: IProp) {
   const dispatch = useAppDispatch();
-  const index = useAppSelector(selectDrawingIndex);
-  const post = useAppSelector(selectBoardPost);
 
   const [editedContent, setEditedContent] = useState('');
 
   const handleEditComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (index) {
+    if (type === 'drawing') {
       await dispatch(editDrawingComment({ drawingCommentId: commentId, editedContent }));
       return;
-    } else if (post) {
+    } else if (type === 'board') {
     }
   };
 
