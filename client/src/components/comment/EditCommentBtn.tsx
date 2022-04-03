@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import EditCommentForm from '@src/components/comment/EditCommentForm';
 
 interface IProp {
   id: number;

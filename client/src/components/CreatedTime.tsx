@@ -7,17 +7,17 @@ interface IProp {
 }
 
 function CreatedTime({ createdTime, size }: IProp) {
-  return <StyledSpan size={size}>{relativeTime(createdTime)}</StyledSpan>;
+  return <Date size={size}>{relativeTime(createdTime)}</Date>;
 }
 
-const StyledSpan = styled.span<{ size: string }>`
+const Date = styled.span<{ size: string }>`
   font-size: ${(prop) => {
     if (prop.size === 'small') {
-      return '1rem';
+      return '1.1rem';
     } else if (prop.size === 'medium') {
-      return '1.5rem';
+      return '1.3rem';
     } else if (prop.size === 'large') {
-      return '1,7rem';
+      return '1.5rem';
     }
   }};
 `;

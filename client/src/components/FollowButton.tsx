@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { follow, unFollow } from '@src/store/requests/profile.request';
-// import { greenButtonStyle, redButtonStyle } from '@src/styles/GlobalStyles';
 import { FollowerType } from '@src/types';
+import Button from '@src/components/Button';
 
 interface IProps {
   followers: FollowerType[];
@@ -12,10 +12,9 @@ interface IProps {
   nickname: string;
 }
 
-function FollowBtn({ followers, id, nickname }: IProps) {
+function FollowButton({ followers, id, nickname }: IProps) {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectAuthUser);
-  // const profile = useAppSelector(selectProfileProfile);
 
   const [isFollowed, setIsFollowed] = useState(false);
 
@@ -40,13 +39,13 @@ function FollowBtn({ followers, id, nickname }: IProps) {
       {id === user?.id ? null : (
         <Container>
           {!isFollowed ? (
-            <button className="follow-btn" onClick={handleFollow}>
+            <FollowBtn color="green" size="small" onClick={handleFollow}>
               팔로우
-            </button>
+            </FollowBtn>
           ) : (
-            <button className="unFollow-btn" onClick={handleUnFollow}>
+            <UnFollowButton color="red" size="small" onClick={handleUnFollow}>
               언팔로우
-            </button>
+            </UnFollowButton>
           )}
         </Container>
       )}
@@ -54,13 +53,8 @@ function FollowBtn({ followers, id, nickname }: IProps) {
   );
 }
 
-const Container = styled.div`
-  .follow-btn {
-    padding: 1rem;
-  }
-  .unFollow-btn {
-    padding: 1rem;
-  }
-`;
+const Container = styled.div``;
+const FollowBtn = styled(Button)``;
+const UnFollowButton = styled(Button)``;
 
-export default FollowBtn;
+export default FollowButton;

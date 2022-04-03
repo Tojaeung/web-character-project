@@ -5,7 +5,7 @@ import { DrawingCommentType, PostCommentType } from '@src/types';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { addDrawingComment } from '@src/store/requests/drawing.request';
-// import { greenButtonStyle } from '@src/styles/GlobalStyles';
+import Button from '@src/components/Button';
 
 interface IProp {
   id: number;
@@ -31,56 +31,52 @@ function CommentForm({ id, comments, category }: IProp) {
 
   return (
     <Container>
-      <div className="background">
-        <textarea
-          placeholder="댓글을 입력하세요.."
-          cols={20}
-          rows={3}
-          wrap="hard"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-        <div className="btn">
-          <span>
-            <AiOutlineComment />
-            {comments.length}
-          </span>
+      <TextArea
+        placeholder="댓글을 입력하세요.."
+        cols={20}
+        rows={3}
+        wrap="hard"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+      />
+      <FormBottomBox>
+        <CommentCount>
+          <CommentIcon />
+          {comments.length}
+        </CommentCount>
 
-          <button onClick={onAddComment}>등록</button>
-        </div>
-      </div>
+        <AddCommentButton color="green" size="small" onClick={onAddComment}>
+          등록
+        </AddCommentButton>
+      </FormBottomBox>
     </Container>
   );
 }
-
 const Container = styled.div`
+  width: 100%;
+  background-color: ${({ theme }) => theme.palette.gray};
+  padding: 1rem 0.5rem 0rem 0.5rem;
+`;
+const TextArea = styled.textarea`
+  width: 100%;
+  min-height: 5rem;
+  resize: none;
+  outline: none;
+  border: 0;
+`;
+const FormBottomBox = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  .background {
-    background-color: ${({ theme }) => theme.palette.gray};
-    padding: 1rem 0.5rem 0rem 0.5rem;
-    textarea {
-      width: 100%;
-      min-height: 5rem;
-      resize: none;
-      outline: none;
-      border: 0;
-    }
-    .btn {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.5rem 0;
-      span {
-        font-size: 1.7rem;
-      }
-      button {
-        padding: 0.5rem 1rem;
-      }
-    }
-  }
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+`;
+const CommentCount = styled.span`
+  display: flex;
+  align-items: center;
+`;
+const AddCommentButton = styled(Button)``;
+const CommentIcon = styled(AiOutlineComment)`
+  font-size: 2rem;
 `;
 
 export default CommentForm;

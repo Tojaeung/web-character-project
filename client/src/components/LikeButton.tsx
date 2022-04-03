@@ -12,7 +12,7 @@ interface IProps {
   dislikes: DrawingDisLikeType[] | PostDisLikeType[];
 }
 
-function LikeBtn({ id, likes, dislikes }: IProps) {
+function LikeButton({ id, likes, dislikes }: IProps) {
   const dispatch = useAppDispatch();
 
   const user = useAppSelector(selectAuthUser);
@@ -35,20 +35,17 @@ function LikeBtn({ id, likes, dislikes }: IProps) {
   };
 
   return (
-    <Container>
-      <span onClick={onAddLike}>
-        {likes?.some((like) => like.user_id === user?.id) ? <AiFillLike /> : <AiOutlineLike />}
-        {likes?.length}
-      </span>
+    <Container onClick={onAddLike}>
+      {likes?.some((like) => like.user_id === user?.id) ? <ActiveLikeIcon /> : <NotActiveLikeIcon />}
+      {likes?.length}
     </Container>
   );
 }
 
-const Container = styled.div`
-  span {
-    cursor: pointer;
-    font-size: 1.6rem;
-  }
+const Container = styled.span`
+  cursor: pointer;
+  font-size: 1.6rem;
 `;
-
-export default LikeBtn;
+const ActiveLikeIcon = styled(AiFillLike)``;
+const NotActiveLikeIcon = styled(AiOutlineLike)``;
+export default LikeButton;

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import CreatedTime from '@src/components/CreatedTime';
-import RemoveCommentBtn from '@src/components/RemoveCommentBtn';
+import RemoveCommentBtn from '@src/components/comment/RemoveCommentButton';
 import { DrawingCommentType, PostCommentType } from '@src/types';
 import EditCommentForm from '@src/components/comment/EditCommentForm';
 import Button from '@src/components/Button';
@@ -34,15 +34,15 @@ function CommentList({ comment, index, setCommentIndex, isSelected }: IProps) {
         <Content>{comment.content}</Content>
 
         <ButtonBox>
-          <OpenEditCommentButton color="green" size="small" inverse={true} onClick={openEditCommemtForm}>
+          <EditCommentButton color="green" size="small" inverse={true} onClick={openEditCommemtForm}>
             수정
-          </OpenEditCommentButton>
+          </EditCommentButton>
           <RemoveCommentBtn id={comment.id} />
         </ButtonBox>
       </ContentBox>
 
       {/* 수정폼  */}
-      {isSelected && <EditCommentForm commentId={comment.id} category="drawing" />}
+      {isSelected && <EditCommentForm commentId={comment.id} />}
     </Container>
   );
 }
@@ -79,6 +79,6 @@ const ButtonBox = styled.div`
   align-items: center;
   gap: 1rem;
 `;
-const OpenEditCommentButton = styled(Button)``;
+const EditCommentButton = styled(Button)``;
 
 export default CommentList;

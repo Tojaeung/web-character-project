@@ -12,7 +12,7 @@ interface IProps {
   dislikes: DrawingDisLikeType[] | PostDisLikeType[];
 }
 
-function DisLikeBtn({ id, likes, dislikes }: IProps) {
+function DisLikeButton({ id, likes, dislikes }: IProps) {
   const dispatch = useAppDispatch();
 
   const user = useAppSelector(selectAuthUser);
@@ -34,20 +34,18 @@ function DisLikeBtn({ id, likes, dislikes }: IProps) {
     return;
   };
   return (
-    <Container>
-      <span onClick={onAddDisLike}>
-        {dislikes?.some((dislike) => dislike.user_id === user?.id) ? <AiFillDislike /> : <AiOutlineDislike />}
-        {dislikes?.length}
-      </span>
+    <Container onClick={onAddDisLike}>
+      {dislikes?.some((dislike) => dislike.user_id === user?.id) ? <ActiveDisLikeIcon /> : <NotActiveDisLikeIcon />}
+      {dislikes?.length}
     </Container>
   );
 }
 
-const Container = styled.div`
-  span {
-    cursor: pointer;
-    font-size: 1.6rem;
-  }
+const Container = styled.span`
+  cursor: pointer;
+  font-size: 1.6rem;
 `;
+const ActiveDisLikeIcon = styled(AiFillDislike)``;
+const NotActiveDisLikeIcon = styled(AiOutlineDislike)``;
 
-export default DisLikeBtn;
+export default DisLikeButton;

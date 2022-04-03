@@ -1,39 +1,129 @@
 import styled from 'styled-components';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useGetProfile } from '@src/hook/useGetProfile';
-import Info from '@src/pages/profile/[id]/Info';
 import Drawing from '@src/pages/profile/[id]/Drawing';
 import { selectProfileOk } from '@src/store/slices/profile.slice';
-import { useAppSelector } from '@src/store/app/hook';
 import NotFound from '@src/components/NotFound';
+import Avatar from '@src/components/Avatar';
+import Nickname from '@src/components/Nickname';
+import FollowButton from '@src/components/FollowButton';
+import ChatButton from '@src/components/ChatButton';
+import Button from '@src/components/Button';
+import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
+import { selectProfileProfile } from '@src/store/slices/profile.slice';
+import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { openModal } from '@src/store/slices/modal.slice';
 
 function Profile() {
   // 존재하지 않는 profileId를 url에서 조회할때 존재하지 않는경우 오류페이지를 보여준다.
   const ok = useAppSelector(selectProfileOk);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const profile = useAppSelector(selectProfileProfile);
+  const user = useAppSelector(selectAuthUser);
+
+  // 자기소개를 클릭하면 자기소개 모달창이 나타난다.
+  const onShowDesc = async (e: React.MouseEvent<HTMLDivElement>) => {
+    await dispatch(openModal({ mode: 'showDesc' }));
+  };
   useGetProfile();
 
   return !ok ? (
     <NotFound />
   ) : (
     <Container>
-      <InfoSection>
-        <Info />
-      </InfoSection>
-      <DrawingSection>
+      <ProfileBox>
+        <CoverBox>
+          <Image src={profile?.cover} alt="커버사진" />
+        </CoverBox>
+
+        <UserInfoBox>
+          <Avatar src={profile?.avatar} size="large" />
+          <Nickname exp={profile?.exp!} nickname={profile?.nickname!} size="large" />
+
+          <Desc onClick={onShowDesc}>자기소개</Desc>
+
+          <FollowInfoBox>
+            <span>팔로워 {profile?.followers.length}</span>
+            <span>팔로잉 {profile?.followings.length}</span>
+          </FollowInfoBox>
+
+          <ButtonBox>
+            <ChatButton chatPartnerId={profile?.id!} chatPartnerUserId={profile?.userId!} />
+
+            <FollowButton followers={profile?.followers!} id={profile?.id!} nickname={profile?.nickname!} />
+
+            {user?.id === profile?.id && (
+              <AddDrawingButton color="green" size="small" onClick={(e) => navigate('/createDrawingForm')}>
+                추가
+              </AddDrawingButton>
+            )}
+          </ButtonBox>
+        </UserInfoBox>
+      </ProfileBox>
+      <DrawingBox>
         <Drawing />
-      </DrawingSection>
+      </DrawingBox>
     </Container>
   );
 }
 
 const Container = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: ${({ theme }) => theme.palette.white};
 `;
-const InfoSection = styled.section`
+const ProfileBox = styled.section`
+  position: relative;
   width: 100%;
 `;
+const CoverBox = styled.div`
+  margin: 0 auto;
+  max-width: 100%;
+  width: 60rem;
+  height: 30rem;
+  border-radius: 10px;
+  overflow: hidden;
+`;
+const Image = styled.img`
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+const UserInfoBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  position: absolute;
+  top: 35rem;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+const Desc = styled.span`
+  font-size: 1.5rem;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+const FollowInfoBox = styled.div`
+  font-size: 1.5rem;
+  display: flex;
+  gap: 1rem;
+`;
+const ButtonBox = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+const AddDrawingButton = styled(Button)``;
 
-const DrawingSection = styled.section`
-  margin-top: 18rem;
+const DrawingBox = styled.section`
+  margin-top: 16.5rem;
 `;
 
 export default Profile;

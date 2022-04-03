@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useAppDispatch } from '@src/store/app/hook';
+import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
+import { selectDrawingIndex } from '@src/store/slices/drawing.slice';
+import { selectBoardPost } from '@src/store/slices/board.slice';
 import { editDrawingComment } from '@src/store/requests/drawing.request';
 import Button from '@src/components/Button';
 
 interface IProp {
   commentId: number;
-  category: string;
 }
 
-function EditCommentForm({ commentId, category }: IProp) {
+function EditCommentForm({ commentId }: IProp) {
   const dispatch = useAppDispatch();
+  const index = useAppSelector(selectDrawingIndex);
+  const post = useAppSelector(selectBoardPost);
 
   const [editedContent, setEditedContent] = useState('');
 
-  const onEditComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (category === 'drawing') {
+  const handleEditComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (index) {
       await dispatch(editDrawingComment({ drawingCommentId: commentId, editedContent }));
       return;
+    } else if (post) {
     }
   };
 
@@ -33,7 +37,7 @@ function EditCommentForm({ commentId, category }: IProp) {
           onChange={(e) => setEditedContent(e.target.value)}
         />
         <ButtonBox>
-          <EditButton color="green" size="small" onClick={onEditComment}>
+          <EditButton color="green" size="small" onClick={handleEditComment}>
             등록
           </EditButton>
           <CancelButton color="green" size="small" inverse={true}>
