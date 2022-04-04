@@ -2,23 +2,32 @@ import { useState } from 'react';
 import ReactQuill from 'react-quill';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
 import 'react-quill/dist/quill.snow.css';
 import { useDefaultConfig } from '@src/hook/useReactQuillConfig';
 import TabMenu from './TabMenu';
 import Button from '@src/components/Button';
+import { useAppDispatch } from '@src/store/app/hook';
+import { editDesc } from '@src/store/requests/settings.request';
 
 function Desc() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [defaultModules] = useDefaultConfig();
   const [desc, setDesc] = useState('');
 
   const onSubmitDesc = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const res = await axios.post('/api/settings/editDesc', { desc }, { withCredentials: true });
-    const { ok, message } = res.data;
-    if (!ok) return alert(message);
-    alert(message);
-    navigate(0);
+    if (desc.length === 0) {
+      return alert('자기소개를 입력해주세요.');
+    } else if (desc.length > 5000) {
+      return alert('글자 수를 초과하였습니다.');
+    }
+    try {
+      const res = await dispatch(editDesc({ desc })).unwrap();
+      alert(res.message);
+      navigate(0);
+    } catch (err: any) {
+      alert(err.message);
+    }
   };
 
   const onCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -35,7 +44,7 @@ function Desc() {
         onChange={setDesc}
         modules={defaultModules}
         theme="snow"
-        placeholder="내용을 입력하세요...."
+        placeholder="내용을 입력하세요....(최대 1000글자)"
       />
       <ButtonBox>
         <SubmitButton color="green" size="medium" responsive={true} onClick={onSubmitDesc}>

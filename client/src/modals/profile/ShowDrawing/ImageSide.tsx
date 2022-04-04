@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { selectDrawing, selectDrawingDrawings, selectDrawingIndex } from '@src/store/slices/drawing.slice';
-import { addView } from '@src/store/requests/drawing.request';
+import { addDrawingView } from '@src/store/requests/drawing.request';
 
 function ImageSide() {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ function ImageSide() {
       return;
     }
     await dispatch(selectDrawing({ selectedIndex: index! - 1 }));
-    await dispatch(addView({ drawingId: drawings[index!]!.id }));
+    await dispatch(addDrawingView({ drawingId: drawings[index!]!.id }));
   };
 
   // 다음 그림
@@ -28,7 +28,7 @@ function ImageSide() {
     }
 
     await dispatch(selectDrawing({ selectedIndex: index! + 1 }));
-    await dispatch(addView({ drawingId: drawings[index!]!.id }));
+    await dispatch(addDrawingView({ drawingId: drawings[index!]!.id }));
   };
 
   return (

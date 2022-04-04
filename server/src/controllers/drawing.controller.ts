@@ -8,14 +8,14 @@ import { Like } from '@src/entities/drawing/like.entity';
 import { DisLike } from '@src/entities/drawing/dislike.entity';
 
 const drawingController = {
-  create: async (req: Request, res: Response) => {
+  addDrawing: async (req: Request, res: Response) => {
     try {
       const drawingUrl = (req.file as Express.MulterS3.File).location;
       const drawingKey = (req.file as Express.MulterS3.File).key;
 
       if (!drawingUrl || !drawingKey) {
         logger.info('그림 자료를 가져오지 못했습니다.');
-        return res.status(200).json({ ok: false, message: '그림을 업로드 하지 않았습니다.' });
+        return res.status(400).json({ ok: false, message: '그림을 업로드 하지 않았습니다.' });
       }
 
       const id = req.session.user?.id;

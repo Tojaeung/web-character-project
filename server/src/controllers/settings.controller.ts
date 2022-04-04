@@ -18,7 +18,7 @@ const settingsController = {
       // 변경할 이메일이 존재하는지 확인합니다.
       const existingEmail = await userRepo.findUserByEmail(newEmail);
       if (existingEmail) {
-        return res.status(200).json({ ok: false, message: '이미 존재하는 이메일 입니다.' });
+        return res.status(400).json({ ok: false, message: '이미 존재하는 이메일 입니다.' });
       }
 
       /*
@@ -44,7 +44,7 @@ const settingsController = {
 
       // 변경할 닉네임이 존재하는지 확인합니다.
       const existingNickname = await userRepo.findUserByNickname(newNickname);
-      if (existingNickname) return res.status(200).json({ ok: false, message: '이미 존재하는 닉네임 입니다.' });
+      if (existingNickname) return res.status(400).json({ ok: false, message: '이미 존재하는 닉네임 입니다.' });
 
       await userRepo.updateNickname(id as number, newNickname);
 
@@ -69,7 +69,7 @@ const settingsController = {
       // 비밀번호 일치 확인
       const user = await userRepo.findUserById(id as number);
       const decryptedPw = await bcrypt.compare(currentPw, user?.pw as string);
-      if (!decryptedPw) return res.status(200).json({ ok: false, message: '비밀번호가 틀렸습니다.' });
+      if (!decryptedPw) return res.status(400).json({ ok: false, message: '비밀번호가 틀렸습니다.' });
 
       // 일치하면 비밀번호 변경
       const encryptedPw = await bcrypt.hash(newPw, 8);
@@ -147,7 +147,7 @@ const settingsController = {
 
       // 이미 기본 이미지일때
       if (currentAvatarKey === defaultAvatarKey) {
-        return res.status(200).json({ ok: false, message: '이미 기본 프로필 이미지입니다.' });
+        return res.status(400).json({ ok: false, message: '이미 기본 프로필 이미지입니다.' });
       }
 
       // 현재 프로필 사진이 기본 이미지가 아닐때 이전 프로필 사진을 s3 객체삭제 합니다.
@@ -197,7 +197,7 @@ const settingsController = {
         req.session.user!.cover = newCover;
         req.session.user!.coverKey = newCoverKey;
         req.session.save(() => {
-          return res.status(200).json({ ok: true, message: '커버 사진을 변경하였습니다.' });
+          return res.status(200).json({ ok: true, message: '커버 이미지을 변경하였습니다.' });
         });
       }
 
@@ -237,7 +237,7 @@ const settingsController = {
 
       // 이미 기본 이미지일때
       if (currentCoverKey === defaultCoverKey) {
-        return res.status(200).json({ ok: false, message: '이미 기본 커버 이미지입니다.' });
+        return res.status(400).json({ ok: false, message: '이미 기본 커버 이미지입니다.' });
       }
 
       // 현재 프로필 사진이 기본 이미지가 아닐때 이전 프로필 사진을 s3 객체삭제 합니다.
@@ -335,13 +335,13 @@ const settingsController = {
       // 자기소개에 아무것도 입력하지 않고 수정버튼을 눌렀을때
       if (desc.length === 0) {
         logger.info('자기소개 변경 글자가 없습니다.');
-        return res.status(200).json({ ok: false, message: '자기소개를 입력해주세요.' });
+        return res.status(400).json({ ok: false, message: '자기소개를 입력해주세요.' });
       }
 
       // 자기소개에 입력한 글자가 너무 많을때
       if (desc.length > 5000) {
         logger.info('자기소개 변경 글자가 너무 많습니다.');
-        return res.status(200).json({ ok: false, message: '자기소개가 너무 길어서 등록이 안되었습니다.' });
+        return res.status(400).json({ ok: false, message: '자기소개가 너무 길어서 등록이 안되었습니다.' });
       }
 
       // 변경한 자기소개를 desc테이블에 업데이트합니다.

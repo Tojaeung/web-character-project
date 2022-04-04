@@ -1,11 +1,11 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
-import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
 import { NicknameInput, AuthInputsType } from '@src/components/AuthInputs';
 import Button from '@src/components/Button';
+import { editNickname } from '@src/store/requests/settings.request';
 
 function EditNickname() {
   const dispatch = useAppDispatch();
@@ -18,16 +18,14 @@ function EditNickname() {
   } = useForm<AuthInputsType>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
-    const res = await axios.post(
-      '/api/settings/account/editNickname',
-      { nickname: data.nickname },
-      { withCredentials: true }
-    );
-    const { ok, message } = res.data;
-    if (!ok) return alert(message);
-    alert(message);
-    await dispatch(closeModal());
-    navigate(0);
+    try {
+      const res = await dispatch(editNickname({ nickname: data.nickname! })).unwrap();
+      alert(res.message);
+      await dispatch(closeModal());
+      navigate(0);
+    } catch (err: any) {
+      alert(err.message);
+    }
   };
 
   return (

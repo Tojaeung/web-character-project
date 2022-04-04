@@ -16,15 +16,15 @@ const authController = {
       // 기존 이메일 존재 유무를 확인합니다.
       const existingEmail = await userRepo.findUserByEmail(email);
       if (existingEmail) {
-        logger.info('이미 존재하는 닉네임 입니다.');
-        return res.status(200).json({ ok: false, message: '이미 존재하는 이메일 입니다.' });
+        logger.info('이미 존재하는 이메일 입니다.');
+        return res.status(400).json({ ok: false, message: '이미 존재하는 이메일 입니다.' });
       }
 
       // 기존 닉네임 존재 유무를 확인합니다.
       const existingNickname = await userRepo.findUserByNickname(nickname);
       if (existingNickname) {
         logger.info('이미 존재하는 닉네임 입니다.');
-        return res.status(200).json({ ok: false, message: '이미 존재하는 닉네임입니다.' });
+        return res.status(400).json({ ok: false, message: '이미 존재하는 닉네임입니다.' });
       }
 
       // 비밀번호를 암호화 합니다.
@@ -126,8 +126,8 @@ const authController = {
 
       return res.status(200).json({ ok: true, message: '로그인 정보가 갱신되었습니다.', user });
     } catch (err: any) {
-      logger.error('리프레쉬 로그인 에러', err);
-      return res.status(500).json({ ok: false, message: '리프레쉬 로그인 에러' });
+      logger.error('로그인 갱신을 실패하였습니다.', err);
+      return res.status(500).json({ ok: false, message: '로그인 갱신 에러' });
     }
   },
 
@@ -176,7 +176,7 @@ const authController = {
       const user = await userRepo.findUserByEmail(email);
       if (!user) {
         logger.info('이메일이 존재하지 않습니다.');
-        return res.status(200).json({ ok: false, message: '이메일이 존재하지 않습니다.' });
+        return res.status(400).json({ ok: false, message: '이메일이 존재하지 않습니다.' });
       }
 
       /*
@@ -206,7 +206,7 @@ const authController = {
       const user = await userRepo.findUserById(Number(id));
       if (!user) {
         logger.info('비밀번호 인증확인이 실패하였습니다.');
-        return res.status(200).json({ ok: false, message: '비밀번호 인증확인이 실패하였습니다.' });
+        return res.status(400).json({ ok: false, message: '비밀번호 인증확인이 실패하였습니다.' });
       }
 
       /*

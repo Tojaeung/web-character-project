@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import ReactQuill from 'react-quill';
+import { useAppDispatch } from '@src/store/app/hook';
+import { imageUpload } from '@src/store/requests/board.request';
 
 export const useDefaultConfig = () => {
   const defaultModules = {
@@ -19,12 +21,15 @@ export const useDefaultConfig = () => {
 };
 
 export const useImageUploadConfig = (quillRef: React.RefObject<ReactQuill>) => {
+  const dispatch = useAppDispatch();
   const [imageKeys, setImageKeys] = useState<string[]>([]);
 
   const imageHandler = () => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
+    input.setAttribute('accept', 'image/png');
+    input.setAttribute('accept', 'image/jpeg');
+    input.setAttribute('accept', 'image/jpg');
     input.click();
 
     // 파일이 input 태그에 담기면 실행 될 함수
@@ -34,10 +39,10 @@ export const useImageUploadConfig = (quillRef: React.RefObject<ReactQuill>) => {
         const formData = new FormData();
         formData.append('image', file[0]);
         try {
-          const res = await axios.post('/api/board/imageUpload', formData, { withCredentials: true });
+          const res = await dispatch(imageUpload(formData)).unwrap();
 
-          const { ok, message, imageKey, imageUrl } = res.data;
-          if (!ok) return alert(message);
+          const { imageKey, imageUrl } = res;
+
           setImageKeys((prevImageKeys) => prevImageKeys.concat(imageKey));
 
           const range = quillRef.current?.getEditor().getSelection()?.index;
@@ -47,9 +52,8 @@ export const useImageUploadConfig = (quillRef: React.RefObject<ReactQuill>) => {
             quill?.setSelection(range, 1);
             quill?.clipboard.dangerouslyPasteHTML(range, `<img src=${imageUrl} alt="이미지" />`);
           }
-        } catch (error: any) {
-          const err = error;
-          return { ...err.response, success: false };
+        } catch (err: any) {
+          alert(err.message);
         }
       }
     };
@@ -71,5 +75,5 @@ export const useImageUploadConfig = (quillRef: React.RefObject<ReactQuill>) => {
     }),
     []
   );
-  return [imageUploadModules, imageKeys];
+  return { imageUploadModules, imageKeys };
 };

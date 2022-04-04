@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request } from 'express';
 import boardController from '@src/controllers/board.controller';
 import auth from '@src/middlewares/auth.middleware';
 import { boardUpload } from '@src/helpers/s3.helper';

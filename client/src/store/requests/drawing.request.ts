@@ -28,6 +28,9 @@ import {
   editCommentReturnType,
   editCommentParamType,
   editCommentErrorType,
+  addDrawingReturnType,
+  addDrawingParamType,
+  addDrawingErrorType,
 } from '@src/store/types/drawing.type';
 import { RootState } from '../app/store';
 
@@ -46,11 +49,26 @@ export const getDrawings = createAsyncThunk<
   }
 });
 
-export const addView = createAsyncThunk<
+export const addDrawing = createAsyncThunk<
+  addDrawingReturnType,
+  addDrawingParamType,
+  { state: RootState; rejectValue: addDrawingErrorType }
+>('ADD_DRAWING', async (data, thunkApi) => {
+  try {
+    const res = await axios.post('/api/drawing/addDrawing', data, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+
+export const addDrawingView = createAsyncThunk<
   addViewReturnType,
   addViewParamType,
   { state: RootState; rejectValue: addViewErrorType }
->('ADD_VIEW', async (data, thunkApi) => {
+>('ADD_DRAWING_VIEW', async (data, thunkApi) => {
   try {
     const res = await axios.post(`/api/drawing/addView`, data, {
       withCredentials: true,

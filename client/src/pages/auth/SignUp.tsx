@@ -1,15 +1,15 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
-import axios from 'axios';
 import styled from 'styled-components';
 import Button from '@src/components/Button';
-
+import { useNavigate } from 'react-router-dom';
 import { openModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
-
+import { signUp } from '@src/store/requests/auth.request';
 import { EmailInput, NicknameInput, PwInput, ConfirmPwInput, AuthInputsType } from '@src/components/AuthInputs';
 
 function SignUp() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -19,10 +19,13 @@ function SignUp() {
   } = useForm<AuthInputsType>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
-    const response = await axios.post('/api/auth/signUp', data);
-    const { ok, message } = response.data;
-    if (!ok) return alert(message);
-    await dispatch(openModal({ mode: 'signUpGuideModal' }));
+    try {
+      await dispatch(signUp(data)).unwrap();
+      await dispatch(openModal({ mode: 'signUpGuideModal' }));
+      navigate('/');
+    } catch (err: any) {
+      alert(err.message);
+    }
   };
 
   return (

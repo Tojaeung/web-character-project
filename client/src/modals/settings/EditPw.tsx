@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { logoutUser } from '@src/store/requests/auth.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { AuthInputsType, PwInput, ConfirmPwInput } from '@src/components/AuthInputs';
 import { closeModal } from '@src/store/slices/modal.slice';
 import Button from '@src/components/Button';
+import { editPw } from '@src/store/requests/settings.request';
 
 function EditPw() {
   const dispatch = useAppDispatch();
@@ -19,17 +19,15 @@ function EditPw() {
   } = useForm<AuthInputsType>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
-    const res = await axios.post(
-      '/api/settings/account/editPw',
-      { currentPw: data.currentPw, newPw: data.pw },
-      { withCredentials: true }
-    );
-    const { ok, message } = res.data;
-    if (!ok) return alert(message);
-    alert(message);
-    await dispatch(closeModal());
-    await dispatch(logoutUser());
-    navigate('/');
+    try {
+      const res = await dispatch(editPw({ currentPw: data.currentPw!, newPw: data.pw! })).unwrap();
+      alert(res.message);
+      await dispatch(closeModal());
+      await dispatch(logoutUser());
+      navigate('/');
+    } catch (err: any) {
+      alert(err.message);
+    }
   };
 
   return (

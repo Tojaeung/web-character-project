@@ -20,41 +20,44 @@ export const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(loginUser.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      state.user = payload.user;
-      localStorage.setItem('login', 'on');
-    });
-    builder.addCase(loginUser.rejected, (state, { payload }) => {
-      state.ok = payload?.ok!;
-      state.message = payload?.message!;
-      state.user = null;
-      alert(state.message);
-    });
+    // 로그인
+    builder
+      .addCase(loginUser.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.user = payload.user;
+      })
+      .addCase(loginUser.rejected, (state, { payload }) => {
+        state.ok = payload?.ok!;
+        state.message = payload?.message!;
+        state.user = null;
+      });
 
-    builder.addCase(logoutUser.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      state.user = null;
-    });
-    builder.addCase(logoutUser.rejected, (state, { payload }) => {
-      state.ok = payload?.ok!;
-      state.message = payload?.message!;
-      state.user = null;
-    });
+    // 로그아웃
+    builder
+      .addCase(logoutUser.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.user = null;
+      })
+      .addCase(logoutUser.rejected, (state, { payload }) => {
+        state.ok = payload?.ok!;
+        state.message = payload?.message!;
+        state.user = null;
+      });
 
-    builder.addCase(refreshLogin.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      state.user = payload.user;
-    });
-    builder.addCase(refreshLogin.rejected, (state, { payload }) => {
-      state.ok = payload?.ok!;
-      state.message = payload?.message!;
-      state.user = null;
-      localStorage.clear();
-    });
+    // 새로고침 로그인 유저정보 다시 가져오기
+    builder
+      .addCase(refreshLogin.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.user = payload.user;
+      })
+      .addCase(refreshLogin.rejected, (state, { payload }) => {
+        state.ok = payload?.ok!;
+        state.message = payload?.message!;
+        state.user = null;
+      });
   },
 });
 

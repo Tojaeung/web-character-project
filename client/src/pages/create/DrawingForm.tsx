@@ -9,11 +9,13 @@ import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import Button from '@src/components/Button';
 import { useDefaultConfig } from '@src/hook/useReactQuillConfig';
-import { useAppSelector } from '@src/store/app/hook';
+import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import LengthCountInput from '@src/components/LengthCountInput';
+import { addDrawing } from '@src/store/requests/drawing.request';
 
 function DrawingForm() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [defaultModules] = useDefaultConfig();
   const user = useAppSelector(selectAuthUser);
@@ -54,11 +56,13 @@ function DrawingForm() {
       formData.append('title', title);
       formData.append('content', content);
 
-      const res = await axios.post('/api/drawing/create', formData, { withCredentials: true });
-      const { ok, message } = res.data;
-      if (!ok) return alert(message);
-      alert(message);
-      navigate(`/profile/${user?.id}`);
+      try {
+        const res = await dispatch(addDrawing(formData)).unwrap();
+        alert(res.message);
+        navigate(`/profile/${user?.id}`);
+      } catch (err: any) {
+        alert(err.message);
+      }
     }
   };
 

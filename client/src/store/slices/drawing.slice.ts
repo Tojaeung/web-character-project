@@ -3,7 +3,7 @@ import type { RootState } from '../app/store';
 import { DrawingType } from '@src/types';
 import {
   getDrawings,
-  addView,
+  addDrawingView,
   addDrawingComment,
   addDrawingLike,
   addDrawingDisLike,
@@ -59,13 +59,13 @@ export const drawingSlice = createSlice({
       state.drawings = [];
       state.cursor = null;
     });
-    builder.addCase(addView.fulfilled, (state, { payload }) => {
+    builder.addCase(addDrawingView.fulfilled, (state, { payload }) => {
       state.ok = payload.ok;
       state.message = payload.message;
       const index = state.index;
       state.drawings[index!]!.views += 1;
     });
-    builder.addCase(addView.rejected, (state, { payload }) => {
+    builder.addCase(addDrawingView.rejected, (state, { payload }) => {
       state.ok = payload!.ok;
       state.message = payload!.message;
     });

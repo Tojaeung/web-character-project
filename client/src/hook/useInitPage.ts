@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '@src/store/app/hook';
-import { refreshLogin } from '@src/store/requests/auth.request';
+import { logoutUser, refreshLogin } from '@src/store/requests/auth.request';
 import { getProfile } from '@src/store/requests/profile.request';
 import { getBoard } from '@src/store/requests/board.request';
 import { getPost } from '@src/store/requests/board.request';
@@ -11,9 +11,15 @@ export const useRefreshLogin = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const login = localStorage.getItem('login');
-    if (!login) return;
-    dispatch(refreshLogin());
+    try {
+      const login = localStorage.getItem('login');
+      if (!login) return;
+      dispatch(refreshLogin()).unwrap();
+    } catch (err: any) {
+      alert(err.message);
+      dispatch(logoutUser());
+      localStorage.clear();
+    }
   }, [dispatch]);
 };
 

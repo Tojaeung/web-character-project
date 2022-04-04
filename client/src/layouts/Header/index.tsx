@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { AiOutlineMenu, AiOutlineKey, AiOutlineSearch, AiOutlineHome, AiOutlineClose } from 'react-icons/ai';
+import { AiOutlineMenu, AiOutlineKey, AiOutlineSearch, AiOutlineHome } from 'react-icons/ai';
 import Profile from './Profile';
 import Alert from './Alert';
 import Chat from './Chat';

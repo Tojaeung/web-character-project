@@ -41,8 +41,6 @@ const boardController = {
     try {
       const imageUrl = (req.file as Express.MulterS3.File).location;
       const imageKey = (req.file as Express.MulterS3.File).key;
-      console.log(imageUrl);
-      console.log(imageKey);
 
       if (!imageUrl || !imageKey) {
         logger.info('s3 이미지 업로드 실패하였습니다.');
@@ -54,16 +52,16 @@ const boardController = {
         .status(200)
         .json({ ok: true, message: '게시판 글쓰기 이미지 url 가져오기 성공하였습니다.', imageUrl, imageKey });
     } catch (err: any) {
-      logger.info('게시판 글쓰기 이미지 url 가져오기 에러');
+      logger.info('게시판 글쓰기 이미지 url 가져오기 에러', err);
       return res.status(500).json({ ok: false, message: '게시판 글쓰기 이미지 url 가져오기 에러' });
     }
   },
   imageRemove: async (req: Request, res: Response) => {
     try {
-      const imageKeyArray = req.body;
+      const { imageKeys } = req.body;
 
       const bucketName = process.env.AWS_BUCKET_NAME as string;
-      imageKeyArray.forEach((imageKey: string) => {
+      imageKeys.forEach((imageKey: string) => {
         s3.deleteObject({ Bucket: bucketName, Key: imageKey as string }, (err) => {
           if (err) {
             logger.warn('s3 board 객체삭제를 실패하였습니다.');
@@ -75,7 +73,7 @@ const boardController = {
       logger.info('게시판 글쓰기 이미지 board 객체 삭제 성공하였습니다.');
       return res.status(200).json({ ok: true, message: '게시판 글쓰기 이미지 board 객체 삭제 성공하였습니다.' });
     } catch (err: any) {
-      logger.info('게시판 글쓰기 이미지 board 객체 삭제 에러');
+      logger.info('게시판 글쓰기 이미지 board 객체 삭제 에러', err);
       return res.status(500).json({ ok: false, message: '게시판 글쓰기 이미지 board 객체 삭제 에러' });
     }
   },
@@ -98,10 +96,10 @@ const boardController = {
         await getRepository(ImageKey).save(image_key);
       });
       logger.info('게시판 글쓰기 등록 성공하였습니다.');
-      return res.status(200).json({ ok: true, message: '게시판 글쓰기 등록 성공하였습니다.', post });
+      return res.status(200).json({ ok: true, message: '게시판 글쓰기 성공하였습니다.', post });
     } catch (err: any) {
-      logger.info('게시판 글쓰기 등록 에러');
-      return res.status(500).json({ ok: false, message: '게시판 글쓰기 등록 에러' });
+      logger.info('게시판 글쓰기 에러');
+      return res.status(500).json({ ok: false, message: '게시판 글쓰기 에러' });
     }
   },
   addPostComment: async (req: Request, res: Response) => {

@@ -34,7 +34,6 @@ export const profileSlice = createSlice({
       state.ok = payload.ok;
       state.message = payload.message;
       state.profile?.followers.push(payload.newFollower);
-      alert(state.message);
     });
     builder.addCase(follow.rejected, (state, { payload }) => {
       state.ok = payload?.ok!;
@@ -46,8 +45,6 @@ export const profileSlice = createSlice({
       const filteredFollowers = state.profile?.followers.filter((follower) => follower.from_id !== payload.userId);
 
       state.profile!.followers = filteredFollowers!;
-
-      alert(state.message);
     });
     builder.addCase(unFollow.rejected, (state, { payload }) => {
       state.ok = payload?.ok!;

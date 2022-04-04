@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { getDrawings, addView } from '@src/store/requests/drawing.request';
+import { getDrawings, addDrawingView } from '@src/store/requests/drawing.request';
 import { selectProfileProfile } from '@src/store/slices/profile.slice';
 import {
   selectDrawing,
@@ -42,7 +42,7 @@ function Drawing() {
 
   const openDrawing = (index: number) => async (e: React.MouseEvent<HTMLLIElement>) => {
     await dispatch(selectDrawing({ selectedIndex: index }));
-    await dispatch(addView({ drawingId: drawings[index].id }));
+    await dispatch(addDrawingView({ drawingId: drawings[index].id }));
     await dispatch(openModal({ mode: 'showDrawingModal' }));
   };
 

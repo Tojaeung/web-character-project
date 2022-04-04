@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
 import { AiOutlineWarning } from 'react-icons/ai';
-import axios from 'axios';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import socket from '@src/utils/socket';
 import { logoutUser } from '@src/store/requests/auth.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
 import Input from '@src/components/Input';
+import { delAccount } from '@src/store/requests/settings.request';
 
 function DelAccount() {
   const dispatch = useAppDispatch();
   const [confirmText, setConfirmText] = useState('');
 
   const onDelAccount = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const res = await axios.get('/api/settings/account/delAccount', { withCredentials: true });
-    const { ok, message } = res.data;
-    if (!ok) return alert(message);
-    alert(message);
-    socket.emit('deleteUser');
-    await dispatch(closeModal());
-    await dispatch(logoutUser());
+    try {
+      const res = await dispatch(delAccount()).unwrap();
+      alert(res.message);
+      socket.emit('deleteUser');
+      socket.disconnect();
+      await dispatch(closeModal());
+      await dispatch(logoutUser());
+    } catch (err: any) {
+      alert(err.message);
+    }
   };
 
   return (

@@ -1,12 +1,12 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
 import { logoutUser } from '@src/store/requests/auth.request';
 import { AuthInputsType, EmailInput } from '@src/components/AuthInputs';
 import Button from '@src/components/Button';
+import { editEmail } from '@src/store/requests/settings.request';
 
 function EditEmail() {
   const navigate = useNavigate();
@@ -19,13 +19,15 @@ function EditEmail() {
   } = useForm<AuthInputsType>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
-    const res = await axios.post('/api/settings/account/editEmail', { email: data.email }, { withCredentials: true });
-    const { ok, message } = res.data;
-    if (!ok) return alert(message);
-    await dispatch(closeModal());
-    alert(message);
-    await dispatch(logoutUser());
-    navigate('/');
+    try {
+      const res = await dispatch(editEmail({ email: data.email! })).unwrap();
+      alert(res.message);
+      await dispatch(closeModal());
+      await dispatch(logoutUser());
+      navigate('/');
+    } catch (err: any) {
+      alert(err.message);
+    }
   };
 
   return (

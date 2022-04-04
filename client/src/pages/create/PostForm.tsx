@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Button from '@src/components/Button';
@@ -10,13 +9,16 @@ import boardTitle from '@src/utils/boardTitle.util';
 import { useImageUploadConfig } from '@src/hook/useReactQuillConfig';
 import { boardCategory } from '@src/utils/boardCategory.util';
 import LengthCountInput from '@src/components/LengthCountInput';
+import { useAppDispatch } from '@src/store/app/hook';
+import { addPost, imageRemove } from '@src/store/requests/board.request';
 
 function PostForm() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { board } = useParams();
 
   const quillRef = useRef<ReactQuill>(null);
-  const [imageUploadModules, imageKeys] = useImageUploadConfig(quillRef);
+  const { imageUploadModules, imageKeys } = useImageUploadConfig(quillRef);
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -33,17 +35,14 @@ function PostForm() {
     } else if (content.length > 10000) {
       return alert('내용 글자 수를 초과하였습니다.');
     } else {
-      const res = await axios.post(
-        '/api/board/addPost',
-        { title, content, board, imageKeys },
-        { withCredentials: true }
-      );
-      const { ok, message, post } = res.data;
-
-      if (!ok) return alert(message);
-
-      alert('글이 등록되었습니다.');
-      navigate(`board/${post.board}/post/${post.id}`);
+      try {
+        const res = await dispatch(addPost({ title, content, board: board!, imageKeys })).unwrap();
+        const { message, post } = res;
+        alert(message);
+        navigate(`board/${post.board}/post/${post.id}`);
+      } catch (err: any) {
+        alert(err.message);
+      }
     }
   };
 
@@ -54,9 +53,11 @@ function PostForm() {
     if ((imageKeys as string[]).length === 0) {
       return;
     } else {
-      const res = await axios.post('/api/board/imageRemove', imageKeys, { withCredentials: true });
-      const { ok, message } = res.data;
-      if (!ok) return alert(message);
+      try {
+        await dispatch(imageRemove({ imageKeys })).unwrap();
+      } catch (err: any) {
+        alert(err.message);
+      }
     }
   };
 

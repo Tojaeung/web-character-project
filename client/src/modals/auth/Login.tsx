@@ -19,9 +19,13 @@ function Login() {
   } = useForm<AuthInputsType>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
-    await dispatch(loginUser({ email: data.email!, pw: data.pw! }));
-    await dispatch(closeModal());
-    navigate(0);
+    try {
+      await dispatch(loginUser({ email: data.email!, pw: data.pw! })).unwrap();
+      await dispatch(closeModal());
+      localStorage.setItem('login', 'on');
+    } catch (err: any) {
+      alert(err.message);
+    }
   };
 
   const openFindPw = async (e: React.MouseEvent<HTMLSpanElement>) => {
@@ -29,7 +33,7 @@ function Login() {
     await dispatch(openModal({ mode: 'findPw' }));
   };
 
-  const moveSignUp = async (e: React.MouseEvent<HTMLSpanElement>) => {
+  const toSignUp = async (e: React.MouseEvent<HTMLSpanElement>) => {
     await dispatch(closeModal());
     navigate('/auth/signUp');
   };
@@ -48,7 +52,7 @@ function Login() {
       <GuideBox>
         <FindPw onClick={openFindPw}>비밀번호찾기</FindPw>
         <Boundary> | </Boundary>
-        <SignUp onClick={moveSignUp}>회원가입</SignUp>
+        <SignUp onClick={toSignUp}>회원가입</SignUp>
       </GuideBox>
     </Form>
   );

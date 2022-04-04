@@ -4,11 +4,14 @@ import styled from 'styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@src/components/Button';
+import { useAppDispatch } from '@src/store/app/hook';
 import { AuthInputsType, PwInput, ConfirmPwInput } from '@src/components/AuthInputs';
+import { editPw } from '@src/store/requests/auth.request';
 
 function EditPw() {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -21,11 +24,13 @@ function EditPw() {
     const query = qs.parse(location.search, {
       ignoreQueryPrefix: true,
     });
-    const res = await axios.post('/api/auth/editPw', { pw: data.pw, pwToken: query.pwToken });
-    const { ok, message } = res.data;
-    if (ok!) return alert(message);
-    alert(message);
-    navigate('/');
+    try {
+      const res = await dispatch(editPw({ pw: data.pw!, pwToken: query.pwToken as string })).unwrap();
+      alert(res.message);
+      navigate('/');
+    } catch (err: any) {
+      alert(err.message);
+    }
   };
 
   return (

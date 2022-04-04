@@ -17,6 +17,16 @@ export type getDrawingsErrorType = {
   message: string;
 };
 
+export type addDrawingReturnType = {
+  ok: boolean;
+  message: string;
+};
+export type addDrawingParamType = {};
+export type addDrawingErrorType = {
+  ok: boolean;
+  message: string;
+};
+
 export type addViewReturnType = {
   ok: boolean;
   message: string;
