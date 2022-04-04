@@ -5,6 +5,7 @@ import axios from 'axios';
 import { logoutUser } from '@src/store/requests/auth.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { AuthInputsType, PwInput, ConfirmPwInput } from '@src/components/AuthInputs';
+import { closeModal } from '@src/store/slices/modal.slice';
 import Button from '@src/components/Button';
 
 function EditPw() {
@@ -26,8 +27,9 @@ function EditPw() {
     const { ok, message } = res.data;
     if (!ok) return alert(message);
     alert(message);
+    await dispatch(closeModal());
     await dispatch(logoutUser());
-    navigate(0);
+    navigate('/');
   };
 
   return (

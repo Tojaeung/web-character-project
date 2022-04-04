@@ -1,14 +1,15 @@
 import React, { useRef } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '@src/store/app/hook';
-import { refreshLogin } from '@src/store/requests/auth.request';
 import { openModal } from '@src/store/slices/modal.slice';
 import TabMenu from './TabMenu';
 import Button from '@src/components/Button';
 
 function Account() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   // 프로필 사진 변경
   const avatarRef = useRef<HTMLInputElement>(null);
@@ -21,7 +22,7 @@ function Account() {
     const { ok, message } = res.data;
     if (!ok) return alert(message);
     alert(message);
-    await dispatch(refreshLogin());
+    navigate(0);
   };
 
   const handleDefaultAvatar = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -29,7 +30,7 @@ function Account() {
     const { ok, message } = res.data;
     if (!ok) return alert(message);
     alert(message);
-    await dispatch(refreshLogin());
+    navigate(0);
   };
 
   // 커버 사진 변경
@@ -43,7 +44,7 @@ function Account() {
     const { ok, message } = res.data;
     if (!ok) return alert(message);
     alert(message);
-    await dispatch(refreshLogin());
+    navigate(0);
   };
 
   const handleDefaultCover = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -51,7 +52,7 @@ function Account() {
     const { ok, message } = res.data;
     if (!ok) return alert(message);
     alert(message);
-    await dispatch(refreshLogin());
+    navigate(0);
   };
 
   const handleEditEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -79,7 +80,7 @@ function Account() {
             <DefaultButton color="red" size="small" inverse={true} responsive={true} onClick={handleDefaultAvatar}>
               기본 프로필 사진
             </DefaultButton>
-            <EditButton color="green" size="small" responsive={true}>
+            <EditButton color="green" size="small" responsive={true} onClick={(e) => avatarRef.current?.click()}>
               변경
             </EditButton>
           </ButtonBox>
@@ -92,7 +93,7 @@ function Account() {
             <DefaultButton color="red" size="small" inverse={true} responsive={true} onClick={handleDefaultCover}>
               기본 커버 사진
             </DefaultButton>
-            <EditButton color="green" size="small" responsive={true}>
+            <EditButton color="green" size="small" responsive={true} onClick={(e) => coverRef.current?.click()}>
               변경
             </EditButton>
           </ButtonBox>

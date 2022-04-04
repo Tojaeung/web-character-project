@@ -50,8 +50,9 @@ const settingsController = {
 
       // 재 로그인을 하지 않고 세션을 변경 해줍니다.
       req.session.user!.nickname = newNickname;
-
-      return res.status(200).json({ ok: true, message: '닉네임이 변경되었습니다.' });
+      req.session.save(() => {
+        return res.status(200).json({ ok: true, message: '닉네임이 변경되었습니다.' });
+      });
     } catch (err) {
       logger.error('닉네임 변경 에러', err);
       return res.status(500).json({ ok: false, message: '닉네임 변경 에러' });
@@ -104,7 +105,9 @@ const settingsController = {
         // 재 로그인을 하지 않기 때문에 세션을 변경해줍니다.
         req.session.user!.avatar = newAvatar;
         req.session.user!.avatarKey = newAvatarKey;
-        return res.status(200).json({ ok: true, message: '프로필 사진을 변경하였습니다.' });
+        req.session.save(() => {
+          return res.status(200).json({ ok: true, message: '프로필 사진을 변경하였습니다.' });
+        });
       }
 
       // s3 최적화를 위해 현재 아바타가 기본 아바타가 아니라면 현재아바타를 삭제한다.
@@ -122,8 +125,9 @@ const settingsController = {
       // 재 로그인을 하지 않기 때문에 세션을 변경해줍니다.
       req.session.user!.avatar = newAvatar;
       req.session.user!.avatarKey = newAvatarKey;
-
-      return res.status(200).json({ ok: true, message: '프로필 사진을 변경하였습니다.' });
+      req.session.save(() => {
+        return res.status(200).json({ ok: true, message: '프로필 사진을 변경하였습니다.' });
+      });
     } catch (err: any) {
       logger.error('프로필사진 변경 에러', err);
       return res.status(500).json({ ok: false, message: '프로필 사진 변경 에러' });
@@ -161,8 +165,9 @@ const settingsController = {
       // 재 로그인 하지 않기 때문에 세션을 변경 해줍니다.
       req.session.user!.avatar = defaultAvatar;
       req.session.user!.avatarKey = defaultAvatarKey;
-
-      return res.status(200).json({ ok: true, message: '기본 프로필 이미지로 변경되었습니다.' });
+      req.session.save(() => {
+        return res.status(200).json({ ok: true, message: '기본 프로필 이미지로 변경되었습니다.' });
+      });
     } catch (err: any) {
       logger.error('기본 프로필 사진 변경 에러', err);
       return res.status(500).json({ ok: false, message: '기본 프로필 이미지 변경 에러' });
@@ -177,7 +182,7 @@ const settingsController = {
       const newCoverKey = (req.file as Express.MulterS3.File).key;
 
       const id = req.session.user?.id;
-      const currentCoverKey = req.session.user?.avatarKey;
+      const currentCoverKey = req.session.user?.coverKey;
       const defaultCoverKey = 'default-cover.jpg';
 
       // s3 helper가 오류가 났을경우
@@ -191,7 +196,9 @@ const settingsController = {
         // 재 로그인을 하지 않기 때문에 세션을 변경해줍니다.
         req.session.user!.cover = newCover;
         req.session.user!.coverKey = newCoverKey;
-        return res.status(200).json({ ok: true, message: '커버 사진을 변경하였습니다.' });
+        req.session.save(() => {
+          return res.status(200).json({ ok: true, message: '커버 사진을 변경하였습니다.' });
+        });
       }
 
       // s3 최적화를 위해 현재 아바타가 기본 아바타가 아니라면 현재아바타를 삭제한다.
@@ -209,8 +216,9 @@ const settingsController = {
       // 재 로그인을 하지 않기 때문에 세션을 변경해줍니다.
       req.session.user!.cover = newCover;
       req.session.user!.coverKey = newCoverKey;
-
-      return res.status(200).json({ ok: true, message: '커버 이미지를 변경하였습니다.' });
+      req.session.save(() => {
+        return res.status(200).json({ ok: true, message: '커버 이미지를 변경하였습니다.' });
+      });
     } catch (err: any) {
       logger.error('프로필사진 변경 에러', err);
       return res.status(500).json({ ok: false, message: '커버 이미지 변경 에러' });
@@ -247,8 +255,9 @@ const settingsController = {
       // 재 로그인 하지 않기 때문에 세션을 변경 해줍니다.
       req.session.user!.cover = defaultCover;
       req.session.user!.coverKey = defaultCoverKey;
-
-      return res.status(200).json({ ok: true, message: '기본 커버 이미지로 변경되었습니다.' });
+      req.session.save(() => {
+        return res.status(200).json({ ok: true, message: '기본 커버 이미지로 변경되었습니다.' });
+      });
     } catch (err: any) {
       logger.error('기본 프로필 사진 변경 에러', err);
       return res.status(500).json({ ok: false, message: '기본 커버 이미지 변경 에러' });
@@ -281,6 +290,13 @@ const settingsController = {
       // 레디스에 저장된 대화정보 등등 식제
       await cluster.del(`chats:${userId}`, `messages:${userId}`, `msgNotis:${userId}`);
 
+      req.session.destroy((err: any) => {
+        if (err) {
+          logger.warn('로그아웃시 세션제거 과정 중 에러 발생');
+          return res.status(400).json({ ok: false, message: '로그아웃이 되지 않습니다.' });
+        }
+      });
+
       return res.status(200).json({ ok: true, message: '계정이 정상적으로 삭제되었습니다.' });
     } catch (err: any) {
       logger.error('계정탈퇴 에러', err);
@@ -297,8 +313,6 @@ const settingsController = {
       const id = req.session.user?.id;
 
       await userRepo.updateEmail(id as number, newEmail as string);
-      // 세션에 변경된 이메일을 업데이트 한다.
-      req.session.user!.email = newEmail as string;
 
       /*
        * 재 로그인을 위해서 홈페이지로 이동합니다.
@@ -333,8 +347,11 @@ const settingsController = {
       // 변경한 자기소개를 desc테이블에 업데이트합니다.
       await userRepo.updateDesc(id as number, desc as string);
 
-      logger.info('자기소개 변경 완료되었습니다.');
-      return res.status(200).json({ ok: true, message: '자기소개 변경 완료되었습니다.' });
+      req.session.user!.desc = desc;
+      req.session.save(() => {
+        logger.info('자기소개 변경 완료되었습니다.');
+        return res.status(200).json({ ok: true, message: '자기소개 변경 완료되었습니다.' });
+      });
     } catch (err: any) {
       logger.error('자기소개 변경 에러', err);
       return res.status(500).json({ ok: false, message: '자기소개 변경 에러' });

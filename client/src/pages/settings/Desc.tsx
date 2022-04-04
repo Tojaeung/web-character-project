@@ -18,6 +18,7 @@ function Desc() {
     const { ok, message } = res.data;
     if (!ok) return alert(message);
     alert(message);
+    navigate(0);
   };
 
   const onCancel = (e: React.MouseEvent<HTMLButtonElement>) => {

@@ -5,7 +5,6 @@ import { User } from '@src/entities/user/user.entity';
 import { UserRepository } from '@src/repositorys/user.repository';
 import logger from '@src/helpers/winston.helper';
 import { sendRegisterEmail, sendFindEmail } from '@src/helpers/nodemailer.helper';
-import cluster from '@src/helpers/redis.helper';
 
 const authController = {
   // 회원가입  API 입니다.
@@ -89,12 +88,13 @@ const authController = {
       delete existingUser.pwToken;
 
       req.session.user = existingUser;
+      req.session.save(() => {
+        // 클라이언트에게 보내는 유저정보
+        const user = req.session.user;
 
-      // 클라이언트에게 보내는 유저정보
-      const user = req.session.user;
-
-      logger.info('로그인 되었습니다.');
-      return res.status(200).json({ ok: true, message: '로그인 되었습니다.', user });
+        logger.info('로그인 되었습니다.');
+        return res.status(200).json({ ok: true, message: '로그인 되었습니다.', user });
+      });
     } catch (err: any) {
       console.log(err);
       logger.error('로그인 에러:', err);

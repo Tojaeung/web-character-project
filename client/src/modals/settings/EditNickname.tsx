@@ -1,14 +1,15 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import axios from 'axios';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
-import { refreshLogin } from '@src/store/requests/auth.request';
 import { NicknameInput, AuthInputsType } from '@src/components/AuthInputs';
 import Button from '@src/components/Button';
 
 function EditNickname() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -26,7 +27,7 @@ function EditNickname() {
     if (!ok) return alert(message);
     alert(message);
     await dispatch(closeModal());
-    await dispatch(refreshLogin());
+    navigate(0);
   };
 
   return (
