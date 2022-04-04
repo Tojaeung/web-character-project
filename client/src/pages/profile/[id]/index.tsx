@@ -39,8 +39,11 @@ function Profile() {
           <Image src={profile?.cover} alt="커버사진" />
         </CoverBox>
 
-        <UserInfoBox>
+        <AvatarBox>
           <Avatar src={profile?.avatar} size="large" />
+        </AvatarBox>
+
+        <UserInfoBox>
           <Nickname exp={profile?.exp!} nickname={profile?.nickname!} size="large" />
 
           <Desc onClick={onShowDesc}>자기소개</Desc>
@@ -49,18 +52,18 @@ function Profile() {
             <span>팔로워 {profile?.followers.length}</span>
             <span>팔로잉 {profile?.followings.length}</span>
           </FollowInfoBox>
+          {user && user?.id !== profile?.id && (
+            <ButtonBox>
+              <ChatButton chatPartnerId={profile?.id!} chatPartnerUserId={profile?.userId!} />
 
-          <ButtonBox>
-            <ChatButton chatPartnerId={profile?.id!} chatPartnerUserId={profile?.userId!} />
-
-            <FollowButton followers={profile?.followers!} id={profile?.id!} nickname={profile?.nickname!} />
-
-            {user?.id === profile?.id && (
-              <AddDrawingButton color="green" size="small" onClick={(e) => navigate('/create/drawingForm')}>
-                추가
-              </AddDrawingButton>
-            )}
-          </ButtonBox>
+              <FollowButton followers={profile?.followers!} id={profile?.id!} nickname={profile?.nickname!} />
+            </ButtonBox>
+          )}
+          {user?.id === profile?.id && (
+            <AddDrawingButton color="green" size="small" onClick={(e) => navigate('/create/drawingForm')}>
+              추가
+            </AddDrawingButton>
+          )}
         </UserInfoBox>
       </ProfileBox>
       <DrawingBox>
@@ -70,16 +73,23 @@ function Profile() {
   );
 }
 
+const AvatarBox = styled.div`
+  position: absolute;
+  top: 25rem;
+  left: calc(50% - 5rem);
+`;
+
 const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
   background-color: ${({ theme }) => theme.palette.white};
 `;
 const ProfileBox = styled.section`
-  position: relative;
   width: 100%;
+  position: relative;
 `;
 const CoverBox = styled.div`
   margin: 0 auto;
@@ -100,10 +110,7 @@ const UserInfoBox = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 0.7rem;
-  position: absolute;
-  top: 35rem;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  margin-top: 5.5rem;
 `;
 const Desc = styled.span`
   font-size: 1.5rem;
@@ -124,7 +131,7 @@ const ButtonBox = styled.div`
 const AddDrawingButton = styled(Button)``;
 
 const DrawingBox = styled.section`
-  margin-top: 16.5rem;
+  /* margin-top: 16.5rem; */
 `;
 
 export default Profile;
