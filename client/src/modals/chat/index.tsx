@@ -5,7 +5,7 @@ import { useAppSelector } from '@src/store/app/hook';
 import Chatting from '@src/modals/chat/chatting';
 import ChatList from '@src/modals/chat/chatList';
 
-function ChatModal() {
+function Chat() {
   const chatOk = useAppSelector(selectChatOk);
   const chatUser = useAppSelector(selectChatUser);
 
@@ -33,4 +33,4 @@ const Container = styled.div`
   }
 `;
 
-export default ChatModal;
+export default Chat;

@@ -5,7 +5,7 @@ import Button from '@src/components/Button';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
 
-function SignUpGuideModal() {
+function SignUpGuide() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -55,4 +55,4 @@ const Content = styled.p`
 `;
 const ConfirmButton = styled(Button)``;
 
-export default SignUpGuideModal;
+export default SignUpGuide;

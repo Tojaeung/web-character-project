@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetProfile } from '@src/hook/useGetProfile';
+import { useGetProfile } from '@src/hook/useInitPage';
 import Drawing from '@src/pages/profile/[id]/Drawing';
 import { selectProfileOk } from '@src/store/slices/profile.slice';
 import NotFound from '@src/components/NotFound';
@@ -16,6 +16,8 @@ import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { openModal } from '@src/store/slices/modal.slice';
 
 function Profile() {
+  useGetProfile();
+
   // 존재하지 않는 profileId를 url에서 조회할때 존재하지 않는경우 오류페이지를 보여준다.
   const ok = useAppSelector(selectProfileOk);
   const dispatch = useAppDispatch();
@@ -27,7 +29,6 @@ function Profile() {
   const onShowDesc = async (e: React.MouseEvent<HTMLDivElement>) => {
     await dispatch(openModal({ mode: 'showDesc' }));
   };
-  useGetProfile();
 
   return !ok ? (
     <NotFound />
@@ -55,7 +56,7 @@ function Profile() {
             <FollowButton followers={profile?.followers!} id={profile?.id!} nickname={profile?.nickname!} />
 
             {user?.id === profile?.id && (
-              <AddDrawingButton color="green" size="small" onClick={(e) => navigate('/createDrawingForm')}>
+              <AddDrawingButton color="green" size="small" onClick={(e) => navigate('/create/drawingForm')}>
                 추가
               </AddDrawingButton>
             )}

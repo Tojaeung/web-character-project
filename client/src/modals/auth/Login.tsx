@@ -8,7 +8,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { AuthInputsType, EmailInput, PwInput } from '@src/components/AuthInputs';
 import Button from '@src/components/Button';
 
-function LoginModal() {
+function Login() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -34,7 +34,7 @@ function LoginModal() {
 
   const onClickRegister = async (e: React.MouseEvent<HTMLSpanElement>) => {
     await dispatch(closeModal());
-    navigate('/auth/register');
+    navigate('/auth/signUp');
   };
 
   return (
@@ -93,4 +93,4 @@ const SignUp = styled.span`
   }
 `;
 
-export default LoginModal;
+export default Login;

@@ -6,7 +6,7 @@ import getLevel from '@src/utils/exp.util';
 import relativeTime from '@src/utils/date.util';
 import boardTitle from '@src/utils/boardTitle.util';
 import Board from '@src/pages/board/[board]';
-import { useGetPost } from '@src/hook/useGetPost';
+import { useGetPost } from '@src/hook/useInitPage';
 // import { greenButtonStyle } from '@src/styles/GlobalStyles';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { selectBoardPost } from '@src/store/slices/board.slice';

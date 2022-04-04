@@ -3,17 +3,17 @@ import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectModalIsOpen, selectModalMode, closeModal } from '@src/store/slices/modal.slice';
 import { AiOutlineClose } from 'react-icons/ai';
-import LoginModal from '@src/modals/auth/Login.modal';
-import DelAccountModal from '@src/modals/settings/DelAccount.modal';
-import ExitChatModal from '@src/modals/chat/ExitChat.modal';
-import SignUpGuideModal from '@src/modals/auth/SignUpGuideModal';
+import LoginModal from '@src/modals/auth/Login';
+import DelAccountModal from '@src/modals/settings/DelAccount';
+import ExitChatModal from '@src/modals/chat/ExitChat';
+import SignUpGuideModal from '@src/modals/auth/SignUpGuide';
 import FindPw from '@src/modals/auth/FindPw';
-import EditEmailModal from '@src/modals/settings/EditEmail.modal';
-import EditNicknameModal from '@src/modals/settings/EditNickname.modal';
-import EditPwModal from '@src/modals/settings/EditPw.modal';
-import SearchModal from '@src/modals/search/Search.modal';
-import ShowDescModal from '@src/modals/profile/ShowDesc.modal';
-import ShowDrawingModal from '@src/modals/profile/ShowDrawing.modal';
+import EditEmailModal from '@src/modals/settings/EditEmail';
+import EditNicknameModal from '@src/modals/settings/EditNickname';
+import EditPwModal from '@src/modals/settings/EditPw';
+import SearchModal from '@src/modals/search/Search';
+import ShowDescModal from '@src/modals/profile/ShowDesc';
+import ShowDrawingModal from '@src/modals/profile/ShowDrawing';
 
 function Modal() {
   const dispatch = useAppDispatch();

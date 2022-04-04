@@ -7,7 +7,7 @@ import { selectProfileProfile } from '@src/store/slices/profile.slice';
 import { useAppSelector } from '@src/store/app/hook';
 import Button from '@src/components/Button';
 
-function ShowDescModal() {
+function ShowDesc() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -29,7 +29,7 @@ function ShowDescModal() {
           color="green"
           size="medium"
           onClick={(e) => {
-            navigate('/settings');
+            navigate('/settings/account');
             onClose(e);
           }}
         >
@@ -57,4 +57,4 @@ const Content = styled.p`
 `;
 const ModifyButton = styled(Button)``;
 
-export default ShowDescModal;
+export default ShowDesc;

@@ -1,15 +1,15 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { useRefreshLogin } from '@src/hook/useRefreshLogin';
+import { useRefreshLogin } from '@src/hook/useInitPage';
 import { useSocketSetup } from '@src/hook/useSocketSetup';
 
 import { AuthRouter, PrivateRouter } from '@src/routes/PrivateRouter';
 
 import Header from '@src/layouts/Header';
 import Home from '@src/pages/Home';
-import PostForm from '@src/pages/PostForm';
-import DrawingForm from '@src/pages/DrawingForm';
+import PostForm from '@src/pages/create/PostForm';
+import DrawingForm from '@src/pages/create/DrawingForm';
 import Modal from '@src/modals/Modal';
 import Chat from '@src/modals/chat';
 import Profile from '@src/pages/profile/[id]';

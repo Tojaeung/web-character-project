@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
 import { v4 } from 'uuid';
-import { useGetBoard } from '@src/hook/useGetBoard';
+import { useGetBoard } from '@src/hook/useInitPage';
 import { selectBoardSelectedBoard } from '@src/store/slices/board.slice';
 import { useAppSelector } from '@src/store/app/hook';
 import relativeTime from '@src/utils/date.util';

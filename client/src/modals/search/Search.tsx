@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Search from '@src/layouts/Header/Search';
 
-function SearchModal() {
+function Search1() {
   return (
     <Container>
       <Search />
@@ -25,4 +25,4 @@ const Container = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
 `;
 
-export default SearchModal;
+export default Search1;

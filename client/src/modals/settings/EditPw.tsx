@@ -1,16 +1,15 @@
+import styled from 'styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import axios from 'axios';
-import { closeModal } from '@src/store/slices/modal.slice';
-import { useAppDispatch } from '@src/store/app/hook';
 import { logoutUser } from '@src/store/requests/auth.request';
-import { AuthInputsType, EmailInput } from '@src/components/AuthInputs';
+import { useAppDispatch } from '@src/store/app/hook';
+import { AuthInputsType, PwInput, ConfirmPwInput } from '@src/components/AuthInputs';
 import Button from '@src/components/Button';
 
-function EditEmailModal() {
-  const navigate = useNavigate();
+function EditPw() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -19,27 +18,30 @@ function EditEmailModal() {
   } = useForm<AuthInputsType>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
-    const res = await axios.post('/api/settings/account/editEmail', { email: data.email }, { withCredentials: true });
+    const res = await axios.post(
+      '/api/settings/account/editPw',
+      { currentPw: data.currentPw, newPw: data.pw },
+      { withCredentials: true }
+    );
     const { ok, message } = res.data;
     if (!ok) return alert(message);
-    await dispatch(closeModal());
     alert(message);
     await dispatch(logoutUser());
-    navigate('/');
+    navigate(0);
   };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <Title>이메일 변경</Title>
-      <Content>
-        변경할 이메일 주소를 정확하게 입력해주세요.🔍
-        <br />
-        <i>'인증메일'</i>이 전송됩니다.
-      </Content>
-      <EmailInput label="이메일" name="email" register={register} error={errors.email} />
+      <Title>비밀번호 변경</Title>
+
+      <Content>변경할 비밀번호를 입력해주세요 🔒🔒</Content>
+
+      <PwInput label="현재 비밀번호" name="currentPw" register={register} error={errors.currentPw} />
+      <PwInput label="변경할 비밀번호" name="pw" register={register} error={errors.pw} />
+      <ConfirmPwInput label="비밀번호 확인" name="confirmPw" register={register} error={errors.confirmPw} />
 
       <SubmitButton type="submit" color="green" size="medium">
-        인증메일 보내기
+        비밀번호 변경하기
       </SubmitButton>
     </Form>
   );
@@ -52,7 +54,6 @@ const Form = styled.form`
   align-items: center;
   gap: 2rem;
 `;
-
 const Title = styled.h1`
   align-self: flex-start;
 `;
@@ -61,4 +62,4 @@ const Content = styled.p`
 `;
 const SubmitButton = styled(Button)``;
 
-export default EditEmailModal;
+export default EditPw;

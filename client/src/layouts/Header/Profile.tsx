@@ -44,7 +44,7 @@ function Profile() {
             프로필
           </NavLink>
 
-          <NavLink to="/settings">
+          <NavLink to="/settings/account">
             <SettingsIcon />
             설정
           </NavLink>

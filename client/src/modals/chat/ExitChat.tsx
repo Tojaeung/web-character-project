@@ -6,7 +6,7 @@ import { selectChatUser, isChatUser } from '@src/store/slices/chat.slice';
 import socket from '@src/utils/socket';
 import Button from '@src/components/Button';
 
-function ExitChatModal() {
+function ExitChat() {
   const dispatch = useAppDispatch();
   const chatUser = useAppSelector(selectChatUser);
 
@@ -44,4 +44,4 @@ const ExitChatButton = styled(Button)`
   align-self: center;
 `;
 
-export default ExitChatModal;
+export default ExitChat;

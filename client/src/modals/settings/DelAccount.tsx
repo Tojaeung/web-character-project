@@ -8,7 +8,7 @@ import { useAppDispatch } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
 import Input from '@src/components/Input';
 
-function DelAccountModal() {
+function DelAccount() {
   const dispatch = useAppDispatch();
   const [confirmText, setConfirmText] = useState('');
 
@@ -88,4 +88,4 @@ const SubmitButton = styled.button`
   }
 `;
 
-export default DelAccountModal;
+export default DelAccount;
