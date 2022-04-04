@@ -19,20 +19,17 @@ function Login() {
   } = useForm<AuthInputsType>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
-    const response = await dispatch(loginUser({ email: data.email!, pw: data.pw! })).unwrap();
-    const { ok, message } = response;
-    if (!ok) return alert(message);
+    await dispatch(loginUser({ email: data.email!, pw: data.pw! }));
     await dispatch(closeModal());
     navigate(0);
-    localStorage.setItem('login', 'on');
   };
 
-  const onClickFindPw = async (e: React.MouseEvent<HTMLSpanElement>) => {
+  const openFindPw = async (e: React.MouseEvent<HTMLSpanElement>) => {
     await dispatch(closeModal());
     await dispatch(openModal({ mode: 'findPw' }));
   };
 
-  const onClickRegister = async (e: React.MouseEvent<HTMLSpanElement>) => {
+  const moveSignUp = async (e: React.MouseEvent<HTMLSpanElement>) => {
     await dispatch(closeModal());
     navigate('/auth/signUp');
   };
@@ -49,9 +46,9 @@ function Login() {
       </LoginButton>
 
       <GuideBox>
-        <FindPw onClick={onClickFindPw}>비밀번호찾기</FindPw>
+        <FindPw onClick={openFindPw}>비밀번호찾기</FindPw>
         <Boundary> | </Boundary>
-        <SignUp onClick={onClickRegister}>회원가입</SignUp>
+        <SignUp onClick={moveSignUp}>회원가입</SignUp>
       </GuideBox>
     </Form>
   );

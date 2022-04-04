@@ -24,11 +24,13 @@ export const authSlice = createSlice({
       state.ok = payload.ok;
       state.message = payload.message;
       state.user = payload.user;
+      localStorage.setItem('login', 'on');
     });
     builder.addCase(loginUser.rejected, (state, { payload }) => {
       state.ok = payload?.ok!;
       state.message = payload?.message!;
       state.user = null;
+      alert(state.message);
     });
 
     builder.addCase(logoutUser.fulfilled, (state, { payload }) => {
@@ -51,6 +53,7 @@ export const authSlice = createSlice({
       state.ok = payload?.ok!;
       state.message = payload?.message!;
       state.user = null;
+      localStorage.clear();
     });
   },
 });

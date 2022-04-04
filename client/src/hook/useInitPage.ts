@@ -9,15 +9,11 @@ import { getPost } from '@src/store/requests/board.request';
 // 리프레쉬 로그인
 export const useRefreshLogin = () => {
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     const login = localStorage.getItem('login');
     if (!login) return;
-    dispatch(refreshLogin()).then((res) => {
-      if (!res.payload?.ok) {
-        localStorage.clear();
-        return;
-      }
-    });
+    dispatch(refreshLogin());
   }, [dispatch]);
 };
 

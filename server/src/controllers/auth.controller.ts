@@ -68,21 +68,21 @@ const authController = {
       const existingUser = await userRepo.findUserByEmail(email);
       if (!existingUser) {
         logger.info('회원 이메일이 존재하지 않습니다.');
-        return res.status(200).json({ ok: false, message: '아이디 또는 비밀번호가 올바르지 않습니다.' });
+        return res.status(400).json({ ok: false, message: '아이디 또는 비밀번호가 올바르지 않습니다.' });
       }
 
       // 유효한 이메일이라면 비밀번호가 맞는지 확인합니다.
       const decryptedPw = await bcrypt.compare(pw, existingUser.pw as string);
       if (!decryptedPw) {
         logger.info('비밀번호가 틀렸습니다.');
-        return res.status(200).json({ ok: false, message: '아이디 또는 비밀번호가 올바르지 않습니다.' });
+        return res.status(400).json({ ok: false, message: '아이디 또는 비밀번호가 올바르지 않습니다.' });
       }
 
       // 인증되지 않은 회원일 경우에 다시 인증메일을 발송합니다.
       if (!existingUser?.isVerified) {
         await sendRegisterEmail(req, res, existingUser.id, existingUser.email, existingUser.emailToken as string);
         logger.info('이메일 인증을 받지 않은 회원입니다.');
-        return res.status(200).json({ ok: false, message: '인증되지 않은 사용자 입니다. 이메일 인증을 확인해주세요' });
+        return res.status(400).json({ ok: false, message: '인증되지 않은 사용자 입니다. 이메일 인증을 확인해주세요' });
       }
       // 보안상 중요한 내용은 클라이언트에 보내지 않는다.
       delete existingUser.pw;
