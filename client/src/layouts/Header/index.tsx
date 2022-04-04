@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { AiOutlineMenu, AiOutlineKey, AiOutlineSearch, AiOutlineHome } from 'react-icons/ai';
+import { AiOutlineMenu, AiOutlineKey, AiOutlineSearch, AiOutlineHome, AiOutlineClose } from 'react-icons/ai';
 import Profile from './Profile';
 import Alert from './Alert';
 import Chat from './Chat';
@@ -16,9 +16,7 @@ function Header() {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectAuthUser);
 
-  const openSearchModal = async (e: React.MouseEvent<SVGElement>) => {
-    await dispatch(openModal({ mode: 'search' }));
-  };
+  const [showSearch, setShowSearch] = useState(false);
 
   const openLoginModal = async (e: any) => {
     await dispatch(openModal({ mode: 'login' }));
@@ -32,7 +30,7 @@ function Header() {
         </Link>
 
         <SearchBox>
-          <Search />
+          <Search setShowSearch={setShowSearch} />
         </SearchBox>
 
         {user ? (
@@ -56,15 +54,20 @@ function Header() {
         )}
       </Container>
       <Responsive>
-        <MenuIcon />
-        <Link to="/">
-          <img src={logo} alt="펜슬힐러" />
-        </Link>
-
-        <IconBox>
-          <SearchIcon onClick={openSearchModal} />
-          {!user && <KeyIcon onClick={openLoginModal} />}
-        </IconBox>
+        {showSearch ? (
+          <Search setShowSearch={setShowSearch} />
+        ) : (
+          <>
+            <MenuIcon />
+            <Link to="/">
+              <img src={logo} alt="펜슬힐러" />
+            </Link>
+            <IconBox>
+              <SearchIcon onClick={(e) => setShowSearch(true)} />
+              {!user && <KeyIcon onClick={openLoginModal} />}
+            </IconBox>
+          </>
+        )}
 
         {user && (
           <ToolsBox>

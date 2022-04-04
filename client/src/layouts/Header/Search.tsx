@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Input from '@src/components/Input';
+import Button from '@src/components/Button';
 import { BsSearch } from 'react-icons/bs';
 import { IoMdClose } from 'react-icons/io';
-import SearchButton from '@src/components/header/SearchButton';
 
-function Search() {
+interface IProp {
+  setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function Search({ setShowSearch }: IProp) {
   const [searchValue, setSearchValue] = useState('');
 
   const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -26,7 +30,13 @@ function Search() {
       />
       <SearchIcon />
       <CancelIcon onClick={(e) => setSearchValue('')} />
-      <SearchButton />
+
+      <SearchButton color="green" size="small">
+        검색
+      </SearchButton>
+      <CancelButton color="red" size="small" onClick={(e) => setShowSearch(false)}>
+        취소
+      </CancelButton>
     </Container>
   );
 }
@@ -57,7 +67,25 @@ const CancelIcon = styled(IoMdClose)`
   top: 0.7rem;
   right: 1rem;
   @media ${({ theme }) => theme.device.mobile} {
-    right: 7.5rem;
+    right: 10.5rem;
+  }
+`;
+
+const SearchButton = styled(Button)`
+  display: none;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    display: block;
+    font-size: 1.2rem;
+    padding: 1rem;
+  }
+`;
+const CancelButton = styled(Button)`
+  display: none;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+    padding: 1rem;
+    display: block;
   }
 `;
 

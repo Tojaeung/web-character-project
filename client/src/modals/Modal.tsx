@@ -11,7 +11,6 @@ import FindPw from '@src/modals/auth/FindPw';
 import EditEmailModal from '@src/modals/settings/EditEmail';
 import EditNicknameModal from '@src/modals/settings/EditNickname';
 import EditPwModal from '@src/modals/settings/EditPw';
-import SearchModal from '@src/modals/search/Search';
 import ShowDescModal from '@src/modals/profile/ShowDesc';
 import ShowDrawingModal from '@src/modals/profile/ShowDrawing';
 
@@ -25,9 +24,9 @@ function Modal() {
     <Container>
       <Background onClick={(e) => dispatch(closeModal())} />
       {!isOpen && !mode && null}
-      {isOpen && mode === 'showDrawingModal' && <ShowDrawingModal />}
-      {isOpen && mode === 'search' && <SearchModal />}
-      {isOpen && mode !== 'showDrawingModal' && 'search' && (
+      {isOpen && mode === 'showDrawingModal' ? (
+        <ShowDrawingModal />
+      ) : (
         <ModalBox>
           <CloseIcon onClick={(e) => dispatch(closeModal())} />
           {isOpen && mode === 'login' && <LoginModal />}
@@ -41,6 +40,7 @@ function Modal() {
           {isOpen && mode === 'showDesc' && <ShowDescModal />}
         </ModalBox>
       )}
+      ))
     </Container>,
     document.getElementById('modalPortal') as HTMLElement
   );
