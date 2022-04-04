@@ -30,6 +30,8 @@ function PostForm() {
       return alert('내용 글자 수를 초과하였습니다.');
     } else if (content.length === 0) {
       return alert('내용을 입력해주세요.');
+    } else if (content.length > 10000) {
+      return alert('내용 글자 수를 초과하였습니다.');
     } else {
       const res = await axios.post(
         '/api/board/addPost',
@@ -76,7 +78,7 @@ function PostForm() {
         onChange={setContent}
         modules={imageUploadModules}
         theme="snow"
-        placeholder="내용을 입력하세요...."
+        placeholder="내용을 입력하세요....(최대 3000글자)"
       />
       <ButtonBox>
         <RegisterButton color="green" size="medium" responsive={true} onClick={onAddPost}>

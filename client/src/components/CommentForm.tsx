@@ -21,6 +21,10 @@ function CommentForm({ id, comments, type }: IProp) {
   const [content, setContent] = useState('');
 
   const onAddComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (content.length > 100) {
+      alert('댓글 글자 수를 초과하였습니다.');
+      return;
+    }
     if (type === 'drawing') {
       await dispatch(addDrawingComment({ userId: user?.id!, drawingId: id, content }));
       setContent('');
@@ -33,7 +37,7 @@ function CommentForm({ id, comments, type }: IProp) {
   return (
     <Container>
       <TextArea
-        placeholder="댓글을 입력하세요.."
+        placeholder="댓글 입력하세요..(최대 100글자)"
         cols={20}
         rows={3}
         wrap="hard"

@@ -43,7 +43,7 @@ const Input = styled.input<{ limit: number; valueLength: number }>`
 
 const LengthCount = styled.span<{ limit: number; valueLength: number }>`
   position: absolute;
-  top: 1.5rem;
+  top: 1.3rem;
   right: 1rem;
   ${({ theme, limit, valueLength }) => {
     if (valueLength > limit) {

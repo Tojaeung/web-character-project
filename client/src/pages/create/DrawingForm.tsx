@@ -43,6 +43,10 @@ function DrawingForm() {
       return alert('내용을 입력해주세요.');
     } else if (!drawing) {
       return alert('그림파일을 업로드 하지 않았습니다.');
+    } else if (content.length === 0) {
+      return alert('내용을 입력해주세요.');
+    } else if (content.length > 10000) {
+      return alert('내용 글자 수를 초과하였습니다.');
     } else {
       e.preventDefault();
       const formData = new FormData();
@@ -92,7 +96,7 @@ function DrawingForm() {
           onChange={setContent}
           modules={defaultModules}
           theme="snow"
-          placeholder="내용을 입력하세요...."
+          placeholder="내용을 입력하세요....(최대 3000글자)"
         />
         <ButtonWrapper>
           <SubmitButton color="green" size="medium" responsive={true} onClick={onSubmit}>
