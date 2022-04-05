@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 interface IProps {
   exp: number;
   nickname: string;
-  size: string;
+  size: 'small' | 'medium' | 'large';
 }
 
 function Nickname({ exp, nickname, size }: IProps) {

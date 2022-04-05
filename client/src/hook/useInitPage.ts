@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '@src/store/app/hook';
 import { logoutUser, refreshLogin } from '@src/store/requests/auth.request';
 import { getProfile } from '@src/store/requests/profile.request';
-import { getBoard } from '@src/store/requests/board.request';
+import { getBoard, getBoards } from '@src/store/requests/board.request';
 import { getPost } from '@src/store/requests/board.request';
 
 // 리프레쉬 로그인
@@ -33,17 +33,25 @@ export const useGetProfile = () => {
   }, [dispatch, profileId]);
 };
 
+// 게시판 모두 불러오기
+export const useGetBoards = () => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getBoards());
+  }, []);
+};
+
 // 게시판
-export const useGetBoard = (boardName: string) => {
+export const useGetBoard = (board: string) => {
   const dispatch = useAppDispatch();
 
-  const getBoardFunction = async (boardName: string) => {
-    await dispatch(getBoard({ boardName }));
+  const getBoardFunction = async (board: string) => {
+    await dispatch(getBoard({ board }));
   };
 
   useEffect(() => {
-    getBoardFunction(boardName as string);
-  }, [boardName]);
+    getBoardFunction(board as string);
+  }, [board]);
 };
 
 // 게시글

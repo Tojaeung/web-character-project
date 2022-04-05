@@ -3,9 +3,9 @@ import { PostType, PostCommentType } from '@src/types';
 export type getBoardsReturnType = {
   ok: boolean;
   message: string;
-  drawingCommissions: PostType[];
-  drawingRequests: PostType[];
-  drawingSales: PostType[];
+  drawingCommission: PostType[];
+  drawingRequest: PostType[];
+  drawingSale: PostType[];
 };
 
 export type getBoardsErrorType = {
@@ -16,12 +16,11 @@ export type getBoardsErrorType = {
 export type getBoardReturnType = {
   ok: boolean;
   message: string;
-  boardName: string;
-  board: PostType[];
+  selectedBoard: PostType[];
 };
 
 export type getBoardParamType = {
-  boardName: string;
+  board: string;
 };
 
 export type getBoardErrorType = {

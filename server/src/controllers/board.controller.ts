@@ -8,19 +8,48 @@ import { PostComment } from '@src/entities/board/postComment.entity';
 import logger from '@src/helpers/winston.helper';
 
 const boardController = {
-  getBoards: async (req: Request, res: Response) => {},
+  getBoards: async (req: Request, res: Response) => {
+    const postRepo = getCustomRepository(PostRepository);
+    try {
+      const drawingCommission = await postRepo.getDrawingCommission();
+      const drawingRequest = await postRepo.getDrawingRequest();
+      const drawingSale = await postRepo.getDrawingSale();
+
+      logger.info('게시판 모두 가져오기 성공하였습니다.');
+      return res.status(200).json({
+        ok: true,
+        message: '게시판 모두 가져오기 성공하였습니다.',
+        drawingCommission,
+        drawingRequest,
+        drawingSale,
+      });
+    } catch (err: any) {
+      logger.info('게시판 모두 가져오기 실패하였습니다.', err);
+      return res.status(500).json({ ok: true, message: '게시판 가져오기 에러' });
+    }
+  },
   getBoard: async (req: Request, res: Response) => {
     const postRepo = getCustomRepository(PostRepository);
     try {
-      const { boardName } = req.body;
+      const { board } = req.body;
+      const { page, limit } = req.query;
 
-      const board = await postRepo.findBoard(boardName);
-
-      logger.info('게시판 가져오기 성공하였습니다.');
-      return res.status(200).json({ ok: true, message: '게시판 가져오기 성공하였습니다.', boardName, board });
+      let offset;
+      if (!limit) {
+        const limit = 10;
+        offset = (Number(page) - 1) * limit;
+        const selectedBoard = await postRepo.getSelectedBoard(board, offset, limit);
+        logger.info('게시판 가져오기 성공하였습니다.');
+        return res.status(200).json({ ok: true, message: '게시판 가져오기 성공하였습니다.', selectedBoard });
+      } else {
+        offset = (Number(page) - 1) * Number(limit);
+        const selectedBoard = await postRepo.getSelectedBoard(board, offset, Number(limit));
+        logger.info('게시판 가져오기 성공하였습니다.');
+        return res.status(200).json({ ok: true, message: '게시판 가져오기 성공하였습니다.', selectedBoard });
+      }
     } catch (err: any) {
-      logger.info('게시판 가져오기 에러');
-      return res.status(200).json({ ok: true, message: '게시판 가져오기 에러' });
+      logger.info('게시판 가져오기 실패하였습니다.', err);
+      return res.status(500).json({ ok: true, message: '게시판 가져오기 에러' });
     }
   },
   getPost: async (req: Request, res: Response) => {

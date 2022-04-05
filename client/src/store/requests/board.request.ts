@@ -30,7 +30,7 @@ export const getBoards = createAsyncThunk<
   { state: RootState; rejectValue: getBoardsErrorType }
 >('GET_BOARDS', async (_, thunkApi) => {
   try {
-    const res = await axios.post('/api/board/getBoards', {
+    const res = await axios.get('/api/board/getBoards', {
       withCredentials: true,
     });
     return res.data;

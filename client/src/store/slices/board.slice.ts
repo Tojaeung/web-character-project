@@ -10,7 +10,7 @@ interface BoardType {
   drawingRequest: PostType[] | null;
   drawingSale: PostType[] | null;
   selectedBoard: PostType[] | null;
-  post: PostType | null;
+  selectedPost: PostType | null;
 }
 
 const initialState: BoardType = {
@@ -20,7 +20,7 @@ const initialState: BoardType = {
   drawingRequest: null,
   drawingSale: null,
   selectedBoard: null,
-  post: null,
+  selectedPost: null,
 };
 
 export const boardSlice = createSlice({
@@ -28,70 +28,78 @@ export const boardSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getBoards.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      state.drawingCommission = payload.drawingCommissions;
-      state.drawingRequest = payload.drawingRequests;
-      state.drawingSale = payload.drawingSales;
-    });
-    builder.addCase(getBoards.rejected, (state, { payload }) => {
-      state.ok = payload!.ok;
-      state.message = payload!.message;
-      state.drawingCommission = null;
-      state.drawingRequest = null;
-      state.drawingSale = null;
-    });
-    builder.addCase(getBoard.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      state.selectedBoard = payload.board;
-      state.drawingCommission = null;
-      state.drawingRequest = null;
-      state.drawingSale = null;
-    });
-    builder.addCase(getBoard.rejected, (state, { payload }) => {
-      state.ok = payload!.ok;
-      state.message = payload!.message;
-      state.selectedBoard = null;
-      state.drawingCommission = null;
-      state.drawingRequest = null;
-      state.drawingSale = null;
-    });
-    builder.addCase(getPost.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      state.post = payload.post;
-      state.drawingCommission = null;
-      state.drawingRequest = null;
-      state.drawingSale = null;
-    });
-    builder.addCase(getPost.rejected, (state, { payload }) => {
-      state.ok = payload!.ok;
-      state.message = payload!.message;
-      state.post = null;
-      state.selectedBoard = null;
-      state.drawingCommission = null;
-      state.drawingRequest = null;
-      state.drawingSale = null;
-    });
-    builder.addCase(addPostComment.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      state.post?.postComments.unshift(payload.newPostComment!);
-      state.drawingCommission = null;
-      state.drawingRequest = null;
-      state.drawingSale = null;
-    });
-    builder.addCase(addPostComment.rejected, (state, { payload }) => {
-      state.ok = payload!.ok;
-      state.message = payload!.message;
-      state.post = null;
-      state.selectedBoard = null;
-      state.drawingCommission = null;
-      state.drawingRequest = null;
-      state.drawingSale = null;
-    });
+    builder
+      .addCase(getBoards.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.drawingCommission = payload.drawingCommission;
+        state.drawingRequest = payload.drawingRequest;
+        state.drawingSale = payload.drawingSale;
+        state.selectedBoard = null;
+        state.selectedPost = null;
+      })
+      .addCase(getBoards.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+        state.drawingCommission = null;
+        state.drawingRequest = null;
+        state.drawingSale = null;
+        state.selectedBoard = null;
+        state.selectedPost = null;
+      });
+    builder
+      .addCase(getBoard.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.selectedBoard = payload.selectedBoard;
+        state.drawingCommission = null;
+        state.drawingRequest = null;
+        state.drawingSale = null;
+      })
+      .addCase(getBoard.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+        state.selectedBoard = null;
+        state.drawingCommission = null;
+        state.drawingRequest = null;
+        state.drawingSale = null;
+      });
+    builder
+      .addCase(getPost.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.selectedPost = payload.post;
+        state.drawingCommission = null;
+        state.drawingRequest = null;
+        state.drawingSale = null;
+      })
+      .addCase(getPost.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+        state.selectedBoard = null;
+        state.selectedPost = null;
+        state.drawingCommission = null;
+        state.drawingRequest = null;
+        state.drawingSale = null;
+      });
+    builder
+      .addCase(addPostComment.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.selectedPost?.postComments.unshift(payload.newPostComment!);
+        state.drawingCommission = null;
+        state.drawingRequest = null;
+        state.drawingSale = null;
+      })
+      .addCase(addPostComment.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+        state.selectedBoard = null;
+        state.selectedPost = null;
+        state.drawingCommission = null;
+        state.drawingRequest = null;
+        state.drawingSale = null;
+      });
   },
 });
 
@@ -102,6 +110,6 @@ export const selectBoardDrawingCommission = (state: RootState) => state.board.dr
 export const selectBoardDrawingRequest = (state: RootState) => state.board.drawingRequest;
 export const selectBoardDrawingSale = (state: RootState) => state.board.drawingSale;
 export const selectBoardSelectedBoard = (state: RootState) => state.board.selectedBoard;
-export const selectBoardPost = (state: RootState) => state.board.post;
+export const selectBoardPost = (state: RootState) => state.board.selectedPost;
 
 export default boardSlice.reducer;

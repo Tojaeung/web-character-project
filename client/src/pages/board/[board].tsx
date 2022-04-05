@@ -8,8 +8,8 @@ import relativeTime from '@src/utils/date.util';
 import getLevel from '@src/utils/exp.util';
 
 function Board() {
-  const { boardName } = useParams();
-  useGetBoard(boardName as string);
+  const { board } = useParams();
+  useGetBoard(board as string);
   const selectedBoard = useAppSelector(selectBoardSelectedBoard);
 
   return (
@@ -31,7 +31,7 @@ function Board() {
             <Tr key={v4()}>
               <Td>{post.id}</Td>
               <Td>
-                <Link to={`/board/${boardName}/post/${post.id}`}>{post.title}</Link>
+                <Link to={`/board/${board}/post/${post.id}`}>{post.title}</Link>
               </Td>
               <Td>
                 [Lv.{getLevel(post.user.exp)}] {post.user.nickname}

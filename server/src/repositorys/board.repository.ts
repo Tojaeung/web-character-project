@@ -7,6 +7,44 @@ import { AbstractRepository, EntityRepository } from 'typeorm';
 
 @EntityRepository(Post)
 export class PostRepository extends AbstractRepository<Post> {
+  getDrawingCommission() {
+    return this.createQueryBuilder('post')
+      .leftJoinAndSelect('post.user', 'user')
+      .where('post.board = :board', { board: 'drawingCommission' })
+      .orderBy('post.id', 'DESC')
+      .limit(10)
+      .getMany();
+  }
+  getDrawingRequest() {
+    return this.createQueryBuilder('post')
+      .leftJoinAndSelect('post.user', 'user')
+      .where('post.board = :board', { board: 'drawingRequest' })
+      .orderBy('post.id', 'DESC')
+      .limit(10)
+      .getMany();
+  }
+  getDrawingSale() {
+    return this.createQueryBuilder('post')
+      .leftJoinAndSelect('post.user', 'user')
+      .where('post.board = :board', { board: 'drawingSale' })
+      .orderBy('post.id', 'DESC')
+      .limit(10)
+      .getMany();
+  }
+
+  getSelectedBoard(board: string, offset: number, limit: number) {
+    return this.createQueryBuilder('post')
+      .leftJoinAndSelect('post.user', 'user')
+      .leftJoinAndSelect('post.postComments', 'postComment')
+      .leftJoinAndSelect('post.likes', 'like')
+      .leftJoinAndSelect('post.dislikes', 'dislike')
+      .where('post.board = :board', { board })
+      .orderBy('post.id', 'DESC')
+      .offset(offset)
+      .limit(limit)
+      .getMany();
+  }
+
   findPostById(postId: number) {
     return this.createQueryBuilder('post')
       .leftJoinAndSelect('post.user', 'postUser')
@@ -16,17 +54,6 @@ export class PostRepository extends AbstractRepository<Post> {
       .leftJoinAndSelect('post.dislikes', 'dislike')
       .where('post.id = :postId', { postId })
       .getOne();
-  }
-
-  findBoard(board: string) {
-    return this.createQueryBuilder('post')
-      .leftJoinAndSelect('post.user', 'user')
-      .leftJoinAndSelect('post.postComments', 'postComment')
-      .leftJoinAndSelect('post.likes', 'like')
-      .leftJoinAndSelect('post.dislikes', 'dislike')
-      .where('post.board = :board', { board })
-      .orderBy('post.created_at', 'DESC')
-      .getMany();
   }
 }
 
