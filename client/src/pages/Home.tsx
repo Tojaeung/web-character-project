@@ -1,8 +1,7 @@
-import React from 'react';
 import styled from 'styled-components';
 import { useGetBoards } from '@src/hook/useInitPage';
 import BoardPreview from '@src/components/BoardPreview';
-import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
+import { useAppSelector } from '@src/store/app/hook';
 import { Link } from 'react-router-dom';
 
 import {
@@ -12,17 +11,11 @@ import {
 } from '@src/store/slices/board.slice';
 
 function Home() {
-  const dispatch = useAppDispatch();
-
   useGetBoards();
 
   const drawingCommission = useAppSelector(selectBoardDrawingCommission);
   const drawingRequest = useAppSelector(selectBoardDrawingRequest);
   const drawingSale = useAppSelector(selectBoardDrawingSale);
-
-  // useEffect(() => {
-  //   dispatch(getBoards());
-  // }, []);
 
   return (
     <Container>

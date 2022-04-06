@@ -52,7 +52,6 @@ export const boardSlice = createSlice({
         state.ok = payload.ok;
         state.message = payload.message;
         state.selectedBoard = payload.selectedBoard;
-        state.drawingCommission = null;
         state.drawingRequest = null;
         state.drawingSale = null;
       })

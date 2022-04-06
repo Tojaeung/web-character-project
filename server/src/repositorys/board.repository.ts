@@ -40,8 +40,8 @@ export class PostRepository extends AbstractRepository<Post> {
       .leftJoinAndSelect('post.dislikes', 'dislike')
       .where('post.board = :board', { board })
       .orderBy('post.id', 'DESC')
-      .offset(offset)
-      .limit(limit)
+      .skip(offset)
+      .take(limit)
       .getMany();
   }
 
@@ -54,6 +54,10 @@ export class PostRepository extends AbstractRepository<Post> {
       .leftJoinAndSelect('post.dislikes', 'dislike')
       .where('post.id = :postId', { postId })
       .getOne();
+  }
+
+  CountPosts(board: string) {
+    return this.createQueryBuilder('post').select('COUNT(*)').where('post.board = :board', { board }).getRawOne();
   }
 }
 

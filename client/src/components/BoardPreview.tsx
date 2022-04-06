@@ -16,12 +16,14 @@ function BoardPreview({ posts, board }: IProps) {
   return (
     <Table>
       <Thaed>
-        <Th>
-          {boardTitle(board)}
-          <Link to={`/board/${board}`}>
-            <ChevronRightIcon />
-          </Link>
-        </Th>
+        <Tr>
+          <Th>
+            {boardTitle(board)}
+            <Link to={`/board/${board}`}>
+              <ChevronRightIcon />
+            </Link>
+          </Th>
+        </Tr>
       </Thaed>
       <Tbody>
         {posts &&

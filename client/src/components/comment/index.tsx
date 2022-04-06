@@ -12,7 +12,7 @@ interface IProp {
 
 function Comment({ comments, type }: IProp) {
   const [page, setPage] = useState(1);
-  const offset = (page - 1) * 3;
+  const offset = (page - 1) * 20;
 
   // 댓글 수정하기 위한 선택된 댓글 인덱스
   const [commentIndex, setCommentIndex] = useState<number>();

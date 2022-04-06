@@ -44,6 +44,7 @@ export const authSlice = createSlice({
         state.ok = payload?.ok!;
         state.message = payload?.message!;
         state.user = null;
+        localStorage.removeItem('login');
       });
 
     // 새로고침 로그인 유저정보 다시 가져오기

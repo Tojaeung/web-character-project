@@ -6,19 +6,19 @@ interface IProps {
   total: number;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
+  limit: number;
 }
 
-function Pagination({ total, page, setPage }: IProps) {
+function Pagination({ total, page, setPage, limit }: IProps) {
   // 페이지 수 범위
-  const pageRange = 5;
-  // 보여지는 게시물 수
-  const limit = 20;
+  const pageRange = 10;
   // 전체 페이지 수
   const pageNum = Math.ceil(total / limit);
+
   // 페이지 수 범위에서 가장 작은 수
   const [minPageLimit, setMinPageLimit] = useState(0);
   // 페이지 수 범위에서 가장 큰 수
-  const [maxPageLimit, setMaxPageLimit] = useState(5);
+  const [maxPageLimit, setMaxPageLimit] = useState(10);
 
   const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (page % pageRange === 1) {

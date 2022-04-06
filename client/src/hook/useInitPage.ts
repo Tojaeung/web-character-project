@@ -42,17 +42,17 @@ export const useGetBoards = () => {
 };
 
 // 게시판
-export const useGetBoard = (board: string) => {
-  const dispatch = useAppDispatch();
+// export const useGetBoard = (board: string) => {
+//   const dispatch = useAppDispatch();
 
-  const getBoardFunction = async (board: string) => {
-    await dispatch(getBoard({ board }));
-  };
+//   const getBoardFunction = async (board: string) => {
+//     await dispatch(getBoard({ board }));
+//   };
 
-  useEffect(() => {
-    getBoardFunction(board as string);
-  }, [board]);
-};
+//   useEffect(() => {
+//     getBoardFunction(board as string);
+//   }, [board]);
+// };
 
 // 게시글
 export const useGetPost = (postId: number) => {

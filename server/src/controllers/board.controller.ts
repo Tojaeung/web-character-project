@@ -25,33 +25,28 @@ const boardController = {
       });
     } catch (err: any) {
       logger.info('게시판 모두 가져오기 실패하였습니다.', err);
-      return res.status(500).json({ ok: true, message: '게시판 가져오기 에러' });
+      return res.status(500).json({ ok: false, message: '게시판 모두 가져오기 에러' });
     }
   },
   getBoard: async (req: Request, res: Response) => {
     const postRepo = getCustomRepository(PostRepository);
     try {
-      const { board } = req.body;
-      const { page, limit } = req.query;
+      const { board, page, limit } = req.body;
 
-      let offset;
-      if (!limit) {
-        const limit = 10;
-        offset = (Number(page) - 1) * limit;
-        const selectedBoard = await postRepo.getSelectedBoard(board, offset, limit);
-        logger.info('게시판 가져오기 성공하였습니다.');
-        return res.status(200).json({ ok: true, message: '게시판 가져오기 성공하였습니다.', selectedBoard });
-      } else {
-        offset = (Number(page) - 1) * Number(limit);
-        const selectedBoard = await postRepo.getSelectedBoard(board, offset, Number(limit));
-        logger.info('게시판 가져오기 성공하였습니다.');
-        return res.status(200).json({ ok: true, message: '게시판 가져오기 성공하였습니다.', selectedBoard });
-      }
+      const offset = (Number(page) - 1) * Number(limit);
+      const selectedBoard = await postRepo.getSelectedBoard(board, offset, Number(limit));
+      const result = await postRepo.CountPosts(board as string);
+
+      logger.info('게시판 가져오기 성공하였습니다.');
+      return res
+        .status(200)
+        .json({ ok: true, message: '게시판 가져오기 성공하였습니다.', selectedBoard, totalPostsNum: result.count });
     } catch (err: any) {
       logger.info('게시판 가져오기 실패하였습니다.', err);
-      return res.status(500).json({ ok: true, message: '게시판 가져오기 에러' });
+      return res.status(500).json({ ok: false, message: '게시판 가져오기 에러' });
     }
   },
+
   getPost: async (req: Request, res: Response) => {
     const postRepo = getCustomRepository(PostRepository);
     try {
