@@ -70,13 +70,14 @@ const Td = styled.td`
   align-items: center;
   padding: 0.5rem 1rem;
   border-bottom: 1px solid ${({ theme }) => theme.palette.gray};
-  flex-wrap: wrap;
+  @media ${({ theme }) => theme.device.mobile} {
+    flex-wrap: wrap;
+  }
 `;
 const ChevronRightIcon = styled(FiChevronRight)`
   font-size: 2.5rem;
 `;
 const PostTitle = styled.p`
-  display: inline;
   padding: 0.5rem;
   word-break: break-all;
   font-size: 1.2rem;
