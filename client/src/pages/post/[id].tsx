@@ -26,7 +26,7 @@ function Post() {
       <BoardName>{boardTitle(selectedPost?.board as string)}</BoardName>
       <TitleBox>
         <PostTitle>{selectedPost?.title}</PostTitle>
-        <CreatedTime createdTime={selectedPost?.user.created_at!} size="medium" />
+        <CreatedTime createdTime={selectedPost?.user.created_at!} size="small" />
       </TitleBox>
       <Header>
         <Avatar src={selectedPost?.user.avatar} size="medium" />
@@ -51,11 +51,16 @@ const TitleBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   border-top: 1px solid ${({ theme }) => theme.palette.borderColor};
   border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
   padding: 1rem 2rem;
 `;
-const PostTitle = styled.h3``;
+const PostTitle = styled.p`
+  font-weight: bold;
+  flex-wrap: wrap;
+  word-break: break-all;
+`;
 const Header = styled.div`
   display: flex;
   align-items: center;
