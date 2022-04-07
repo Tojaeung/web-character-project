@@ -11,7 +11,6 @@ interface BoardType {
   drawingRequest: PostType[] | null;
   drawingSale: PostType[] | null;
   selectedBoard: PostType[] | null;
-  selectedPost: PostType | null;
 }
 
 const initialState: BoardType = {
@@ -22,7 +21,6 @@ const initialState: BoardType = {
   drawingRequest: [],
   drawingSale: [],
   selectedBoard: [],
-  selectedPost: null,
 };
 
 export const boardSlice = createSlice({
@@ -39,7 +37,6 @@ export const boardSlice = createSlice({
         state.drawingRequest = payload.drawingRequest;
         state.drawingSale = payload.drawingSale;
         state.selectedBoard = null;
-        state.selectedPost = null;
       })
       .addCase(getBoards.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
@@ -49,7 +46,6 @@ export const boardSlice = createSlice({
         state.drawingRequest = null;
         state.drawingSale = null;
         state.selectedBoard = null;
-        state.selectedPost = null;
       });
     builder
       .addCase(getBoard.fulfilled, (state, { payload }) => {

@@ -47,8 +47,6 @@ function Board() {
             <Th>제목</Th>
             <Th>닉네임</Th>
             <Th>조회수</Th>
-            <Th>좋아요</Th>
-            <Th>싫어요</Th>
             <Th>날짜</Th>
           </Tr>
         </Thead>
@@ -64,8 +62,6 @@ function Board() {
                   <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />
                 </Td>
                 <Td>{post.views}</Td>
-                <Td>{post.likes.length}</Td>
-                <Td>{post.dislikes.length}</Td>
                 <Td>{relativeTime(post.created_at)}</Td>
               </Tr>
             ))}

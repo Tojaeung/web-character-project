@@ -24,6 +24,7 @@ import settingsRouter from '@src/routes/settings.route';
 import profileRouter from '@src/routes/profile.route';
 import drawingRouter from '@src/routes/drawing.route';
 import boardRouter from '@src/routes/board.route';
+import postRouter from '@src/routes/post.route';
 
 const app: Application = express();
 const http = createServer(app);
@@ -54,6 +55,7 @@ app.use('/api', settingsRouter);
 app.use('/api', profileRouter);
 app.use('/api', drawingRouter);
 app.use('/api', boardRouter);
+app.use('/api', postRouter);
 
 // Server & DB listening
 const port = process.env.PORT as string;

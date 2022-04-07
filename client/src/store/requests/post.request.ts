@@ -25,7 +25,7 @@ export const getPost = createAsyncThunk<
   { state: RootState; rejectValue: getPostErrorType }
 >('GET_POST', async (data, thunkApi) => {
   try {
-    const res = await axios.post('/api/board/getPost', data, {
+    const res = await axios.post('/api/post/getPost', data, {
       withCredentials: true,
     });
     return res.data;
@@ -40,7 +40,7 @@ export const addPost = createAsyncThunk<
   { state: RootState; rejectValue: addPostErrorType }
 >('ADD_POST', async (data, thunkApi) => {
   try {
-    const res = await axios.post('/api/board/addPost', data, {
+    const res = await axios.post('/api/post/addPost', data, {
       withCredentials: true,
     });
     return res.data;
@@ -55,7 +55,7 @@ export const addPostComment = createAsyncThunk<
   { state: RootState; rejectValue: addPostCommentErrorType }
 >('ADD_POST_COMMENT', async (data, thunkApi) => {
   try {
-    const res = await axios.post('/api/board/addPostComment', data, {
+    const res = await axios.post('/api/post/addPostComment', data, {
       withCredentials: true,
     });
     return res.data;
@@ -70,7 +70,7 @@ export const imageUpload = createAsyncThunk<
   { state: RootState; rejectValue: imageUploadErrorType }
 >('IMAGE_UPLOAD', async (data, thunkApi) => {
   try {
-    const res = await axios.post('/api/board/imageUpload', data, {
+    const res = await axios.post('/api/post/imageUpload', data, {
       withCredentials: true,
     });
     return res.data;
@@ -85,7 +85,7 @@ export const imageRemove = createAsyncThunk<
   { state: RootState; rejectValue: imageRemoveErrorType }
 >('IMAGE_REMOVE', async (data, thunkApi) => {
   try {
-    const res = await axios.post('/api/board/imageRemove', data, {
+    const res = await axios.post('/api/post/imageRemove', data, {
       withCredentials: true,
     });
     return res.data;

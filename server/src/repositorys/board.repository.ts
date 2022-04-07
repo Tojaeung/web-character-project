@@ -44,9 +44,6 @@ export class PostRepository extends AbstractRepository<Post> {
   getSelectedBoard(board: string, offset: number, limit: number) {
     return this.createQueryBuilder('post')
       .leftJoinAndSelect('post.user', 'user')
-      .leftJoinAndSelect('post.postComments', 'postComment')
-      .leftJoinAndSelect('post.likes', 'like')
-      .leftJoinAndSelect('post.dislikes', 'dislike')
       .where('post.board = :board', { board })
       .orderBy('post.id', 'DESC')
       .skip(offset)
