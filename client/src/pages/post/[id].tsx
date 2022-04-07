@@ -3,19 +3,20 @@ import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import boardTitle from '@src/utils/boardTitle.util';
-import Board from '@src/pages/board';
+import Board from '@src/pages/board/[board]';
 import { selectPostPost } from '@src/store/slices/post.slice';
 import { getPost } from '@src/store/requests/post.request';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import CreatedTime from '@src/components/CreatedTime';
 import Comment from '@src/components/comment';
+import CommentForm from '@src/components/CommentForm';
 
 function Post() {
   const dispatch = useAppDispatch();
   const { postId } = useParams();
 
-  const selectedPost = useAppSelector(selectPostPost);
+  const post = useAppSelector(selectPostPost);
 
   useEffect(() => {
     dispatch(getPost({ postId: postId! })).unwrap();
@@ -23,18 +24,19 @@ function Post() {
 
   return (
     <Container>
-      <BoardName>{boardTitle(selectedPost?.board as string)}</BoardName>
+      <BoardName>{boardTitle(post?.board as string)}</BoardName>
       <TitleBox>
-        <PostTitle>{selectedPost?.title}</PostTitle>
-        <CreatedTime createdTime={selectedPost?.user.created_at!} size="small" />
+        <PostTitle>{post?.title}</PostTitle>
+        <CreatedTime createdTime={post?.user.created_at!} size="small" />
       </TitleBox>
       <Header>
-        <Avatar src={selectedPost?.user.avatar} size="medium" />
-        <Nickname exp={selectedPost?.user.exp!} nickname={selectedPost?.user.nickname!} size="medium" />
+        <Avatar src={post?.user.avatar} size="medium" />
+        <Nickname exp={post?.user.exp!} nickname={post?.user.nickname!} size="medium" />
       </Header>
 
-      <Content dangerouslySetInnerHTML={{ __html: selectedPost?.content as string }} />
-      <Comment type="board" comments={selectedPost?.postComments!} />
+      <Content dangerouslySetInnerHTML={{ __html: post?.content as string }} />
+      <CommentForm type="board" id={post?.id!} />
+      <Comment type="board" comments={post?.postComments!} />
       <Board />
     </Container>
   );
@@ -43,7 +45,7 @@ function Post() {
 const Container = styled.div`
   background-color: ${({ theme }) => theme.palette.bgColor};
 `;
-const BoardName = styled.h1`
+const BoardName = styled.h2`
   padding: 1rem;
 `;
 

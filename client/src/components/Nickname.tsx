@@ -23,6 +23,7 @@ const Container = styled.div`
 `;
 
 const Level = styled.span`
+  font-size: 1.2rem;
   font-weight: 500;
 `;
 const NickNameTag = styled.span<{ size: string }>`

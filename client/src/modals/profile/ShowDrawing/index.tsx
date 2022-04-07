@@ -24,7 +24,7 @@ function ShowDrawingModal() {
 
         <Info />
 
-        <CommentForm id={drawings[index!]?.id!} comments={drawings[index!]?.drawingComments!} type="drawing" />
+        <CommentForm id={drawings[index!]?.id!} type="drawing" />
         <Comment comments={drawings[index!]?.drawingComments!} type="drawing" />
       </InfoSide>
     </Container>

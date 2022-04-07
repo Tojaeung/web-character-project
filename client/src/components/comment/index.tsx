@@ -19,8 +19,12 @@ function Comment({ comments, type }: IProp) {
 
   return (
     <>
-      {!comments ? null : (
+      {!comments || comments.length === 0 ? null : (
         <Container>
+          <Header>
+            <Topic>댓글</Topic>
+            <CommentNum>{comments.length}</CommentNum>
+          </Header>
           {comments!.slice(offset, offset + 20).map((comment, index) => (
             <CommentList
               key={v4()}
@@ -44,5 +48,18 @@ const Container = styled.ul`
   flex-direction: column;
   align-items: center;
 `;
+
+const Header = styled.div`
+  width: 100%;
+  background-color: ${({ theme }) => theme.palette.gray};
+  font-size: 1.5rem;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const Topic = styled.span``;
+const CommentNum = styled.span``;
 
 export default Comment;

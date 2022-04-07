@@ -7,7 +7,7 @@ const drawingRouter = Router();
 
 drawingRouter.post('/drawing/create', auth, drawingUpload.single('drawing'), drawingController.addDrawing);
 drawingRouter.post('/drawing/getDrawings', drawingController.getDrawings);
-drawingRouter.post('/drawing/addView', auth, drawingController.addView);
+drawingRouter.post('/drawing/addView', drawingController.addView);
 drawingRouter.post('/drawing/addComment', auth, drawingController.addComment);
 drawingRouter.post('/drawing/addLike', auth, drawingController.addLike);
 drawingRouter.post('/drawing/addDisLike', auth, drawingController.addDisLike);

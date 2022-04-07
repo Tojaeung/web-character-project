@@ -30,7 +30,7 @@ function BoardPreview({ posts, board }: IProps) {
           posts.map((post) => (
             <Tr key={v4()}>
               <Td>
-                <PostTitle>{post.title}</PostTitle>
+                <PostTitle to={`/board/${board}/post/${post.id}`}>{post.title}</PostTitle>
                 <PostUser>
                   <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />
                   <CreatedTime createdTime={post.created_at} size="small" />
@@ -77,7 +77,7 @@ const Td = styled.td`
 const ChevronRightIcon = styled(FiChevronRight)`
   font-size: 2.5rem;
 `;
-const PostTitle = styled.p`
+const PostTitle = styled(Link)`
   padding: 0.5rem;
   word-break: break-all;
   font-size: 1.2rem;

@@ -78,11 +78,7 @@ function Board() {
           <LimitSelector setPage={setPage} limit={limit} setLimit={setLimit} />
         </Header>
         <Table>
-          <Thead>
-            <Tr>
-              <Th>제목</Th>
-            </Tr>
-          </Thead>
+          <Thead></Thead>
           <Tbody>
             {selectedBoard &&
               selectedBoard.map((post) => (
@@ -91,7 +87,7 @@ function Board() {
                     <Link to={`/board/${board}/post/${post.id}`}>{post.title}</Link>
                     <BottomBox>
                       <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />
-                      <Views>조회수: {post.views}</Views>
+                      조회수: {post.views}
                       <CreatedTime createdTime={post.created_at} size="small" />
                     </BottomBox>
                   </Title>
@@ -125,6 +121,7 @@ const BottomBox = styled.div`
     display: flex;
     align-items: center;
     gap: 1rem;
+    font-size: 1rem;
   }
 `;
 const Name = styled.td`
@@ -180,7 +177,7 @@ const Header = styled.div`
   justify-content: space-between;
   padding: 1rem;
 `;
-const BoardName = styled.h1``;
+const BoardName = styled.h2``;
 
 const Responsive = styled.div`
   display: none;
