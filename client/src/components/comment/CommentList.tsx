@@ -28,7 +28,11 @@ function CommentList({ type, comment, index, setCommentIndex, isSelected }: IPro
   // 댓글 삭제하기
   const handleRemoveComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (type === 'drawing') {
-      await dispatch(removeDrawingComment({ drawingCommentId: comment.id }));
+      try {
+        await dispatch(removeDrawingComment({ drawingCommentId: comment.id })).unwrap();
+      } catch (err: any) {
+        alert(err.message);
+      }
     } else if (type === 'board') {
     }
   };

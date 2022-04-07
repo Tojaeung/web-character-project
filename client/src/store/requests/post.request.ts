@@ -49,21 +49,6 @@ export const addPost = createAsyncThunk<
   }
 });
 
-export const addPostComment = createAsyncThunk<
-  addPostCommentReturnType,
-  addPostCommentParamType,
-  { state: RootState; rejectValue: addPostCommentErrorType }
->('ADD_POST_COMMENT', async (data, thunkApi) => {
-  try {
-    const res = await axios.post('/api/post/addPostComment', data, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
-  }
-});
-
 export const imageUpload = createAsyncThunk<
   imageUploadReturnType,
   imageUploadParamType,
@@ -86,6 +71,21 @@ export const imageRemove = createAsyncThunk<
 >('IMAGE_REMOVE', async (data, thunkApi) => {
   try {
     const res = await axios.post('/api/post/imageRemove', data, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+
+export const addPostComment = createAsyncThunk<
+  addPostCommentReturnType,
+  addPostCommentParamType,
+  { state: RootState; rejectValue: addPostCommentErrorType }
+>('ADD_POST_COMMENT', async (data, thunkApi) => {
+  try {
+    const res = await axios.post('/api/post/addPostComment', data, {
       withCredentials: true,
     });
     return res.data;

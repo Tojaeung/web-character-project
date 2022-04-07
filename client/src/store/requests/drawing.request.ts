@@ -160,7 +160,7 @@ export const removeDrawingComment = createAsyncThunk<
   { state: RootState; rejectValue: removeCommentErrorType }
 >('REMOVE_DRAWING_COMMENT', async (data, thunkApi) => {
   try {
-    const res = await axios.post(`/api/drawing/removeComment`, data, {
+    const res = await axios.delete(`/api/drawing/removeComment/${data.drawingCommentId}`, {
       withCredentials: true,
     });
     return res.data;

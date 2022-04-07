@@ -13,6 +13,6 @@ drawingRouter.post('/drawing/addLike', auth, drawingController.addLike);
 drawingRouter.post('/drawing/addDisLike', auth, drawingController.addDisLike);
 drawingRouter.delete('/drawing/removeLike', auth, drawingController.removeLike);
 drawingRouter.delete('/drawing/removeDisLike', auth, drawingController.removeDisLike);
-drawingRouter.delete('/drawing/removeComment', auth, drawingController.removeComment);
+drawingRouter.delete('/drawing/removeComment/:id', auth, drawingController.removeComment);
 drawingRouter.patch('/drawing/editComment', auth, drawingController.editComment);
 export default drawingRouter;

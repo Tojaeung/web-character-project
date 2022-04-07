@@ -190,9 +190,9 @@ const drawingController = {
 
   removeComment: async (req: Request, res: Response) => {
     try {
-      const { drawingCommentId } = req.body;
+      const { id } = req.params;
 
-      const removedComment = await getRepository(DrawingComment).findOne({ id: drawingCommentId });
+      const removedComment = await getRepository(DrawingComment).findOne({ id: Number(id) });
 
       if (!removedComment) {
         logger.info('해당하는 그림 댓글이 존재하지 않습니다.');
