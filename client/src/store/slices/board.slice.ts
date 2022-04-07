@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import { PostType } from '@src/types';
-import { getBoards, getBoard, getPost, addPostComment } from '@src/store/requests/board.request';
+import { getBoards, getBoard } from '@src/store/requests/board.request';
 
 interface BoardType {
   ok: boolean;
@@ -70,29 +70,6 @@ export const boardSlice = createSlice({
         state.drawingSale = null;
         state.selectedBoard = null;
       });
-    builder
-      .addCase(getPost.fulfilled, (state, { payload }) => {
-        state.ok = payload.ok;
-        state.message = payload.message;
-        state.selectedPost = payload.post;
-      })
-      .addCase(getPost.rejected, (state, { payload }) => {
-        state.ok = payload!.ok;
-        state.message = payload!.message;
-        state.selectedBoard = null;
-        state.selectedPost = null;
-      });
-    builder
-      .addCase(addPostComment.fulfilled, (state, { payload }) => {
-        state.ok = payload.ok;
-        state.message = payload.message;
-        state.selectedPost?.postComments.unshift(payload.newPostComment!);
-      })
-      .addCase(addPostComment.rejected, (state, { payload }) => {
-        state.ok = payload!.ok;
-        state.message = payload!.message;
-        state.selectedPost = null;
-      });
   },
 });
 
@@ -104,6 +81,5 @@ export const selectBoardDrawingCommission = (state: RootState) => state.board.dr
 export const selectBoardDrawingRequest = (state: RootState) => state.board.drawingRequest;
 export const selectBoardDrawingSale = (state: RootState) => state.board.drawingSale;
 export const selectBoardSelectedBoard = (state: RootState) => state.board.selectedBoard;
-export const selectBoardPost = (state: RootState) => state.board.selectedPost;
 
 export default boardSlice.reducer;

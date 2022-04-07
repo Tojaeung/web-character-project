@@ -5,6 +5,7 @@ import profileSlice from '../slices/profile.slice';
 import modalSlice from '../slices/modal.slice';
 import drawingSlice from '../slices/drawing.slice';
 import boardSlice from '../slices/board.slice';
+import postSlice from '../slices/post.slice';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     modal: modalSlice,
     drawing: drawingSlice,
     board: boardSlice,
+    post: postSlice,
   },
 });
 

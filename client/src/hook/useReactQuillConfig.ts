@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 // import axios from 'axios';
 import ReactQuill from 'react-quill';
 import { useAppDispatch } from '@src/store/app/hook';
-import { imageUpload } from '@src/store/requests/board.request';
+import { imageUpload } from '@src/store/requests/post.request';
 
 export const useDefaultConfig = () => {
   const defaultModules = {

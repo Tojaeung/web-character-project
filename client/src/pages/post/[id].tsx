@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import boardTitle from '@src/utils/boardTitle.util';
 import Board from '@src/pages/board';
-import { selectBoardPost } from '@src/store/slices/board.slice';
-import { getPost } from '@src/store/requests/board.request';
+import { selectPostPost } from '@src/store/slices/post.slice';
+import { getPost } from '@src/store/requests/post.request';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import CreatedTime from '@src/components/CreatedTime';
@@ -15,7 +15,7 @@ function Post() {
   const dispatch = useAppDispatch();
   const { postId } = useParams();
 
-  const selectedPost = useAppSelector(selectBoardPost);
+  const selectedPost = useAppSelector(selectPostPost);
 
   useEffect(() => {
     dispatch(getPost({ postId: postId! })).unwrap();

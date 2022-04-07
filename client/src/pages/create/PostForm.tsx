@@ -10,7 +10,7 @@ import { useImageUploadConfig } from '@src/hook/useReactQuillConfig';
 import { boardCategory } from '@src/utils/boardCategory.util';
 import LengthCountInput from '@src/components/LengthCountInput';
 import { useAppDispatch } from '@src/store/app/hook';
-import { addPost, imageRemove } from '@src/store/requests/board.request';
+import { addPost, imageRemove } from '@src/store/requests/post.request';
 
 function PostForm() {
   const dispatch = useAppDispatch();
