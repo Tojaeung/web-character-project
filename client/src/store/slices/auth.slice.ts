@@ -39,6 +39,7 @@ export const authSlice = createSlice({
         state.ok = payload.ok;
         state.message = payload.message;
         state.user = null;
+        localStorage.removeItem('login');
       })
       .addCase(logoutUser.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
