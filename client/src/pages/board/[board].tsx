@@ -133,6 +133,7 @@ const Views = styled.td``;
 const Date = styled.td``;
 
 const Container = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -182,6 +183,7 @@ const BoardName = styled.h2``;
 const Responsive = styled.div`
   display: none;
   @media ${({ theme }) => theme.device.tablet} {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;

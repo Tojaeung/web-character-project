@@ -43,20 +43,27 @@ function Post() {
 }
 
 const Container = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem;
   background-color: ${({ theme }) => theme.palette.bgColor};
 `;
 const BoardName = styled.h2`
-  padding: 1rem;
+  align-self: flex-start;
 `;
 
 const TitleBox = styled.div`
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
   border-top: 1px solid ${({ theme }) => theme.palette.borderColor};
   border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
-  padding: 1rem 2rem;
+  padding: 2rem 0;
 `;
 const PostTitle = styled.p`
   font-weight: bold;
@@ -64,13 +71,13 @@ const PostTitle = styled.p`
   word-break: break-all;
 `;
 const Header = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
 `;
 const Content = styled.div`
-  padding: 1rem;
+  width: 100%;
 `;
 
 export default Post;

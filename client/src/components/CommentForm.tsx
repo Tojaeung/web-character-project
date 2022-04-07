@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { AiOutlineComment } from 'react-icons/ai';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { addDrawingComment } from '@src/store/requests/drawing.request';
+import { addPostComment } from '@src/store/requests/post.request';
 import Button from '@src/components/Button';
 
 interface IProp {
@@ -22,6 +22,9 @@ function CommentForm({ id, type }: IProp) {
     if (content.length > 100) {
       alert('댓글 글자 수를 초과하였습니다.');
       return;
+    } else if (content.length === 0) {
+      alert('댓글을 입력해주세요.');
+      return;
     }
     if (type === 'drawing') {
       try {
@@ -29,8 +32,16 @@ function CommentForm({ id, type }: IProp) {
         setContent('');
       } catch (err: any) {
         alert(err.message);
+        setContent('');
       }
     } else if (type === 'board') {
+      try {
+        await dispatch(addPostComment({ userId: user?.id!, postId: id, content })).unwrap();
+        setContent('');
+      } catch (err: any) {
+        alert(err.message);
+        setContent('');
+      }
     }
     return;
   };

@@ -29,7 +29,6 @@ export const postSlice = createSlice({
       .addCase(getPost.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
         state.message = payload!.message;
-        state.post = null;
       });
     builder
       .addCase(addPostComment.fulfilled, (state, { payload }) => {
@@ -40,7 +39,6 @@ export const postSlice = createSlice({
       .addCase(addPostComment.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
         state.message = payload!.message;
-        state.post = null;
       });
   },
 });

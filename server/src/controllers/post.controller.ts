@@ -104,7 +104,7 @@ const postController = {
       logger.info('게시판 댓글 등록 성공하였습니다.');
       return res.status(200).json({ ok: true, message: '게시판 댓글 등록 성공하였습니다.', newPostComment });
     } catch (err: any) {
-      logger.info('게시판 댓글 등록 에러');
+      logger.info('게시판 댓글 등록 에러', err);
       return res.status(500).json({ ok: false, message: '게시판 댓글 등록 에러' });
     }
   },
