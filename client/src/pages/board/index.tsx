@@ -38,7 +38,7 @@ function Board() {
     <Container>
       <Header>
         <Title>{boardTitle(board as string)}</Title>
-        <LimitSelector page={page} limit={limit} setLimit={setLimit} />
+        <LimitSelector setPage={setPage} limit={limit} setLimit={setLimit} />
       </Header>
       <Table>
         <Thead>
@@ -105,6 +105,7 @@ const Tbody = styled.tbody`
 const Td = styled.td`
   border: 0;
   padding: 1rem;
+  text-align: center;
 `;
 
 const Tr = styled.tr`
