@@ -39,7 +39,7 @@ export type getPostReturnType = {
 };
 
 export type getPostParamType = {
-  postId: number;
+  postId: string | number;
 };
 
 export type getPostErrorType = {

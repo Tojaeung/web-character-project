@@ -18,19 +18,23 @@ function Comment({ comments, type }: IProp) {
   const [commentIndex, setCommentIndex] = useState<number>();
 
   return (
-    <Container>
-      {comments!.slice(offset, offset + 3).map((comment, index) => (
-        <CommentList
-          key={v4()}
-          type={type}
-          comment={comment}
-          index={index}
-          setCommentIndex={setCommentIndex}
-          isSelected={commentIndex === index ? true : false}
-        />
-      ))}
-      <Pagination total={comments.length} page={page} setPage={setPage} />
-    </Container>
+    <>
+      {!comments ? null : (
+        <Container>
+          {comments!.slice(offset, offset + 20).map((comment, index) => (
+            <CommentList
+              key={v4()}
+              type={type}
+              comment={comment}
+              index={index}
+              setCommentIndex={setCommentIndex}
+              isSelected={commentIndex === index ? true : false}
+            />
+          ))}
+          <Pagination total={comments!.length} page={page} setPage={setPage} />
+        </Container>
+      )}
+    </>
   );
 }
 

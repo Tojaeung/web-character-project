@@ -75,7 +75,6 @@ export const boardSlice = createSlice({
         state.ok = payload.ok;
         state.message = payload.message;
         state.selectedPost = payload.post;
-        state.selectedBoard = null;
       })
       .addCase(getPost.rejected, (state, { payload }) => {
         state.ok = payload!.ok;

@@ -36,9 +36,8 @@ function App() {
 
             <Route path="/profile/:profileId" element={<Profile />} />
 
-            <Route path="/board/:board" element={<Board />}>
-              <Route path="post/:postId" element={<Post />} />
-            </Route>
+            <Route path="/board/:board" element={<Board />} />
+            <Route path="/board/:board/post/:postId" element={<Post />} />
 
             <Route path="/auth" element={<AuthRouter />}>
               <Route path="signUp" element={<SignUp />} />
