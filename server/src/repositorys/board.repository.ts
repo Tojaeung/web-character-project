@@ -7,6 +7,15 @@ import { AbstractRepository, EntityRepository } from 'typeorm';
 
 @EntityRepository(Post)
 export class PostRepository extends AbstractRepository<Post> {
+  getFree() {
+    return this.createQueryBuilder('post')
+      .leftJoinAndSelect('post.user', 'user')
+      .where('post.board = :board', { board: 'free' })
+      .orderBy('post.id', 'DESC')
+      .limit(10)
+      .getMany();
+  }
+
   getDrawingCommission() {
     return this.createQueryBuilder('post')
       .leftJoinAndSelect('post.user', 'user')

@@ -9,7 +9,7 @@ import boardTitle from '@src/utils/boardTitle.util';
 
 interface IProps {
   posts: PostType[] | null;
-  board: 'drawingCommission' | 'drawingRequest' | 'drawingSale';
+  board: 'free' | 'drawingCommission' | 'drawingRequest' | 'drawingSale';
 }
 
 function BoardPreview({ posts, board }: IProps) {
@@ -68,17 +68,18 @@ const Td = styled.td`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem;
+  padding: 0.5rem 1rem;
   border-bottom: 1px solid ${({ theme }) => theme.palette.gray};
+  flex-wrap: wrap;
 `;
 const ChevronRightIcon = styled(FiChevronRight)`
   font-size: 2.5rem;
 `;
 const PostTitle = styled.p`
+  display: inline;
+  padding: 0.5rem;
+  word-break: break-all;
   font-size: 1.2rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 `;
 const PostUser = styled.span`
   display: flex;

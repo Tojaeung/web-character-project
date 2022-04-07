@@ -6,6 +6,7 @@ import { getBoards, getBoard, getPost, addPostComment } from '@src/store/request
 interface BoardType {
   ok: boolean;
   message: string | null;
+  free: PostType[] | null;
   drawingCommission: PostType[] | null;
   drawingRequest: PostType[] | null;
   drawingSale: PostType[] | null;
@@ -16,10 +17,11 @@ interface BoardType {
 const initialState: BoardType = {
   ok: false,
   message: null,
-  drawingCommission: null,
-  drawingRequest: null,
-  drawingSale: null,
-  selectedBoard: null,
+  free: [],
+  drawingCommission: [],
+  drawingRequest: [],
+  drawingSale: [],
+  selectedBoard: [],
   selectedPost: null,
 };
 
@@ -32,6 +34,7 @@ export const boardSlice = createSlice({
       .addCase(getBoards.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
+        state.free = payload.free;
         state.drawingCommission = payload.drawingCommission;
         state.drawingRequest = payload.drawingRequest;
         state.drawingSale = payload.drawingSale;
@@ -41,6 +44,7 @@ export const boardSlice = createSlice({
       .addCase(getBoards.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
         state.message = payload!.message;
+        state.free = null;
         state.drawingCommission = null;
         state.drawingRequest = null;
         state.drawingSale = null;
@@ -51,53 +55,44 @@ export const boardSlice = createSlice({
       .addCase(getBoard.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-        state.selectedBoard = payload.selectedBoard;
+        state.free = null;
+        state.drawingCommission = null;
         state.drawingRequest = null;
         state.drawingSale = null;
+        state.selectedBoard = payload.selectedBoard;
       })
       .addCase(getBoard.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
         state.message = payload!.message;
-        state.selectedBoard = null;
+        state.free = null;
         state.drawingCommission = null;
         state.drawingRequest = null;
         state.drawingSale = null;
+        state.selectedBoard = null;
       });
     builder
       .addCase(getPost.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
         state.selectedPost = payload.post;
-        state.drawingCommission = null;
-        state.drawingRequest = null;
-        state.drawingSale = null;
+        state.selectedBoard = null;
       })
       .addCase(getPost.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
         state.message = payload!.message;
         state.selectedBoard = null;
         state.selectedPost = null;
-        state.drawingCommission = null;
-        state.drawingRequest = null;
-        state.drawingSale = null;
       });
     builder
       .addCase(addPostComment.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
         state.selectedPost?.postComments.unshift(payload.newPostComment!);
-        state.drawingCommission = null;
-        state.drawingRequest = null;
-        state.drawingSale = null;
       })
       .addCase(addPostComment.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
         state.message = payload!.message;
-        state.selectedBoard = null;
         state.selectedPost = null;
-        state.drawingCommission = null;
-        state.drawingRequest = null;
-        state.drawingSale = null;
       });
   },
 });
@@ -105,6 +100,7 @@ export const boardSlice = createSlice({
 // export const { } = authSlice.actions;
 export const selectBoardOk = (state: RootState) => state.board.ok;
 export const selectBoardMessage = (state: RootState) => state.board.message;
+export const selectBoardFree = (state: RootState) => state.board.free;
 export const selectBoardDrawingCommission = (state: RootState) => state.board.drawingCommission;
 export const selectBoardDrawingRequest = (state: RootState) => state.board.drawingRequest;
 export const selectBoardDrawingSale = (state: RootState) => state.board.drawingSale;

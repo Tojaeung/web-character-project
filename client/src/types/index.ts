@@ -99,7 +99,7 @@ export type PostDisLikeType = {
 
 export type PostType = {
   id: number;
-  board: string;
+  board: 'free' | 'drawingCommission' | 'drawingRequest' | 'drawingSale';
   title: string;
   content: string;
   views: number;

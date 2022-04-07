@@ -11,6 +11,7 @@ const boardController = {
   getBoards: async (req: Request, res: Response) => {
     const postRepo = getCustomRepository(PostRepository);
     try {
+      const free = await postRepo.getFree();
       const drawingCommission = await postRepo.getDrawingCommission();
       const drawingRequest = await postRepo.getDrawingRequest();
       const drawingSale = await postRepo.getDrawingSale();
@@ -19,6 +20,7 @@ const boardController = {
       return res.status(200).json({
         ok: true,
         message: '게시판 모두 가져오기 성공하였습니다.',
+        free,
         drawingCommission,
         drawingRequest,
         drawingSale,

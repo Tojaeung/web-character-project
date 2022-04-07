@@ -1,1 +1,1 @@
-export const boardCategory = ['drawingCommission', 'drawingRequest', 'drawingSale'];
+export const boardCategory = ['free', 'drawingCommission', 'drawingRequest', 'drawingSale'];

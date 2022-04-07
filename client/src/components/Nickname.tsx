@@ -26,19 +26,19 @@ const Level = styled.span`
   font-weight: 500;
 `;
 const NickNameTag = styled.span<{ size: string }>`
-  font-weight: 700;
   ${({ size }) => {
     if (size === 'small') {
       return css`
-        font-size: 1.4rem;
+        font-size: 1.2rem;
       `;
     } else if (size === 'medium') {
       return css`
-        font-size: 1.6rem;
+        font-size: 1.4rem;
       `;
     } else if (size === 'large') {
       return css`
-        font-size: 1.8rem;
+        font-size: 1.6rem;
+        font-weight: bold;
       `;
     }
   }}

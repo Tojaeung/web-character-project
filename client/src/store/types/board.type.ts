@@ -3,6 +3,7 @@ import { PostType, PostCommentType } from '@src/types';
 export type getBoardsReturnType = {
   ok: boolean;
   message: string;
+  free: PostType[];
   drawingCommission: PostType[];
   drawingRequest: PostType[];
   drawingSale: PostType[];
