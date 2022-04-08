@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import { PostType } from '@src/types';
-import { getPost, addPostComment } from '@src/store/requests/post.request';
+import { getPost, addPostComment, removePostComment, editPostComment } from '@src/store/requests/post.request';
 
 interface PostSliceType {
   ok: boolean;
@@ -34,9 +34,35 @@ export const postSlice = createSlice({
       .addCase(addPostComment.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-        state.post?.postComments.unshift(payload.newPostComment!);
+        state.post?.postComments.push(payload.newPostComment!);
       })
       .addCase(addPostComment.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
+    builder
+      .addCase(removePostComment.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+
+        const filteredComments = state.post?.postComments.filter((comment) => comment.id !== payload.removedCommentId);
+
+        state.post!.postComments = filteredComments!;
+      })
+      .addCase(removePostComment.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
+    builder
+      .addCase(editPostComment.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+
+        const commentIndex = state.post?.postComments.findIndex((comment) => comment.id === payload.editedCommentId);
+
+        state.post!.postComments[commentIndex!].content = payload.editedContent!;
+      })
+      .addCase(editPostComment.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
         state.message = payload!.message;
       });

@@ -11,6 +11,8 @@ postRouter.post('/post/imageUpload', auth, boardUpload.single('image'), postCont
 postRouter.post('/post/imageRemove', auth, postController.imageRemove);
 
 postRouter.post('/post/addPost', auth, postController.addPost);
-postRouter.post('/post/addPostComment', auth, postController.addPostComment);
+postRouter.post('/post/addComment', auth, postController.addComment);
+postRouter.delete('/post/removeComment/:postCommentId', auth, postController.removeComment);
+postRouter.patch('/post/editComment', auth, postController.editComment);
 
 export default postRouter;

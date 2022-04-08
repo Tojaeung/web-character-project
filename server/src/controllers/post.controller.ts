@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getCustomRepository, getRepository } from 'typeorm';
+import { getCustomRepository, getRepository, createQueryBuilder } from 'typeorm';
 import { s3 } from '@src/helpers/s3.helper';
 import { Post } from '@src/entities/board/post.entity';
 import { ImageKey } from '@src/entities/board/imageKey.entity';
@@ -87,11 +87,12 @@ const postController = {
       return res.status(500).json({ ok: false, message: '게시판 글쓰기 에러' });
     }
   },
-  addPostComment: async (req: Request, res: Response) => {
+  addComment: async (req: Request, res: Response) => {
     const postCommentRepo = getCustomRepository(PostCommentRepository);
 
     try {
       const { userId, postId, content } = req.body;
+      console.log(userId);
 
       const postComment = new PostComment();
       postComment.user_id = userId;
@@ -106,6 +107,54 @@ const postController = {
     } catch (err: any) {
       logger.info('게시판 댓글 등록 에러', err);
       return res.status(500).json({ ok: false, message: '게시판 댓글 등록 에러' });
+    }
+  },
+  removeComment: async (req: Request, res: Response) => {
+    const postCommentRepo = getCustomRepository(PostCommentRepository);
+
+    try {
+      const { postCommentId } = req.params;
+
+      const removedComment = await postCommentRepo.removePostComment(Number(postCommentId));
+
+      if (removedComment.affected === 0) {
+        logger.info('게시글 댓글 제거 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '게시글 댓글 제거 실패하였습니다.' });
+      }
+
+      logger.info('게시글 댓글 제거 성공하였습니다.');
+      return res
+        .status(200)
+        .json({ ok: true, message: '게시글 댓글 제거 성공하였습니다.', removedCommentId: Number(postCommentId) });
+    } catch (err: any) {
+      logger.info('게시글 댓글 제거 에러', err);
+      return res.status(500).json({ ok: false, message: '게시판 댓글 제거 에러' });
+    }
+  },
+
+  editComment: async (req: Request, res: Response) => {
+    const postCommentRepo = getCustomRepository(PostCommentRepository);
+
+    try {
+      const { postCommentId, editedContent } = req.body;
+
+      const editedComment = await postCommentRepo.editPostComment(postCommentId, editedContent);
+
+      if (editedComment.affected === 0) {
+        logger.info('게시글 댓글 수정 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '게시글 댓글 수정 실패하였습니다.' });
+      }
+
+      logger.info('게시글 댓글 수정 성공하였습니다.');
+      return res.status(200).json({
+        ok: true,
+        message: '게시글 댓글 수정 성공하였습니다.',
+        editedCommentId: Number(postCommentId),
+        editedContent: editedContent,
+      });
+    } catch (err: any) {
+      logger.info('게시글 댓글 수정 에러', err);
+      return res.status(500).json({ ok: false, message: '게시판 댓글 수정 에러' });
     }
   },
 };

@@ -75,6 +75,22 @@ export class PostCommentRepository extends AbstractRepository<PostComment> {
       .where('postComment.id = :postCommentId', { postCommentId })
       .getOne();
   }
+
+  removePostComment(postCommentId: number) {
+    return this.createQueryBuilder('postComment')
+      .delete()
+      .from(PostComment)
+      .where('id = :id', { id: postCommentId })
+      .execute();
+  }
+
+  editPostComment(postCommentId: number, editedContent: string) {
+    return this.createQueryBuilder('postComment')
+      .update(PostComment)
+      .set({ content: editedContent })
+      .where('id = :id', { id: postCommentId })
+      .execute();
+  }
 }
 
 @EntityRepository(Like)

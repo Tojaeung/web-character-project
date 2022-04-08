@@ -74,7 +74,7 @@ export const drawingSlice = createSlice({
       state.ok = payload.ok;
       state.message = payload.message;
       const index = state.index;
-      state.drawings[index!]!.drawingComments?.unshift(payload.addedComment);
+      state.drawings[index!]!.drawingComments?.push(payload.addedComment);
     });
     builder.addCase(addDrawingComment.rejected, (state, { payload }) => {
       state.ok = payload!.ok;

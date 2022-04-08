@@ -5,6 +5,7 @@ import Nickname from '@src/components/Nickname';
 import CreatedTime from '@src/components/CreatedTime';
 import { useAppDispatch } from '@src/store/app/hook';
 import { removeDrawingComment } from '@src/store/requests/drawing.request';
+import { removePostComment } from '@src/store/requests/post.request';
 import { DrawingCommentType, PostCommentType } from '@src/types';
 import EditCommentForm from '@src/components/comment/EditCommentForm';
 import Button from '@src/components/Button';
@@ -34,6 +35,11 @@ function CommentList({ type, comment, index, setCommentIndex, isSelected }: IPro
         alert(err.message);
       }
     } else if (type === 'board') {
+      try {
+        await dispatch(removePostComment({ postCommentId: comment.id })).unwrap();
+      } catch (err: any) {
+        alert(err.message);
+      }
     }
   };
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch } from '@src/store/app/hook';
 import { editDrawingComment } from '@src/store/requests/drawing.request';
+import { editPostComment } from '@src/store/requests/post.request';
 import Button from '@src/components/Button';
 
 interface IProp {
@@ -16,11 +17,30 @@ function EditCommentForm({ type, commentId, setCommentIndex }: IProp) {
   const [editedContent, setEditedContent] = useState('');
 
   const handleEditComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (type === 'drawing') {
-      await dispatch(editDrawingComment({ drawingCommentId: commentId, editedContent }));
+    if (editedContent.length > 100) {
+      alert('댓글 글자 수를 초과하였습니다.');
       return;
-    } else if (type === 'board') {
+    } else if (editedContent.length === 0) {
+      alert('댓글을 입력해주세요.');
+      return;
     }
+    if (type === 'drawing') {
+      try {
+        await dispatch(editDrawingComment({ drawingCommentId: commentId, editedContent })).unwrap();
+        setEditedContent('');
+      } catch (err: any) {
+        alert(err.message);
+      }
+    } else if (type === 'board') {
+      try {
+        await dispatch(editPostComment({ postCommentId: commentId, editedContent })).unwrap();
+        setEditedContent('');
+      } catch (err: any) {
+        alert(err.message);
+      }
+    }
+
+    setCommentIndex(-1);
   };
 
   // 수정폼을 닫는다.
@@ -32,7 +52,7 @@ function EditCommentForm({ type, commentId, setCommentIndex }: IProp) {
     <Container>
       <Background>
         <TextArea
-          placeholder="수정하세요.."
+          placeholder="수정하세요.. (최대 100글자)"
           cols={20}
           rows={3}
           wrap="hard"

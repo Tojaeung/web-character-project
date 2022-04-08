@@ -77,3 +77,35 @@ export type addPostErrorType = {
   ok: boolean;
   message: string;
 };
+
+export type removePostReturnType = {
+  ok: boolean;
+  message: string;
+  removedCommentId: number;
+};
+
+export type removePostParamType = {
+  postCommentId: number;
+};
+
+export type removePostErrorType = {
+  ok: boolean;
+  message: string;
+};
+
+export type editPostReturnType = {
+  ok: boolean;
+  message: string;
+  editedCommentId: number;
+  editedContent: string;
+};
+
+export type editPostParamType = {
+  postCommentId: number;
+  editedContent: string;
+};
+
+export type editPostErrorType = {
+  ok: boolean;
+  message: string;
+};
