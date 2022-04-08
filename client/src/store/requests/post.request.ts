@@ -23,6 +23,18 @@ import {
   editPostErrorType,
   editPostParamType,
   editPostReturnType,
+  addPostLikeReturnType,
+  addPostLikeParamType,
+  addPostLikeErrorType,
+  addPostDisLikeReturnType,
+  addPostDisLikeParamType,
+  addPostDisLikeErrorType,
+  removePostLikeReturnType,
+  removePostLikeParamType,
+  removePostLikeErrorType,
+  removePostDisLikeReturnType,
+  removePostDisLikeParamType,
+  removePostDisLikeErrorType,
 } from '@src/store/types/post.type';
 
 export const getPost = createAsyncThunk<
@@ -107,6 +119,65 @@ export const removePostComment = createAsyncThunk<
 >('REMOVE_POST_COMMENT', async (data, thunkApi) => {
   try {
     const res = await axios.delete(`/api/post/removeComment/${data.postCommentId}`, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+
+export const addPostLike = createAsyncThunk<
+  addPostLikeReturnType,
+  addPostLikeParamType,
+  { state: RootState; rejectValue: addPostLikeErrorType }
+>('ADD_POST_LIKE', async (data, thunkApi) => {
+  try {
+    const res = await axios.post('/api/post/addLike', data, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+
+export const addPostDisLike = createAsyncThunk<
+  addPostDisLikeReturnType,
+  addPostDisLikeParamType,
+  { state: RootState; rejectValue: addPostDisLikeErrorType }
+>('ADD_POST_DISLIKE', async (data, thunkApi) => {
+  try {
+    const res = await axios.post(`/api/post/addDisLike`, data, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+export const removePostLike = createAsyncThunk<
+  removePostLikeReturnType,
+  removePostLikeParamType,
+  { state: RootState; rejectValue: removePostLikeErrorType }
+>('REMOVE_POST_LIKE', async (data, thunkApi) => {
+  try {
+    const res = await axios.delete(`/api/post/removeLike/${data.userId}`, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+
+export const removePostDisLike = createAsyncThunk<
+  removePostDisLikeReturnType,
+  removePostDisLikeParamType,
+  { state: RootState; rejectValue: removePostDisLikeErrorType }
+>('REMOVE_POST_DISLIKE', async (data, thunkApi) => {
+  try {
+    const res = await axios.delete(`/api/post/removeDisLike/${data.userId}`, {
       withCredentials: true,
     });
     return res.data;

@@ -91,6 +91,17 @@ export class PostCommentRepository extends AbstractRepository<PostComment> {
       .where('id = :id', { id: postCommentId })
       .execute();
   }
+
+  removePostLike(userId: number) {
+    return this.createQueryBuilder('postComment').delete().from(Like).where('user_id = :id', { id: userId }).execute();
+  }
+  removePostDisLike(userId: number) {
+    return this.createQueryBuilder('postComment')
+      .delete()
+      .from(DisLike)
+      .where('user_id = :id', { id: userId })
+      .execute();
+  }
 }
 
 @EntityRepository(Like)

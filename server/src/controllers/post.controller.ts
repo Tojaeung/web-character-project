@@ -6,6 +6,8 @@ import { ImageKey } from '@src/entities/board/imageKey.entity';
 import { PostComment } from '@src/entities/board/postComment.entity';
 import logger from '@src/helpers/winston.helper';
 import { PostCommentRepository, PostRepository } from '@src/repositorys/board.repository';
+import { Like } from '@src/entities/board/like.entity';
+import { DisLike } from '@src/entities/board/dislike.entity';
 
 const postController = {
   getPost: async (req: Request, res: Response) => {
@@ -155,6 +157,94 @@ const postController = {
     } catch (err: any) {
       logger.info('게시글 댓글 수정 에러', err);
       return res.status(500).json({ ok: false, message: '게시판 댓글 수정 에러' });
+    }
+  },
+
+  addLike: async (req: Request, res: Response) => {
+    try {
+      const { userId, postId } = req.body;
+
+      const addedLike = new Like();
+      addedLike.user_id = userId;
+      addedLike.post_id = postId;
+      await getRepository(Like).save(addedLike);
+
+      logger.info('게시글 좋아요 추가 성공하였습니다.');
+      return res.status(200).json({
+        ok: true,
+        message: '게시글 좋아요 추가 성공하였습니다.',
+        addedLike,
+      });
+    } catch (err: any) {
+      logger.info('게시글 좋아요 추가 에러', err);
+      return res.status(500).json({ ok: false, message: '게시글 좋아요 추가 에러' });
+    }
+  },
+  addDisLike: async (req: Request, res: Response) => {
+    try {
+      const { userId, postId } = req.body;
+
+      const addedDisLike = new DisLike();
+      addedDisLike.user_id = userId;
+      addedDisLike.post_id = postId;
+      await getRepository(DisLike).save(addedDisLike);
+
+      logger.info('게시글 싫어요 추가 성공하였습니다.');
+      return res.status(200).json({
+        ok: true,
+        message: '게시글 싫어요 추가 성공하였습니다.',
+        addedDisLike,
+      });
+    } catch (err: any) {
+      logger.info('게시글 싫어요 추가  에러', err);
+      return res.status(500).json({ ok: false, message: '게시판 싫어요 추가 에러' });
+    }
+  },
+
+  removeLike: async (req: Request, res: Response) => {
+    const postCommentRepo = getCustomRepository(PostCommentRepository);
+    try {
+      const { userId } = req.params;
+
+      const removedLike = await postCommentRepo.removePostLike(Number(userId));
+
+      if (removedLike.affected === 0) {
+        logger.info('게시글 좋아요 제거 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '게시글 댓글 좋아요 제거 실패하였습니다.' });
+      }
+
+      logger.info('게시글 좋아요 추가 성공하였습니다.');
+      return res.status(200).json({
+        ok: true,
+        message: '게시글 좋아요 추가 성공하였습니다.',
+        removedLikeUserId: Number(userId),
+      });
+    } catch (err: any) {
+      logger.info('게시글 좋아요 추가 에러', err);
+      return res.status(500).json({ ok: false, message: '게시글 좋아요 추가 에러' });
+    }
+  },
+  removeDisLike: async (req: Request, res: Response) => {
+    const postCommentRepo = getCustomRepository(PostCommentRepository);
+    try {
+      const { userId } = req.params;
+
+      const removedLike = await postCommentRepo.removePostDisLike(Number(userId));
+
+      if (removedLike.affected === 0) {
+        logger.info('게시글 좋아요 제거 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '게시글 댓글 좋아요 제거 실패하였습니다.' });
+      }
+
+      logger.info('게시글 싫어요 추가 성공하였습니다.');
+      return res.status(200).json({
+        ok: true,
+        message: '게시글 싫어요 추가 성공하였습니다.',
+        removedDisLikeUserId: Number(userId),
+      });
+    } catch (err: any) {
+      logger.info('게시글 싫어요 추가  에러', err);
+      return res.status(500).json({ ok: false, message: '게시판 싫어요 추가 에러' });
     }
   },
 };

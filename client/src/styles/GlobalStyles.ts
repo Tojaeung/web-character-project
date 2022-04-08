@@ -16,54 +16,6 @@ const GlobalStyles = createGlobalStyle`
     background-color: ${({ theme }) => theme.palette.white};
     color: ${({ theme }) => theme.palette.black};
     font-family: 'Noto Sans KR', sans-serif;
-  
-    h1 { 
-        font-weight: bold;
-        font-size: 3rem;
-        @media ${({ theme }) => theme.device.mobile} {
-          font-size: 2.5rem;
-        }
-    }
-    h2 { 
-        font-weight: 700;
-        font-size: 2.2rem;
-        @media ${({ theme }) => theme.device.mobile} {
-          font-size: 2rem;
-        }
-        
-    }
-    h3 { 
-        font-weight: 600;
-        font-size: 1.8rem;
-        @media ${({ theme }) => theme.device.mobile} {
-          font-size: 1.5rem;
-        }
-    }
-    p {
-      font-size: 1.6rem;
-      @media ${({ theme }) => theme.device.mobile} {
-          font-size: 1.4rem;
-        }
-    }
-    label {
-      font-size: 1.5rem;
-      @media ${({ theme }) => theme.device.mobile} {
-          font-size: 1.3rem;
-        }
-    }
-    input {
-      font-size: 1.4rem;
-      @media ${({ theme }) => theme.device.mobile} {
-          font-size: 1.3rem;
-        }
-    }
-
-    span {
-      font-size: 1.4rem;
-      @media ${({ theme }) => theme.device.mobile} {
-          font-size: 1.3rem;
-        }
-    }
 
   strong {
     font-weight: 700;

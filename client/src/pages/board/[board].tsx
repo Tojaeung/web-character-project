@@ -178,7 +178,9 @@ const Header = styled.div`
   justify-content: space-between;
   padding: 1rem;
 `;
-const BoardName = styled.h2``;
+const BoardName = styled.h2`
+  font-size: 2rem;
+`;
 
 const Responsive = styled.div`
   display: none;

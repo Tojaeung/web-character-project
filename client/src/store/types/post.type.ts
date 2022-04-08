@@ -1,4 +1,4 @@
-import { PostCommentType, PostType } from '@src/types';
+import { PostCommentType, PostDisLikeType, PostLikeType, PostType } from '@src/types';
 
 export type getPostReturnType = {
   ok: boolean;
@@ -89,6 +89,68 @@ export type removePostParamType = {
 };
 
 export type removePostErrorType = {
+  ok: boolean;
+  message: string;
+};
+
+export type addPostLikeReturnType = {
+  ok: boolean;
+  message: string;
+  addedLike: PostLikeType;
+};
+
+export type addPostLikeParamType = {
+  userId: number;
+  postId: number;
+};
+
+export type addPostLikeErrorType = {
+  ok: boolean;
+  message: string;
+};
+
+export type addPostDisLikeReturnType = {
+  ok: boolean;
+  message: string;
+  addedDisLike: PostDisLikeType;
+};
+
+export type addPostDisLikeParamType = {
+  userId: number;
+  postId: number;
+};
+
+export type addPostDisLikeErrorType = {
+  ok: boolean;
+  message: string;
+};
+
+export type removePostLikeReturnType = {
+  ok: boolean;
+  message: string;
+  removedLikeUserId: number;
+};
+
+export type removePostLikeParamType = {
+  userId: number;
+};
+
+export type removePostLikeErrorType = {
+  ok: boolean;
+  message: string;
+};
+
+export type removePostDisLikeReturnType = {
+  ok: boolean;
+  message: string;
+  removedDisLikeUserId: number;
+};
+
+export type removePostDisLikeParamType = {
+  userId: number;
+};
+
+export type removePostDisLikeErrorType = {
   ok: boolean;
   message: string;
 };

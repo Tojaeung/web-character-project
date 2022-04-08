@@ -1,7 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import { PostType } from '@src/types';
-import { getPost, addPostComment, removePostComment, editPostComment } from '@src/store/requests/post.request';
+import {
+  getPost,
+  addPostComment,
+  removePostComment,
+  editPostComment,
+  addPostLike,
+  addPostDisLike,
+  removePostLike,
+  removePostDisLike,
+} from '@src/store/requests/post.request';
 
 interface PostSliceType {
   ok: boolean;
@@ -54,10 +63,54 @@ export const postSlice = createSlice({
         state.message = payload!.message;
       });
     builder
+      .addCase(addPostLike.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.post?.likes.push(payload.addedLike!);
+      })
+      .addCase(addPostLike.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
+    builder
+      .addCase(addPostDisLike.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.post?.dislikes.push(payload.addedDisLike!);
+      })
+      .addCase(addPostDisLike.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
+    builder
+      .addCase(removePostLike.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        const filteredLike = state.post?.likes.filter((like) => like.user_id !== payload.removedLikeUserId);
+        state.post!.likes = filteredLike!;
+      })
+      .addCase(removePostLike.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
+    builder
+      .addCase(removePostDisLike.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        const filteredDisLike = state.post?.dislikes.filter(
+          (dislike) => dislike.user_id !== payload.removedDisLikeUserId
+        );
+        state.post!.dislikes = filteredDisLike!;
+      })
+      .addCase(removePostDisLike.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
+
+    builder
       .addCase(editPostComment.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-
         const commentIndex = state.post?.postComments.findIndex((comment) => comment.id === payload.editedCommentId);
 
         state.post!.postComments[commentIndex!].content = payload.editedContent!;

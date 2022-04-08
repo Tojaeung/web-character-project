@@ -11,8 +11,14 @@ postRouter.post('/post/imageUpload', auth, boardUpload.single('image'), postCont
 postRouter.post('/post/imageRemove', auth, postController.imageRemove);
 
 postRouter.post('/post/addPost', auth, postController.addPost);
+
 postRouter.post('/post/addComment', auth, postController.addComment);
 postRouter.delete('/post/removeComment/:postCommentId', auth, postController.removeComment);
 postRouter.patch('/post/editComment', auth, postController.editComment);
+
+postRouter.post('/post/addLike', auth, postController.addLike);
+postRouter.post('/post/addDisLike', auth, postController.addDisLike);
+postRouter.delete('/post/removeLike/:userId', auth, postController.removeLike);
+postRouter.delete('/post/removeDisLike/:userId', auth, postController.removeDisLike);
 
 export default postRouter;
