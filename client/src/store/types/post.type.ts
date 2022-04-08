@@ -78,6 +78,25 @@ export type addPostErrorType = {
   message: string;
 };
 
+export type editPostReturnType = {
+  ok: boolean;
+  message: string;
+  editedPost: PostType;
+};
+
+export type editPostParamType = {
+  postId: number;
+  title: string;
+  content: string;
+
+  imageKeys: string[];
+};
+
+export type editPostErrorType = {
+  ok: boolean;
+  message: string;
+};
+
 export type removePostReturnType = {
   ok: boolean;
   message: string;
@@ -155,19 +174,19 @@ export type removePostDisLikeErrorType = {
   message: string;
 };
 
-export type editPostReturnType = {
+export type editPostCommentReturnType = {
   ok: boolean;
   message: string;
   editedCommentId: number;
   editedContent: string;
 };
 
-export type editPostParamType = {
+export type editPostCommentParamType = {
   postCommentId: number;
   editedContent: string;
 };
 
-export type editPostErrorType = {
+export type editPostCommentErrorType = {
   ok: boolean;
   message: string;
 };

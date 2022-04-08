@@ -35,6 +35,9 @@ import {
   removePostDisLikeReturnType,
   removePostDisLikeParamType,
   removePostDisLikeErrorType,
+  editPostCommentErrorType,
+  editPostCommentParamType,
+  editPostCommentReturnType,
 } from '@src/store/types/post.type';
 
 export const getPost = createAsyncThunk<
@@ -59,6 +62,21 @@ export const addPost = createAsyncThunk<
 >('ADD_POST', async (data, thunkApi) => {
   try {
     const res = await axios.post('/api/post/addPost', data, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+
+export const editPost = createAsyncThunk<
+  editPostReturnType,
+  editPostParamType,
+  { state: RootState; rejectValue: editPostErrorType }
+>('EDIT_POST', async (data, thunkApi) => {
+  try {
+    const res = await axios.patch('/api/post/editPost', data, {
       withCredentials: true,
     });
     return res.data;
@@ -187,9 +205,9 @@ export const removePostDisLike = createAsyncThunk<
 });
 
 export const editPostComment = createAsyncThunk<
-  editPostReturnType,
-  editPostParamType,
-  { state: RootState; rejectValue: editPostErrorType }
+  editPostCommentReturnType,
+  editPostCommentParamType,
+  { state: RootState; rejectValue: editPostCommentErrorType }
 >('EDIT_POST_COMMENT', async (data, thunkApi) => {
   try {
     const res = await axios.patch(`/api/post/editComment`, data, {

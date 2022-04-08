@@ -21,6 +21,7 @@ import NotFound from '@src/components/NotFound';
 import Account from './pages/settings/Account';
 import Alert from './pages/settings/Alert';
 import Desc from './pages/settings/Desc';
+import EditForm from '@src/pages/EditForm';
 
 function App() {
   useRefreshLogin();
@@ -55,6 +56,8 @@ function App() {
                 <Route path="drawingForm" element={<DrawingForm />} />
                 <Route path="postForm/:board" element={<PostForm />} />
               </Route>
+
+              <Route path="editForm/:type/:id" element={<EditForm />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

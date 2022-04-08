@@ -108,9 +108,11 @@ const ButtonBox = styled.div`
 `;
 const EditButton = styled(Button)`
   padding: 0.5rem;
+  font-size: 1.2rem;
 `;
 const RemoveButton = styled(Button)`
   padding: 0.5rem;
+  font-size: 1.2rem;
 `;
 
 export default CommentList;

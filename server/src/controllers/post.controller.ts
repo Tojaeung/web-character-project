@@ -94,6 +94,31 @@ const postController = {
       return res.status(500).json({ ok: false, message: '게시판 글쓰기 에러' });
     }
   },
+
+  editPost: async (req: Request, res: Response) => {
+    const postRepo = getCustomRepository(PostRepository);
+    try {
+      const { postId, title, content, imageKeys } = req.body;
+
+      const editedPost = await postRepo.findPostById(Number(postId));
+      editedPost!.title = title;
+      editedPost!.content = content;
+      await getRepository(Post).save(editedPost!);
+
+      const image_key = new ImageKey();
+      imageKeys.forEach(async (imageKey: string) => {
+        image_key.post_id = postId;
+        image_key.image_key = imageKey;
+        await getRepository(ImageKey).save(image_key);
+      });
+      logger.info('게시글 수정 성공하였습니다.');
+      return res.status(200).json({ ok: true, message: '게시글 수정 성공하였습니다.', editedPost });
+    } catch (err: any) {
+      logger.info('게시글 수정 에러');
+      return res.status(500).json({ ok: false, message: '게시글 수정 에러' });
+    }
+  },
+
   addComment: async (req: Request, res: Response) => {
     const postCommentRepo = getCustomRepository(PostCommentRepository);
 

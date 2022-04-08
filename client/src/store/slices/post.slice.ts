@@ -10,6 +10,7 @@ import {
   addPostDisLike,
   removePostLike,
   removePostDisLike,
+  editPost,
 } from '@src/store/requests/post.request';
 
 interface PostSliceType {
@@ -116,6 +117,17 @@ export const postSlice = createSlice({
         state.post!.postComments[commentIndex!].content = payload.editedContent!;
       })
       .addCase(editPostComment.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
+
+    builder
+      .addCase(editPost.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.post = payload.editedPost;
+      })
+      .addCase(editPost.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
         state.message = payload!.message;
       });
