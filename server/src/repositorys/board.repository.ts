@@ -91,10 +91,17 @@ export class PostCommentRepository extends AbstractRepository<PostComment> {
       .where('id = :id', { id: postCommentId })
       .execute();
   }
+}
 
+@EntityRepository(Like)
+export class LikeRepository extends AbstractRepository<Like> {
   removePostLike(userId: number) {
     return this.createQueryBuilder('postComment').delete().from(Like).where('user_id = :id', { id: userId }).execute();
   }
+}
+
+@EntityRepository(DisLike)
+export class DisLikeRepository extends AbstractRepository<DisLike> {
   removePostDisLike(userId: number) {
     return this.createQueryBuilder('postComment')
       .delete()
@@ -103,12 +110,6 @@ export class PostCommentRepository extends AbstractRepository<PostComment> {
       .execute();
   }
 }
-
-@EntityRepository(Like)
-export class LikeRepository extends AbstractRepository<Like> {}
-
-@EntityRepository(DisLike)
-export class DisLikeRepository extends AbstractRepository<DisLike> {}
 
 @EntityRepository(ImageKey)
 export class ImageKeyRepository extends AbstractRepository<ImageKey> {}

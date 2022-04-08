@@ -64,7 +64,12 @@ const UserInfoBox = styled.div`
   align-items: center;
   gap: 0.5rem;
 `;
-const Content = styled.div``;
+const Content = styled.div`
+  font-size: 1.4rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
+`;
 const DrawingInfoBox = styled.div`
   display: flex;
   justify-content: space-around;

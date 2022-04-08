@@ -142,10 +142,10 @@ export const drawingSlice = createSlice({
       state.ok = payload.ok;
       state.message = payload.message;
       const index = state.index;
-      const editedCommentIndex = state.drawings[index!]?.drawingComments?.findIndex(
-        (drawingComment) => drawingComment.id === payload.editedComment.id
+      const commentIndex = state.drawings[index!]?.drawingComments?.findIndex(
+        (drawingComment) => drawingComment.id === payload.drawingCommentId
       );
-      state.drawings[index!]!.drawingComments![editedCommentIndex!].content! = payload.editedComment.content;
+      state.drawings[index!]!.drawingComments![commentIndex!].content! = payload.editedContent;
     });
     builder.addCase(editDrawingComment.rejected, (state, { payload }) => {
       state.ok = payload!.ok;

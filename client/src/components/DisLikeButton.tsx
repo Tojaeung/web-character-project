@@ -24,11 +24,11 @@ function DisLikeButton({ type, id, likes, dislikes }: IProps) {
       const existingLike = likes?.some((like) => like.user_id === user?.id);
       const existingDisLike = dislikes?.some((dislike) => dislike.user_id === user?.id);
       if (!existingLike && existingDisLike) {
-        await dispatch(removeDrawingDisLike({ userId: user?.id!, drawingId: id }));
+        await dispatch(removeDrawingDisLike({ userId: user?.id! }));
         return;
       } else if (existingLike && !existingDisLike) {
         await dispatch(addDrawingDisLike({ userId: user?.id!, drawingId: id }));
-        await dispatch(removeDrawingLike({ userId: user?.id!, drawingId: id }));
+        await dispatch(removeDrawingLike({ userId: user?.id! }));
         return;
       } else if (!existingLike && !existingDisLike) {
         await dispatch(addDrawingDisLike({ userId: user?.id!, drawingId: id }));

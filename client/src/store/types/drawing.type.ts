@@ -90,7 +90,6 @@ export type removeLikeReturnType = {
 };
 export type removeLikeParamType = {
   userId: number;
-  drawingId: number;
 };
 export type removeLikeErrorType = {
   ok: boolean;
@@ -104,7 +103,6 @@ export type removeDisLikeReturnType = {
 };
 export type removeDisLikeParamType = {
   userId: number;
-  drawingId: number;
 };
 export type removeDisLikeErrorType = {
   ok: boolean;
@@ -127,7 +125,8 @@ export type removeCommentErrorType = {
 export type editCommentReturnType = {
   ok: boolean;
   message: string;
-  editedComment: DrawingCommentType;
+  drawingCommentId: number;
+  editedContent: string;
 };
 export type editCommentParamType = {
   drawingCommentId: number;

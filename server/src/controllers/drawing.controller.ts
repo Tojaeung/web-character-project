@@ -1,7 +1,12 @@
 import { Request, Response } from 'express';
 import { getRepository, getCustomRepository } from 'typeorm';
 import logger from '@src/helpers/winston.helper';
-import { DrawingRepository, DrawingCommentRepository } from '@src/repositorys/drawing.repository';
+import {
+  DrawingRepository,
+  DrawingCommentRepository,
+  LikeRepository,
+  DisLikeRepository,
+} from '@src/repositorys/drawing.repository';
 import { Drawing } from '@src/entities/drawing/drawing.entity';
 import { DrawingComment } from '@src/entities/drawing/drawingComment.entity';
 import { Like } from '@src/entities/drawing/like.entity';
@@ -77,7 +82,7 @@ const drawingController = {
     try {
       const { drawingId } = req.body;
 
-      await drawingRepo.addView(drawingId);
+      await drawingRepo.addDrawingView(drawingId);
 
       logger.info('그림 조회수 추가하기 성공');
       return res.status(200).json({ ok: true, message: '그림 조회수 추가하기 성공' });
@@ -141,47 +146,38 @@ const drawingController = {
     }
   },
   removeLike: async (req: Request, res: Response) => {
+    const drawingLikeRepo = getCustomRepository(LikeRepository);
     try {
-      const { userId, drawingId } = req.body;
+      const { userId } = req.params;
 
-      const removedLike = await getRepository(Like).findOne({
-        where: { user_id: userId, drawing_id: drawingId },
-      });
+      const removedLike = await drawingLikeRepo.removeDrawingLike(Number(userId));
 
-      if (!removedLike) {
-        logger.info('해당하는 그림 좋아요가 존재하지 않습니다.');
-        return res.status(400).json({ ok: false, message: '그림 좋아요 제거하기 실패' });
+      if (removedLike.affected === 0) {
+        logger.info('그림 좋아요 제거 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '그림 좋아요 제거 실패하였습니다.' });
       }
 
-      // removedLike 제거시 PK도 객체에서 제거되기 때문에 따라 PK정보를 뺴내준다.
-      const removedLikeId = removedLike.id;
-      await getRepository(Like).remove(removedLike);
-
       logger.info('그림 좋아요 제거하기 성공');
-      return res.status(200).json({ ok: true, message: '그림 좋아요 제거하기 성공', removedLikeId });
+      return res.status(200).json({ ok: true, message: '그림 좋아요 제거하기 성공', removedLikeId: userId });
     } catch (err: any) {
       logger.info('그림 좋아요 제거하기 에러', err);
       return res.status(500).json({ ok: false, message: '그림 좋아요 제거하기 에러' });
     }
   },
   removeDisLike: async (req: Request, res: Response) => {
+    const drawingDisLikeRepo = getCustomRepository(DisLikeRepository);
     try {
-      const { userId, drawingId } = req.body;
+      const { userId } = req.params;
 
-      const removedDisLike = await getRepository(DisLike).findOne({
-        where: { user_id: userId, drawing_id: drawingId },
-      });
+      const removedDisLike = await drawingDisLikeRepo.removeDrawingDisLike(Number(userId));
 
-      if (!removedDisLike) {
-        logger.info('해당하는 그림 싫어요가 존재하지 않습니다.');
-        return res.status(400).json({ ok: false, message: '그림 싫어요 제거하기 실패' });
+      if (removedDisLike.affected === 0) {
+        logger.info('그림 싫어요 제거 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '그림 싫어요 제거 실패하였습니다.' });
       }
 
-      const removedDisLikeId = removedDisLike?.id;
-      await getRepository(DisLike).remove(removedDisLike);
-
       logger.info('그림 싫어요 제거하기 성공');
-      return res.status(200).json({ ok: true, message: '그림 싫어요 제거하기 성공', removedDisLikeId });
+      return res.status(200).json({ ok: true, message: '그림 싫어요 제거하기 성공', removedDisLikeId: userId });
     } catch (err: any) {
       logger.info('그림 싫어요 제거하기 에러', err);
       return res.status(500).json({ ok: false, message: '그림 싫어요 제거하기 에러' });
@@ -189,40 +185,45 @@ const drawingController = {
   },
 
   removeComment: async (req: Request, res: Response) => {
+    const drawingCommentRepo = getCustomRepository(DrawingCommentRepository);
     try {
-      const { id } = req.params;
+      const { drawingCommentId } = req.params;
 
-      const removedComment = await getRepository(DrawingComment).findOne({ id: Number(id) });
+      const removedDrawingComment = drawingCommentRepo.removeDrawingComment(Number(drawingCommentId));
 
-      if (!removedComment) {
-        logger.info('해당하는 그림 댓글이 존재하지 않습니다.');
-        return res.status(400).json({ ok: false, message: '그림 댓글 삭제하기 실패' });
+      if ((await removedDrawingComment).affected === 0) {
+        logger.info('그림 댓글 삭제 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '그림 댓글 삭제 실패하였습니다.' });
       }
 
-      const removedCommentId = removedComment.id;
-      await getRepository(DrawingComment).remove(removedComment);
-
       logger.info('그림 댓글 삭제하기 성공');
-      return res.status(200).json({ ok: true, message: '그림 댓글 삭제하기 성공', removedCommentId });
+      return res
+        .status(200)
+        .json({ ok: true, message: '그림 댓글 삭제하기 성공', removedCommentId: Number(drawingCommentId) });
     } catch (err: any) {
       logger.info('그림 댓글 삭제하기 에러', err);
       return res.status(500).json({ ok: false, message: '그림 댓글 삭제하기 에러' });
     }
   },
   editComment: async (req: Request, res: Response) => {
+    const drawingCommentRepo = getCustomRepository(DrawingCommentRepository);
     try {
       const { drawingCommentId, editedContent } = req.body;
 
-      const editedComment = await getRepository(DrawingComment).findOne({ id: drawingCommentId });
-      if (!editedComment) {
+      const editedDrawingComment = await drawingCommentRepo.editDrawingComment(drawingCommentId, editedContent);
+
+      if (editedDrawingComment.affected === 0) {
         logger.info('해당하는 그림 댓글이 존재하지 않습니다.');
         return res.status(400).json({ ok: false, message: '그림 댓글 수정하기 실패' });
       }
-      editedComment.content = editedContent;
-      await getRepository(DrawingComment).save(editedComment);
 
       logger.info('그림 댓글 수정하기 완료');
-      return res.status(200).json({ ok: true, message: '그림 댓글 수정하기 완료', editedComment });
+      return res.status(200).json({
+        ok: true,
+        message: '그림 댓글 수정하기 완료',
+        drawingCommentId: Number(drawingCommentId),
+        editedContent,
+      });
     } catch (err: any) {
       logger.info('그림 댓글 수정하기 에러', err);
       return res.status(500).json({ ok: false, message: '그림 댓글 수정하기 에러' });

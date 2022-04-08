@@ -130,7 +130,7 @@ export const removeDrawingLike = createAsyncThunk<
   { state: RootState; rejectValue: removeLikeErrorType }
 >('REMOVE_DRAWING_LIKE', async (data, thunkApi) => {
   try {
-    const res = await axios.post(`/api/drawing/removeLike`, data, {
+    const res = await axios.delete(`/api/drawing/removeLike/${data.userId}`, {
       withCredentials: true,
     });
     return res.data;
@@ -145,7 +145,7 @@ export const removeDrawingDisLike = createAsyncThunk<
   { state: RootState; rejectValue: removeDisLikeErrorType }
 >('REMOVE_DRAWING_DISLIKE', async (data, thunkApi) => {
   try {
-    const res = await axios.post(`/api/drawing/removeDisLike`, data, {
+    const res = await axios.delete(`/api/drawing/removeDisLike/${data.userId}`, {
       withCredentials: true,
     });
     return res.data;

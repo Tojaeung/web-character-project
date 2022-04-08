@@ -5,7 +5,12 @@ import { Post } from '@src/entities/board/post.entity';
 import { ImageKey } from '@src/entities/board/imageKey.entity';
 import { PostComment } from '@src/entities/board/postComment.entity';
 import logger from '@src/helpers/winston.helper';
-import { PostCommentRepository, PostRepository } from '@src/repositorys/board.repository';
+import {
+  DisLikeRepository,
+  LikeRepository,
+  PostCommentRepository,
+  PostRepository,
+} from '@src/repositorys/board.repository';
 import { Like } from '@src/entities/board/like.entity';
 import { DisLike } from '@src/entities/board/dislike.entity';
 
@@ -202,11 +207,11 @@ const postController = {
   },
 
   removeLike: async (req: Request, res: Response) => {
-    const postCommentRepo = getCustomRepository(PostCommentRepository);
+    const postLikeRepo = getCustomRepository(LikeRepository);
     try {
       const { userId } = req.params;
 
-      const removedLike = await postCommentRepo.removePostLike(Number(userId));
+      const removedLike = await postLikeRepo.removePostLike(Number(userId));
 
       if (removedLike.affected === 0) {
         logger.info('게시글 좋아요 제거 실패하였습니다.');
@@ -225,11 +230,11 @@ const postController = {
     }
   },
   removeDisLike: async (req: Request, res: Response) => {
-    const postCommentRepo = getCustomRepository(PostCommentRepository);
+    const postDisLikeRepo = getCustomRepository(DisLikeRepository);
     try {
       const { userId } = req.params;
 
-      const removedLike = await postCommentRepo.removePostDisLike(Number(userId));
+      const removedLike = await postDisLikeRepo.removePostDisLike(Number(userId));
 
       if (removedLike.affected === 0) {
         logger.info('게시글 좋아요 제거 실패하였습니다.');

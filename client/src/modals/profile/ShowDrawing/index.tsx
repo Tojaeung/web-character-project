@@ -64,6 +64,8 @@ const Header = styled.div`
   align-items: center;
   padding: 1rem 0;
   border-bottom: 1px solid ${({ theme }) => theme.palette.gray};
+  font-size: 1.8rem;
+  font-weight: bold;
 `;
 const Title = styled.h2``;
 const CloseIcon = styled(AiOutlineClose)`

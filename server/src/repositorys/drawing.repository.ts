@@ -30,7 +30,7 @@ export class DrawingRepository extends AbstractRepository<Drawing> {
       .getMany();
   }
 
-  addView(drawingId: number) {
+  addDrawingView(drawingId: number) {
     return this.createQueryBuilder('drawing')
       .update()
       .set({ views: () => 'views +1' })
@@ -47,9 +47,33 @@ export class DrawingCommentRepository extends AbstractRepository<DrawingComment>
       .where('drawingComment.id = :drawingCommentId', { drawingCommentId })
       .getOne();
   }
+
+  editDrawingComment(drawingCommentId: number, editedContent: string) {
+    return this.createQueryBuilder('drawingComment')
+      .update(DrawingComment)
+      .set({ content: editedContent })
+      .where('id = :id', { id: drawingCommentId })
+      .execute();
+  }
+
+  removeDrawingComment(drawingCommentId: number) {
+    return this.createQueryBuilder('drawingComment')
+      .delete()
+      .from(DrawingComment)
+      .where('id = :id', { id: drawingCommentId })
+      .execute();
+  }
 }
 
 @EntityRepository(Like)
-export class LikeRepository extends AbstractRepository<Like> {}
+export class LikeRepository extends AbstractRepository<Like> {
+  removeDrawingLike(userId: number) {
+    return this.createQueryBuilder('like').delete().from(Like).where('user_id = :userId', { userId }).execute();
+  }
+}
 @EntityRepository(DisLike)
-export class DisLikeRepository extends AbstractRepository<DisLike> {}
+export class DisLikeRepository extends AbstractRepository<DisLike> {
+  removeDrawingDisLike(userId: number) {
+    return this.createQueryBuilder('dislike').delete().from(DisLike).where('user_id = :userId', { userId }).execute();
+  }
+}
