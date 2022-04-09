@@ -65,6 +65,10 @@ export class PostRepository extends AbstractRepository<Post> {
   CountPosts(board: string) {
     return this.createQueryBuilder('post').select('COUNT(*)').where('post.board = :board', { board }).getRawOne();
   }
+
+  removePost(postId: number) {
+    return this.createQueryBuilder('post').delete().from(Post).where('id = :id', { id: postId }).execute();
+  }
 }
 
 @EntityRepository(PostComment)
@@ -112,4 +116,12 @@ export class DisLikeRepository extends AbstractRepository<DisLike> {
 }
 
 @EntityRepository(ImageKey)
-export class ImageKeyRepository extends AbstractRepository<ImageKey> {}
+export class ImageKeyRepository extends AbstractRepository<ImageKey> {
+  findImageKeysByPostId(postId: number) {
+    return this.createQueryBuilder('imageKey').where('post_id = :id', { id: postId }).getMany();
+  }
+
+  removeImageKeys(id: number) {
+    return this.createQueryBuilder('imageKey').delete().from(ImageKey).where('id = :id', { id }).execute();
+  }
+}

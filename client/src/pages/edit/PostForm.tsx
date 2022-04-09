@@ -62,7 +62,6 @@ function EditForm() {
     setContent('');
 
     if ((imageKeys as string[]).length === 0) {
-      return;
     } else {
       try {
         await dispatch(imageRemove({ imageKeys })).unwrap();

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import boardTitle from '@src/utils/boardTitle.util';
 import Board from '@src/pages/board/[board]';
 import { selectPostPost } from '@src/store/slices/post.slice';
-import { getPost } from '@src/store/requests/post.request';
+import { getPost, removePost } from '@src/store/requests/post.request';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import CreatedTime from '@src/components/CreatedTime';
@@ -17,13 +17,25 @@ import Button from '@src/components/Button';
 
 function Post() {
   const dispatch = useAppDispatch();
+
   const { postId } = useParams();
+  const navigate = useNavigate();
 
   const post = useAppSelector(selectPostPost);
 
   useEffect(() => {
     dispatch(getPost({ postId: postId! })).unwrap();
   }, [postId]);
+
+  const handleRemovePost = async (e: any) => {
+    try {
+      const res = await dispatch(removePost({ postId: Number(postId) })).unwrap();
+      alert(res.message);
+      navigate(`/board/${post?.board}`);
+    } catch (err: any) {
+      alert(err.message);
+    }
+  };
 
   return (
     <Container>
@@ -44,7 +56,7 @@ function Post() {
           <EditPost color="green" size="small" inverse={true}>
             <Link to={`/edit/postForm/${post?.id}`}>수정</Link>
           </EditPost>
-          <RemovePost color="red" size="small" inverse={true}>
+          <RemovePost color="red" size="small" inverse={true} onClick={handleRemovePost}>
             삭제
           </RemovePost>
         </ButtonBox>

@@ -100,14 +100,28 @@ export type editPostErrorType = {
 export type removePostReturnType = {
   ok: boolean;
   message: string;
-  removedCommentId: number;
 };
 
 export type removePostParamType = {
-  postCommentId: number;
+  postId: number;
 };
 
 export type removePostErrorType = {
+  ok: boolean;
+  message: string;
+};
+
+export type removePostCommentReturnType = {
+  ok: boolean;
+  message: string;
+  removedCommentId: number;
+};
+
+export type removePostCommentParamType = {
+  postCommentId: number;
+};
+
+export type removePostCommentErrorType = {
   ok: boolean;
   message: string;
 };

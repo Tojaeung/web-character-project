@@ -20,6 +20,9 @@ function DisLikeButton({ type, id, likes, dislikes }: IProps) {
   const user = useAppSelector(selectAuthUser);
 
   const onAddDisLike = async (e: React.MouseEvent<HTMLSpanElement>) => {
+    if (!user) {
+      return alert('로그인 후 이용 가능합니다.');
+    }
     if (type === 'drawing') {
       const existingLike = likes?.some((like) => like.user_id === user?.id);
       const existingDisLike = dislikes?.some((dislike) => dislike.user_id === user?.id);

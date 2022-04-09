@@ -7,6 +7,7 @@ import { PostComment } from '@src/entities/board/postComment.entity';
 import logger from '@src/helpers/winston.helper';
 import {
   DisLikeRepository,
+  ImageKeyRepository,
   LikeRepository,
   PostCommentRepository,
   PostRepository,
@@ -116,6 +117,39 @@ const postController = {
     } catch (err: any) {
       logger.info('게시글 수정 에러');
       return res.status(500).json({ ok: false, message: '게시글 수정 에러' });
+    }
+  },
+
+  removePost: async (req: Request, res: Response) => {
+    const postRepo = getCustomRepository(PostRepository);
+    const imageKeyRepo = getCustomRepository(ImageKeyRepository);
+    try {
+      const { postId } = req.params;
+
+      await postRepo.removePost(Number(postId));
+
+      // imageKey 불러와서 같이 s3삭제
+      const imageKeys = await imageKeyRepo.findImageKeysByPostId(Number(postId));
+      console.log(imageKeys);
+
+      if (imageKeys.length !== 0) {
+        const bucketName = process.env.AWS_BUCKET_NAME as string;
+        imageKeys.forEach(async (imageKey) => {
+          await imageKeyRepo.removeImageKeys(imageKey.id);
+          s3.deleteObject({ Bucket: bucketName, Key: imageKey.image_key as string }, (err) => {
+            if (err) {
+              logger.warn('s3 board 객체삭제를 실패하였습니다.');
+              return res.status(400).json({ ok: false, message: 's3 최적화 실패하였습니다.' });
+            }
+          });
+        });
+      }
+
+      logger.info('게시글 제거 성공하였습니다.');
+      return res.status(200).json({ ok: true, message: '게시글 제거 성공하였습니다.' });
+    } catch (err: any) {
+      logger.info('게시글 제거 에러', err);
+      return res.status(500).json({ ok: false, message: '게시글 제거 에러' });
     }
   },
 

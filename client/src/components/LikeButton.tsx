@@ -20,9 +20,13 @@ function LikeButton({ type, id, likes, dislikes }: IProps) {
   const user = useAppSelector(selectAuthUser);
 
   const onAddLike = async (e: React.MouseEvent<HTMLSpanElement>) => {
+    if (!user) {
+      return alert('로그인 후 이용 가능합니다.');
+    }
     if (type === 'drawing') {
       const existingLike = likes.some((like) => like.user_id === user?.id);
       const existingDisLike = dislikes.some((dislike) => dislike.user_id === user?.id);
+
       if (existingLike && !existingDisLike) {
         await dispatch(removeDrawingLike({ userId: user?.id! }));
         return;
@@ -34,10 +38,12 @@ function LikeButton({ type, id, likes, dislikes }: IProps) {
         await dispatch(addDrawingLike({ userId: user?.id!, drawingId: id }));
         return;
       }
+
       return;
     } else if (type === 'board') {
       const existingLike = likes.some((like) => like.user_id === user?.id);
       const existingDisLike = dislikes.some((dislike) => dislike.user_id === user?.id);
+
       if (existingLike && !existingDisLike) {
         await dispatch(removePostLike({ userId: user?.id! }));
         return;

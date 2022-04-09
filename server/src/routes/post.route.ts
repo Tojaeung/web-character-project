@@ -12,6 +12,7 @@ postRouter.post('/post/imageRemove', auth, postController.imageRemove);
 
 postRouter.post('/post/addPost', auth, postController.addPost);
 postRouter.patch('/post/editPost', auth, postController.editPost);
+postRouter.delete('/post/removePost/:postId', auth, postController.removePost);
 
 postRouter.post('/post/addComment', auth, postController.addComment);
 postRouter.delete('/post/removeComment/:postCommentId', auth, postController.removeComment);
