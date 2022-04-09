@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
+import { BsPencilSquare } from 'react-icons/bs';
+import { HiOutlineChevronDoubleUp } from 'react-icons/hi';
 import { getBoard } from '@src/store/requests/board.request';
 import { selectBoardSelectedBoard } from '@src/store/slices/board.slice';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
@@ -10,9 +12,12 @@ import Pagination from './Pagination';
 import boardTitle from '@src/utils/boardTitle.util';
 import LimitSelector from './LimitSelector';
 import CreatedTime from '@src/components/CreatedTime';
+import Button from '@src/components/Button';
 
 function Board() {
   const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
   const { board } = useParams();
 
   const selectedBoard = useAppSelector(selectBoardSelectedBoard);
@@ -34,6 +39,10 @@ function Board() {
       .then((res) => setTotalPostsNum(res.totalPostsNum));
   }, [page, limit]);
 
+  const goTop = (e: React.MouseEvent<HTMLButtonElement>) => {
+    document.documentElement.scrollTop = 0;
+  };
+
   return (
     <>
       <Container>
@@ -42,155 +51,194 @@ function Board() {
           <LimitSelector setPage={setPage} limit={limit} setLimit={setLimit} />
         </Header>
         <Table>
-          <Thead>
-            <Tr>
-              <Th>번호</Th>
-              <Th>제목</Th>
-              <Th>닉네임</Th>
-              <Th>조회수</Th>
-              <Th>날짜</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {selectedBoard &&
-              selectedBoard.map((post) => (
-                <Tr key={v4()}>
-                  <Id>{post.id}</Id>
-                  <Title>
-                    <Link to={`/board/${board}/post/${post.id}`}>{post.title}</Link>
-                  </Title>
-                  <Name>
-                    <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />
-                  </Name>
-                  <Views>{post.views}</Views>
-                  <Date>
-                    <CreatedTime createdTime={post.created_at} size="small" />
-                  </Date>
-                </Tr>
-              ))}
-          </Tbody>
+          <tr>
+            <th>번호</th>
+            <th className="title">제목</th>
+            <th>닉네임</th>
+            <th>조회수</th>
+            <th>날짜</th>
+          </tr>
+
+          {selectedBoard &&
+            selectedBoard.map((post) => (
+              <tr key={v4()}>
+                <td>{post.id}</td>
+                <td className="post-title">
+                  <Link to={`/board/${board}/post/${post.id}`}>{post.title}</Link>
+                </td>
+                <td>
+                  <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />
+                </td>
+                <td>{post.views}</td>
+                <td>
+                  <CreatedTime createdTime={post.created_at} size="small" />
+                </td>
+              </tr>
+            ))}
         </Table>
-        <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
+
+        <Footer>
+          <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
+          <ScrollUpButton color="green" size="small" inverse={true} onClick={goTop}>
+            상단으로
+          </ScrollUpButton>
+          <CreatePostButton color="green" size="small" onClick={(e) => navigate(`/create/postForm/${board}`)}>
+            글쓰기
+          </CreatePostButton>
+        </Footer>
       </Container>
+
       <Responsive>
         <Header>
           <BoardName>{boardTitle(board as string)}</BoardName>
           <LimitSelector setPage={setPage} limit={limit} setLimit={setLimit} />
         </Header>
         <Table>
-          <Thead></Thead>
-          <Tbody>
-            {selectedBoard &&
-              selectedBoard.map((post) => (
-                <Tr key={v4()}>
-                  <Title>
-                    <Link to={`/board/${board}/post/${post.id}`}>{post.title}</Link>
-                    <BottomBox>
-                      <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />
-                      조회수: {post.views}
-                      <CreatedTime createdTime={post.created_at} size="small" />
-                    </BottomBox>
-                  </Title>
-                </Tr>
-              ))}
-          </Tbody>
+          {selectedBoard &&
+            selectedBoard.map((post) => (
+              <ListBox key={v4()}>
+                <PostLink to={`/board/${board}/post/${post.id}`}>{post.title}</PostLink>
+
+                <DetailBox>
+                  <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />
+
+                  <Views>조회수: {post.views}</Views>
+
+                  <CreatedTime createdTime={post.created_at} size="small" />
+                </DetailBox>
+              </ListBox>
+            ))}
         </Table>
-        <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
+
+        <Footer>
+          <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
+          <ScrollUpButton color="green" size="small" onClick={goTop}>
+            <ScrollUpIcon />
+          </ScrollUpButton>
+          <CreatePostButton color="green" size="small" onClick={(e) => navigate(`/create/postForm/${board}`)}>
+            <CreatePostIcon />
+          </CreatePostButton>
+        </Footer>
       </Responsive>
     </>
   );
 }
-const Id = styled.td`
-  border-right: 1px solid ${({ theme }) => theme.palette.gray};
-`;
-const Title = styled.td`
-  width: 60%;
-  text-align: left;
-  padding: 1rem 2rem;
-
-  @media ${({ theme }) => theme.device.tablet} {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-`;
-const BottomBox = styled.div`
-  @media ${({ theme }) => theme.device.tablet} {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    font-size: 1rem;
-  }
-`;
-const Name = styled.td`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-const Views = styled.td``;
-const Date = styled.td``;
 
 const Container = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: ${({ theme }) => theme.palette.bgColor};
   @media ${({ theme }) => theme.device.tablet} {
     display: none;
   }
 `;
 
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0 auto;
-  border: 1px solid ${({ theme }) => theme.palette.gray};
-`;
-
-const Thead = styled.thead``;
-
-const Th = styled.th`
-  padding: 1rem;
-  font-size: 1.3rem;
-  font-weight: bold;
-  border: 1px solid ${({ theme }) => theme.palette.black};
-  background-color: ${({ theme }) => theme.palette.gray};
-`;
-
-const Tbody = styled.tbody``;
-
-const Tr = styled.tr`
-  text-align: center;
-  font-size: 1.2rem;
-  flex-wrap: wrap;
-  word-break: break-all;
-  border: 1px solid ${({ theme }) => theme.palette.gray};
-`;
-
 const Header = styled.div`
-  width: 100%;
-  align-self: flex-start;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
+  @media ${({ theme }) => theme.device.tablet} {
+    border-bottom: 1px solid ${({ theme }) => theme.palette.gray};
+  }
 `;
-const BoardName = styled.h2`
+const BoardName = styled.span`
   font-size: 2rem;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  position: relative;
+  tr {
+    text-align: center;
+    th {
+      font-size: 1.4rem;
+      font-weight: bold;
+      padding: 1rem;
+      background-color: ${({ theme }) => theme.palette.gray};
+      white-space: nowrap;
+    }
+    td {
+      border: 1px solid ${({ theme }) => theme.palette.gray};
+      padding: 1rem;
+    }
+    .title {
+      width: 70%;
+    }
+    .post-title {
+      text-align: left;
+      padding: 0 0 0 2rem;
+      word-break: break-all;
+    }
+  }
+`;
+const Footer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const ScrollUpButton = styled(Button)`
+  position: absolute;
+  bottom: 0.7rem;
+  right: 7rem;
+  padding: 0.7rem;
+  @media ${({ theme }) => theme.device.tablet} {
+    position: fixed;
+    bottom: 10rem;
+    right: 2rem;
+    padding: 0.7rem;
+  }
+`;
+
+const CreatePostButton = styled(Button)`
+  position: absolute;
+  bottom: 0.7rem;
+  right: 1rem;
+  padding: 0.7rem;
+  @media ${({ theme }) => theme.device.tablet} {
+    position: fixed;
+    bottom: 6rem;
+    right: 2rem;
+  }
 `;
 
 const Responsive = styled.div`
   display: none;
   @media ${({ theme }) => theme.device.tablet} {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: ${({ theme }) => theme.palette.bgColor};
+    display: block;
   }
+`;
+
+const ListBox = styled.tr`
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 0.5rem;
+  border-bottom: 1px dotted;
+`;
+
+const PostLink = styled(Link)`
+  text-align: left;
+  align-self: flex-start;
+  font-size: 1.3rem;
+  word-break: break-all;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
+`;
+const Views = styled.span``;
+const DetailBox = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+`;
+
+const ScrollUpIcon = styled(HiOutlineChevronDoubleUp)`
+  font-size: 2rem;
+`;
+
+const CreatePostIcon = styled(BsPencilSquare)`
+  font-size: 2rem;
+  color: ${({ theme }) => theme.palette.white};
 `;
 
 export default Board;

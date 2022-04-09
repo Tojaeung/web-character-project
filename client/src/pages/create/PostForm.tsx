@@ -46,12 +46,11 @@ function PostForm() {
     }
   };
 
-  const onBackToList = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleBackBoard = async (e: React.MouseEvent<HTMLButtonElement>) => {
     setTitle('');
     setContent('');
 
     if ((imageKeys as string[]).length === 0) {
-      return;
     } else {
       try {
         await dispatch(imageRemove({ imageKeys })).unwrap();
@@ -59,6 +58,7 @@ function PostForm() {
         alert(err.message);
       }
     }
+    navigate(-1);
   };
 
   return !boardCategory.includes(board as string) ? (
@@ -85,7 +85,7 @@ function PostForm() {
         <RegisterButton color="green" size="medium" responsive={true} onClick={onAddPost}>
           등록
         </RegisterButton>
-        <BackToListButton color="green" size="medium" responsive={true} inverse={true} onClick={onBackToList}>
+        <BackToListButton color="green" size="medium" responsive={true} inverse={true} onClick={handleBackBoard}>
           목록으로
         </BackToListButton>
       </ButtonBox>
