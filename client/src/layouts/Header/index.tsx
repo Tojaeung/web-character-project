@@ -97,7 +97,6 @@ const Container = styled.div`
   padding: 0rem 1rem;
   background: ${({ theme }) => theme.palette.bgColor};
   border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
-  z-index: 1000;
   min-height: 5rem;
 
   @media ${({ theme }) => theme.device.mobile} {
@@ -148,6 +147,7 @@ const ToolsBox = styled.div`
     justify-content: space-between;
     width: 100%;
     padding: 0.5rem 2rem;
+    z-index: 1010;
     border-top: 1px solid ${({ theme }) => theme.palette.borderColor};
     background-color: ${({ theme }) => theme.palette.white};
   }
@@ -173,7 +173,6 @@ const Responsive = styled.div`
     align-items: center;
     padding: 0 1rem;
     border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
-    z-index: 1000;
     min-height: 5rem;
     background: ${({ theme }) => theme.palette.bgColor};
   }
