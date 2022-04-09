@@ -39,6 +39,7 @@ function Board() {
       .then((res) => setTotalPostsNum(res.totalPostsNum));
   }, [page, limit]);
 
+  // 스크롤 맨위로
   const goTop = (e: React.MouseEvent<HTMLButtonElement>) => {
     document.documentElement.scrollTop = 0;
   };
@@ -100,10 +101,9 @@ function Board() {
                 <PostLink to={`/board/${board}/post/${post.id}`}>{post.title}</PostLink>
 
                 <DetailBox>
-                  <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />
-
+                  <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />|
                   <Views>조회수: {post.views}</Views>
-
+                  |
                   <CreatedTime createdTime={post.created_at} size="small" />
                 </DetailBox>
               </ListBox>

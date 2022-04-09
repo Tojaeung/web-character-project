@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getCustomRepository, getRepository, createQueryBuilder } from 'typeorm';
+import { getCustomRepository, getRepository } from 'typeorm';
 import { s3 } from '@src/helpers/s3.helper';
 import { Post } from '@src/entities/board/post.entity';
 import { ImageKey } from '@src/entities/board/imageKey.entity';
@@ -16,6 +16,25 @@ import { Like } from '@src/entities/board/like.entity';
 import { DisLike } from '@src/entities/board/dislike.entity';
 
 const postController = {
+  addView: async (req: Request, res: Response) => {
+    const postRepo = getCustomRepository(PostRepository);
+    try {
+      const { postId } = req.body;
+
+      const result = await postRepo.addPostView(postId as number);
+
+      if (result.affected === 0) {
+        logger.info('게시글 조회수 추가 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '게시판 조회수 추가 실패하였습니다.' });
+      }
+
+      logger.info('게시글 조회수 추가 성공하였습니다.');
+      return res.status(200).json({ ok: true, message: '게시판 조회수 추가 성공하였습니다.' });
+    } catch (err: any) {
+      logger.info('게시글 조회수 추가 에러', err);
+      return res.status(500).json({ ok: false, message: '게시판 조회수 추가 에러' });
+    }
+  },
   getPost: async (req: Request, res: Response) => {
     const postRepo = getCustomRepository(PostRepository);
     try {
@@ -26,7 +45,7 @@ const postController = {
       logger.info('게시판 글 가져오기 성공하였습니다.');
       return res.status(200).json({ ok: true, message: '게시판 글 가져오기 성공하였습니다.', post });
     } catch (err: any) {
-      logger.info('게시판 글 가져오기 에러');
+      logger.info('게시판 글 가져오기 에러', err);
       return res.status(500).json({ ok: false, message: '게시판 글 가져오기 에러' });
     }
   },

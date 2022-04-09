@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AiOutlineMore, AiOutlineUnorderedList } from 'react-icons/ai';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import boardTitle from '@src/utils/boardTitle.util';
 import Board from '@src/pages/board/[board]';
 import { selectPostPost } from '@src/store/slices/post.slice';
-import { getPost, removePost } from '@src/store/requests/post.request';
+import { getPost, removePost, addView } from '@src/store/requests/post.request';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import CreatedTime from '@src/components/CreatedTime';
@@ -26,7 +26,8 @@ function Post() {
   const post = useAppSelector(selectPostPost);
 
   useEffect(() => {
-    dispatch(getPost({ postId: postId! })).unwrap();
+    dispatch(getPost({ postId: Number(postId) })).unwrap();
+    dispatch(addView({ postId: Number(postId) }));
   }, [postId]);
 
   const handleRemovePost = async (e: any) => {

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import { PostType } from '@src/types';
 import {
+  addView,
   getPost,
   addPostComment,
   removePostComment,
@@ -31,6 +32,16 @@ export const postSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder
+      .addCase(addView.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.post!.views += 1;
+      })
+      .addCase(addView.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
     builder
       .addCase(getPost.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;

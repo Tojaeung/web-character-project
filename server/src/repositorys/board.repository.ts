@@ -51,6 +51,14 @@ export class PostRepository extends AbstractRepository<Post> {
       .getMany();
   }
 
+  addPostView(postId: number) {
+    return this.createQueryBuilder('post')
+      .update(Post)
+      .set({ views: () => 'views +1' })
+      .where('id =:id', { id: postId })
+      .execute();
+  }
+
   findPostById(postId: number) {
     return this.createQueryBuilder('post')
       .leftJoinAndSelect('post.user', 'postUser')

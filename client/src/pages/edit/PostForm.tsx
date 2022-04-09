@@ -21,7 +21,7 @@ function EditForm() {
   const post = useAppSelector(selectPostPost);
 
   useEffect(() => {
-    dispatch(getPost({ postId: postId! }))
+    dispatch(getPost({ postId: Number(postId) }))
       .unwrap()
       .then((res) => {
         const post = res.post;

@@ -1,5 +1,20 @@
 import { PostCommentType, PostDisLikeType, PostLikeType, PostType } from '@src/types';
 
+export type addViewReturnType = {
+  ok: boolean;
+  message: string;
+  post: PostType | null;
+};
+
+export type addViewParamType = {
+  postId: number;
+};
+
+export type addViewErrorType = {
+  ok: boolean;
+  message: string;
+};
+
 export type getPostReturnType = {
   ok: boolean;
   message: string;
@@ -7,7 +22,7 @@ export type getPostReturnType = {
 };
 
 export type getPostParamType = {
-  postId: string | number;
+  postId: number;
 };
 
 export type getPostErrorType = {

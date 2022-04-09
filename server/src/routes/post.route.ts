@@ -6,6 +6,7 @@ import { boardUpload } from '@src/helpers/s3.helper';
 const postRouter = Router();
 
 postRouter.post('/post/getPost', postController.getPost);
+postRouter.post('/post/addView', postController.addView);
 
 postRouter.post('/post/imageUpload', auth, boardUpload.single('image'), postController.imageUpload);
 postRouter.post('/post/imageRemove', auth, postController.imageRemove);

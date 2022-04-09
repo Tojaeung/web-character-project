@@ -41,7 +41,25 @@ import {
   removePostCommentErrorType,
   removePostCommentParamType,
   removePostCommentReturnType,
+  addViewErrorType,
+  addViewParamType,
+  addViewReturnType,
 } from '@src/store/types/post.type';
+
+export const addView = createAsyncThunk<
+  addViewReturnType,
+  addViewParamType,
+  { state: RootState; rejectValue: addViewErrorType }
+>('ADD_VIEW', async (data, thunkApi) => {
+  try {
+    const res = await axios.post('/api/post/addView', data, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
 
 export const getPost = createAsyncThunk<
   getPostReturnType,
