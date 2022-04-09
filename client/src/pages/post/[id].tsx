@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import { AiOutlineMore, AiOutlineUnorderedList } from 'react-icons/ai';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import boardTitle from '@src/utils/boardTitle.util';
 import Board from '@src/pages/board/[board]';
@@ -14,6 +15,7 @@ import CommentForm from '@src/components/CommentForm';
 import LikeButton from '@src/components/LikeButton';
 import DisLikeButton from '@src/components/DisLikeButton';
 import Button from '@src/components/Button';
+import useDropDown from '@src/hook/useDropDown';
 
 function Post() {
   const dispatch = useAppDispatch();
@@ -37,6 +39,11 @@ function Post() {
     }
   };
 
+  const [openDropDown, setOpenDropDown] = useState(false);
+  const targetRef = useRef<HTMLUListElement>(null);
+
+  useDropDown({ openDropDown, setOpenDropDown, targetRef });
+
   return (
     <Container>
       <BoardName>{boardTitle(post?.board as string)}</BoardName>
@@ -50,16 +57,30 @@ function Post() {
           <Nickname exp={post?.user.exp!} nickname={post?.user.nickname!} size="medium" />
         </ProfileBox>
         <ButtonBox>
-          <BackBoard color="black" size="small" inverse={true}>
-            <Link to={`/board/${post?.board}`}>목록으로</Link>
+          <BackBoard color="black" size="small" inverse={true} onClick={(e) => navigate(`/board/${post?.board}`)}>
+            목록
           </BackBoard>
-          <EditPost color="green" size="small" inverse={true}>
-            <Link to={`/edit/postForm/${post?.id}`}>수정</Link>
+          <EditPost color="green" size="small" inverse={true} onClick={(e) => navigate(`/edit/postForm/${post?.id}`)}>
+            수정
           </EditPost>
           <RemovePost color="red" size="small" inverse={true} onClick={handleRemovePost}>
             삭제
           </RemovePost>
+          <ReportPost color="red" size="small">
+            신고
+          </ReportPost>
         </ButtonBox>
+        <ResponsiveButtonBox>
+          <BackBoardIcon onClick={(e) => navigate(`/board/${post?.board}`)} />
+          <MoreIcon onClick={(e) => setOpenDropDown(!openDropDown)} />
+          {openDropDown && (
+            <Dropdown ref={targetRef}>
+              <List onClick={(e) => navigate(`/edit/postForm/${post?.id}`)}>수정</List>
+              <List onClick={handleRemovePost}>삭제</List>
+              <List>신고</List>
+            </Dropdown>
+          )}
+        </ResponsiveButtonBox>
       </Header>
 
       <Content dangerouslySetInnerHTML={{ __html: post?.content as string }} />
@@ -127,7 +148,11 @@ const ButtonBox = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    display: none;
+  }
 `;
+
 const BackBoard = styled(Button)`
   padding: 0.5rem;
   font-size: 1.2rem;
@@ -139,6 +164,45 @@ const EditPost = styled(Button)`
 const RemovePost = styled(Button)`
   padding: 0.5rem;
   font-size: 1.2rem;
+`;
+const ReportPost = styled(Button)`
+  padding: 0.5rem;
+  font-size: 1.2rem;
+`;
+
+const ResponsiveButtonBox = styled.div`
+  display: none;
+  @media ${({ theme }) => theme.device.mobile} {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+    z-index: 1011;
+  }
+`;
+
+const BackBoardIcon = styled(AiOutlineUnorderedList)`
+  font-size: 2.2rem;
+  cursor: pointer;
+`;
+const MoreIcon = styled(AiOutlineMore)`
+  font-size: 2.2rem;
+  cursor: pointer;
+`;
+const Dropdown = styled.ul`
+  width: 7rem;
+  background-color: ${({ theme }) => theme.palette.bgColor};
+  top: 3rem;
+  right: 1rem;
+  box-shadow: ${({ theme }) => theme.palette.shadowColor};
+  position: absolute;
+`;
+
+const List = styled.li`
+  padding: 1rem;
+  font-size: 1.2rem;
+  text-align: center;
+  border-bottom: 1px solid ${({ theme }) => theme.palette.gray};
 `;
 
 const Content = styled.div`
