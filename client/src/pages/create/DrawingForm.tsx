@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +26,7 @@ function DrawingForm() {
 
   const [drawing, setDrawing] = useState<File>();
   const [preview, setPreview] = useState('');
-  const onAddDrawing = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const setPreviewDrawing = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target?.files) return;
     setDrawing(e.target?.files[0]);
     const fileUrl = URL.createObjectURL(e.target?.files[0]);
@@ -76,7 +75,12 @@ function DrawingForm() {
       </User>
 
       <Drawing onClick={(e) => drawingInputRef.current?.click()}>
-        <Input type="file" accept="image/png, image/jpeg, image/jpg" ref={drawingInputRef} onChange={onAddDrawing} />
+        <Input
+          type="file"
+          accept="image/png, image/jpeg, image/jpg"
+          ref={drawingInputRef}
+          onChange={setPreviewDrawing}
+        />
         {preview ? (
           <Image src={preview} alt="그림미리보기" />
         ) : (

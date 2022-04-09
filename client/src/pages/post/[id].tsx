@@ -42,7 +42,7 @@ function Post() {
             <Link to={`/board/${post?.board}`}>목록으로</Link>
           </BackBoard>
           <EditPost color="green" size="small" inverse={true}>
-            <Link to={`/editForm/board/${post?.id}`}>수정</Link>
+            <Link to={`/edit/postForm/${post?.id}`}>수정</Link>
           </EditPost>
           <RemovePost color="red" size="small" inverse={true}>
             삭제

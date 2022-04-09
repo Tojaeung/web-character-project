@@ -8,8 +8,8 @@ import { AuthRouter, PrivateRouter } from '@src/routes/PrivateRouter';
 
 import Header from '@src/layouts/Header';
 import Home from '@src/pages/Home';
-import PostForm from '@src/pages/create/PostForm';
-import DrawingForm from '@src/pages/create/DrawingForm';
+import CreatePostForm from '@src/pages/create/PostForm';
+import CreateDrawingForm from '@src/pages/create/DrawingForm';
 import Modal from '@src/modals/Modal';
 import Chat from '@src/modals/chat';
 import Profile from '@src/pages/profile/[id]';
@@ -21,7 +21,7 @@ import NotFound from '@src/components/NotFound';
 import Account from './pages/settings/Account';
 import Alert from './pages/settings/Alert';
 import Desc from './pages/settings/Desc';
-import EditForm from '@src/pages/EditForm';
+import EditPostForm from '@src/pages/edit/PostForm';
 
 function App() {
   useRefreshLogin();
@@ -53,11 +53,13 @@ function App() {
               </Route>
               <Route path="editPw" element={<EditPw />} />
               <Route path="create">
-                <Route path="drawingForm" element={<DrawingForm />} />
-                <Route path="postForm/:board" element={<PostForm />} />
+                <Route path="drawingForm" element={<CreateDrawingForm />} />
+                <Route path="postForm/:board" element={<CreatePostForm />} />
               </Route>
 
-              <Route path="editForm/:type/:id" element={<EditForm />} />
+              <Route path="edit">
+                <Route path="postForm/:postId" element={<EditPostForm />} />
+              </Route>
             </Route>
 
             <Route path="*" element={<NotFound />} />

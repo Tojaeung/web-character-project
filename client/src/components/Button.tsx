@@ -22,20 +22,20 @@ const sizeSettions = css<{ size: string }>`
   ${({ size }) =>
     size === 'large' &&
     css`
-      padding: 2rem 4rem;
-      font-size: 2rem;
+      padding: 1.5rem 2rem;
+      font-size: 1.6rem;
     `}
   ${({ size }) =>
     size === 'medium' &&
     css`
-      padding: 1rem 2rem;
-      font-size: 1.6rem;
+      padding: 1rem;
+      font-size: 1.4rem;
     `}
   ${({ size }) =>
     size === 'small' &&
     css`
-      padding: 0.8rem 1.8rem;
-      font-size: 1.4rem;
+      padding: 0.5;
+      font-size: 1.2rem;
     `}
 `;
 
