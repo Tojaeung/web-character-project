@@ -81,7 +81,7 @@ const Background = styled.div`
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 1010;
+  z-index: 1020;
 `;
 const ModalBox = styled.div`
   width: 40rem;
@@ -96,7 +96,7 @@ const ModalBox = styled.div`
   border-radius: 5px;
   padding: 2rem;
   background-color: ${({ theme }) => theme.palette.white};
-  z-index: 1010;
+  z-index: 1020;
   gap: 1.5rem;
 `;
 

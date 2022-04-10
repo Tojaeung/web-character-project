@@ -66,7 +66,7 @@ function Header() {
             <Dropdown ref={targetRef}>
               <List onClick={(e) => navigate(`/edit/postForm/${post?.id}`)}>수정</List>
               <List onClick={handleRemovePost}>삭제</List>
-              <List>신고</List>
+              <List onClick={(e) => setOpenReportModal(true)}>신고</List>
             </Dropdown>
           )}
         </ResponsiveButtonBox>
