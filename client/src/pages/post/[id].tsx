@@ -21,6 +21,7 @@ function Post() {
   const post = useAppSelector(selectPostPost);
 
   useEffect(() => {
+    document.documentElement.scrollTop = 0;
     dispatch(getPost({ postId: Number(postId) }));
     dispatch(addView({ postId: Number(postId) }));
   }, [postId]);
