@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import { PostType } from '@src/types';
 import { getBoards, getBoard } from '@src/store/requests/board.request';
+import { addView } from '@src/store/requests/post.request';
 
 interface BoardType {
   ok: boolean;
@@ -58,6 +59,29 @@ export const boardSlice = createSlice({
         state.selectedBoard = payload.selectedBoard;
       })
       .addCase(getBoard.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+        state.free = null;
+        state.drawingCommission = null;
+        state.drawingRequest = null;
+        state.drawingSale = null;
+        state.selectedBoard = null;
+      });
+    builder
+      .addCase(addView.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.free = null;
+        state.drawingCommission = null;
+        state.drawingRequest = null;
+        state.drawingSale = null;
+        state.selectedBoard?.map((post) => {
+          if (post.id === payload.postId) {
+            post.views += 1;
+          }
+        });
+      })
+      .addCase(addView.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
         state.message = payload!.message;
         state.free = null;

@@ -124,9 +124,11 @@ export const postSlice = createSlice({
       .addCase(editPostComment.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-        const commentIndex = state.post?.postComments.findIndex((comment) => comment.id === payload.editedCommentId);
-
-        state.post!.postComments[commentIndex!].content = payload.editedContent!;
+        state.post?.postComments.map((comment) => {
+          if (comment.id === payload.editedCommentId) {
+            comment.content = payload.editedContent;
+          }
+        });
       })
       .addCase(editPostComment.rejected, (state, { payload }) => {
         state.ok = payload!.ok;

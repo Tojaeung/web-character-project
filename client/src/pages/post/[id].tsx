@@ -26,7 +26,7 @@ function Post() {
   const post = useAppSelector(selectPostPost);
 
   useEffect(() => {
-    dispatch(getPost({ postId: Number(postId) })).unwrap();
+    dispatch(getPost({ postId: Number(postId) }));
     dispatch(addView({ postId: Number(postId) }));
   }, [postId]);
 

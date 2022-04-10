@@ -3,7 +3,7 @@ import { PostCommentType, PostDisLikeType, PostLikeType, PostType } from '@src/t
 export type addViewReturnType = {
   ok: boolean;
   message: string;
-  post: PostType | null;
+  postId: number;
 };
 
 export type addViewParamType = {
