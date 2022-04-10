@@ -48,6 +48,7 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
+    "@slack/webhook": "^6.1.0",
     "aws-sdk": "^2.1058.0",
     "bcrypt": "^5.0.1",
     "connect-redis": "^6.0.0",
