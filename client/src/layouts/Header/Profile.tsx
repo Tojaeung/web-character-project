@@ -81,6 +81,7 @@ const DropDown = styled.ul`
   right: 0.5rem;
   font-size: 1.7rem;
   border-radius: 5px;
+  z-index: 1032;
   background: ${({ theme }) => theme.palette.bgColor};
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
   @media ${({ theme }) => theme.device.mobile} {

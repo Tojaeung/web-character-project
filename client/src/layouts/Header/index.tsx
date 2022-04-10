@@ -98,7 +98,7 @@ const Container = styled.div`
   background: ${({ theme }) => theme.palette.bgColor};
   border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
   min-height: 5rem;
-  z-index: 1030;
+  z-index: 1;
 
   @media ${({ theme }) => theme.device.mobile} {
     display: none;

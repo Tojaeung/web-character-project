@@ -45,7 +45,9 @@ function Modal() {
     document.getElementById('modalPortal') as HTMLElement
   );
 }
-const Container = styled.div``;
+const Container = styled.div`
+  /* z-index: 1030; */
+`;
 const Background = styled.div`
   position: fixed;
   top: 0;
@@ -53,7 +55,7 @@ const Background = styled.div`
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 1000;
+  z-index: 2;
 `;
 const ModalBox = styled.div`
   display: flex;
@@ -67,7 +69,7 @@ const ModalBox = styled.div`
   border-radius: 5px;
   padding: 2rem;
   background-color: ${({ theme }) => theme.palette.white};
-  z-index: 1000;
+  z-index: 1031;
 `;
 const CloseIcon = styled(AiOutlineClose)`
   font-size: 2.5rem;

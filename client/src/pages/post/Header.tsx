@@ -78,7 +78,13 @@ function Header() {
           )}
         </ResponsiveButtonBox>
       </Container>
-      <ReportModal isOpen={isOpen} closeReportModal={closeReportModal} />
+      <ReportModal
+        isOpen={isOpen}
+        closeReportModal={closeReportModal}
+        suspect={post?.user.nickname!}
+        title={post?.title!}
+        content={post?.content!}
+      />
     </>
   );
 }

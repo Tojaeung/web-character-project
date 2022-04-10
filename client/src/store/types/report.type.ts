@@ -5,10 +5,11 @@ export type sendReportReturnType = {
 
 export type sendReportParamType = {
   reportType: string;
-  content: string;
+  report: string;
   url: string;
-  id: number;
-  nickname: string;
+  suspect: string;
+  title?: string;
+  content?: string;
 };
 export type sendReportErrorType = {
   ok: boolean;

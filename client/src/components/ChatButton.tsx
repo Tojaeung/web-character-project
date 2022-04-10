@@ -27,9 +27,13 @@ function ChatButton({ design, chatPartnerUserId }: IProps) {
 
   // 채팅목록에 상대를 추가합니다.
   const onAddChat = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    socket.emit('addChat', chatPartnerUserId);
-    await dispatch(openChatModal());
-    localStorage.setItem('chat', 'on');
+    if (!user) {
+      return alert('로그인 후 이용 가능합니다.');
+    } else {
+      socket.emit('addChat', chatPartnerUserId);
+      await dispatch(openChatModal());
+      localStorage.setItem('chat', 'on');
+    }
   };
 
   return (

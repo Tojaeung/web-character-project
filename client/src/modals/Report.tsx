@@ -4,38 +4,46 @@ import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import { AiOutlineClose } from 'react-icons/ai';
 import Button from '@src/components/Button';
-import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { useAppDispatch } from '@src/store/app/hook';
 import { sendReport } from '@src/store/requests/report.request';
 
 interface IProps {
   isOpen: boolean;
   closeReportModal: () => void;
+  suspect: string;
+  title?: string;
+  content?: string;
 }
 
-function Report({ isOpen, closeReportModal }: IProps) {
+function Report({ isOpen, closeReportModal, suspect, title, content }: IProps) {
   const location = useLocation();
 
   const dispatch = useAppDispatch();
-  const user = useAppSelector(selectAuthUser);
 
   const [reportType, setReportType] = useState('');
-  const [content, setContent] = useState('');
+  const [report, setReport] = useState('');
+
+  const handleCloseModal = (e: any) => {
+    closeReportModal();
+    setReportType('');
+    setReport('');
+  };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (reportType === '') {
       return alert('신고 유형을 선택해주세요.');
-    } else if (content.length === 0) {
+    } else if (report.length === 0) {
       return alert('내용을 입력해주세요.');
-    } else if (content.length > 100) {
+    } else if (report.length > 100) {
       return alert('글자 수를 초과하였습니다.');
     } else {
       try {
         const res = await dispatch(
-          sendReport({ reportType, content, url: location.pathname, id: user?.id!, nickname: user?.nickname! })
+          sendReport({ reportType, report, url: location.pathname, suspect, title, content: content! })
         ).unwrap();
-
         alert(res.message);
+        setReportType('');
+        setReport('');
       } catch (err: any) {
         alert(err.message);
       }
@@ -45,9 +53,9 @@ function Report({ isOpen, closeReportModal }: IProps) {
   if (!isOpen) return null;
   return createPortal(
     <Container>
-      <Background onClick={closeReportModal} />
+      <Background onClick={handleCloseModal} />
       <ModalBox>
-        <CloseIcon onClick={closeReportModal} />
+        <CloseIcon onClick={handleCloseModal} />
         <Title>신고하기🚨🚨</Title>
         <Select name="reportType" value={reportType} onChange={(e) => setReportType(e.target.value)}>
           <Option>신고유형</Option>
@@ -61,8 +69,8 @@ function Report({ isOpen, closeReportModal }: IProps) {
           cols={20}
           rows={3}
           wrap="hard"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
+          value={report}
+          onChange={(e) => setReport(e.target.value)}
         />
         <ReportButton color="red" size="small" onClick={handleSubmit}>
           신고하기
@@ -81,7 +89,7 @@ const Background = styled.div`
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 1020;
+  z-index: 1050;
 `;
 const ModalBox = styled.div`
   width: 40rem;
@@ -96,7 +104,7 @@ const ModalBox = styled.div`
   border-radius: 5px;
   padding: 2rem;
   background-color: ${({ theme }) => theme.palette.white};
-  z-index: 1020;
+  z-index: 1050;
   gap: 1.5rem;
 `;
 

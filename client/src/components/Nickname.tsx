@@ -49,7 +49,7 @@ function Nickname({ exp, userId = null, nickname, dropDown = false, size }: IPro
           </Dropdown>
         )}
       </Container>
-      <ReportModal isOpen={isOpen} closeReportModal={closeReportModal} />
+      <ReportModal isOpen={isOpen} closeReportModal={closeReportModal} suspect={nickname} />
     </>
   );
 }
