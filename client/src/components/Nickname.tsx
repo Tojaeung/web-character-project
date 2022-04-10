@@ -8,6 +8,7 @@ import useReportModal from '@src/hook/useReportModal';
 import ReportModal from '@src/modals/Report';
 import { useAppSelector } from '@src/store/app/hook';
 import { selectPostPost } from '@src/store/slices/post.slice';
+import { selectAuthUser } from '@src/store/slices/auth.slice';
 
 interface IProps {
   exp: number;
@@ -18,6 +19,7 @@ interface IProps {
 }
 
 function Nickname({ exp, userId = null, nickname, dropDown = false, size }: IProps) {
+  const user = useAppSelector(selectAuthUser);
   const post = useAppSelector(selectPostPost);
 
   // 드롭다운 메뉴 커스텀 훅
@@ -38,9 +40,11 @@ function Nickname({ exp, userId = null, nickname, dropDown = false, size }: IPro
             <List>
               <Link to={`/profile/${userId}`}>프로필 보기</Link>
             </List>
-            <List>
-              <ChatButton design="list" chatPartnerUserId={post?.user.userId!} />
-            </List>
+            {user?.id === post?.user.id ? null : (
+              <List>
+                <ChatButton design="list" chatPartnerUserId={post?.user.userId!} />
+              </List>
+            )}
             <List onClick={openReportModal}>신고하기</List>
           </Dropdown>
         )}
