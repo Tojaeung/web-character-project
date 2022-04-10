@@ -9,11 +9,11 @@ import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { sendReport } from '@src/store/requests/report.request';
 
 interface IProps {
-  openReportModal: boolean;
-  setOpenReportModal: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean;
+  closeReportModal: () => void;
 }
 
-function Report({ openReportModal, setOpenReportModal }: IProps) {
+function Report({ isOpen, closeReportModal }: IProps) {
   const location = useLocation();
 
   const dispatch = useAppDispatch();
@@ -42,12 +42,12 @@ function Report({ openReportModal, setOpenReportModal }: IProps) {
     }
   };
 
-  if (!openReportModal) return null;
+  if (!isOpen) return null;
   return createPortal(
     <Container>
-      <Background onClick={(e) => setOpenReportModal(false)} />
+      <Background onClick={closeReportModal} />
       <ModalBox>
-        <CloseIcon onClick={(e) => setOpenReportModal(false)} />
+        <CloseIcon onClick={closeReportModal} />
         <Title>신고하기🚨🚨</Title>
         <Select name="reportType" value={reportType} onChange={(e) => setReportType(e.target.value)}>
           <Option>신고유형</Option>

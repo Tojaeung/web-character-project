@@ -10,12 +10,16 @@ import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { removePost } from '@src/store/requests/post.request';
 import useDropDown from '@src/hook/useDropDown';
 import ReportModal from '@src/modals/Report';
+import useReportModal from '@src/hook/useReportModal';
 
 function Header() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const post = useAppSelector(selectPostPost);
+
+  // 신고하기 모달 커스텀 훅
+  const { isOpen, openReportModal, closeReportModal } = useReportModal();
 
   // 게시글 삭제
   const handleRemovePost = async (e: any) => {
@@ -33,15 +37,18 @@ function Header() {
   const targetRef = useRef<HTMLUListElement>(null);
   useDropDown({ openDropDown, setOpenDropDown, targetRef });
 
-  // 신고하기 모달 열고 닫기
-  const [openReportModal, setOpenReportModal] = useState(false);
-
   return (
     <>
       <Container>
         <ProfileBox>
           <Avatar src={post?.user.avatar} size="medium" />
-          <Nickname exp={post?.user.exp!} nickname={post?.user.nickname!} size="medium" />
+          <Nickname
+            exp={post?.user.exp!}
+            userId={post?.user.id!}
+            nickname={post?.user.nickname!}
+            dropDown={true}
+            size="medium"
+          />
         </ProfileBox>
 
         <ButtonBox>
@@ -54,7 +61,7 @@ function Header() {
           <RemovePost color="red" size="small" inverse={true} onClick={handleRemovePost}>
             삭제
           </RemovePost>
-          <ReportPost color="red" size="small" onClick={(e) => setOpenReportModal(true)}>
+          <ReportPost color="red" size="small" onClick={openReportModal}>
             신고
           </ReportPost>
         </ButtonBox>
@@ -66,12 +73,12 @@ function Header() {
             <Dropdown ref={targetRef}>
               <List onClick={(e) => navigate(`/edit/postForm/${post?.id}`)}>수정</List>
               <List onClick={handleRemovePost}>삭제</List>
-              <List onClick={(e) => setOpenReportModal(true)}>신고</List>
+              <List onClick={openReportModal}>신고</List>
             </Dropdown>
           )}
         </ResponsiveButtonBox>
       </Container>
-      {openReportModal && <ReportModal openReportModal={openReportModal} setOpenReportModal={setOpenReportModal} />}
+      <ReportModal isOpen={isOpen} closeReportModal={closeReportModal} />
     </>
   );
 }
