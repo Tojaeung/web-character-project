@@ -39,7 +39,7 @@ function Nickname({ exp, userId = null, nickname, dropDown = false, size }: IPro
               <Link to={`/profile/${userId}`}>프로필 보기</Link>
             </List>
             <List>
-              <ChatButton chatPartnerId={post?.user.id!} chatPartnerUserId={post?.user.userId!} />
+              <ChatButton design="list" chatPartnerUserId={post?.user.userId!} />
             </List>
             <List onClick={openReportModal}>신고하기</List>
           </Dropdown>

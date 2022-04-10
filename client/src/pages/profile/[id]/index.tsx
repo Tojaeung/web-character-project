@@ -54,7 +54,7 @@ function Profile() {
           </FollowInfoBox>
           {user && user?.id !== profile?.id && (
             <ButtonBox>
-              <ChatButton chatPartnerId={profile?.id!} chatPartnerUserId={profile?.userId!} />
+              <ChatButton design="button" chatPartnerUserId={profile?.userId!} />
 
               <FollowButton followers={profile?.followers!} id={profile?.id!} nickname={profile?.nickname!} />
             </ButtonBox>
