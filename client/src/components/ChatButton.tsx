@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectChats, openChatModal } from '@src/store/slices/chat.slice';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import socket from '@src/utils/socket';
-import Button from '@src/components/Button';
 
 interface IProps {
   design: 'button' | 'list';
@@ -61,9 +60,11 @@ const StartChatButton = styled.button<{ design: 'button' | 'list' }>`
   border-radius: 5px;
   font-weight: bold;
   color: ${({ theme }) => theme.palette.white};
+  cursor: pointer;
   ${({ design }) => {
     if (design === 'list') {
       return css`
+        padding: 0;
         background-color: ${({ theme }) => theme.palette.bgColor};
         color: ${({ theme }) => theme.palette.black};
       `;
@@ -79,9 +80,11 @@ const ChattingButton = styled.button<{ design: 'button' | 'list' }>`
   border-radius: 5px;
   background-color: ${({ theme }) => theme.palette.red};
   color: ${({ theme }) => theme.palette.white};
+  cursor: pointer;
   ${({ design }) => {
     if (design === 'list') {
       return css`
+        padding: 0;
         background-color: ${({ theme }) => theme.palette.bgColor};
         color: ${({ theme }) => theme.palette.black};
       `;
