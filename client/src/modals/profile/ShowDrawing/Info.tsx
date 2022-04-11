@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { AiOutlineEye } from 'react-icons/ai';
+import { AiOutlineEye, AiOutlineMore } from 'react-icons/ai';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import CreatedTime from '@src/components/CreatedTime';
@@ -16,13 +16,16 @@ function Info() {
 
   return (
     <Container>
-      <UserBox>
-        <UserInfoBox>
+      <Header>
+        <UserBox>
           <Avatar src={profile?.avatar} size="small" />
-          <Nickname exp={profile?.exp!} nickname={profile?.nickname!} size="small" />
-        </UserInfoBox>
-        <CreatedTime createdTime={drawings[index!]?.created_at!} size="small" />
-      </UserBox>
+          <FlexBox>
+            <Nickname exp={profile?.exp!} nickname={profile?.nickname!} size="small" />
+            <CreatedTime createdTime={drawings[index!]?.created_at!} size="small" />
+          </FlexBox>
+        </UserBox>
+        <MoreIcon />
+      </Header>
 
       <Content dangerouslySetInnerHTML={{ __html: drawings[index!]?.content as string }} />
 
@@ -53,17 +56,30 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-top: 1rem;
 `;
-const UserBox = styled.div`
+const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
-const UserInfoBox = styled.div`
+const FlexBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+`;
+const UserBox = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
 `;
+
+const MoreIcon = styled(AiOutlineMore)`
+  font-size: 2rem;
+  cursor: pointer;
+`;
+
 const Content = styled.div`
   font-size: 1.4rem;
   @media ${({ theme }) => theme.device.mobile} {

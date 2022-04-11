@@ -28,7 +28,6 @@ const drawingController = {
 
       // drawing 테이블에 정보를 저장합니다.
       const drawing = new Drawing();
-      drawing.title = title;
       drawing.content = content;
       drawing.url = drawingUrl;
       drawing.key = drawingKey;

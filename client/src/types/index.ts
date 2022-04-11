@@ -40,7 +40,6 @@ export type DrawingDisLikeType = {
 
 export type DrawingType = {
   id: number;
-  title: string;
   content: string;
   url: string;
   key: string;

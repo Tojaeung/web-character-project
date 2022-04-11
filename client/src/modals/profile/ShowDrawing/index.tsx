@@ -17,10 +17,9 @@ function ShowDrawingModal() {
     <Container>
       <ImageSide />
       <InfoSide>
-        <Header>
-          <Title>제목: {drawings[index!]?.title}</Title>
-          <CloseIcon onClick={(e) => dispatch(closeModal())} />
-        </Header>
+        <IconBox onClick={(e) => dispatch(closeModal())}>
+          <CloseIcon />
+        </IconBox>
 
         <Info />
 
@@ -58,17 +57,16 @@ const InfoSide = styled.div`
     width: 100%;
   }
 `;
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 0;
-  border-bottom: 1px solid ${({ theme }) => theme.palette.gray};
-  font-size: 1.8rem;
-  font-weight: bold;
+const IconBox = styled.div`
+  background-color: ${({ theme }) => theme.palette.gray};
+  padding: 0.5rem;
+  border-radius: 50%;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
 `;
-const Title = styled.h2``;
 const CloseIcon = styled(AiOutlineClose)`
+  color: black;
   font-size: 2.5rem;
   cursor: pointer;
 `;
