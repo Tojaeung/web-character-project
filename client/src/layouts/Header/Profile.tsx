@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { CgProfile } from 'react-icons/cg';
+import { BsBell } from 'react-icons/bs';
 import { FiSettings, FiLogOut } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -7,9 +8,9 @@ import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { logoutUser } from '@src/store/requests/auth.request';
 import Avatar from '@src/components/Avatar';
-import Nickname from '@src/components/Nickname';
 import socket from '@src/utils/socket';
 import useDropDown from '@src/hook/useDropDown';
+import Chat from './Chat';
 
 function Profile() {
   const navigate = useNavigate();
@@ -21,12 +22,15 @@ function Profile() {
 
   useDropDown({ openDropDown, setOpenDropDown, targetRef });
 
-  const onLogout = async (e: React.MouseEvent<HTMLDivElement>) => {
+  const onLogout = async (e: React.MouseEvent<HTMLLIElement>) => {
     await dispatch(logoutUser());
     localStorage.clear();
     socket.disconnect();
     navigate(0);
   };
+
+  const chatRef = useRef<HTMLDivElement>(null);
+
   return (
     <Container>
       <AvatarBox onClick={(e) => setOpenDropDown(!openDropDown)}>
@@ -34,25 +38,30 @@ function Profile() {
       </AvatarBox>
       {openDropDown && (
         <DropDown ref={targetRef}>
-          <UserInfo>
-            <Avatar src={user?.avatar} size="large" />
-            <Nickname exp={user?.exp!} nickname={user?.nickname!} size="medium" />
-          </UserInfo>
-
           <NavLink to={`/profile/${user?.id}`}>
             <ProfileIcon />
             프로필
           </NavLink>
+
+          <List onClick={(e) => chatRef.current?.click()}>
+            <Chat chatRef={chatRef} />
+            메세지
+          </List>
+
+          <List>
+            <BellIcon />
+            알림
+          </List>
 
           <NavLink to="/settings/account">
             <SettingsIcon />
             설정
           </NavLink>
 
-          <LogOut onClick={onLogout}>
+          <List onClick={onLogout}>
             <LogOutIcon />
             로그아웃
-          </LogOut>
+          </List>
         </DropDown>
       )}
     </Container>
@@ -89,14 +98,7 @@ const DropDown = styled.ul`
     right: -1rem;
   }
 `;
-const UserInfo = styled.div`
-  display: flex;
-  gap: 1rem;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem 0;
-  border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
-`;
+
 const NavLink = styled(Link)`
   padding: 1rem;
   display: flex;
@@ -107,14 +109,7 @@ const NavLink = styled(Link)`
     cursor: pointer;
   }
 `;
-const ProfileIcon = styled(CgProfile)`
-  font-size: 2.5rem;
-`;
-
-const SettingsIcon = styled(FiSettings)`
-  font-size: 2.5rem;
-`;
-const LogOut = styled.div`
+const List = styled.li`
   padding: 1rem;
   display: flex;
   align-items: center;
@@ -124,6 +119,18 @@ const LogOut = styled.div`
     cursor: pointer;
   }
 `;
+
+const ProfileIcon = styled(CgProfile)`
+  font-size: 2.5rem;
+`;
+const BellIcon = styled(BsBell)`
+  font-size: 2.5rem;
+`;
+
+const SettingsIcon = styled(FiSettings)`
+  font-size: 2.5rem;
+`;
+
 const LogOutIcon = styled(FiLogOut)`
   font-size: 2.5rem;
 `;

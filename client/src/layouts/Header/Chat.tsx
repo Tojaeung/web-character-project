@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { BsChatLeftText, BsChatLeftTextFill } from 'react-icons/bs';
+import { BsChatLeftText } from 'react-icons/bs';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectMsgNotis } from '@src/store/slices/chat.slice';
 import { openChatModal, closeChatModal, selectChatOk } from '@src/store/slices/chat.slice';
 import NotiCount from '@src/components/NotiCount';
 
-function Chat() {
+interface IProp {
+  chatRef: React.MutableRefObject<HTMLDivElement | null>;
+}
+
+function Chat({ chatRef }: IProp) {
   // 확인 안한 메세지 알림 수
   const dispatch = useAppDispatch();
   const chatOk = useAppSelector(selectChatOk);
@@ -35,22 +39,20 @@ function Chat() {
   };
 
   return (
-    <Container chatOk={chatOk} onClick={onChatModal}>
+    <Container ref={chatRef} chatOk={chatOk} onClick={onChatModal}>
       {totalMsgNotiNum === 0 ? null : (
         <NotiBox>
           <NotiCount notiNum={totalMsgNotiNum!} />
         </NotiBox>
       )}
 
-      {chatOk ? <ChatFillIcon /> : <ChatIcon />}
+      <ChatIcon />
     </Container>
   );
 }
 
 const Container = styled.div<{ chatOk: boolean }>`
   position: relative;
-  padding: 0.5rem;
-
   cursor: pointer;
 `;
 
@@ -60,9 +62,6 @@ const NotiBox = styled.div`
   left: 2rem;
 `;
 const ChatIcon = styled(BsChatLeftText)`
-  font-size: 2.5rem;
-`;
-const ChatFillIcon = styled(BsChatLeftTextFill)`
   font-size: 2.5rem;
 `;
 
