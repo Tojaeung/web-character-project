@@ -35,7 +35,7 @@ function Nickname({ exp, userId = null, nickname, dropDown = false, size }: IPro
             <List>
               <Link to={`/profile/${userId}`}>프로필 보기</Link>
             </List>
-            {user?.id === post?.user.id ? null : (
+            {user?.id !== post?.user.id && (
               <List>
                 <ChatButton design="list" chatPartnerUserId={post?.user.userId!} />
               </List>

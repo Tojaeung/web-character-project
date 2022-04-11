@@ -4,6 +4,7 @@ import { AiOutlineUnorderedList } from 'react-icons/ai';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import Button from '@src/components/Button';
+import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { selectPostPost } from '@src/store/slices/post.slice';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { removePost } from '@src/store/requests/post.request';
@@ -15,6 +16,7 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const user = useAppSelector(selectAuthUser);
   const post = useAppSelector(selectPostPost);
 
   // 신고하기 모달 커스텀 훅
@@ -49,12 +51,22 @@ function Header() {
           <BackBoard color="black" size="small" inverse={true} onClick={(e) => navigate(`/board/${post?.board}`)}>
             목록
           </BackBoard>
-          <EditPost color="green" size="small" inverse={true} onClick={(e) => navigate(`/edit/postForm/${post?.id}`)}>
-            수정
-          </EditPost>
-          <RemovePost color="red" size="small" inverse={true} onClick={handleRemovePost}>
-            삭제
-          </RemovePost>
+          {user?.id === post?.user.id && (
+            <>
+              <EditPost
+                color="green"
+                size="small"
+                inverse={true}
+                onClick={(e) => navigate(`/edit/postForm/${post?.id}`)}
+              >
+                수정
+              </EditPost>
+              <RemovePost color="red" size="small" inverse={true} onClick={handleRemovePost}>
+                삭제
+              </RemovePost>
+            </>
+          )}
+
           <ReportPost color="red" size="small" onClick={openReportModal}>
             신고
           </ReportPost>

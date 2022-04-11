@@ -6,8 +6,11 @@ import useDropDown from '@src/hook/useDropDown';
 import ReportModal from '@src/modals/Report';
 import useReportModal from '@src/hook/useReportModal';
 import { DrawingType, PostType } from '@src/types';
-import { useAppDispatch } from '@src/store/app/hook';
+import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
+import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectDrawingDrawings, selectDrawingIndex } from '@src/store/slices/drawing.slice';
+import { selectPostPost } from '@src/store/slices/post.slice';
 
 interface IProps {
   type: 'drawing' | 'board';
@@ -19,6 +22,10 @@ function MoreButton({ type, entity, handleRemove }: IProps) {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
+  const user = useAppSelector(selectAuthUser);
+  const drawings = useAppSelector(selectDrawingDrawings);
+  const index = useAppSelector(selectDrawingIndex);
+  const post = useAppSelector(selectPostPost);
 
   // 신고하기 모달 커스텀 훅
   const { isOpen, openReportModal, closeReportModal } = useReportModal();
@@ -29,12 +36,8 @@ function MoreButton({ type, entity, handleRemove }: IProps) {
   useDropDown({ openDropDown, setOpenDropDown, targetRef });
 
   const goEdit = async (e: React.MouseEvent<HTMLLIElement>) => {
-    if (type === 'drawing') {
-      await dispatch(closeModal());
-      navigate(`/edit/drawingForm/${entity?.id}`);
-    } else {
-      navigate(`/edit/postForm/${entity?.id}`);
-    }
+    await dispatch(closeModal());
+    navigate(`/edit/postForm/${entity?.id}`);
   };
   return (
     <>
@@ -42,8 +45,11 @@ function MoreButton({ type, entity, handleRemove }: IProps) {
         <MoreIcon onClick={(e) => setOpenDropDown(!openDropDown)} />
         {openDropDown && (
           <Dropdown ref={targetRef}>
-            <List onClick={goEdit}>수정</List>
-            <List onClick={handleRemove}>삭제</List>
+            {type === 'board' && user?.id === post?.user.id && <List onClick={goEdit}>수정</List>}
+
+            {type === 'drawing' && user?.id === drawings[index!].user_id && <List onClick={handleRemove}>삭제</List>}
+            {type === 'board' && user?.id === post?.user.id && <List onClick={handleRemove}>삭제</List>}
+
             <List onClick={openReportModal}>신고</List>
           </Dropdown>
         )}
