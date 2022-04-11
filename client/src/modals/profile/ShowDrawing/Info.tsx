@@ -6,25 +6,26 @@ import CreatedTime from '@src/components/CreatedTime';
 import LikeButton from '@src/components/LikeButton';
 import DisLikeButton from '@src/components/DisLikeButton';
 import { useAppSelector } from '@src/store/app/hook';
-import { selectProfileProfile } from '@src/store/slices/profile.slice';
 import { selectDrawingDrawings, selectDrawingIndex } from '@src/store/slices/drawing.slice';
+import MoreButton from '@src/components/MoreButton';
 
 function Info() {
-  const profile = useAppSelector(selectProfileProfile);
   const drawings = useAppSelector(selectDrawingDrawings);
   const index = useAppSelector(selectDrawingIndex);
+
+  const handleDrawingRemove = (e: any) => {};
 
   return (
     <Container>
       <Header>
         <UserBox>
-          <Avatar src={profile?.avatar} size="small" />
+          <Avatar src={drawings[index!].user?.avatar} size="small" />
           <FlexBox>
-            <Nickname exp={profile?.exp!} nickname={profile?.nickname!} size="small" />
+            <Nickname exp={drawings[index!].user?.exp!} nickname={drawings[index!].user?.nickname!} size="small" />
             <CreatedTime createdTime={drawings[index!]?.created_at!} size="small" />
           </FlexBox>
         </UserBox>
-        <MoreIcon />
+        <MoreButton entity={drawings[index!]} handleRemove={handleDrawingRemove} />
       </Header>
 
       <Content dangerouslySetInnerHTML={{ __html: drawings[index!]?.content as string }} />

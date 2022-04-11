@@ -45,6 +45,7 @@ export type DrawingType = {
   key: string;
   views: number;
   user_id: number;
+  user: UserType | null;
   drawingComments: DrawingCommentType[] | null;
   likes: DrawingLikeType[] | null;
   dislikes: DrawingDisLikeType[] | null;

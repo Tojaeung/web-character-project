@@ -1,16 +1,15 @@
-import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { AiOutlineMore, AiOutlineUnorderedList } from 'react-icons/ai';
+import { AiOutlineUnorderedList } from 'react-icons/ai';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import Button from '@src/components/Button';
 import { selectPostPost } from '@src/store/slices/post.slice';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { removePost } from '@src/store/requests/post.request';
-import useDropDown from '@src/hook/useDropDown';
 import ReportModal from '@src/modals/Report';
 import useReportModal from '@src/hook/useReportModal';
+import MoreButton from '@src/components/MoreButton';
 
 function Header() {
   const navigate = useNavigate();
@@ -31,11 +30,6 @@ function Header() {
       alert(err.message);
     }
   };
-
-  // 드롭다운 메뉴 커스텀 훅
-  const [openDropDown, setOpenDropDown] = useState(false);
-  const targetRef = useRef<HTMLUListElement>(null);
-  useDropDown({ openDropDown, setOpenDropDown, targetRef });
 
   return (
     <>
@@ -65,26 +59,19 @@ function Header() {
             신고
           </ReportPost>
         </ButtonBox>
+        <ReportModal
+          isOpen={isOpen}
+          closeReportModal={closeReportModal}
+          suspect={post?.user.nickname!}
+          title={post?.title!}
+          content={post?.content!}
+        />
 
         <ResponsiveButtonBox>
           <BackBoardIcon onClick={(e) => navigate(`/board/${post?.board}`)} />
-          <MoreIcon onClick={(e) => setOpenDropDown(!openDropDown)} />
-          {openDropDown && (
-            <Dropdown ref={targetRef}>
-              <List onClick={(e) => navigate(`/edit/postForm/${post?.id}`)}>수정</List>
-              <List onClick={handleRemovePost}>삭제</List>
-              <List onClick={openReportModal}>신고</List>
-            </Dropdown>
-          )}
+          <MoreButton entity={post!} handleRemove={handleRemovePost} />
         </ResponsiveButtonBox>
       </Container>
-      <ReportModal
-        isOpen={isOpen}
-        closeReportModal={closeReportModal}
-        suspect={post?.user.nickname!}
-        title={post?.title!}
-        content={post?.content!}
-      />
     </>
   );
 }
@@ -142,23 +129,5 @@ const BackBoardIcon = styled(AiOutlineUnorderedList)`
   font-size: 2.2rem;
   cursor: pointer;
 `;
-const MoreIcon = styled(AiOutlineMore)`
-  font-size: 2.2rem;
-  cursor: pointer;
-`;
-const Dropdown = styled.ul`
-  width: 7rem;
-  background-color: ${({ theme }) => theme.palette.bgColor};
-  top: 3rem;
-  right: 1rem;
-  box-shadow: ${({ theme }) => theme.palette.shadowColor};
-  position: absolute;
-`;
 
-const List = styled.li`
-  padding: 1rem;
-  font-size: 1.2rem;
-  text-align: center;
-  border-bottom: 1px solid ${({ theme }) => theme.palette.gray};
-`;
 export default Header;

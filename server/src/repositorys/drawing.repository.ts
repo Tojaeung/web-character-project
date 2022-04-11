@@ -8,8 +8,9 @@ import { DisLike } from '@src/entities/drawing/dislike.entity';
 export class DrawingRepository extends AbstractRepository<Drawing> {
   getDrawingsById(profileId: number, drawingsLimit: number) {
     return this.createQueryBuilder('drawing')
+      .leftJoinAndSelect('drawing.user', 'drawingUser')
       .leftJoinAndSelect('drawing.drawingComments', 'drawingComment')
-      .leftJoinAndSelect('drawingComment.user', 'user')
+      .leftJoinAndSelect('drawingComment.user', 'drawingCommentUser')
       .leftJoinAndSelect('drawing.likes', 'like')
       .leftJoinAndSelect('drawing.dislikes', 'dislike')
       .where('drawing.user_id = :profileId', { profileId })
