@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from 'react';
 // import axios from 'axios';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 import { useAppDispatch } from '@src/store/app/hook';
 import { imageUpload } from '@src/store/requests/post.request';
+import imageResize from 'quill-image-resize';
+Quill.register('modules/imageResize', imageResize);
 
 export const useDefaultConfig = () => {
   const defaultModules = {
@@ -71,6 +73,9 @@ export const useImageUploadConfig = (quillRef: React.RefObject<ReactQuill>) => {
         handlers: {
           image: imageHandler,
         },
+      },
+      imageResize: {
+        parchment: Quill.import('parchment'),
       },
     }),
     []
