@@ -22,7 +22,6 @@ function EditNickname() {
       const res = await dispatch(editNickname({ nickname: data.nickname! })).unwrap();
       alert(res.message);
       await dispatch(closeModal());
-      navigate(0);
     } catch (err: any) {
       alert(err.message);
     }

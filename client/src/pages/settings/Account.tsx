@@ -21,7 +21,6 @@ function Account() {
     try {
       const res = await dispatch(editAvatar(formData)).unwrap();
       alert(res.message);
-      navigate(0);
     } catch (err: any) {
       alert(err.message);
     }
@@ -31,7 +30,6 @@ function Account() {
     try {
       const res = await dispatch(editDefaultAvatar()).unwrap();
       alert(res.message);
-      navigate(0);
     } catch (err: any) {
       alert(err.message);
     }
@@ -47,7 +45,6 @@ function Account() {
     try {
       const res = await dispatch(editCover(formData)).unwrap();
       alert(res.message);
-      navigate(0);
     } catch (err: any) {
       alert(err.message);
     }
@@ -57,7 +54,6 @@ function Account() {
     try {
       const res = await dispatch(editDefaultCover()).unwrap();
       alert(res.message);
-      navigate(0);
     } catch (err: any) {
       alert(err.message);
     }

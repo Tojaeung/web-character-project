@@ -51,7 +51,7 @@ const settingsController = {
       // 재 로그인을 하지 않고 세션을 변경 해줍니다.
       req.session.user!.nickname = newNickname;
       req.session.save(() => {
-        return res.status(200).json({ ok: true, message: '닉네임이 변경되었습니다.' });
+        return res.status(200).json({ ok: true, message: '닉네임이 변경되었습니다.', newNickname });
       });
     } catch (err) {
       logger.error('닉네임 변경 에러', err);
@@ -126,7 +126,7 @@ const settingsController = {
       req.session.user!.avatar = newAvatar;
       req.session.user!.avatarKey = newAvatarKey;
       req.session.save(() => {
-        return res.status(200).json({ ok: true, message: '프로필 사진을 변경하였습니다.' });
+        return res.status(200).json({ ok: true, message: '프로필 사진을 변경하였습니다.', newAvatar, newAvatarKey });
       });
     } catch (err: any) {
       logger.error('프로필사진 변경 에러', err);
@@ -166,7 +166,9 @@ const settingsController = {
       req.session.user!.avatar = defaultAvatar;
       req.session.user!.avatarKey = defaultAvatarKey;
       req.session.save(() => {
-        return res.status(200).json({ ok: true, message: '기본 프로필 이미지로 변경되었습니다.' });
+        return res
+          .status(200)
+          .json({ ok: true, message: '기본 프로필 이미지로 변경되었습니다.', defaultAvatar, defaultAvatarKey });
       });
     } catch (err: any) {
       logger.error('기본 프로필 사진 변경 에러', err);
@@ -217,7 +219,7 @@ const settingsController = {
       req.session.user!.cover = newCover;
       req.session.user!.coverKey = newCoverKey;
       req.session.save(() => {
-        return res.status(200).json({ ok: true, message: '커버 이미지를 변경하였습니다.' });
+        return res.status(200).json({ ok: true, message: '커버 이미지를 변경하였습니다.', newCover, newCoverKey });
       });
     } catch (err: any) {
       logger.error('프로필사진 변경 에러', err);
@@ -256,7 +258,9 @@ const settingsController = {
       req.session.user!.cover = defaultCover;
       req.session.user!.coverKey = defaultCoverKey;
       req.session.save(() => {
-        return res.status(200).json({ ok: true, message: '기본 커버 이미지로 변경되었습니다.' });
+        return res
+          .status(200)
+          .json({ ok: true, message: '기본 커버 이미지로 변경되었습니다.', defaultCover, defaultCoverKey });
       });
     } catch (err: any) {
       logger.error('기본 프로필 사진 변경 에러', err);
@@ -350,7 +354,7 @@ const settingsController = {
       req.session.user!.desc = desc;
       req.session.save(() => {
         logger.info('자기소개 변경 완료되었습니다.');
-        return res.status(200).json({ ok: true, message: '자기소개 변경 완료되었습니다.' });
+        return res.status(200).json({ ok: true, message: '자기소개 변경 완료되었습니다.', desc });
       });
     } catch (err: any) {
       logger.error('자기소개 변경 에러', err);

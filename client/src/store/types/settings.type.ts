@@ -15,6 +15,7 @@ export type editEmailErrorType = {
 export type editNicknameReturnType = {
   ok: boolean;
   message: string;
+  newNickname: string;
 };
 
 export type editNicknameParamType = {
@@ -44,6 +45,8 @@ export type editPwErrorType = {
 export type editAvatarReturnType = {
   ok: boolean;
   message: string;
+  newAvatar: string;
+  newAvatarKey: string;
 };
 
 export type editAvatarParamType = {};
@@ -56,6 +59,8 @@ export type editAvatarErrorType = {
 export type defaultAvatarReturnType = {
   ok: boolean;
   message: string;
+  defaultAvatar: string;
+  defaultAvatarKey: string;
 };
 
 export type defaultAvatarErrorType = {
@@ -66,6 +71,8 @@ export type defaultAvatarErrorType = {
 export type editCoverReturnType = {
   ok: boolean;
   message: string;
+  newCover: string;
+  newCoverKey: string;
 };
 export type editCoverParamType = {};
 
@@ -77,6 +84,8 @@ export type editCoverErrorType = {
 export type defaultCoverReturnType = {
   ok: boolean;
   message: string;
+  defaultCover: string;
+  defaultCoverKey: string;
 };
 
 export type defaultCoverErrorType = {
@@ -87,6 +96,7 @@ export type defaultCoverErrorType = {
 export type editDescReturnType = {
   ok: boolean;
   message: string;
+  desc: string;
 };
 export type editDescParamType = {
   desc: string;
