@@ -4,8 +4,6 @@ import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import ChatButton from '@src/components/ChatButton';
 import useDropDown from '@src/hook/useDropDown';
-import useReportModal from '@src/hook/useReportModal';
-import ReportModal from '@src/modals/Report';
 import { useAppSelector } from '@src/store/app/hook';
 import { selectPostPost } from '@src/store/slices/post.slice';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
@@ -27,9 +25,6 @@ function Nickname({ exp, userId = null, nickname, dropDown = false, size }: IPro
   const targetRef = useRef<HTMLUListElement>(null);
   useDropDown({ openDropDown, setOpenDropDown, targetRef });
 
-  // 신고하기 모달 커스텀 훅
-  const { isOpen, openReportModal, closeReportModal } = useReportModal();
-
   return (
     <>
       <Container dropDown={dropDown} onClick={(e) => setOpenDropDown(!openDropDown)}>
@@ -45,11 +40,9 @@ function Nickname({ exp, userId = null, nickname, dropDown = false, size }: IPro
                 <ChatButton design="list" chatPartnerUserId={post?.user.userId!} />
               </List>
             )}
-            <List onClick={openReportModal}>신고하기</List>
           </Dropdown>
         )}
       </Container>
-      <ReportModal isOpen={isOpen} closeReportModal={closeReportModal} suspect={nickname} />
     </>
   );
 }

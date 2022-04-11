@@ -5,11 +5,13 @@ import logger from '@src/helpers/winston.helper';
 const reportController = {
   sendReport: async (req: Request, res: Response) => {
     try {
-      const { reportType, report, url, suspect, title, content } = req.body;
+      const { reportType, report, url, proof } = req.body;
       const { nickname } = req.session.user!;
 
       const webHookUrl = process.env.SLACK_WEBHOOK_URL as string;
       const webHook = new IncomingWebhook(webHookUrl);
+
+      const stringProof = JSON.stringify(proof, null, 2);
 
       const result = await webHook.send({
         blocks: [
@@ -44,7 +46,9 @@ const reportController = {
             type: 'section',
             text: {
               type: 'mrkdwn',
-              text: `용의자: ${suspect} \n제목:${title} \n 내용:${content} `,
+              text: `
+                증거: ${stringProof}
+              `,
             },
           },
         ],

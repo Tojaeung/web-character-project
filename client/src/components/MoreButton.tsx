@@ -8,11 +8,12 @@ import useReportModal from '@src/hook/useReportModal';
 import { DrawingType, PostType } from '@src/types';
 
 interface IProps {
+  type: 'drawing' | 'board';
   entity: DrawingType | PostType;
   handleRemove: (e: any) => void;
 }
 
-function MoreButton({ entity, handleRemove }: IProps) {
+function MoreButton({ type, entity, handleRemove }: IProps) {
   const navigate = useNavigate();
 
   // 신고하기 모달 커스텀 훅
@@ -23,25 +24,26 @@ function MoreButton({ entity, handleRemove }: IProps) {
   const targetRef = useRef<HTMLUListElement>(null);
   useDropDown({ openDropDown, setOpenDropDown, targetRef });
 
+  const goEdit = (e: React.MouseEvent<HTMLLIElement>) => {
+    if (type === 'drawing') {
+      navigate(`/edit/drawingForm/${entity?.id}`);
+    } else {
+      navigate(`/edit/postForm/${entity?.id}`);
+    }
+  };
   return (
     <>
       <Container>
         <MoreIcon onClick={(e) => setOpenDropDown(!openDropDown)} />
         {openDropDown && (
           <Dropdown ref={targetRef}>
-            <List onClick={(e) => navigate(`/edit/postForm/${entity?.id}`)}>수정</List>
+            <List onClick={goEdit}>수정</List>
             <List onClick={handleRemove}>삭제</List>
             <List onClick={openReportModal}>신고</List>
           </Dropdown>
         )}
       </Container>
-      <ReportModal
-        isOpen={isOpen}
-        closeReportModal={closeReportModal}
-        suspect={entity?.user!.nickname}
-        // title={entity?.title === undefined ? 'few' : 'fefw'}
-        content={entity?.content!}
-      />
+      <ReportModal isOpen={isOpen} closeReportModal={closeReportModal} proof={entity} />
     </>
   );
 }

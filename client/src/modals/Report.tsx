@@ -6,16 +6,15 @@ import { AiOutlineClose } from 'react-icons/ai';
 import Button from '@src/components/Button';
 import { useAppDispatch } from '@src/store/app/hook';
 import { sendReport } from '@src/store/requests/report.request';
+import { DrawingType, PostType } from '@src/types';
 
 interface IProps {
   isOpen: boolean;
   closeReportModal: () => void;
-  suspect: string;
-  title?: string;
-  content?: string;
+  proof: DrawingType | PostType;
 }
 
-function Report({ isOpen, closeReportModal, suspect, title, content }: IProps) {
+function Report({ isOpen, closeReportModal, proof }: IProps) {
   const location = useLocation();
 
   const dispatch = useAppDispatch();
@@ -38,9 +37,7 @@ function Report({ isOpen, closeReportModal, suspect, title, content }: IProps) {
       return alert('글자 수를 초과하였습니다.');
     } else {
       try {
-        const res = await dispatch(
-          sendReport({ reportType, report, url: location.pathname, suspect, title, content: content! })
-        ).unwrap();
+        const res = await dispatch(sendReport({ reportType, report, url: location.pathname, proof })).unwrap();
         alert(res.message);
         setReportType('');
         setReport('');

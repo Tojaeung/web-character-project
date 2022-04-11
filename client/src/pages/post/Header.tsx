@@ -59,17 +59,11 @@ function Header() {
             신고
           </ReportPost>
         </ButtonBox>
-        <ReportModal
-          isOpen={isOpen}
-          closeReportModal={closeReportModal}
-          suspect={post?.user.nickname!}
-          title={post?.title!}
-          content={post?.content!}
-        />
+        <ReportModal isOpen={isOpen} closeReportModal={closeReportModal} proof={post!} />
 
         <ResponsiveButtonBox>
           <BackBoardIcon onClick={(e) => navigate(`/board/${post?.board}`)} />
-          <MoreButton entity={post!} handleRemove={handleRemovePost} />
+          <MoreButton type="board" entity={post!} handleRemove={handleRemovePost} />
         </ResponsiveButtonBox>
       </Container>
     </>
