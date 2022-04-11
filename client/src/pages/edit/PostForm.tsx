@@ -92,10 +92,10 @@ function EditForm() {
         placeholder="내용을 입력하세요....(최대 3000글자)"
       />
       <ButtonBox>
-        <RegisterButton color="green" size="medium" responsive={true} onClick={handleModify}>
+        <RegisterButton color="green" size="medium" onClick={handleModify}>
           수정
         </RegisterButton>
-        <BackButton color="green" size="medium" responsive={true} inverse={true} onClick={handleBack}>
+        <BackButton color="green" size="medium" inverse={true} onClick={handleBack}>
           돌아가기
         </BackButton>
       </ButtonBox>

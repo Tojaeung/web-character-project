@@ -22,7 +22,7 @@ function SignUpGuide() {
         가입하신 이메일로 <i>"인증메일"</i>을 보내드렸습니다.📫
       </Content>
 
-      <ConfirmButton color="green" size="medium" responsive={true} onClick={handleConfirm}>
+      <ConfirmButton color="green" size="medium" onClick={handleConfirm}>
         확인
       </ConfirmButton>
     </Container>

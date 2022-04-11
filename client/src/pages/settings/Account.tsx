@@ -81,10 +81,10 @@ function Account() {
         <EditBox>
           <Title>프로필 사진</Title>
           <ButtonBox>
-            <DefaultButton color="red" size="small" inverse={true} responsive={true} onClick={handleDefaultAvatar}>
+            <DefaultButton color="red" size="small" inverse={true} onClick={handleDefaultAvatar}>
               기본 프로필 사진
             </DefaultButton>
-            <EditButton color="green" size="small" responsive={true} onClick={(e) => avatarRef.current?.click()}>
+            <EditButton color="green" size="small" onClick={(e) => avatarRef.current?.click()}>
               변경
             </EditButton>
           </ButtonBox>
@@ -94,10 +94,10 @@ function Account() {
         <EditBox>
           <Title>커버 사진</Title>
           <ButtonBox>
-            <DefaultButton color="red" size="small" inverse={true} responsive={true} onClick={handleDefaultCover}>
+            <DefaultButton color="red" size="small" inverse={true} onClick={handleDefaultCover}>
               기본 커버 사진
             </DefaultButton>
-            <EditButton color="green" size="small" responsive={true} onClick={(e) => coverRef.current?.click()}>
+            <EditButton color="green" size="small" onClick={(e) => coverRef.current?.click()}>
               변경
             </EditButton>
           </ButtonBox>
@@ -106,28 +106,28 @@ function Account() {
 
         <EditBox>
           <Title>이메일</Title>
-          <EditButton color="green" size="small" responsive={true} onClick={handleEditEmail}>
+          <EditButton color="green" size="small" onClick={handleEditEmail}>
             변경
           </EditButton>
         </EditBox>
 
         <EditBox>
           <Title>닉네임</Title>
-          <EditButton color="green" size="small" responsive={true} onClick={handleEditNickname}>
+          <EditButton color="green" size="small" onClick={handleEditNickname}>
             변경
           </EditButton>
         </EditBox>
 
         <EditBox>
           <Title>이메일</Title>
-          <EditButton color="green" size="small" responsive={true} onClick={handleEditPw}>
+          <EditButton color="green" size="small" onClick={handleEditPw}>
             변경
           </EditButton>
         </EditBox>
 
         <EditBox>
           <Title>계정탈퇴</Title>
-          <EditButton color="red" size="small" responsive={true} onClick={handleDelAccount}>
+          <EditButton color="red" size="small" onClick={handleDelAccount}>
             탈퇴하기
           </EditButton>
         </EditBox>

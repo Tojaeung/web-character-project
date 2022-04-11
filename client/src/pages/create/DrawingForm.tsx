@@ -107,16 +107,10 @@ function DrawingForm() {
           placeholder="내용을 입력하세요....(최대 3000글자)"
         />
         <ButtonWrapper>
-          <SubmitButton color="green" size="medium" responsive={true} onClick={onSubmit}>
+          <SubmitButton color="green" size="medium" onClick={onSubmit}>
             추가
           </SubmitButton>
-          <CancelButton
-            color="green"
-            size="medium"
-            inverse={true}
-            responsive={true}
-            onClick={() => navigate(`/profile/${user?.id}`)}
-          >
+          <CancelButton color="green" size="medium" inverse={true} onClick={() => navigate(`/profile/${user?.id}`)}>
             취소
           </CancelButton>
         </ButtonWrapper>

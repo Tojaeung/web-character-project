@@ -35,6 +35,7 @@ function MoreButton({ type, entity, handleRemove }: IProps) {
   const targetRef = useRef<HTMLUListElement>(null);
   useDropDown({ openDropDown, setOpenDropDown, targetRef });
 
+  // 수정
   const goEdit = async (e: React.MouseEvent<HTMLLIElement>) => {
     await dispatch(closeModal());
     navigate(`/edit/postForm/${entity?.id}`);

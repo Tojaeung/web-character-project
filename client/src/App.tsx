@@ -30,8 +30,8 @@ function App() {
   return (
     <BrowserRouter>
       <FullScreen>
-        <Header />
         <AppScreen>
+          <Header />
           <Routes>
             <Route path="/" element={<Home />} />
 

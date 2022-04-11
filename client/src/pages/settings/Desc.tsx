@@ -47,10 +47,10 @@ function Desc() {
         placeholder="내용을 입력하세요....(최대 1000글자)"
       />
       <ButtonBox>
-        <SubmitButton color="green" size="medium" responsive={true} onClick={onSubmitDesc}>
+        <SubmitButton color="green" size="medium" onClick={onSubmitDesc}>
           확인
         </SubmitButton>
-        <CancelButton color="green" size="medium" inverse={true} responsive={true} onClick={onCancel}>
+        <CancelButton color="green" size="medium" inverse={true} onClick={onCancel}>
           취소
         </CancelButton>
       </ButtonBox>

@@ -82,10 +82,10 @@ function PostForm() {
         placeholder="내용을 입력하세요....(최대 3000글자)"
       />
       <ButtonBox>
-        <RegisterButton color="green" size="medium" responsive={true} onClick={onAddPost}>
+        <RegisterButton color="green" size="medium" onClick={onAddPost}>
           등록
         </RegisterButton>
-        <BackToListButton color="green" size="medium" responsive={true} inverse={true} onClick={handleBackBoard}>
+        <BackToListButton color="green" size="medium" inverse={true} onClick={handleBackBoard}>
           목록으로
         </BackToListButton>
       </ButtonBox>

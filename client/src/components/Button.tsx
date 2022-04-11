@@ -3,16 +3,15 @@ import styled, { css } from 'styled-components';
 import { lighten, darken } from 'polished';
 
 interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: string | JSX.Element;
+  children: string | React.ReactNode;
   color: 'green' | 'red' | 'black';
   size: 'small' | 'medium' | 'large';
   inverse?: boolean;
-  responsive?: boolean;
 }
 
-function StyledButton({ children, color, size, inverse, responsive, ...props }: IProps) {
+function StyledButton({ children, color, size, inverse, ...props }: IProps) {
   return (
-    <Button {...props} color={color} size={size} inverse={inverse || false} responsive={responsive || false}>
+    <Button {...props} color={color} size={size} inverse={inverse || false}>
       {children}
     </Button>
   );
@@ -36,36 +35,6 @@ const sizeSettions = css<{ size: string }>`
     css`
       padding: 0.5;
       font-size: 1.2rem;
-    `}
-`;
-
-const responsiveSettings = css<{ size: string; responsive?: boolean }>`
-  ${({ size, responsive }) =>
-    size === 'large' &&
-    responsive &&
-    css`
-      @media ${({ theme }) => theme.device.mobile} {
-        padding: 1rem 2rem;
-        font-size: 1.6rem;
-      }
-    `}
-  ${({ size, responsive }) =>
-    size === 'medium' &&
-    responsive &&
-    css`
-      @media ${({ theme }) => theme.device.mobile} {
-        padding: 0.8rem 1.7rem;
-        font-size: 1.4rem;
-      }
-    `}
-  ${({ size, responsive }) =>
-    size === 'small' &&
-    responsive &&
-    css`
-      @media ${({ theme }) => theme.device.mobile} {
-        padding: 0.5rem 1.5rem;
-        font-size: 1.2rem;
-      }
     `}
 `;
 
@@ -102,6 +71,9 @@ const colorSettings = css<{ color: string; inverse?: boolean }>`
 `;
 
 const Button = styled.button<IProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-weight: 700;
   border-radius: 5px;
   white-space: nowrap;
@@ -110,7 +82,6 @@ const Button = styled.button<IProps>`
   color: ${({ theme }) => theme.palette.white};
   ${sizeSettions};
   ${colorSettings};
-  ${responsiveSettings};
 `;
 
 export default StyledButton;
