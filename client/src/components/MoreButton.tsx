@@ -6,6 +6,8 @@ import useDropDown from '@src/hook/useDropDown';
 import ReportModal from '@src/modals/Report';
 import useReportModal from '@src/hook/useReportModal';
 import { DrawingType, PostType } from '@src/types';
+import { useAppDispatch } from '@src/store/app/hook';
+import { closeModal } from '@src/store/slices/modal.slice';
 
 interface IProps {
   type: 'drawing' | 'board';
@@ -16,6 +18,8 @@ interface IProps {
 function MoreButton({ type, entity, handleRemove }: IProps) {
   const navigate = useNavigate();
 
+  const dispatch = useAppDispatch();
+
   // 신고하기 모달 커스텀 훅
   const { isOpen, openReportModal, closeReportModal } = useReportModal();
 
@@ -24,8 +28,9 @@ function MoreButton({ type, entity, handleRemove }: IProps) {
   const targetRef = useRef<HTMLUListElement>(null);
   useDropDown({ openDropDown, setOpenDropDown, targetRef });
 
-  const goEdit = (e: React.MouseEvent<HTMLLIElement>) => {
+  const goEdit = async (e: React.MouseEvent<HTMLLIElement>) => {
     if (type === 'drawing') {
+      await dispatch(closeModal());
       navigate(`/edit/drawingForm/${entity?.id}`);
     } else {
       navigate(`/edit/postForm/${entity?.id}`);
@@ -70,6 +75,10 @@ const List = styled.li`
   font-size: 1.2rem;
   text-align: center;
   border-bottom: 1px solid ${({ theme }) => theme.palette.gray};
+  cursor: pointer;
+  &:hover {
+    background-color: ${({ theme }) => theme.palette.gray};
+  }
 `;
 
 export default MoreButton;

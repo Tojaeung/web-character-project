@@ -41,6 +41,7 @@ function Report({ isOpen, closeReportModal, proof }: IProps) {
         alert(res.message);
         setReportType('');
         setReport('');
+        closeReportModal();
       } catch (err: any) {
         alert(err.message);
       }
