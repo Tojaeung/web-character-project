@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import { ProfileType } from '@src/types';
-import { getProfile, follow, unFollow } from '../requests/profile.request';
+import { getProfile } from '../requests/profile.request';
 
 interface profileType {
   ok: boolean;
@@ -29,26 +29,6 @@ export const profileSlice = createSlice({
       state.ok = payload!.ok;
       state.message = payload!.message;
       state.profile = null;
-    });
-    builder.addCase(follow.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      state.profile?.followers.push(payload.newFollower);
-    });
-    builder.addCase(follow.rejected, (state, { payload }) => {
-      state.ok = payload?.ok!;
-      state.message = payload?.message!;
-    });
-    builder.addCase(unFollow.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      const filteredFollowers = state.profile?.followers.filter((follower) => follower.from_id !== payload.userId);
-
-      state.profile!.followers = filteredFollowers!;
-    });
-    builder.addCase(unFollow.rejected, (state, { payload }) => {
-      state.ok = payload?.ok!;
-      state.message = payload?.message!;
     });
   },
 });

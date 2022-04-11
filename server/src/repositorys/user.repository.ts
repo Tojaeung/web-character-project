@@ -1,6 +1,5 @@
 import { AbstractRepository, EntityRepository } from 'typeorm';
 import { User } from '@src/entities/user/user.entity';
-import { Follow } from '@src/entities/user/follow.entity';
 
 @EntityRepository(User)
 export class UserRepository extends AbstractRepository<User> {
@@ -73,27 +72,5 @@ export class UserRepository extends AbstractRepository<User> {
       .leftJoinAndSelect('user.followings', 'followings')
       .where('user.id = :profileId', { profileId })
       .getOne();
-  }
-}
-
-@EntityRepository(Follow)
-export class FollowRepository extends AbstractRepository<Follow> {
-  unFollow(userId: number, profileId: number) {
-    return this.createQueryBuilder('follow')
-      .delete()
-      .from(Follow)
-      .where('from_id = :userId', { userId })
-      .andWhere('to_id = :profileId', { profileId })
-      .execute();
-  }
-
-  // 계정삭제 할때 모든 팔로우 정보 삭제
-  deleteFollow(id: number) {
-    return this.createQueryBuilder('follow')
-      .delete()
-      .from(Follow)
-      .where('from_id = :from_id', { from_id: id })
-      .orWhere('to_id = :to_id', { to_id: id })
-      .execute();
   }
 }

@@ -7,7 +7,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Follow } from '@src/entities/user/follow.entity';
 import { Drawing } from '../drawing/drawing.entity';
 import { DrawingComment } from '../drawing/drawingComment.entity';
 import { Post } from '../board/post.entity';
@@ -80,12 +79,6 @@ export class User {
 
   @UpdateDateColumn()
   updated_at: Date;
-
-  @OneToMany(() => Follow, (follow) => follow.following_user)
-  followings: Follow[];
-
-  @OneToMany(() => Follow, (follow) => follow.follower_user)
-  followers: Follow[];
 
   @OneToMany(() => Drawing, (drawing) => drawing.user)
   drawings: Drawing[];

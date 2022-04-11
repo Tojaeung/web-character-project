@@ -5,7 +5,5 @@ import auth from '@src/middlewares/auth.middleware';
 const profileRouter = Router();
 
 profileRouter.post('/profile/getProfile', profileController.getProfile);
-profileRouter.post('/profile/follow', auth, profileController.follow);
-profileRouter.post('/profile/unFollow', auth, profileController.unFollow);
 
 export default profileRouter;

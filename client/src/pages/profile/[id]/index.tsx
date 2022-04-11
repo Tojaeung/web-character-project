@@ -7,7 +7,6 @@ import { selectProfileOk } from '@src/store/slices/profile.slice';
 import NotFound from '@src/components/NotFound';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
-import FollowButton from '@src/components/FollowButton';
 import ChatButton from '@src/components/ChatButton';
 import Button from '@src/components/Button';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
@@ -48,15 +47,9 @@ function Profile() {
 
           <Desc onClick={onShowDesc}>자기소개</Desc>
 
-          <FollowInfoBox>
-            <span>팔로워 {profile?.followers.length}</span>
-            <span>팔로잉 {profile?.followings.length}</span>
-          </FollowInfoBox>
           {user && user?.id !== profile?.id && (
             <ButtonBox>
               <ChatButton design="button" chatPartnerUserId={profile?.userId!} />
-
-              <FollowButton followers={profile?.followers!} id={profile?.id!} nickname={profile?.nickname!} />
             </ButtonBox>
           )}
           {user?.id === profile?.id && (
