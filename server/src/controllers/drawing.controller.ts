@@ -14,6 +14,7 @@ import { DisLike } from '@src/entities/drawing/dislike.entity';
 
 const drawingController = {
   addDrawing: async (req: Request, res: Response) => {
+    const drawingRepo = getCustomRepository(DrawingRepository);
     try {
       const drawingUrl = (req.file as Express.MulterS3.File).location;
       const drawingKey = (req.file as Express.MulterS3.File).key;
@@ -24,7 +25,9 @@ const drawingController = {
       }
 
       const id = req.session.user?.id;
-      const { title, content } = req.body;
+      const { content } = req.body;
+
+      const user = req.session.user!;
 
       // drawing 테이블에 정보를 저장합니다.
       const drawing = new Drawing();
@@ -32,13 +35,41 @@ const drawingController = {
       drawing.url = drawingUrl;
       drawing.key = drawingKey;
       drawing.user_id = id!;
+
       await getRepository(Drawing).save(drawing);
 
+      // 위에 drawing은 user정보가 없다.
+      // drawing으로 응답을 보내면 새로 추가된 그림은 user 정보가 빠진 view를 보여주게 된다.
+      // 그래서. drawing과 user를 결합시킨 newDrawing으로 응답을 보내준다.
+      const newDrawing = await drawingRepo.drawingJoinUser(Number(id));
+
       logger.info('그림을 저장하였습니다.');
-      return res.status(200).json({ ok: true, message: '그림을 저장하였습니다.' });
+      return res.status(200).json({ ok: true, message: '그림을 저장하였습니다.', newDrawing });
     } catch (err: any) {
       logger.info('그림저장 에러', err);
       return res.status(500).json({ ok: false, message: '그림저장 에러' });
+    }
+  },
+
+  removeDrawing: async (req: Request, res: Response) => {
+    const drawingRepo = getCustomRepository(DrawingRepository);
+    try {
+      const { drawingId } = req.params;
+
+      const result = await drawingRepo.removeDrawing(Number(drawingId));
+
+      if (result.affected === 0) {
+        logger.info('그림 제거 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '그림 제거 실패하였습니다.' });
+      }
+
+      logger.info('그림 제거 성공하였습니다.');
+      return res
+        .status(200)
+        .json({ ok: true, message: '그림 제거 성공하였습니다.', removedDrawingId: Number(drawingId) });
+    } catch (err: any) {
+      logger.info('그림제거 에러', err);
+      return res.status(500).json({ ok: false, message: '그림제거 에러' });
     }
   },
   getDrawings: async (req: Request, res: Response) => {

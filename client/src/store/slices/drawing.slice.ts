@@ -3,6 +3,8 @@ import type { RootState } from '../app/store';
 import { DrawingType } from '@src/types';
 import {
   getDrawings,
+  addDrawing,
+  removeDrawing,
   addDrawingView,
   addDrawingComment,
   addDrawingLike,
@@ -59,6 +61,28 @@ export const drawingSlice = createSlice({
       state.drawings = [];
       state.cursor = null;
     });
+
+    builder.addCase(addDrawing.fulfilled, (state, { payload }) => {
+      state.ok = payload.ok;
+      state.message = payload.message;
+      state.drawings.unshift(payload.newDrawing);
+    });
+    builder.addCase(addDrawing.rejected, (state, { payload }) => {
+      state.ok = payload!.ok;
+      state.message = payload!.message;
+    });
+
+    builder.addCase(removeDrawing.fulfilled, (state, { payload }) => {
+      state.ok = payload.ok;
+      state.message = payload.message;
+      const filteredDrawings = state.drawings.filter((drawing) => drawing.id !== payload.removedDrawingId);
+      state.drawings = filteredDrawings;
+    });
+    builder.addCase(removeDrawing.rejected, (state, { payload }) => {
+      state.ok = payload!.ok;
+      state.message = payload!.message;
+    });
+
     builder.addCase(addDrawingView.fulfilled, (state, { payload }) => {
       state.ok = payload.ok;
       state.message = payload.message;

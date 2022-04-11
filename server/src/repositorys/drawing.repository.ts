@@ -38,6 +38,17 @@ export class DrawingRepository extends AbstractRepository<Drawing> {
       .where('id = :drawingId', { drawingId })
       .execute();
   }
+
+  drawingJoinUser(drawingId: number) {
+    return this.createQueryBuilder('drawing')
+      .leftJoinAndSelect('drawing.user', 'user')
+      .where('drawing.user_id = :drawingId', { drawingId })
+      .getOne();
+  }
+
+  removeDrawing(drawingId: number) {
+    return this.createQueryBuilder('drawing').delete().from(Drawing).where('id = :drawingId', { drawingId }).execute();
+  }
 }
 
 @EntityRepository(DrawingComment)

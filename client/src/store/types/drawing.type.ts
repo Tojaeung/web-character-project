@@ -20,9 +20,23 @@ export type getDrawingsErrorType = {
 export type addDrawingReturnType = {
   ok: boolean;
   message: string;
+  newDrawing: DrawingType;
 };
 export type addDrawingParamType = {};
 export type addDrawingErrorType = {
+  ok: boolean;
+  message: string;
+};
+
+export type removeDrawingReturnType = {
+  ok: boolean;
+  message: string;
+  removedDrawingId: number;
+};
+export type removeDrawingParamType = {
+  drawingId: number;
+};
+export type removeDrawingErrorType = {
   ok: boolean;
   message: string;
 };

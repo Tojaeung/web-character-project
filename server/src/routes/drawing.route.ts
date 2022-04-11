@@ -6,6 +6,8 @@ import { drawingUpload } from '@src/helpers/s3.helper';
 const drawingRouter = Router();
 
 drawingRouter.post('/drawing/addDrawing', auth, drawingUpload.single('drawing'), drawingController.addDrawing);
+drawingRouter.delete('/drawing/removeDrawing/:drawingId', auth, drawingController.removeDrawing);
+
 drawingRouter.post('/drawing/getDrawings', drawingController.getDrawings);
 drawingRouter.post('/drawing/addView', drawingController.addView);
 drawingRouter.post('/drawing/addComment', auth, drawingController.addComment);

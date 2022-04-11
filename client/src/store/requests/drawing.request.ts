@@ -31,6 +31,9 @@ import {
   addDrawingReturnType,
   addDrawingParamType,
   addDrawingErrorType,
+  removeDrawingErrorType,
+  removeDrawingParamType,
+  removeDrawingReturnType,
 } from '@src/store/types/drawing.type';
 import { RootState } from '../app/store';
 
@@ -56,6 +59,21 @@ export const addDrawing = createAsyncThunk<
 >('ADD_DRAWING', async (data, thunkApi) => {
   try {
     const res = await axios.post('/api/drawing/addDrawing', data, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+
+export const removeDrawing = createAsyncThunk<
+  removeDrawingReturnType,
+  removeDrawingParamType,
+  { state: RootState; rejectValue: removeDrawingErrorType }
+>('REMOVE_DRAWING', async (data, thunkApi) => {
+  try {
+    const res = await axios.delete(`/api/drawing/removeDrawing/${data.drawingId}`, {
       withCredentials: true,
     });
     return res.data;

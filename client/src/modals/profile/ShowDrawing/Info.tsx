@@ -5,15 +5,27 @@ import Nickname from '@src/components/Nickname';
 import CreatedTime from '@src/components/CreatedTime';
 import LikeButton from '@src/components/LikeButton';
 import DisLikeButton from '@src/components/DisLikeButton';
-import { useAppSelector } from '@src/store/app/hook';
+import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectDrawingDrawings, selectDrawingIndex } from '@src/store/slices/drawing.slice';
+import { closeModal } from '@src/store/slices/modal.slice';
+import { removeDrawing } from '@src/store/requests/drawing.request';
 import MoreButton from '@src/components/MoreButton';
 
 function Info() {
+  const dispatch = useAppDispatch();
+
   const drawings = useAppSelector(selectDrawingDrawings);
   const index = useAppSelector(selectDrawingIndex);
 
-  const handleDrawingRemove = (e: any) => {};
+  const handleDrawingRemove = async (e: any) => {
+    try {
+      const res = await dispatch(removeDrawing({ drawingId: drawings[index!].id })).unwrap();
+      await dispatch(closeModal());
+      alert(res.message);
+    } catch (err: any) {
+      alert(err.message);
+    }
+  };
 
   return (
     <Container>
