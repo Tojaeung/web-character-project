@@ -67,22 +67,8 @@ export type ProfileType = {
   emailToken: string | null;
   isVerified: boolean;
   exp: number;
-  followers: FollowerType[];
-  followings: FollowingType[];
   created_at: Date;
   updated_at: Date;
-};
-
-export type FollowerType = {
-  id: number;
-  from_id: number;
-  to_id: number;
-};
-
-export type FollowingType = {
-  id: number;
-  from_id: number;
-  to_id: number;
 };
 
 export type PostLikeType = {

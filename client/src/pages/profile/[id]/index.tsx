@@ -112,11 +112,6 @@ const Desc = styled.span`
     text-decoration: underline;
   }
 `;
-const FollowInfoBox = styled.div`
-  font-size: 1.5rem;
-  display: flex;
-  gap: 1rem;
-`;
 const ButtonBox = styled.div`
   display: flex;
   gap: 1rem;

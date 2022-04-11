@@ -61,16 +61,9 @@ export class UserRepository extends AbstractRepository<User> {
     return this.createQueryBuilder('user').delete().from(User).where('id = :id', { id }).execute();
   }
 
-  /*
-   * getProfile API에 사용된다.
-   * 프로필유저 정보와 프로필유저의 팔로우, 팔로잉 정보를 가져온다.
-   * user테이블과 follow 테이블이 결합한다.
-   */
+  // getProfile API에 사용된다.
+  // 프로필유저 정보와 프로필유저의 팔로우, 팔로잉 정보를 가져온다.
   findProfile(profileId: number) {
-    return this.createQueryBuilder('user')
-      .leftJoinAndSelect('user.followers', 'followers')
-      .leftJoinAndSelect('user.followings', 'followings')
-      .where('user.id = :profileId', { profileId })
-      .getOne();
+    return this.createQueryBuilder('user').where('user.id = :profileId', { profileId }).getOne();
   }
 }

@@ -4,10 +4,7 @@ import { UserRepository } from '@src/repositorys/user.repository';
 import logger from '@src/helpers/winston.helper';
 
 const profileController = {
-  /*
-   * 프로필유저 정보를 클라이언트에 보내는 API입니다.
-   * follow 테이블이 user테이블과 결합됩니다.
-   */
+  //  프로필유저 정보를 클라이언트에 보내는 API입니다.
   getProfile: async (req: Request, res: Response) => {
     const userRepo = getCustomRepository(UserRepository);
 
