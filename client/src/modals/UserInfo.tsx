@@ -1,18 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectPostPost } from '@src/store/slices/post.slice';
-import { selectDrawingDrawings, selectDrawingIndex } from '@src/store/slices/drawing.slice';
+import { AiOutlineClose } from 'react-icons/ai';
+import { useAppDispatch } from '@src/store/app/hook';
 import { getUserInfo } from '@src/store/requests/etc.request';
 import getLevel from '@src/utils/exp.util';
 import relativeTime from '@src/utils/date.util';
 import { UserType } from '@src/types';
+import { useAppSelector } from '@src/store/app/hook';
+import { selectAuthUser } from '@src/store/slices/auth.slice';
 
-function UserInfo() {
+interface IProps {
+  isOpen: boolean;
+  closeModalHook: () => void;
+  userId: number;
+}
+
+function UserInfo({ isOpen, closeModalHook, userId }: IProps) {
   const dispatch = useAppDispatch();
-  const post = useAppSelector(selectPostPost);
-  const drawings = useAppSelector(selectDrawingDrawings);
-  const index = useAppSelector(selectDrawingIndex);
+
+  const user = useAppSelector(selectAuthUser);
 
   const [userInfo, setUserInfo] = useState<UserType | null>(null);
   const [drawingsNum, setDrawingsNum] = useState<number | null>(null);
@@ -20,75 +27,63 @@ function UserInfo() {
   const [commentsNum, setCommentsNum] = useState<number | null>(null);
 
   useEffect(() => {
-    // 게시판에서 유정정보를 요청한다면 반드시 리덕스변수 post가 있기 때문에 사용하였다.
-    if (post) {
-      dispatch(getUserInfo({ userId: post?.user.id! }))
-        .unwrap()
-        .then((res) => {
-          const { userInfo, drawingsNum, drawingCommentsNum, postsNum, postCommentsNum } = res;
-          setUserInfo(userInfo);
-          setDrawingsNum(drawingsNum);
-          setPostsNum(postsNum);
-          setCommentsNum(drawingCommentsNum + postCommentsNum);
-        })
-
-        .catch((err: any) => {
-          alert(err.message);
-        });
-    } else {
-      // 그림모달에서 유저정보를 요청한다면 반드시 리덕스변수 drawings가 있기 때문에 사용하였다.
-      dispatch(getUserInfo({ userId: drawings[index!].user?.id! }))
-        .unwrap()
-        .then((res) => {
-          const { userInfo, drawingsNum, drawingCommentsNum, postsNum, postCommentsNum } = res;
-          setUserInfo(userInfo);
-          setDrawingsNum(drawingsNum);
-          setPostsNum(postsNum);
-          setCommentsNum(drawingCommentsNum + postCommentsNum);
-        })
-        .catch((err: any) => {
-          alert(err.message);
-        });
-    }
+    dispatch(getUserInfo({ userId }))
+      .unwrap()
+      .then((res) => {
+        const { userInfo, drawingsNum, drawingCommentsNum, postsNum, postCommentsNum } = res;
+        setUserInfo(userInfo);
+        setDrawingsNum(drawingsNum);
+        setPostsNum(postsNum);
+        setCommentsNum(drawingCommentsNum + postCommentsNum);
+      })
+      .catch((err: any) => {
+        alert(err.message);
+      });
   }, []);
 
-  return (
+  if (!isOpen) return null;
+  return createPortal(
     <Container>
-      <Title>유저정보</Title>
-      <table>
-        <tr>
-          <th>닉네임</th>
-          <td>{userInfo?.nickname}</td>
-        </tr>
+      <Background onClick={closeModalHook} />
+      <ModalBox>
+        <CloseIcon onClick={closeModalHook} />
+        <Title>{user?.id === userId ? '내 정보' : '유저정보'}</Title>
+        <table>
+          <tr>
+            <th>닉네임</th>
+            <td>{userInfo?.nickname}</td>
+          </tr>
 
-        <tr>
-          <th>그림 수</th>
-          <td>{drawingsNum}</td>
-        </tr>
-        <tr>
-          <th>게시글 수</th>
-          <td>{postsNum}</td>
-        </tr>
+          <tr>
+            <th>그림 수</th>
+            <td>{drawingsNum}</td>
+          </tr>
+          <tr>
+            <th>게시글 수</th>
+            <td>{postsNum}</td>
+          </tr>
 
-        <tr>
-          <th>댓글 수</th>
-          <td>{commentsNum}</td>
-        </tr>
+          <tr>
+            <th>댓글 수</th>
+            <td>{commentsNum}</td>
+          </tr>
 
-        <tr>
-          <th>영감력</th>
-          <td>{userInfo?.exp}</td>
-        </tr>
-        <tr>
-          <th>레벨</th>
-          <td>{getLevel(userInfo?.exp!)}</td>
-        </tr>
-        <tr>
-          <th>가입일</th>
-          <td>{relativeTime(userInfo?.created_at!)}</td>
-        </tr>
-      </table>
-    </Container>
+          <tr>
+            <th>영감력</th>
+            <td>{userInfo?.exp}</td>
+          </tr>
+          <tr>
+            <th>레벨</th>
+            <td>{getLevel(userInfo?.exp!)}</td>
+          </tr>
+          <tr>
+            <th>가입일</th>
+            <td>{relativeTime(userInfo?.created_at!)}</td>
+          </tr>
+        </table>
+      </ModalBox>
+    </Container>,
+    document.getElementById('modalPortal') as HTMLElement
   );
 }
 
@@ -117,8 +112,39 @@ const Container = styled.div`
     }
   }
 `;
+
+const Background = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1050;
+`;
+const ModalBox = styled.div`
+  width: 30rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+  padding: 2rem;
+  background-color: ${({ theme }) => theme.palette.white};
+  z-index: 1050;
+  gap: 1.5rem;
+`;
+
+const CloseIcon = styled(AiOutlineClose)`
+  align-self: flex-end;
+  font-size: 2rem;
+`;
 const Title = styled.h1`
-  font-size: 1.5rem;
+  font-size: 1.8rem;
 `;
 
 export default UserInfo;

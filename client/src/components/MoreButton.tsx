@@ -4,7 +4,7 @@ import { AiOutlineMore } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import useDropDown from '@src/hook/useDropDown';
 import ReportModal from '@src/modals/Report';
-import useReportModal from '@src/hook/useReportModal';
+import useModal from '@src/hook/useModal';
 import { DrawingType, PostType } from '@src/types';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
@@ -28,7 +28,7 @@ function MoreButton({ type, entity, handleRemove }: IProps) {
   const post = useAppSelector(selectPostPost);
 
   // 신고하기 모달 커스텀 훅
-  const { isOpen, openReportModal, closeReportModal } = useReportModal();
+  const { isOpen, openModalHook, closeModalHook } = useModal();
 
   // 드롭다운 메뉴 커스텀 훅
   const [openDropDown, setOpenDropDown] = useState(false);
@@ -51,11 +51,11 @@ function MoreButton({ type, entity, handleRemove }: IProps) {
             {type === 'drawing' && user?.id === drawings[index!].user_id && <List onClick={handleRemove}>삭제</List>}
             {type === 'board' && user?.id === post?.user.id && <List onClick={handleRemove}>삭제</List>}
 
-            <List onClick={openReportModal}>신고</List>
+            <List onClick={openModalHook}>신고</List>
           </Dropdown>
         )}
       </Container>
-      <ReportModal isOpen={isOpen} closeReportModal={closeReportModal} proof={entity} />
+      {isOpen && <ReportModal isOpen={isOpen} closeModalHook={closeModalHook} proof={entity} />}
     </>
   );
 }

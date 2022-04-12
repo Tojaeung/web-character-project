@@ -33,7 +33,7 @@ function MoreButton({ id, profileUserId }: IProps) {
       {openDropDown && (
         <Dropdown ref={targetRef}>
           <List>
-            <Link to="/create/drawingForm">새글추가</Link>
+            <Link to="/create/drawingForm">그림추가</Link>
           </List>
 
           <ChatButton chatPartnerUserId={profileUserId} />

@@ -5,6 +5,6 @@ import auth from '@src/middlewares/auth.middleware';
 const etcRouter = Router();
 
 etcRouter.post('/etc/sendReport', auth, etcController.sendReport);
-etcRouter.post('/etc/getUserInfo', auth, etcController.getUserInfo);
+etcRouter.post('/etc/getUserInfo', etcController.getUserInfo);
 
 export default etcRouter;

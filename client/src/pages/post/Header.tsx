@@ -9,7 +9,7 @@ import { selectPostPost } from '@src/store/slices/post.slice';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { removePost } from '@src/store/requests/post.request';
 import ReportModal from '@src/modals/Report';
-import useReportModal from '@src/hook/useReportModal';
+import useModal from '@src/hook/useModal';
 import MoreButton from '@src/components/MoreButton';
 
 function Header() {
@@ -20,7 +20,7 @@ function Header() {
   const post = useAppSelector(selectPostPost);
 
   // 신고하기 모달 커스텀 훅
-  const { isOpen, openReportModal, closeReportModal } = useReportModal();
+  const { isOpen, openModalHook, closeModalHook } = useModal();
 
   // 게시글 삭제
   const handleRemovePost = async (e: any) => {
@@ -68,11 +68,11 @@ function Header() {
             </>
           )}
 
-          <ReportPost color="red" size="small" onClick={openReportModal}>
+          <ReportPost color="red" size="small" onClick={openModalHook}>
             신고
           </ReportPost>
         </ButtonBox>
-        <ReportModal isOpen={isOpen} closeReportModal={closeReportModal} proof={post!} />
+        {isOpen && <ReportModal isOpen={isOpen} closeModalHook={closeModalHook} proof={post!} />}
 
         <ResponsiveButtonBox>
           <BackBoardIcon onClick={(e) => navigate(`/board/${post?.board}`)} />

@@ -10,11 +10,11 @@ import { DrawingType, PostType } from '@src/types';
 
 interface IProps {
   isOpen: boolean;
-  closeReportModal: () => void;
+  closeModalHook: () => void;
   proof: DrawingType | PostType;
 }
 
-function Report({ isOpen, closeReportModal, proof }: IProps) {
+function Report({ isOpen, closeModalHook, proof }: IProps) {
   const location = useLocation();
 
   const dispatch = useAppDispatch();
@@ -23,7 +23,7 @@ function Report({ isOpen, closeReportModal, proof }: IProps) {
   const [report, setReport] = useState('');
 
   const handleCloseModal = (e: any) => {
-    closeReportModal();
+    closeModalHook();
     setReportType('');
     setReport('');
   };
@@ -41,7 +41,7 @@ function Report({ isOpen, closeReportModal, proof }: IProps) {
         alert(res.message);
         setReportType('');
         setReport('');
-        closeReportModal();
+        closeModalHook();
       } catch (err: any) {
         alert(err.message);
       }
@@ -75,7 +75,7 @@ function Report({ isOpen, closeReportModal, proof }: IProps) {
         </ReportButton>
       </ModalBox>
     </Container>,
-    document.getElementById('reportPortal') as HTMLElement
+    document.getElementById('modalPortal') as HTMLElement
   );
 }
 
