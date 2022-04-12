@@ -49,6 +49,10 @@ export class DrawingRepository extends AbstractRepository<Drawing> {
   removeDrawing(drawingId: number) {
     return this.createQueryBuilder('drawing').delete().from(Drawing).where('id = :drawingId', { drawingId }).execute();
   }
+
+  getDrawingsNum(userId: number) {
+    return this.createQueryBuilder('drawing').select('COUNT(*)').where('user_id = :id', { id: userId }).getRawOne();
+  }
 }
 
 @EntityRepository(DrawingComment)
@@ -74,6 +78,13 @@ export class DrawingCommentRepository extends AbstractRepository<DrawingComment>
       .from(DrawingComment)
       .where('id = :id', { id: drawingCommentId })
       .execute();
+  }
+
+  getDrawingCommentsNum(userId: number) {
+    return this.createQueryBuilder('drawingComment')
+      .select('COUNT(*)')
+      .where('user_id = :id', { id: userId })
+      .getRawOne();
   }
 }
 

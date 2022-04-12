@@ -33,7 +33,13 @@ function Info() {
         <UserBox>
           <Avatar src={drawings[index!].user?.avatar} size="small" />
           <FlexBox>
-            <Nickname exp={drawings[index!].user?.exp!} nickname={drawings[index!].user?.nickname!} size="small" />
+            <Nickname
+              userId={drawings[index!].user?.id}
+              exp={drawings[index!].user?.exp!}
+              nickname={drawings[index!].user?.nickname!}
+              dropDown={true}
+              size="small"
+            />
             <CreatedTime createdTime={drawings[index!]?.created_at!} size="small" />
           </FlexBox>
         </UserBox>

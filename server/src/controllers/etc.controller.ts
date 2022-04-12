@@ -1,6 +1,10 @@
 import { Request, Response } from 'express';
 import { IncomingWebhook } from '@slack/webhook';
 import logger from '@src/helpers/winston.helper';
+import { getCustomRepository } from 'typeorm';
+import { PostCommentRepository, PostRepository } from '@src/repositorys/board.repository';
+import { DrawingCommentRepository, DrawingRepository } from '@src/repositorys/drawing.repository';
+import { UserRepository } from '@src/repositorys/user.repository';
 
 const reportController = {
   sendReport: async (req: Request, res: Response) => {
@@ -63,6 +67,34 @@ const reportController = {
     } catch (err: any) {
       logger.error('신고하기 에러', err);
       return res.status(500).json({ ok: false, message: '신고하기 에러' });
+    }
+  },
+  getUserInfo: async (req: Request, res: Response) => {
+    const drawingRepo = getCustomRepository(DrawingRepository);
+    const drawingCommentRepo = getCustomRepository(DrawingCommentRepository);
+    const postRepo = getCustomRepository(PostRepository);
+    const postCommentRepo = getCustomRepository(PostCommentRepository);
+
+    try {
+      const { userId } = req.body;
+
+      const drawingsNum = await drawingRepo.getDrawingsNum(Number(userId));
+      const drawingCommentsNum = await drawingCommentRepo.getDrawingCommentsNum(Number(userId));
+      const postsNum = await postRepo.getPostsNum(Number(userId));
+      const postCommentsNum = await postCommentRepo.getPostCommentsNum(Number(userId));
+
+      logger.info('유저정보 가져오기 성공하였습니다.');
+      return res.status(200).json({
+        ok: true,
+        message: '유저정보 가져오기 성공하였습니다.',
+        drawingsNum: Number(drawingsNum.count),
+        drawingCommentsNum: Number(drawingCommentsNum.count),
+        postsNum: Number(postsNum.count),
+        postCommentsNum: Number(postCommentsNum.count),
+      });
+    } catch (err: any) {
+      logger.error('유저정보 가져오기 에러', err);
+      return res.status(500).json({ ok: false, message: '유저정보 가져오기 에러' });
     }
   },
 };

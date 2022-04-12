@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react';
 import getLevel from '@src/utils/exp.util';
 import styled, { css } from 'styled-components';
-import { Link } from 'react-router-dom';
 import ChatButton from '@src/components/ChatButton';
 import useDropDown from '@src/hook/useDropDown';
-import { useAppSelector } from '@src/store/app/hook';
+import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectPostPost } from '@src/store/slices/post.slice';
+import { openModal } from '@src/store/slices/modal.slice';
 
 interface IProps {
   exp: number;
@@ -16,12 +16,17 @@ interface IProps {
 }
 
 function Nickname({ exp, userId = null, nickname, dropDown = false, size }: IProps) {
+  const dispatch = useAppDispatch();
   const post = useAppSelector(selectPostPost);
 
   // 드롭다운 메뉴 커스텀 훅
   const [openDropDown, setOpenDropDown] = useState(false);
   const targetRef = useRef<HTMLUListElement>(null);
   useDropDown({ openDropDown, setOpenDropDown, targetRef });
+
+  const openUserInfoModal = async (e: React.MouseEvent<HTMLLIElement>) => {
+    await dispatch(openModal({ mode: 'UserInfo' }));
+  };
 
   return (
     <>
@@ -33,9 +38,10 @@ function Nickname({ exp, userId = null, nickname, dropDown = false, size }: IPro
         {openDropDown && dropDown && (
           <Dropdown ref={targetRef}>
             <List>
-              <Link to={`/profile/${userId}`}>프로필 보기</Link>
+              <a href={`/profile/${userId}`}>프로필 보기</a>
             </List>
-
+            <List>작성글 보기</List>
+            <List onClick={openUserInfoModal}>유저정보</List>
             <ChatButton chatPartnerUserId={post?.user.userId!} />
           </Dropdown>
         )}

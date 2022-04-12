@@ -77,6 +77,10 @@ export class PostRepository extends AbstractRepository<Post> {
   removePost(postId: number) {
     return this.createQueryBuilder('post').delete().from(Post).where('id = :id', { id: postId }).execute();
   }
+
+  getPostsNum(userId: number) {
+    return this.createQueryBuilder('post').select('COUNT(*)').where('user_id = :id', { id: userId }).getRawOne();
+  }
 }
 
 @EntityRepository(PostComment)
@@ -102,6 +106,9 @@ export class PostCommentRepository extends AbstractRepository<PostComment> {
       .set({ content: editedContent })
       .where('id = :id', { id: postCommentId })
       .execute();
+  }
+  getPostCommentsNum(userId: number) {
+    return this.createQueryBuilder('postComment').select('COUNT(*)').where('user_id = :id', { id: userId }).getRawOne();
   }
 }
 

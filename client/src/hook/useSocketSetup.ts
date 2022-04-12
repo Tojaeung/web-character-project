@@ -50,8 +50,8 @@ export const useSocketSetup = () => {
     });
 
     socket.on('connect_error', async () => {
-      alert('예기치 않은 오류로 로그아웃 되었습니다.');
       await dispatch(logoutUser());
+      alert('예기치 않은 오류로 로그아웃 되었습니다.');
     });
 
     return () => {

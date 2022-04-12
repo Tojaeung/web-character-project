@@ -13,6 +13,7 @@ import EditNicknameModal from '@src/modals/settings/EditNickname';
 import EditPwModal from '@src/modals/settings/EditPw';
 import ShowDescModal from '@src/modals/profile/ShowDesc';
 import ShowDrawingModal from '@src/modals/profile/ShowDrawing';
+import UserInfo from '@src/modals/post/UserInfo';
 
 function Modal() {
   const dispatch = useAppDispatch();
@@ -38,6 +39,7 @@ function Modal() {
           {isOpen && mode === 'editNickname' && <EditNicknameModal />}
           {isOpen && mode === 'editPw' && <EditPwModal />}
           {isOpen && mode === 'showDesc' && <ShowDescModal />}
+          {isOpen && mode === 'UserInfo' && <UserInfo />}
         </ModalBox>
       )}
       ))

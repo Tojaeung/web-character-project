@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { AiOutlineClose } from 'react-icons/ai';
 import Button from '@src/components/Button';
 import { useAppDispatch } from '@src/store/app/hook';
-import { sendReport } from '@src/store/requests/report.request';
+import { sendReport } from '@src/store/requests/etc.request';
 import { DrawingType, PostType } from '@src/types';
 
 interface IProps {
