@@ -3,17 +3,19 @@ import styled from 'styled-components';
 import { IoIosMore } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import useDropDown from '@src/hook/useDropDown';
-import { useAppDispatch } from '@src/store/app/hook';
+import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
+import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { openModal } from '@src/store/slices/modal.slice';
 import ChatButton from '@src/components/ChatButton';
 
 interface IProps {
-  id: number;
-  profileUserId: string;
+  profileId: number;
+  profileChatId: string;
 }
 
-function MoreButton({ id, profileUserId }: IProps) {
+function MoreButton({ profileId, profileChatId }: IProps) {
   const dispatch = useAppDispatch();
+  const user = useAppSelector(selectAuthUser);
 
   // 드롭다운 메뉴 커스텀 훅
   const [openDropDown, setOpenDropDown] = useState(false);
@@ -32,11 +34,13 @@ function MoreButton({ id, profileUserId }: IProps) {
       </MoreIconBox>
       {openDropDown && (
         <Dropdown ref={targetRef}>
-          <List>
-            <Link to="/create/drawingForm">그림추가</Link>
-          </List>
+          {profileId === user?.id && (
+            <List>
+              <Link to="/create/drawingForm">그림추가</Link>
+            </List>
+          )}
 
-          <ChatButton chatPartnerUserId={profileUserId} />
+          <ChatButton chatPartnerUserId={profileChatId} />
 
           <List onClick={showDescModal}>자기소개</List>
         </Dropdown>

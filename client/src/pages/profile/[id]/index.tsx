@@ -8,7 +8,6 @@ import Nickname from '@src/components/Nickname';
 import Button from '@src/components/Button';
 import { useAppSelector } from '@src/store/app/hook';
 import { selectProfileProfile } from '@src/store/slices/profile.slice';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
 import MoreButton from './MoreButton';
 
 function Profile() {
@@ -17,7 +16,6 @@ function Profile() {
   // 존재하지 않는 profileId를 url에서 조회할때 존재하지 않는경우 오류페이지를 보여준다.
   const ok = useAppSelector(selectProfileOk);
   const profile = useAppSelector(selectProfileProfile);
-  const user = useAppSelector(selectAuthUser);
 
   return !ok ? (
     <NotFound />
@@ -34,7 +32,7 @@ function Profile() {
 
         <UserInfoBox>
           <Nickname exp={profile?.exp!} nickname={profile?.nickname!} size="large" />
-          <MoreButton id={user?.id!} profileUserId={profile?.userId!} />
+          <MoreButton profileId={profile?.id!} profileChatId={profile?.userId!} />
         </UserInfoBox>
       </ProfileBox>
       <DrawingBox>
