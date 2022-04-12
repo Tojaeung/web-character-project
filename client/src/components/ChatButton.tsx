@@ -36,17 +36,13 @@ function ChatButton({ chatPartnerUserId }: IProps) {
   };
 
   return (
-    <>
-      {chatPartnerUserId === user?.userId ? null : (
-        <Container>
-          {!isChatting ? (
-            <StartChat onClick={handleAddChat}>채팅하기</StartChat>
-          ) : (
-            <Chatting onClick={(e) => alert('이미 채팅중인 유저입니다.')}>채팅중...</Chatting>
-          )}
-        </Container>
+    <Container>
+      {!isChatting ? (
+        <StartChat onClick={handleAddChat}>채팅하기</StartChat>
+      ) : (
+        <Chatting onClick={(e) => alert('이미 채팅중인')}>채팅중...</Chatting>
       )}
-    </>
+    </Container>
   );
 }
 const Container = styled.div`

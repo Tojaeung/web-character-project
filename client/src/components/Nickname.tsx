@@ -3,21 +3,20 @@ import getLevel from '@src/utils/exp.util';
 import styled, { css } from 'styled-components';
 import ChatButton from '@src/components/ChatButton';
 import useDropDown from '@src/hook/useDropDown';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectPostPost } from '@src/store/slices/post.slice';
+import { useAppDispatch } from '@src/store/app/hook';
 import { openModal } from '@src/store/slices/modal.slice';
 
 interface IProps {
   exp: number;
   userId?: number | null;
+  userChatId?: string | null;
   nickname: string;
   dropDown?: boolean;
   size: 'small' | 'medium' | 'large';
 }
 
-function Nickname({ exp, userId = null, nickname, dropDown = false, size }: IProps) {
+function Nickname({ exp, userId = null, userChatId = null, nickname, dropDown = false, size }: IProps) {
   const dispatch = useAppDispatch();
-  const post = useAppSelector(selectPostPost);
 
   // 드롭다운 메뉴 커스텀 훅
   const [openDropDown, setOpenDropDown] = useState(false);
@@ -42,7 +41,7 @@ function Nickname({ exp, userId = null, nickname, dropDown = false, size }: IPro
             </List>
             <List>작성글 보기</List>
             <List onClick={openUserInfoModal}>유저정보</List>
-            <ChatButton chatPartnerUserId={post?.user.userId!} />
+            <ChatButton chatPartnerUserId={userChatId!} />
           </Dropdown>
         )}
       </Container>
@@ -85,10 +84,22 @@ const List = styled.li`
 `;
 
 const NickNameTag = styled.span<{ size: string; dropDown: boolean }>`
-  cursor: ${({ dropDown }) => (dropDown ? 'pointer' : 'default')};
-  &:hover {
-    text-decoration: underline;
-  }
+  ${({ dropDown }) => {
+    if (dropDown) {
+      return css`
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
+      `;
+    } else {
+      return css`
+        cursor: default;
+        text-decoration: none;
+      `;
+    }
+  }}
+
   ${({ size }) => {
     if (size === 'small') {
       return css`
