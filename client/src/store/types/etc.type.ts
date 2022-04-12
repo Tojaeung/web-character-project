@@ -1,4 +1,4 @@
-import { DrawingType, PostType } from '@src/types';
+import { DrawingType, PostType, UserType } from '@src/types';
 
 export type sendReportReturnType = {
   ok: boolean;
@@ -19,6 +19,7 @@ export type sendReportErrorType = {
 export type getUserInfoReturnType = {
   ok: boolean;
   message: string;
+  userInfo: UserType;
   drawingsNum: number;
   drawingCommentsNum: number;
   postsNum: number;

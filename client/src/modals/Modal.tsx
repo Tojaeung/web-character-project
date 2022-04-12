@@ -13,7 +13,7 @@ import EditNicknameModal from '@src/modals/settings/EditNickname';
 import EditPwModal from '@src/modals/settings/EditPw';
 import ShowDescModal from '@src/modals/profile/ShowDesc';
 import ShowDrawingModal from '@src/modals/profile/ShowDrawing';
-import UserInfo from '@src/modals/post/UserInfo';
+import UserInfo from '@src/modals/UserInfo';
 
 function Modal() {
   const dispatch = useAppDispatch();

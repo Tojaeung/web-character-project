@@ -70,6 +70,7 @@ const reportController = {
     }
   },
   getUserInfo: async (req: Request, res: Response) => {
+    const userRepo = getCustomRepository(UserRepository);
     const drawingRepo = getCustomRepository(DrawingRepository);
     const drawingCommentRepo = getCustomRepository(DrawingCommentRepository);
     const postRepo = getCustomRepository(PostRepository);
@@ -78,6 +79,7 @@ const reportController = {
     try {
       const { userId } = req.body;
 
+      const userInfo = await userRepo.findUserById(Number(userId));
       const drawingsNum = await drawingRepo.getDrawingsNum(Number(userId));
       const drawingCommentsNum = await drawingCommentRepo.getDrawingCommentsNum(Number(userId));
       const postsNum = await postRepo.getPostsNum(Number(userId));
@@ -87,6 +89,7 @@ const reportController = {
       return res.status(200).json({
         ok: true,
         message: '유저정보 가져오기 성공하였습니다.',
+        userInfo,
         drawingsNum: Number(drawingsNum.count),
         drawingCommentsNum: Number(drawingCommentsNum.count),
         postsNum: Number(postsNum.count),

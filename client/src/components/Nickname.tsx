@@ -28,24 +28,22 @@ function Nickname({ exp, userId = null, userChatId = null, nickname, dropDown = 
   };
 
   return (
-    <>
-      <Container>
-        <Level>[Lv.{getLevel(exp)}]</Level>
-        <NickNameTag size={size} dropDown={dropDown} onClick={(e) => setOpenDropDown(!openDropDown)}>
-          {nickname}
-        </NickNameTag>
-        {openDropDown && dropDown && (
-          <Dropdown ref={targetRef}>
-            <List>
-              <a href={`/profile/${userId}`}>프로필 보기</a>
-            </List>
-            <List>작성글 보기</List>
-            <List onClick={openUserInfoModal}>유저정보</List>
-            <ChatButton chatPartnerUserId={userChatId!} />
-          </Dropdown>
-        )}
-      </Container>
-    </>
+    <Container>
+      <Level>[Lv.{getLevel(exp)}]</Level>
+      <NickNameTag size={size} dropDown={dropDown} onClick={(e) => setOpenDropDown(!openDropDown)}>
+        {nickname}
+      </NickNameTag>
+      {openDropDown && dropDown && (
+        <Dropdown ref={targetRef}>
+          <List>
+            <a href={`/profile/${userId}`}>프로필 보기</a>
+          </List>
+          <List>작성글 보기</List>
+          <List onClick={openUserInfoModal}>유저정보</List>
+          <ChatButton chatPartnerUserId={userChatId!} />
+        </Dropdown>
+      )}
+    </Container>
   );
 }
 
