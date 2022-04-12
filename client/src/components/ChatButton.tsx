@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectChats, openChatModal } from '@src/store/slices/chat.slice';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import socket from '@src/utils/socket';
 
 interface IProps {
-  design: 'button' | 'list';
   chatPartnerUserId: string;
 }
 
-function ChatButton({ design, chatPartnerUserId }: IProps) {
+function ChatButton({ chatPartnerUserId }: IProps) {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectAuthUser);
   const chats = useAppSelector(selectChats);
@@ -26,7 +25,7 @@ function ChatButton({ design, chatPartnerUserId }: IProps) {
   }, [chats, chatPartnerUserId]);
 
   // 채팅목록에 상대를 추가합니다.
-  const onAddChat = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddChat = async (e: React.MouseEvent<HTMLSpanElement>) => {
     if (!user) {
       return alert('로그인 후 이용 가능합니다.');
     } else {
@@ -41,11 +40,9 @@ function ChatButton({ design, chatPartnerUserId }: IProps) {
       {chatPartnerUserId === user?.userId ? null : (
         <Container>
           {!isChatting ? (
-            <StartChatButton design={design} onClick={onAddChat}>
-              채팅하기
-            </StartChatButton>
+            <StartChat onClick={handleAddChat}>채팅하기</StartChat>
           ) : (
-            <ChattingButton design={design}>채팅중...</ChattingButton>
+            <Chatting onClick={(e) => alert('이미 채팅중인 유저입니다.')}>채팅중...</Chatting>
           )}
         </Container>
       )}
@@ -54,46 +51,20 @@ function ChatButton({ design, chatPartnerUserId }: IProps) {
 }
 const Container = styled.div`
   width: 100%;
-`;
-const StartChatButton = styled.button<{ design: 'button' | 'list' }>`
-  border: 0;
-  outline: 0;
-  padding: 0.5rem;
   font-size: 1.2rem;
-  background-color: ${({ theme }) => theme.palette.green};
-  border-radius: 5px;
-  font-weight: bold;
-  color: ${({ theme }) => theme.palette.white};
+  white-space: nowrap;
+  padding: 1rem;
+  text-align: center;
   cursor: pointer;
-  ${({ design }) => {
-    if (design === 'list') {
-      return css`
-        padding: 0;
-        background-color: ${({ theme }) => theme.palette.bgColor};
-        color: ${({ theme }) => theme.palette.black};
-      `;
-    }
-  }}
+  &:hover {
+    background-color: ${({ theme }) => theme.palette.gray};
+  }
 `;
-const ChattingButton = styled.button<{ design: 'button' | 'list' }>`
-  border: 0;
-  outline: 0;
-  padding: 0.5rem;
+const StartChat = styled.span`
   font-size: 1.2rem;
-  font-weight: bold;
-  border-radius: 5px;
-  background-color: ${({ theme }) => theme.palette.red};
-  color: ${({ theme }) => theme.palette.white};
-  cursor: pointer;
-  ${({ design }) => {
-    if (design === 'list') {
-      return css`
-        padding: 0;
-        background-color: ${({ theme }) => theme.palette.bgColor};
-        color: ${({ theme }) => theme.palette.black};
-      `;
-    }
-  }}
+`;
+const Chatting = styled.span`
+  font-size: 1.2rem;
 `;
 
 export default ChatButton;

@@ -6,7 +6,6 @@ import ChatButton from '@src/components/ChatButton';
 import useDropDown from '@src/hook/useDropDown';
 import { useAppSelector } from '@src/store/app/hook';
 import { selectPostPost } from '@src/store/slices/post.slice';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
 
 interface IProps {
   exp: number;
@@ -17,7 +16,6 @@ interface IProps {
 }
 
 function Nickname({ exp, userId = null, nickname, dropDown = false, size }: IProps) {
-  const user = useAppSelector(selectAuthUser);
   const post = useAppSelector(selectPostPost);
 
   // 드롭다운 메뉴 커스텀 훅
@@ -27,19 +25,18 @@ function Nickname({ exp, userId = null, nickname, dropDown = false, size }: IPro
 
   return (
     <>
-      <Container dropDown={dropDown} onClick={(e) => setOpenDropDown(!openDropDown)}>
+      <Container>
         <Level>[Lv.{getLevel(exp)}]</Level>
-        <NickNameTag size={size}>{nickname}</NickNameTag>
+        <NickNameTag size={size} dropDown={dropDown} onClick={(e) => setOpenDropDown(!openDropDown)}>
+          {nickname}
+        </NickNameTag>
         {openDropDown && dropDown && (
           <Dropdown ref={targetRef}>
             <List>
               <Link to={`/profile/${userId}`}>프로필 보기</Link>
             </List>
-            {user?.id !== post?.user.id && (
-              <List>
-                <ChatButton design="list" chatPartnerUserId={post?.user.userId!} />
-              </List>
-            )}
+
+            <ChatButton chatPartnerUserId={post?.user.userId!} />
           </Dropdown>
         )}
       </Container>
@@ -47,13 +44,12 @@ function Nickname({ exp, userId = null, nickname, dropDown = false, size }: IPro
   );
 }
 
-const Container = styled.div<{ dropDown: boolean }>`
+const Container = styled.div`
   display: flex;
   gap: 0.5rem;
   align-items: center;
   justify-content: center;
   position: relative;
-  cursor: ${({ dropDown }) => (dropDown ? 'pointer' : 'default')};
 `;
 
 const Level = styled.span`
@@ -78,11 +74,15 @@ const List = styled.li`
   border-bottom: 1px solid ${({ theme }) => theme.palette.gray};
   cursor: pointer;
   &:hover {
-    background-color: 1px solid ${({ theme }) => theme.palette.gray};
+    background-color: ${({ theme }) => theme.palette.gray};
   }
 `;
 
-const NickNameTag = styled.span<{ size: string }>`
+const NickNameTag = styled.span<{ size: string; dropDown: boolean }>`
+  cursor: ${({ dropDown }) => (dropDown ? 'pointer' : 'default')};
+  &:hover {
+    text-decoration: underline;
+  }
   ${({ size }) => {
     if (size === 'small') {
       return css`

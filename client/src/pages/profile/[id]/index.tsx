@@ -1,33 +1,23 @@
 import styled from 'styled-components';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useGetProfile } from '@src/hook/useInitPage';
 import Drawing from '@src/pages/profile/[id]/Drawing';
 import { selectProfileOk } from '@src/store/slices/profile.slice';
 import NotFound from '@src/components/NotFound';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
-import ChatButton from '@src/components/ChatButton';
 import Button from '@src/components/Button';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
+import { useAppSelector } from '@src/store/app/hook';
 import { selectProfileProfile } from '@src/store/slices/profile.slice';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
-import { openModal } from '@src/store/slices/modal.slice';
+import MoreButton from './MoreButton';
 
 function Profile() {
   useGetProfile();
 
   // 존재하지 않는 profileId를 url에서 조회할때 존재하지 않는경우 오류페이지를 보여준다.
   const ok = useAppSelector(selectProfileOk);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const profile = useAppSelector(selectProfileProfile);
   const user = useAppSelector(selectAuthUser);
-
-  // 자기소개를 클릭하면 자기소개 모달창이 나타난다.
-  const onShowDesc = async (e: React.MouseEvent<HTMLDivElement>) => {
-    await dispatch(openModal({ mode: 'showDesc' }));
-  };
 
   return !ok ? (
     <NotFound />
@@ -44,19 +34,7 @@ function Profile() {
 
         <UserInfoBox>
           <Nickname exp={profile?.exp!} nickname={profile?.nickname!} size="large" />
-
-          <Desc onClick={onShowDesc}>자기소개</Desc>
-
-          {user && user?.id !== profile?.id && (
-            <ButtonBox>
-              <ChatButton design="button" chatPartnerUserId={profile?.userId!} />
-            </ButtonBox>
-          )}
-          {user?.id === profile?.id && (
-            <AddDrawingButton color="green" size="small" onClick={(e) => navigate('/create/drawingForm')}>
-              추가
-            </AddDrawingButton>
-          )}
+          <MoreButton id={user?.id!} profileUserId={profile?.userId!} />
         </UserInfoBox>
       </ProfileBox>
       <DrawingBox>
@@ -100,7 +78,7 @@ const Image = styled.img`
 `;
 const UserInfoBox = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
   gap: 0.7rem;
   margin-top: 5.5rem;
