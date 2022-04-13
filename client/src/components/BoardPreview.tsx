@@ -8,7 +8,7 @@ import { PostType } from '@src/types';
 import boardTitle from '@src/utils/boardTitle.util';
 
 interface IProps {
-  posts: PostType[] | null;
+  posts: PostType[] | undefined;
   board: 'free' | 'drawingCommission' | 'drawingRequest' | 'drawingSale';
 }
 

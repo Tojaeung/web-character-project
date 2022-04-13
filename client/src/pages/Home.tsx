@@ -1,26 +1,34 @@
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useGetBoards } from '@src/hook/useInitPage';
 import BoardPreview from '@src/components/BoardPreview';
-import { useAppSelector } from '@src/store/app/hook';
+import { useAppDispatch } from '@src/store/app/hook';
+import { getBoards } from '@src/store/requests/board.request';
 import { Link } from 'react-router-dom';
-
-import {
-  selectBoardFree,
-  selectBoardDrawingCommission,
-  selectBoardDrawingRequest,
-  selectBoardDrawingSale,
-} from '@src/store/slices/board.slice';
+import { PostType } from '@src/types';
 
 function Home() {
-  useGetBoards();
-  const drawingFree = useAppSelector(selectBoardFree);
-  const drawingCommission = useAppSelector(selectBoardDrawingCommission);
-  const drawingRequest = useAppSelector(selectBoardDrawingRequest);
-  const drawingSale = useAppSelector(selectBoardDrawingSale);
+  const dispatch = useAppDispatch();
+
+  const [free, setFree] = useState<PostType[] | undefined>();
+  const [drawingCommission, setDrawingCommission] = useState<PostType[] | undefined>();
+  const [drawingRequest, setDrawingRequest] = useState<PostType[] | undefined>();
+  const [drawingSale, setDrawingSale] = useState<PostType[] | undefined>();
+
+  useEffect(() => {
+    dispatch(getBoards())
+      .unwrap()
+      .then((res) => {
+        const { free, drawingCommission, drawingRequest, drawingSale } = res;
+        setFree(free);
+        setDrawingCommission(drawingCommission);
+        setDrawingRequest(drawingRequest);
+        setDrawingSale(drawingSale);
+      });
+  }, []);
 
   return (
     <Container>
-      <BoardPreview posts={drawingFree} board="free" />
+      <BoardPreview posts={free} board="free" />
       <BoardPreview posts={drawingCommission} board="drawingCommission" />
       <BoardPreview posts={drawingRequest} board="drawingRequest" />
       <BoardPreview posts={drawingSale} board="drawingSale" />
