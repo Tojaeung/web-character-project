@@ -51,32 +51,36 @@ function Board() {
           <BoardName>{boardTitle(board as string)}</BoardName>
           <LimitSelector setPage={setPage} limit={limit} setLimit={setLimit} />
         </Header>
-        <Table>
-          <tr>
-            <th>번호</th>
-            <th className="title">제목</th>
-            <th>닉네임</th>
-            <th>조회수</th>
-            <th>날짜</th>
-          </tr>
+        <table>
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th className="title">제목</th>
+              <th>닉네임</th>
+              <th>조회수</th>
+              <th>날짜</th>
+            </tr>
+          </thead>
 
-          {selectedBoard &&
-            selectedBoard.map((post) => (
-              <tr key={v4()}>
-                <td>{post.id}</td>
-                <td className="post-title">
-                  <Link to={`/board/${board}/post/${post.id}`}>{post.title}</Link>
-                </td>
-                <td>
-                  <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />
-                </td>
-                <td>{post.views}</td>
-                <td>
-                  <CreatedTime createdTime={post.created_at} size="small" />
-                </td>
-              </tr>
-            ))}
-        </Table>
+          <tbody>
+            {selectedBoard &&
+              selectedBoard.map((post) => (
+                <tr key={v4()}>
+                  <td>{post.id}</td>
+                  <td className="post-title">
+                    <Link to={`/board/${board}/post/${post.id}`}>{post.title}</Link>
+                  </td>
+                  <td>
+                    <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />
+                  </td>
+                  <td>{post.views}</td>
+                  <td>
+                    <CreatedTime createdTime={post.created_at} size="small" />
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
 
         <Footer>
           <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
@@ -94,21 +98,20 @@ function Board() {
           <BoardName>{boardTitle(board as string)}</BoardName>
           <LimitSelector setPage={setPage} limit={limit} setLimit={setLimit} />
         </Header>
-        <Table>
-          {selectedBoard &&
-            selectedBoard.map((post) => (
-              <ListBox key={v4()}>
-                <PostLink to={`/board/${board}/post/${post.id}`}>{post.title}</PostLink>
 
-                <DetailBox>
-                  <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />|
-                  <Views>조회수: {post.views}</Views>
-                  |
-                  <CreatedTime createdTime={post.created_at} size="small" />
-                </DetailBox>
-              </ListBox>
-            ))}
-        </Table>
+        {selectedBoard &&
+          selectedBoard.map((post) => (
+            <ListBox key={v4()}>
+              <PostLink to={`/board/${board}/post/${post.id}`}>{post.title}</PostLink>
+
+              <DetailBox>
+                <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />|
+                <Views>조회수: {post.views}</Views>
+                |
+                <CreatedTime createdTime={post.created_at} size="small" />
+              </DetailBox>
+            </ListBox>
+          ))}
 
         <Footer>
           <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
@@ -129,6 +132,33 @@ const Container = styled.div`
   @media ${({ theme }) => theme.device.tablet} {
     display: none;
   }
+
+  table {
+    width: 100%;
+    position: relative;
+    tr {
+      text-align: center;
+      th {
+        font-size: 1.4rem;
+        font-weight: bold;
+        padding: 1rem;
+        background-color: ${({ theme }) => theme.palette.gray};
+        white-space: nowrap;
+      }
+      td {
+        border: 1px solid ${({ theme }) => theme.palette.gray};
+        padding: 1rem;
+      }
+      .title {
+        width: 70%;
+      }
+      .post-title {
+        text-align: left;
+        padding: 0 0 0 2rem;
+        word-break: break-all;
+      }
+    }
+  }
 `;
 
 const Header = styled.div`
@@ -144,32 +174,6 @@ const BoardName = styled.span`
   font-size: 2rem;
 `;
 
-const Table = styled.table`
-  width: 100%;
-  position: relative;
-  tr {
-    text-align: center;
-    th {
-      font-size: 1.4rem;
-      font-weight: bold;
-      padding: 1rem;
-      background-color: ${({ theme }) => theme.palette.gray};
-      white-space: nowrap;
-    }
-    td {
-      border: 1px solid ${({ theme }) => theme.palette.gray};
-      padding: 1rem;
-    }
-    .title {
-      width: 70%;
-    }
-    .post-title {
-      text-align: left;
-      padding: 0 0 0 2rem;
-      word-break: break-all;
-    }
-  }
-`;
 const Footer = styled.div`
   display: flex;
   justify-content: center;
@@ -208,7 +212,7 @@ const Responsive = styled.div`
   }
 `;
 
-const ListBox = styled.tr`
+const ListBox = styled.div`
   display: flex;
   flex-direction: column;
   padding: 1rem;

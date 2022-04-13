@@ -49,37 +49,39 @@ function UserInfo({ isOpen, closeModalHook, userId }: IProps) {
         <CloseIcon onClick={closeModalHook} />
         <Title>{user?.id === userId ? '내 정보' : '유저정보'}</Title>
         <table>
-          <tr>
-            <th>닉네임</th>
-            <td>{userInfo?.nickname}</td>
-          </tr>
+          <thead></thead>
+          <tbody>
+            <tr>
+              <td>닉네임</td>
+              <td>{userInfo?.nickname}</td>
+            </tr>
+            <tr>
+              <td>그림 수</td>
+              <td>{drawingsNum}</td>
+            </tr>
+            <tr>
+              <td>게시글 수</td>
+              <td>{postsNum}</td>
+            </tr>
 
-          <tr>
-            <th>그림 수</th>
-            <td>{drawingsNum}</td>
-          </tr>
-          <tr>
-            <th>게시글 수</th>
-            <td>{postsNum}</td>
-          </tr>
+            <tr>
+              <td>댓글 수</td>
+              <td>{commentsNum}</td>
+            </tr>
 
-          <tr>
-            <th>댓글 수</th>
-            <td>{commentsNum}</td>
-          </tr>
-
-          <tr>
-            <th>영감력</th>
-            <td>{userInfo?.exp}</td>
-          </tr>
-          <tr>
-            <th>레벨</th>
-            <td>{getLevel(userInfo?.exp!)}</td>
-          </tr>
-          <tr>
-            <th>가입일</th>
-            <td>{relativeTime(userInfo?.created_at!)}</td>
-          </tr>
+            <tr>
+              <td>영감력</td>
+              <td>{userInfo?.exp}</td>
+            </tr>
+            <tr>
+              <td>레벨</td>
+              <td>{getLevel(userInfo?.exp!)}</td>
+            </tr>
+            <tr>
+              <td>가입일</td>
+              <td>{relativeTime(userInfo?.created_at!)}</td>
+            </tr>
+          </tbody>
         </table>
       </ModalBox>
     </Container>,
@@ -88,23 +90,21 @@ function UserInfo({ isOpen, closeModalHook, userId }: IProps) {
 }
 
 const Container = styled.div`
-  width: 25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
   table {
     width: 100%;
     tr {
       padding: 1rem;
-      th {
+      td:nth-child(1) {
         font-size: 1.2rem;
         padding: 1rem;
         width: 8rem;
         white-space: nowrap;
         font-weight: 500;
+        text-align: center;
         background-color: ${({ theme }) => theme.palette.gray};
       }
-      td {
+      td:nth-child(2) {
+        text-align: center;
         font-size: 1.1rem;
         padding: 1rem;
         border: 1px solid ${({ theme }) => theme.palette.gray};
@@ -136,15 +136,17 @@ const ModalBox = styled.div`
   padding: 2rem;
   background-color: ${({ theme }) => theme.palette.white};
   z-index: 1050;
-  gap: 1.5rem;
+  gap: 1rem;
 `;
 
 const CloseIcon = styled(AiOutlineClose)`
   align-self: flex-end;
   font-size: 2rem;
+  cursor: pointer;
 `;
 const Title = styled.h1`
   font-size: 1.8rem;
+  align-self: flex-start;
 `;
 
 export default UserInfo;
