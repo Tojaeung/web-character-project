@@ -1,17 +1,15 @@
-import axios from 'axios';
-import qs from 'qs';
 import styled from 'styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Button from '@src/components/Button';
 import { useAppDispatch } from '@src/store/app/hook';
 import { AuthInputsType, PwInput, ConfirmPwInput } from '@src/components/AuthInputs';
 import { editPw } from '@src/store/requests/auth.request';
 
 function EditPw() {
-  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [searchParams] = useSearchParams();
 
   const {
     register,
@@ -21,11 +19,10 @@ function EditPw() {
   } = useForm<AuthInputsType>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
-    const query = qs.parse(location.search, {
-      ignoreQueryPrefix: true,
-    });
+    const query = searchParams.get('pwToken');
+
     try {
-      const res = await dispatch(editPw({ pw: data.pw!, pwToken: query.pwToken as string })).unwrap();
+      const res = await dispatch(editPw({ pw: data.pw!, pwToken: query as string })).unwrap();
       alert(res.message);
       navigate('/');
     } catch (err: any) {
