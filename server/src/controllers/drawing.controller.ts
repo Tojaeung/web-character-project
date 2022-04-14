@@ -27,7 +27,13 @@ const drawingController = {
       const id = req.session.user?.id;
       const { content } = req.body;
 
-      const user = req.session.user!;
+      if (content.length === 0 || content === '<p><br></p>') {
+        logger.info('그림 내용을 입력하지 않아서 데이터에 추가 할 수 없습니다.');
+        return res.status(400).json({ ok: false, message: '내용을 입력해주세요.' });
+      } else if (content.length > 10000) {
+        logger.info('그림 내용을 너무 많이 입력해서 데이터에 추가 할 수 없습니다.');
+        return res.status(400).json({ ok: false, message: '내용 글자 수를 초과하였습니다.' });
+      }
 
       // drawing 테이블에 정보를 저장합니다.
       const drawing = new Drawing();

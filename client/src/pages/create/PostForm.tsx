@@ -24,25 +24,13 @@ function PostForm() {
   const [content, setContent] = useState('');
 
   const onAddPost = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (title.length > 50) {
-      return alert('제목 글자 수를 초과하였습니다.');
-    } else if (title.length === 0) {
-      return alert('제목을 입력해주세요.');
-    } else if (content.length > 10000) {
-      return alert('내용 글자 수를 초과하였습니다.');
-    } else if (content.length === 0) {
-      return alert('내용을 입력해주세요.');
-    } else if (content.length > 10000) {
-      return alert('내용 글자 수를 초과하였습니다.');
-    } else {
-      try {
-        const res = await dispatch(addPost({ title, content, board: board!, imageKeys })).unwrap();
-        const { message, post } = res;
-        alert(message);
-        navigate(`board/${post.board}/post/${post.id}`);
-      } catch (err: any) {
-        alert(err.message);
-      }
+    try {
+      const res = await dispatch(addPost({ title, content, board: board!, imageKeys })).unwrap();
+      const { message, post } = res;
+      alert(message);
+      navigate(`board/${post.board}/post/${post.id}`);
+    } catch (err: any) {
+      alert(err.message);
     }
   };
 

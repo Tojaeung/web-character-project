@@ -9,7 +9,6 @@ import Button from '@src/components/Button';
 import { useDefaultConfig } from '@src/hook/useReactQuillConfig';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
-import LengthCountInput from '@src/components/LengthCountInput';
 import { addDrawing } from '@src/store/requests/drawing.request';
 
 function DrawingForm() {
@@ -19,7 +18,6 @@ function DrawingForm() {
 
   const drawingInputRef = useRef<HTMLInputElement>(null);
 
-  const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
   const [drawing, setDrawing] = useState<File>();
@@ -34,33 +32,18 @@ function DrawingForm() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     // submit 페이지 초기화 방지
     e.preventDefault();
-    if (title.length > 50) {
-      return alert('제목 글자 수를 초과하였습니다.');
-    } else if (title.length === 0) {
-      return alert('제목을 입력해주세요.');
-    } else if (content.length > 10000) {
-      return alert('내용 글자 수를 초과하였습니다.');
-    } else if (content.length === 0) {
-      return alert('내용을 입력해주세요.');
-    } else if (!drawing) {
-      return alert('그림파일을 업로드 하지 않았습니다.');
-    } else if (content.length === 0) {
-      return alert('내용을 입력해주세요.');
-    } else if (content.length > 10000) {
-      return alert('내용 글자 수를 초과하였습니다.');
-    } else {
-      const formData = new FormData();
-      formData.append('drawing', drawing as File);
-      formData.append('title', title);
-      formData.append('content', content);
+    if (!drawing) return alert('그림파일을 업로드 하지 않았습니다.');
 
-      try {
-        const res = await dispatch(addDrawing(formData)).unwrap();
-        alert(res.message);
-        window.location.href = `/profile/${user?.id}`;
-      } catch (err: any) {
-        alert(err.message);
-      }
+    const formData = new FormData();
+    formData.append('drawing', drawing as File);
+    formData.append('content', content);
+
+    try {
+      const res = await dispatch(addDrawing(formData)).unwrap();
+      alert(res.message);
+      window.location.href = `/profile/${user?.id}`;
+    } catch (err: any) {
+      alert(err.message);
     }
   };
 
@@ -91,12 +74,6 @@ function DrawingForm() {
       </Drawing>
 
       <Form onSubmit={onSubmit}>
-        <LengthCountInput
-          limit={50}
-          placeholder="제목"
-          valueLength={title.length}
-          onChange={(e) => setTitle(e.target.value)}
-        />
         <ReactQuill
           className="ql-editor"
           value={content}
