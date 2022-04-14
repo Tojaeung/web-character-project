@@ -37,7 +37,7 @@ function Nickname({ exp, userId = null, userChatId = null, nickname, dropDown = 
         {openDropDown && dropDown && (
           <Dropdown ref={targetRef}>
             <List>
-              <a href={`/profile/${userId}`}>프로필 보기</a>
+              <GoProfile href={`/profile/${userId}`}>프로필 보기</GoProfile>
             </List>
             <List>작성글 보기</List>
             <List onClick={openModalHook}>{user?.id === userId ? '내 정보' : '유저정보'}</List>
@@ -119,4 +119,5 @@ const NickNameTag = styled.span<{ size: string; dropDown: boolean }>`
   }};
 `;
 
+const GoProfile = styled.a``;
 export default Nickname;

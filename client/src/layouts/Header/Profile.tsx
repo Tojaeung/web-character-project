@@ -38,10 +38,10 @@ function Profile() {
       </AvatarBox>
       {openDropDown && (
         <DropDown ref={targetRef}>
-          <NavLink to={`/profile/${user?.id}`}>
+          <GoProfile href={`/profile/${user?.id}`}>
             <ProfileIcon />
             프로필
-          </NavLink>
+          </GoProfile>
 
           <List onClick={(e) => chatRef.current?.click()}>
             <Chat chatRef={chatRef} />
@@ -133,5 +133,16 @@ const SettingsIcon = styled(FiSettings)`
 
 const LogOutIcon = styled(FiLogOut)`
   font-size: 2.5rem;
+`;
+
+const GoProfile = styled.a`
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  &:hover {
+    background: ${({ theme }) => theme.palette.gray};
+    cursor: pointer;
+  }
 `;
 export default Profile;

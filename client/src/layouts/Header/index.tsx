@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { AiOutlineMenu, AiOutlineUser, AiOutlineKey } from 'react-icons/ai';
 import { MdPlaylistAdd } from 'react-icons/md';
@@ -30,10 +30,10 @@ function Header() {
           }}
         />
         <RightSide>
-          <ATag href="/board/free">자유게시판</ATag>
-          <ATag href="/board/drawingCommission">커미션</ATag>
-          <ATag href="/board/drawingRequest">리퀘스트</ATag>
-          <ATag href="/board/drawingSale">분양</ATag>
+          <NavLink to={'/board/free'}>자유게시판</NavLink>
+          <NavLink to={'/board/drawingCommission'}>커미션</NavLink>
+          <NavLink to={'/board/drawingRequest'}>리퀘스트</NavLink>
+          <NavLink to={'/board/drawingSale'}>분양</NavLink>
           {user ? (
             <Profile />
           ) : (
@@ -94,12 +94,13 @@ const RightSide = styled.div`
   gap: 5rem;
 `;
 
-const ATag = styled.a`
+const NavLink = styled(Link)`
   font-size: 1.7rem;
   &:hover {
     text-decoration: underline;
   }
 `;
+
 const AuthBox = styled.div`
   display: flex;
   align-items: center;

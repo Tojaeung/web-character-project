@@ -10,7 +10,7 @@ export const useObserver = (targetRef: React.RefObject<HTMLDivElement>) => {
 
   const options = useMemo(() => {
     return {
-      threshold: 1,
+      threshold: 0,
     };
   }, []);
 

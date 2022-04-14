@@ -20,7 +20,6 @@ interface DrawingSliceType {
   ok: boolean;
   message: string | null;
   drawings: DrawingType[];
-  cursor: number | null;
   index: number | null;
 }
 
@@ -29,7 +28,6 @@ const initialState: DrawingSliceType = {
   ok: false,
   message: null,
   drawings: [],
-  cursor: 0,
   index: null,
 };
 
@@ -52,14 +50,12 @@ export const drawingSlice = createSlice({
       payload.drawings!.forEach((drawing) => {
         state.drawings.push(drawing);
       });
-      state.cursor = payload.newCursor;
     });
     builder.addCase(getDrawings.rejected, (state, { payload }) => {
       state.isLoading = false;
       state.ok = payload!.ok;
       state.message = payload!.message;
       state.drawings = [];
-      state.cursor = null;
     });
 
     builder.addCase(addDrawing.fulfilled, (state, { payload }) => {
@@ -184,7 +180,6 @@ export const selectDrawingIsLoading = (state: RootState) => state.drawing.isLoad
 export const selectDrawingOk = (state: RootState) => state.drawing.ok;
 export const selectDrawingMessage = (state: RootState) => state.drawing.message;
 export const selectDrawingDrawings = (state: RootState) => state.drawing.drawings;
-export const selectDrawingCursor = (state: RootState) => state.drawing.cursor;
 export const selectDrawingIndex = (state: RootState) => state.drawing.index;
 
 export default drawingSlice.reducer;

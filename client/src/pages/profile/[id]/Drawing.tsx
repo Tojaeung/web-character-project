@@ -1,43 +1,37 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { getDrawings, addDrawingView } from '@src/store/requests/drawing.request';
-import { selectProfileProfile } from '@src/store/slices/profile.slice';
-import {
-  selectDrawing,
-  selectDrawingDrawings,
-  selectDrawingIsLoading,
-  selectDrawingCursor,
-} from '@src/store/slices/drawing.slice';
+import { selectDrawing, selectDrawingDrawings, selectDrawingIsLoading } from '@src/store/slices/drawing.slice';
 import { openModal } from '@src/store/slices/modal.slice';
 import loading from '@src/assets/images/loading.gif';
 import { useObserver } from '@src/hook/useObserver';
 
 function Drawing() {
+  const { profileId } = useParams();
   const dispatch = useAppDispatch();
-  const profile = useAppSelector(selectProfileProfile);
+
   const isLoading = useAppSelector(selectDrawingIsLoading);
   const drawings = useAppSelector(selectDrawingDrawings);
-  const cursor = useAppSelector(selectDrawingCursor);
 
-  const targetRef = useRef<HTMLDivElement>(null);
+  const [cursor, setCursor] = useState<number | null>(0);
 
   // useObserver는 무한스크롤 커스텀 훅이다.
+  const targetRef = useRef<HTMLDivElement>(null);
   const isVisible = useObserver(targetRef);
 
-  const importDrawings = async (profileId: number, cursor: number) => {
-    await dispatch(getDrawings({ profileId: profile!.id, cursor: cursor }));
-  };
-
   useEffect(() => {
-    /*
-     * isVisible이 false일때는 importDrawings이 작동되지 않게 한다. (오직 true일때만)
-     * cursor가 0 일때는 더이상 drawing 데이터가 없기 때문이다.
-     */
+    // cursor가 0 일때는 더이상 drawing 데이터가 없기 때문이다.
     if (!isVisible || cursor === null) {
       return;
     }
-    importDrawings(profile?.id!, cursor);
+    dispatch(getDrawings({ profileId: Number(profileId), cursor: cursor }))
+      .unwrap()
+      .then((res) => {
+        const { newCursor } = res;
+        setCursor(newCursor);
+      });
   }, [isVisible]);
 
   const openDrawing = (index: number) => async (e: React.MouseEvent<HTMLLIElement>) => {

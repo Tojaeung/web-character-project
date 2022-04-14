@@ -37,7 +37,7 @@ function Board() {
     )
       .unwrap()
       .then((res) => setTotalPostsNum(res.totalPostsNum));
-  }, [page, limit]);
+  }, [page, limit, board]);
 
   // 스크롤 맨위로
   const goTop = (e: React.MouseEvent<HTMLButtonElement>) => {
