@@ -198,6 +198,8 @@ const authController = {
     try {
       // nodemailer.config.ts에서 온 쿼리정보 입니다.
       const { id, pwToken } = req.query;
+      console.log(id, pwToken);
+      
 
       /*
        * 요청받은 이메일로 유저를 찾습니다.

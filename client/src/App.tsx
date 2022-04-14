@@ -42,10 +42,10 @@ function App() {
 
             <Route path="/auth" element={<AuthRouter />}>
               <Route path="signUp" element={<SignUp />} />
+              <Route path="editPw" element={<EditPw />} />
             </Route>
 
             <Route path="/" element={<PrivateRouter />}>
-              <Route path="auth/editPw" element={<EditPw />} />
               <Route path="settings">
                 <Route path="account" element={<Account />} />
                 <Route path="alert" element={<Alert />} />
