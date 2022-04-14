@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useNavigate } from 'react-router-dom';
 import { GrAddCircle } from 'react-icons/gr';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
@@ -15,7 +14,6 @@ import { addDrawing } from '@src/store/requests/drawing.request';
 
 function DrawingForm() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const [defaultModules] = useDefaultConfig();
   const user = useAppSelector(selectAuthUser);
 
@@ -33,7 +31,9 @@ function DrawingForm() {
     setPreview(fileUrl);
   };
 
-  const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    // submit 페이지 초기화 방지
+    e.preventDefault();
     if (title.length > 50) {
       return alert('제목 글자 수를 초과하였습니다.');
     } else if (title.length === 0) {
@@ -49,7 +49,6 @@ function DrawingForm() {
     } else if (content.length > 10000) {
       return alert('내용 글자 수를 초과하였습니다.');
     } else {
-      e.preventDefault();
       const formData = new FormData();
       formData.append('drawing', drawing as File);
       formData.append('title', title);
@@ -58,7 +57,7 @@ function DrawingForm() {
       try {
         const res = await dispatch(addDrawing(formData)).unwrap();
         alert(res.message);
-        navigate(`/profile/${user?.id}`);
+        window.location.href = `/profile/${user?.id}`;
       } catch (err: any) {
         alert(err.message);
       }
@@ -91,7 +90,7 @@ function DrawingForm() {
         )}
       </Drawing>
 
-      <Form>
+      <Form onSubmit={onSubmit}>
         <LengthCountInput
           limit={50}
           placeholder="제목"
@@ -107,10 +106,18 @@ function DrawingForm() {
           placeholder="내용을 입력하세요....(최대 3000글자)"
         />
         <ButtonWrapper>
-          <SubmitButton color="green" size="medium" onClick={onSubmit}>
+          <SubmitButton type="submit" color="green" size="medium">
             추가
           </SubmitButton>
-          <CancelButton color="green" size="medium" inverse={true} onClick={() => navigate(`/profile/${user?.id}`)}>
+          <CancelButton
+            type="button"
+            color="green"
+            size="medium"
+            inverse={true}
+            onClick={(e) => {
+              window.location.href = `/profile/${user?.id}`;
+            }}
+          >
             취소
           </CancelButton>
         </ButtonWrapper>
