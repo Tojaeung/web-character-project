@@ -1,6 +1,7 @@
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { AiOutlineMenu, AiOutlineUser, AiOutlineKey } from 'react-icons/ai';
+import { Link, useNavigate } from 'react-router-dom';
+import { AiOutlineMenu, AiOutlineUser, AiOutlineKey, AiOutlineClose } from 'react-icons/ai';
 import { MdPlaylistAdd } from 'react-icons/md';
 import Profile from './Profile';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
@@ -18,6 +19,8 @@ function Header() {
   const openLoginModal = async (e: any) => {
     await dispatch(openModal({ mode: 'login' }));
   };
+
+  const [openMobileNav, setOpenMobileNav] = useState(false);
 
   return (
     <>
@@ -50,8 +53,39 @@ function Header() {
           )}
         </RightSide>
       </Container>
+
       <Responsive>
-        <MenuIcon />
+        {openMobileNav ? (
+          <CloseIcon onClick={(e) => setOpenMobileNav(!openMobileNav)} />
+        ) : (
+          <MenuIcon onClick={(e) => setOpenMobileNav(!openMobileNav)} />
+        )}
+
+        {openMobileNav && (
+          <NavBox>
+            <List>
+              <NavLink to={'/board/free'} onClick={(e) => setOpenMobileNav(false)}>
+                자유게시판
+              </NavLink>
+            </List>
+            <List>
+              <NavLink to={'/board/drawingCommission'} onClick={(e) => setOpenMobileNav(false)}>
+                커미션
+              </NavLink>
+            </List>
+            <List>
+              <NavLink to={'/board/drawingRequest'} onClick={(e) => setOpenMobileNav(false)}>
+                리퀘스트
+              </NavLink>
+            </List>
+            <List>
+              <NavLink to={'/board/drawingSale'} onClick={(e) => setOpenMobileNav(false)}>
+                분양
+              </NavLink>
+            </List>
+          </NavBox>
+        )}
+
         <Logo
           src={logo}
           alt="logo"
@@ -124,6 +158,7 @@ const AddIcon = styled(MdPlaylistAdd)`
 const Responsive = styled.div`
   display: none;
   @media ${({ theme }) => theme.device.tablet} {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -139,8 +174,33 @@ const MenuIcon = styled(AiOutlineMenu)`
   cursor: pointer;
 `;
 
+const CloseIcon = styled(AiOutlineClose)`
+  font-size: 2.5rem;
+  cursor: pointer;
+`;
+
 const KeyIcon = styled(AiOutlineKey)`
   font-size: 2.5rem;
+  cursor: pointer;
+`;
+
+const NavBox = styled.ul`
+  position: absolute;
+  width: 100%;
+  top: 5rem;
+  left: 0;
+  background-color: ${({ theme }) => theme.palette.bgColor};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1020;
+`;
+
+const List = styled.li`
+  width: 100%;
+  border: 1px solid ${({ theme }) => theme.palette.gray};
+  text-align: center;
+  padding: 2rem 0;
 `;
 
 export default Header;
