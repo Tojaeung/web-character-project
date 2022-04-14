@@ -46,13 +46,14 @@ const settingsController = {
       const existingNickname = await userRepo.findUserByNickname(newNickname);
       if (existingNickname) return res.status(400).json({ ok: false, message: '이미 존재하는 닉네임 입니다.' });
 
-      await userRepo.updateNickname(id as number, newNickname);
+      const result = await userRepo.updateNickname(id as number, newNickname);
+      if (result.affected === 0) {
+        logger.info('닉네임 변경 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '닉네임 변경 실패하였습니다.' });
+      }
 
-      // 재 로그인을 하지 않고 세션을 변경 해줍니다.
-      req.session.user!.nickname = newNickname;
-      req.session.save(() => {
-        return res.status(200).json({ ok: true, message: '닉네임이 변경되었습니다.', newNickname });
-      });
+      logger.info('닉네임 변경 성공하였습니다.');
+      return res.status(200).json({ ok: true, message: '닉네임이 성공되었습니다.', newNickname });
     } catch (err) {
       logger.error('닉네임 변경 에러', err);
       return res.status(500).json({ ok: false, message: '닉네임 변경 에러' });
@@ -73,7 +74,12 @@ const settingsController = {
 
       // 일치하면 비밀번호 변경
       const encryptedPw = await bcrypt.hash(newPw, 8);
-      await userRepo.updatePw(id as number, encryptedPw);
+
+      const result = await userRepo.updatePw(id as number, encryptedPw);
+      if (result.affected === 0) {
+        logger.info('비밀번호 변경 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '비밀번호 변경 실패하였습니다.' });
+      }
 
       return res.status(200).json({ ok: true, message: '비밀번호가 변경되었습니다. 다시 로그인 해주세요.' });
     } catch (err: any) {
@@ -100,34 +106,28 @@ const settingsController = {
         return res.status(400).json({ message: '변경할 프로필 이미지를 찾지 못했습니다.' });
       }
 
-      // 현재 아바타가 기본 아바타라면 삭제하지 않는다
-      if (currentAvatarKey === defaultAvatarKey) {
-        // 재 로그인을 하지 않기 때문에 세션을 변경해줍니다.
-        req.session.user!.avatar = newAvatar;
-        req.session.user!.avatarKey = newAvatarKey;
-        req.session.save(() => {
-          return res.status(200).json({ ok: true, message: '프로필 사진을 변경하였습니다.' });
+      // 현재 아바타가 기본 아바타가 아니면 s3에서 삭제한다.
+      if (currentAvatarKey !== defaultAvatarKey) {
+        // s3 최적화를 위해 현재 아바타가 기본 아바타가 아니라면 현재아바타를 삭제한다.
+        const bucketName = process.env.AWS_BUCKET_NAME as string;
+        s3.deleteObject({ Bucket: bucketName, Key: currentAvatarKey as string }, (err) => {
+          if (err) {
+            logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
+            return res.status(400).json({ ok: false, message: 's3 최적화 실패하였습니다.' });
+          }
         });
       }
 
-      // s3 최적화를 위해 현재 아바타가 기본 아바타가 아니라면 현재아바타를 삭제한다.
-      const bucketName = process.env.AWS_BUCKET_NAME as string;
-      s3.deleteObject({ Bucket: bucketName, Key: currentAvatarKey as string }, (err) => {
-        if (err) {
-          logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-          return res.status(400).json({ ok: false, message: 's3 최적화 실패하였습니다.' });
-        }
-      });
-
       // user테이블에 avatar, avatarKey 정보를 업데이트 합니다.
-      await userRepo.updateAvatar(id as number, newAvatar, newAvatarKey);
+      const result = await userRepo.updateAvatar(id as number, newAvatar, newAvatarKey);
 
-      // 재 로그인을 하지 않기 때문에 세션을 변경해줍니다.
-      req.session.user!.avatar = newAvatar;
-      req.session.user!.avatarKey = newAvatarKey;
-      req.session.save(() => {
-        return res.status(200).json({ ok: true, message: '프로필 사진을 변경하였습니다.', newAvatar, newAvatarKey });
-      });
+      if (result.affected === 0) {
+        logger.info('프로필 이미지 변경 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '프로필 이미지 변경 실패하였습니다.' });
+      }
+
+      logger.info('프로필 이미지 변경 성공하였습니다.');
+      return res.status(200).json({ ok: true, message: '프로필 사진을 변경하였습니다.', newAvatar, newAvatarKey });
     } catch (err: any) {
       logger.error('프로필사진 변경 에러', err);
       return res.status(500).json({ ok: false, message: '프로필 사진 변경 에러' });
@@ -145,31 +145,30 @@ const settingsController = {
       const defaultAvatar = 'https://character.s3.ap-northeast-2.amazonaws.com/avatar/default-avatar.png';
       const defaultAvatarKey = 'default-avatar.png';
 
-      // 이미 기본 이미지일때
-      if (currentAvatarKey === defaultAvatarKey) {
-        return res.status(400).json({ ok: false, message: '이미 기본 프로필 이미지입니다.' });
+      // 이미 기본 이미지아닐떄 s3에서 삭제한다.
+      if (currentAvatarKey !== defaultAvatarKey) {
+        // 현재 프로필 사진이 기본 이미지가 아닐때 이전 프로필 사진을 s3 객체삭제 합니다.
+        const bucketName = process.env.AWS_BUCKET_NAME as string;
+        s3.deleteObject({ Bucket: bucketName, Key: currentAvatarKey as string }, (err) => {
+          if (err) {
+            logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
+            return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
+          }
+        });
       }
 
-      // 현재 프로필 사진이 기본 이미지가 아닐때 이전 프로필 사진을 s3 객체삭제 합니다.
-      const bucketName = process.env.AWS_BUCKET_NAME as string;
-      s3.deleteObject({ Bucket: bucketName, Key: currentAvatarKey as string }, (err) => {
-        if (err) {
-          logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-          return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
-        }
-      });
-
       // 기본 프로필 이미지로 바꾸기 위해 user테이블을 업데이트 시켜준다.
-      await userRepo.updateAvatar(id as number, defaultAvatar, defaultAvatarKey);
+      const result = await userRepo.updateAvatar(id as number, defaultAvatar, defaultAvatarKey);
 
-      // 재 로그인 하지 않기 때문에 세션을 변경 해줍니다.
-      req.session.user!.avatar = defaultAvatar;
-      req.session.user!.avatarKey = defaultAvatarKey;
-      req.session.save(() => {
-        return res
-          .status(200)
-          .json({ ok: true, message: '기본 프로필 이미지로 변경되었습니다.', defaultAvatar, defaultAvatarKey });
-      });
+      if (result.affected === 0) {
+        logger.info('프로필 기본이미지 변경 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '프로필  기본이미지 변경 실패하였습니다.' });
+      }
+
+      logger.info('프로필 기본이미지 변경 성공하였습니다.');
+      return res
+        .status(200)
+        .json({ ok: true, message: '프로필 기본이미지 변경 성공하였습니다.', defaultAvatar, defaultAvatarKey });
     } catch (err: any) {
       logger.error('기본 프로필 사진 변경 에러', err);
       return res.status(500).json({ ok: false, message: '기본 프로필 이미지 변경 에러' });
@@ -193,34 +192,28 @@ const settingsController = {
         return res.status(400).json({ message: '변경할 커버 이미지를 찾지 못했습니다.' });
       }
 
-      // 현재 아바타가 기본 아바타라면 삭제하지 않는다
-      if (currentCoverKey === defaultCoverKey) {
-        // 재 로그인을 하지 않기 때문에 세션을 변경해줍니다.
-        req.session.user!.cover = newCover;
-        req.session.user!.coverKey = newCoverKey;
-        req.session.save(() => {
-          return res.status(200).json({ ok: true, message: '커버 이미지을 변경하였습니다.' });
+      // 현재 아바타가 기본 아바타아니라면 삭제하지 한다.
+      if (currentCoverKey !== defaultCoverKey) {
+        // s3 최적화를 위해 현재 아바타가 기본 아바타가 아니라면 현재아바타를 삭제한다.
+        const bucketName = process.env.AWS_BUCKET_NAME as string;
+        s3.deleteObject({ Bucket: bucketName, Key: currentCoverKey as string }, (err) => {
+          if (err) {
+            logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
+            return res.status(400).json({ ok: false, message: 's3 최적화 실패하였습니다.' });
+          }
         });
       }
 
-      // s3 최적화를 위해 현재 아바타가 기본 아바타가 아니라면 현재아바타를 삭제한다.
-      const bucketName = process.env.AWS_BUCKET_NAME as string;
-      s3.deleteObject({ Bucket: bucketName, Key: currentCoverKey as string }, (err) => {
-        if (err) {
-          logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-          return res.status(400).json({ ok: false, message: 's3 최적화 실패하였습니다.' });
-        }
-      });
-
       // user테이블에 avatar, avatarKey 정보를 업데이트 합니다.
-      await userRepo.updateCover(id as number, newCover, newCoverKey);
+      const result = await userRepo.updateCover(id as number, newCover, newCoverKey);
 
-      // 재 로그인을 하지 않기 때문에 세션을 변경해줍니다.
-      req.session.user!.cover = newCover;
-      req.session.user!.coverKey = newCoverKey;
-      req.session.save(() => {
-        return res.status(200).json({ ok: true, message: '커버 이미지를 변경하였습니다.', newCover, newCoverKey });
-      });
+      if (result.affected === 0) {
+        logger.info('커버 이미지를 변경 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '커버 이미지를 변경 실패하였습니다.' });
+      }
+
+      logger.info('커버 이미지를 변경하였습니다.');
+      return res.status(200).json({ ok: true, message: '커버 이미지를 변경하였습니다.', newCover, newCoverKey });
     } catch (err: any) {
       logger.error('프로필사진 변경 에러', err);
       return res.status(500).json({ ok: false, message: '커버 이미지 변경 에러' });
@@ -237,31 +230,30 @@ const settingsController = {
       const defaultCover = 'https://character.s3.ap-northeast-2.amazonaws.com/cover/default-cover.jpg';
       const defaultCoverKey = 'default-cover.jpg';
 
-      // 이미 기본 이미지일때
-      if (currentCoverKey === defaultCoverKey) {
-        return res.status(400).json({ ok: false, message: '이미 기본 커버 이미지입니다.' });
+      // 이미 기본 이미지아닐때
+      if (currentCoverKey !== defaultCoverKey) {
+        // 현재 프로필 사진이 기본 이미지가 아닐때 이전 프로필 사진을 s3 객체삭제 합니다.
+        const bucketName = process.env.AWS_BUCKET_NAME as string;
+        s3.deleteObject({ Bucket: bucketName, Key: currentCoverKey as string }, (err) => {
+          if (err) {
+            logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
+            return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
+          }
+        });
       }
 
-      // 현재 프로필 사진이 기본 이미지가 아닐때 이전 프로필 사진을 s3 객체삭제 합니다.
-      const bucketName = process.env.AWS_BUCKET_NAME as string;
-      s3.deleteObject({ Bucket: bucketName, Key: currentCoverKey as string }, (err) => {
-        if (err) {
-          logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-          return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
-        }
-      });
-
       // 기본 프로필 이미지로 바꾸기 위해 user테이블을 업데이트 시켜준다.
-      await userRepo.updateCover(id as number, defaultCover, defaultCoverKey);
+      const result = await userRepo.updateCover(id as number, defaultCover, defaultCoverKey);
 
-      // 재 로그인 하지 않기 때문에 세션을 변경 해줍니다.
-      req.session.user!.cover = defaultCover;
-      req.session.user!.coverKey = defaultCoverKey;
-      req.session.save(() => {
-        return res
-          .status(200)
-          .json({ ok: true, message: '기본 커버 이미지로 변경되었습니다.', defaultCover, defaultCoverKey });
-      });
+      if (result.affected === 0) {
+        logger.info('기본 커버 이미지로 변경 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '기본 커버 이미지로 변경 실패하였습니다.' });
+      }
+
+      logger.info('기본 커버 이미지로 변경 성공하였습니다.');
+      return res
+        .status(200)
+        .json({ ok: true, message: '기본 커버 이미지로 변경 성공하였습니다.', defaultCover, defaultCoverKey });
     } catch (err: any) {
       logger.error('기본 프로필 사진 변경 에러', err);
       return res.status(500).json({ ok: false, message: '기본 커버 이미지 변경 에러' });
@@ -289,7 +281,11 @@ const settingsController = {
         });
       }
       // onDelete: cascade 때문에 관계된 모든 유저정보를 삭제합니다.
-      await userRepo.deleteUser(id as number);
+      const result = await userRepo.deleteUser(id as number);
+      if (result.affected === 0) {
+        logger.warn('계정 삭제 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '계정 삭제 실패하였습니다.' });
+      }
 
       // 레디스에 저장된 대화정보 등등 식제
       await cluster.del(`chats:${userId}`, `messages:${userId}`, `msgNotis:${userId}`);
@@ -301,6 +297,7 @@ const settingsController = {
         }
       });
 
+      logger.warn('계정 삭제 성공 하였습니다.');
       return res.status(200).json({ ok: true, message: '계정이 정상적으로 삭제되었습니다.' });
     } catch (err: any) {
       logger.error('계정탈퇴 에러', err);
@@ -349,13 +346,14 @@ const settingsController = {
       }
 
       // 변경한 자기소개를 desc테이블에 업데이트합니다.
-      await userRepo.updateDesc(id as number, desc as string);
+      const result = await userRepo.updateDesc(id as number, desc as string);
+      if (result.affected === 0) {
+        logger.info('자기소개 변경 실패하였습니다..');
+        return res.status(400).json({ ok: false, message: '자기소개 변경 실패하였습니다.' });
+      }
 
-      req.session.user!.desc = desc;
-      req.session.save(() => {
-        logger.info('자기소개 변경 완료되었습니다.');
-        return res.status(200).json({ ok: true, message: '자기소개 변경 완료되었습니다.', desc });
-      });
+      logger.info('자기소개 변경 완료되었습니다.');
+      return res.status(200).json({ ok: true, message: '자기소개 변경 완료되었습니다.', desc });
     } catch (err: any) {
       logger.error('자기소개 변경 에러', err);
       return res.status(500).json({ ok: false, message: '자기소개 변경 에러' });
