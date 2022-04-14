@@ -64,14 +64,17 @@ const PrevIcon = styled(AiOutlineLeft)<{ index: number | null }>`
   left: 5%;
   top: 50%;
   transform: translate(-50%, -50%);
-  color: ${({ theme }) => theme.palette.white};
+  color: ${({ theme }) => theme.palette.black};
   display: ${({ index }) => (index === 0 ? 'none' : 'block')};
+  background-color: ${({ theme }) => theme.palette.gray};
+  border: 1px solid ${({ theme }) => theme.palette.black};
+  border-radius: 50%;
   cursor: pointer;
   &:hover {
     opacity: ${({ index }) => (index === 0 ? 0 : 0.7)};
   }
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 5rem;
+    font-size: 4rem;
   }
 `;
 const NextIcon = styled(AiOutlineRight)<{ index: number | null; total: number | null }>`
@@ -80,14 +83,17 @@ const NextIcon = styled(AiOutlineRight)<{ index: number | null; total: number | 
   left: 95%;
   top: 50%;
   transform: translate(-50%, -50%);
-  color: ${({ theme }) => theme.palette.white};
+  background-color: ${({ theme }) => theme.palette.gray};
+  color: ${({ theme }) => theme.palette.black};
+  border: 1px solid ${({ theme }) => theme.palette.black};
+  border-radius: 50%;
   display: ${({ index, total }) => (index! + 1 === total ? 'none' : 'block')};
   cursor: pointer;
   &:hover {
     opacity: ${({ index, total }) => (index! + 1 === total ? 0 : 0.7)};
   }
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 5rem;
+    font-size: 4rem;
   }
 `;
 const ImageBox = styled.div`
