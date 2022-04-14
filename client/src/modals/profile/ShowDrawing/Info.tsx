@@ -35,7 +35,7 @@ function Info() {
           <FlexBox>
             <Nickname
               userId={drawings[index!].user?.id}
-              userChatId={drawings[index!].user?.userId}
+              chatUserId={drawings[index!].user?.chatId}
               exp={drawings[index!].user?.exp!}
               nickname={drawings[index!].user?.nickname!}
               dropDown={true}

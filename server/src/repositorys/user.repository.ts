@@ -18,8 +18,8 @@ export class UserRepository extends AbstractRepository<User> {
     return this.createQueryBuilder('user').where('user.id = :id', { id }).getOne();
   }
 
-  findUserByUserId(userId: string) {
-    return this.createQueryBuilder('user').where('user.userId = :userId', { userId }).getOne();
+  findUserByUserId(chatId: string) {
+    return this.createQueryBuilder('user').where('user.chatId = :chatId', { chatId }).getOne();
   }
 
   // 비밀번호 변경시 사용되는 pwToken으로 유저정보를 찾는 쿼리입니다.

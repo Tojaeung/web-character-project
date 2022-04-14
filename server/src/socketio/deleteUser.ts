@@ -4,10 +4,10 @@ import cluster from '@src/helpers/redis.helper';
 const deleteUser = async (socket: SessionSocket) => {
   const user = socket.request.session.user;
 
-  await cluster.del(`user:${user.userId}`);
-  await cluster.del(`chats:${user.userId}`);
-  await cluster.del(`messages:${user.userId}`);
-  await cluster.del(`msgNotis:${user.userId}`);
+  await cluster.del(`user:${user.chatId}`);
+  await cluster.del(`chats:${user.chatId}`);
+  await cluster.del(`messages:${user.chatId}`);
+  await cluster.del(`msgNotis:${user.chatId}`);
 };
 
 export default deleteUser;

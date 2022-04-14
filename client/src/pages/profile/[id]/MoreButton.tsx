@@ -40,7 +40,7 @@ function MoreButton({ profileId, profileChatId }: IProps) {
             </List>
           )}
 
-          <ChatButton chatPartnerUserId={profileChatId} />
+          <ChatButton chatUserId={profileChatId} />
 
           <List onClick={showDescModal}>자기소개</List>
         </Dropdown>

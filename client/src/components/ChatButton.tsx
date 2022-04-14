@@ -6,10 +6,10 @@ import { selectAuthUser } from '@src/store/slices/auth.slice';
 import socket from '@src/utils/socket';
 
 interface IProps {
-  chatPartnerUserId: string;
+  chatUserId: string; // 채팅상대를 표현한 변수이다.
 }
 
-function ChatButton({ chatPartnerUserId }: IProps) {
+function ChatButton({ chatUserId }: IProps) {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectAuthUser);
   const chats = useAppSelector(selectChats);
@@ -17,19 +17,19 @@ function ChatButton({ chatPartnerUserId }: IProps) {
   const [isChatting, setIsChatting] = useState(false);
 
   useEffect(() => {
-    if (chats.some((chat) => chat.userId === chatPartnerUserId)) {
+    if (chats.some((chat) => chat.chatId === chatUserId)) {
       setIsChatting(true);
     } else {
       setIsChatting(false);
     }
-  }, [chats, chatPartnerUserId]);
+  }, [chats, chatUserId]);
 
   // 채팅목록에 상대를 추가합니다.
   const handleAddChat = async (e: React.MouseEvent<HTMLSpanElement>) => {
     if (!user) {
       return alert('로그인 후 이용 가능합니다.');
     } else {
-      socket.emit('addChat', chatPartnerUserId);
+      socket.emit('addChat', chatUserId);
       await dispatch(openChatModal());
       localStorage.setItem('chat', 'on');
     }

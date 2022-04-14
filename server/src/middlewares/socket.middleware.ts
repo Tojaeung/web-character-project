@@ -12,7 +12,7 @@ export const authorizeUser = async (defaultSocket: Socket, next: NextFunction) =
 
   const user = socket.request.session.user;
 
-  socket.join(user.userId);
+  socket.join(user.chatId);
 
   next();
 };

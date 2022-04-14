@@ -41,7 +41,7 @@ function ChatList() {
           <GuideText>대화상대가 존재하지 않습니다...</GuideText>
         ) : (
           chats.map((chat) => {
-            const msgNotiNum = msgNotis.filter((msgNoti) => msgNoti.from === chat.userId).length;
+            const msgNotiNum = msgNotis.filter((msgNoti) => msgNoti.from === chat.chatId).length;
 
             return (
               <ListBox key={v4()} onClick={onAddChatUser(chat)}>

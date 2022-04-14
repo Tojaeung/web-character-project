@@ -11,9 +11,9 @@ function ExitChat() {
   const chatUser = useAppSelector(selectChatUser);
 
   const onExitChat = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    socket.emit('deleteChat', chatUser?.userId);
-    socket.emit('deleteMessage', chatUser?.userId);
-    socket.emit('deleteMsgNoti', chatUser?.userId);
+    socket.emit('deleteChat', chatUser?.chatId);
+    socket.emit('deleteMessage', chatUser?.chatId);
+    socket.emit('deleteMsgNoti', chatUser?.chatId);
     localStorage.removeItem('chatUser');
     await dispatch(isChatUser({ chatUser: null }));
     await dispatch(closeModal());

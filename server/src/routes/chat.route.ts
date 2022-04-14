@@ -13,14 +13,14 @@ interface ImgMsgObjType {
 }
 
 chatRouter.post('/chat/imgMessage', chatUpload.single('imgMessage'), (req: Request, res: Response) => {
-  const { chatId, userId, messageDate } = req.body;
+  const { chatUserId, chatId, messageDate } = req.body;
   const imgUrl = (req.file as Express.MulterS3.File).location;
   const imgKey = (req.file as Express.MulterS3.File).key;
 
   const imgMsgObj: ImgMsgObjType = {
     type: 'image',
-    to: chatId,
-    from: userId,
+    to: chatUserId,
+    from: chatId,
     content: imgUrl,
     imgKey,
     date: messageDate,

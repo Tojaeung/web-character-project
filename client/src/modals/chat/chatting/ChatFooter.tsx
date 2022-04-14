@@ -22,8 +22,8 @@ function ChatFooter() {
   const onSendTextMsg = async (e: any) => {
     const textMsgObj = {
       type: 'text',
-      to: chatUser?.userId,
-      from: user?.userId,
+      to: chatUser?.chatId,
+      from: user?.chatId,
       content: message,
       date: moment().format(),
     };
@@ -36,8 +36,8 @@ function ChatFooter() {
     }
 
     socket.emit('addMessage', textMsgObj);
-    socket.emit('addMsgNoti', { from: user?.userId, to: chatUser?.userId });
-    socket.emit('deleteMsgNoti', chatUser?.userId);
+    socket.emit('addMsgNoti', { from: user?.chatId, to: chatUser?.chatId });
+    socket.emit('deleteMsgNoti', chatUser?.chatId);
     setMessage('');
   };
 
@@ -51,15 +51,15 @@ function ChatFooter() {
 
     const formData = new FormData();
     formData.append('imgMessage', e.target?.files[0]);
-    formData.append('chatId', chatUser?.userId);
-    formData.append('userId', user?.userId as string);
+    formData.append('chatUserId', chatUser?.chatId);
+    formData.append('chatId', user?.chatId as string);
     formData.append('messageDate', moment().format());
     const response = await axios.post('/api/chat/imgMessage', formData, { withCredentials: true });
     const { ok, imgMsgObj } = response.data;
     if (!ok) return;
     socket.emit('addMessage', imgMsgObj);
-    socket.emit('addMsgNoti', { from: user?.userId, to: chatUser?.userId });
-    socket.emit('deleteMsgNoti', chatUser?.userId);
+    socket.emit('addMsgNoti', { from: user?.chatId, to: chatUser?.chatId });
+    socket.emit('deleteMsgNoti', chatUser?.chatId);
   };
 
   return (

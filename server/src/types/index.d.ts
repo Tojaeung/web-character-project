@@ -7,7 +7,7 @@ declare module 'express-session' {
     user: {
       [key: string]: any;
       id: number;
-      userId: string;
+      chatId: string;
       email: string;
       nickname: string;
       desc: string;

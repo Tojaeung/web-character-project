@@ -21,11 +21,11 @@ function ChatBody() {
       {chatUser &&
         messages.length > 0 &&
         messages
-          .filter((message) => message.to === chatUser.userId || message.from === chatUser.userId)
+          .filter((message) => message.to === chatUser.chatId || message.from === chatUser.chatId)
           .map((message) => {
             return (
-              <MessageBox type={message.to === chatUser.userId ? 'sent' : 'received'} key={v4()}>
-                <Message type={message.to === chatUser.userId ? 'sent' : 'received'}>
+              <MessageBox type={message.to === chatUser.chatId ? 'sent' : 'received'} key={v4()}>
+                <Message type={message.to === chatUser.chatId ? 'sent' : 'received'}>
                   {message.type === 'text' ? (
                     <TextMessage>{message.content}</TextMessage>
                   ) : (

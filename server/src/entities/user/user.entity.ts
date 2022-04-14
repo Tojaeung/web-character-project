@@ -19,7 +19,7 @@ export class User {
 
   @Column()
   @Generated('uuid')
-  userId: string;
+  chatId: string;
 
   @Column({
     unique: true,

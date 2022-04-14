@@ -1,6 +1,6 @@
 export type UserType = {
   id: number;
-  userId: string;
+  chatId: string;
   email: string;
   nickname: string;
   desc: string;
@@ -55,7 +55,7 @@ export type DrawingType = {
 
 export type ProfileType = {
   id: number;
-  userId: string;
+  chatId: string;
   email: string;
   nickname: string;
   desc: string;

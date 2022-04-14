@@ -11,13 +11,13 @@ import { selectAuthUser } from '@src/store/slices/auth.slice';
 interface IProps {
   exp: number;
   userId?: number | null;
-  userChatId?: string | null;
+  chatUserId?: string | null;
   nickname: string;
   dropDown?: boolean;
   size: 'small' | 'medium' | 'large';
 }
 
-function Nickname({ exp, userId = null, userChatId = null, nickname, dropDown = false, size }: IProps) {
+function Nickname({ exp, userId = null, chatUserId = null, nickname, dropDown = false, size }: IProps) {
   const user = useAppSelector(selectAuthUser);
 
   const { isOpen, openModalHook, closeModalHook } = useModal();
@@ -41,7 +41,7 @@ function Nickname({ exp, userId = null, userChatId = null, nickname, dropDown = 
             </List>
             <List>작성글 보기</List>
             <List onClick={openModalHook}>{user?.id === userId ? '내 정보' : '유저정보'}</List>
-            <ChatButton chatPartnerUserId={userChatId!} />
+            <ChatButton chatUserId={chatUserId!} />
           </Dropdown>
         )}
       </Container>

@@ -7,8 +7,8 @@ import logger from '@src/helpers/winston.helper';
 const deleteMessage = async (socket: SessionSocket, chatId: string) => {
   const user = socket.request.session.user;
 
-  const messages = await cluster.lrange(`messages:${user.userId}`, 0, -1);
-  await cluster.del(`messages:${user.userId}`);
+  const messages = await cluster.lrange(`messages:${user.chatId}`, 0, -1);
+  await cluster.del(`messages:${user.chatId}`);
 
   // 이미지 파일, 대화상대만 key 정보를 불러옴
   const parsedMessages = await parseMessages(messages);
@@ -46,7 +46,7 @@ const deleteMessage = async (socket: SessionSocket, chatId: string) => {
       const newMessageStr = [newMessage.type, newMessage.to, newMessage.from, newMessage.content, newMessage.date].join(
         ','
       );
-      await cluster.lpush(`messages:${user.userId}`, newMessageStr);
+      await cluster.lpush(`messages:${user.chatId}`, newMessageStr);
     }
 
     socket.emit('initMessages', newMessages);

@@ -1,5 +1,5 @@
 export type ChatUserType = {
-  userId: string;
+  chatId: string;
   nickname: string;
   avatar: string;
   lastType: string | undefined;

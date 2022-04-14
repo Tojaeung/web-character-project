@@ -32,7 +32,7 @@ function Profile() {
 
         <UserInfoBox>
           <Nickname exp={profile?.exp!} nickname={profile?.nickname!} size="large" />
-          <MoreButton profileId={profile?.id!} profileChatId={profile?.userId!} />
+          <MoreButton profileId={profile?.id!} profileChatId={profile?.chatId!} />
         </UserInfoBox>
       </ProfileBox>
       <DrawingBox>
