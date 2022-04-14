@@ -18,7 +18,7 @@ export class UserRepository extends AbstractRepository<User> {
     return this.createQueryBuilder('user').where('user.id = :id', { id }).getOne();
   }
 
-  findUserByUserId(chatId: string) {
+  findUserByChatId(chatId: string) {
     return this.createQueryBuilder('user').where('user.chatId = :chatId', { chatId }).getOne();
   }
 
@@ -62,8 +62,16 @@ export class UserRepository extends AbstractRepository<User> {
   }
 
   // getProfile API에 사용된다.
-  // 프로필유저 정보와 프로필유저의 팔로우, 팔로잉 정보를 가져온다.
   findProfile(profileId: number) {
     return this.createQueryBuilder('user').where('user.id = :profileId', { profileId }).getOne();
+  }
+
+  // 댓글, 게시글 작성시 영감력(user테이블의 exp칼럼) 상승
+  addExp(id: number, addedExp: number) {
+    return this.createQueryBuilder('user')
+      .update(User)
+      .set({ exp: () => `exp + ${addedExp}` })
+      .where('id =:id', { id })
+      .execute();
   }
 }

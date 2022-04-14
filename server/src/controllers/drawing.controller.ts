@@ -11,6 +11,7 @@ import { Drawing } from '@src/entities/drawing/drawing.entity';
 import { DrawingComment } from '@src/entities/drawing/drawingComment.entity';
 import { Like } from '@src/entities/drawing/like.entity';
 import { DisLike } from '@src/entities/drawing/dislike.entity';
+import { UserRepository } from '@src/repositorys/user.repository';
 
 const drawingController = {
   addDrawing: async (req: Request, res: Response) => {
@@ -129,6 +130,7 @@ const drawingController = {
   },
 
   addComment: async (req: Request, res: Response) => {
+    const userRepo = getCustomRepository(UserRepository);
     const drawingCommentRepo = getCustomRepository(DrawingCommentRepository);
     try {
       const { userId, drawingId, content } = req.body;

@@ -8,19 +8,6 @@ declare module 'express-session' {
       [key: string]: any;
       id: number;
       chatId: string;
-      email: string;
-      nickname: string;
-      desc: string;
-      avatar: string;
-      avatarKey: string;
-      cover: string;
-      coverKey: string;
-      role: string;
-      emailToken: string | null;
-      isVerified: boolean;
-      exp: number;
-      created_at: Date;
-      updated_at: Date;
     };
   }
 }

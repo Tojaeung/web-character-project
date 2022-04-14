@@ -16,7 +16,7 @@ const addChat = async (socket: SessionSocket, chatId: string) => {
   }
 
   // 추가한 채팅상대가 존재하는 유저인지 확인합니다.
-  const chatUser = await userRepository.findUserByUserId(chatId);
+  const chatUser = await userRepository.findUserByChatId(chatId);
   if (!chatUser) {
     const result = { ok: false, message: '존재하지 않는 유저입니다.' };
     socket.emit('addChat', result);

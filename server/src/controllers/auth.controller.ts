@@ -83,17 +83,11 @@ const authController = {
         logger.info('이메일 인증을 받지 않은 회원입니다.');
         return res.status(400).json({ ok: false, message: '인증되지 않은 사용자 입니다. 이메일 인증을 확인해주세요' });
       }
-      // 보안상 중요한 내용은 클라이언트에 보내지 않는다.
-      delete existingUser.pw;
-      delete existingUser.pwToken;
 
-      req.session.user = existingUser;
+      req.session.user = { id: existingUser.id, chatId: existingUser.chatId };
       req.session.save(() => {
-        // 클라이언트에게 보내는 유저정보
-        const user = req.session.user;
-
         logger.info('로그인 되었습니다.');
-        return res.status(200).json({ ok: true, message: '로그인 되었습니다.', user });
+        return res.status(200).json({ ok: true, message: '로그인 되었습니다.', user: existingUser });
       });
     } catch (err: any) {
       console.log(err);
@@ -121,9 +115,17 @@ const authController = {
 
   // refresh시 다시 유저정보를 보내주는 API입니다.
   refreshLogin: async (req: Request, res: Response) => {
+    const userRepo = getCustomRepository(UserRepository);
     try {
-      const user = req.session.user;
+      const id = req.session.user!.id;
 
+      const user = await userRepo.findUserById(id);
+      if (!user) {
+        logger.info('유저가 존재하지 않아 로그인 정보 갱신에 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '로그인 정보 갱신 실패하였습니다.' });
+      }
+
+      logger.info('로그인 정보가 갱신되었습니다.');
       return res.status(200).json({ ok: true, message: '로그인 정보가 갱신되었습니다.', user });
     } catch (err: any) {
       logger.error('로그인 갱신을 실패하였습니다.', err);
@@ -199,7 +201,6 @@ const authController = {
       // nodemailer.config.ts에서 온 쿼리정보 입니다.
       const { id, pwToken } = req.query;
       console.log(id, pwToken);
-      
 
       /*
        * 요청받은 이메일로 유저를 찾습니다.
