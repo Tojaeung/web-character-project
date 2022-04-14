@@ -2,7 +2,15 @@ import { useEffect } from 'react';
 import socket from '@src/utils/socket';
 import { useAppDispatch } from '@src/store/app/hook';
 import { logoutUser } from '@src/store/requests/auth.request';
-import { addChat, initChats, initMessages, addMessage, initMsgNotis, addMsgNoti } from '@src/store/slices/chat.slice';
+import {
+  addChat,
+  initChats,
+  initMessages,
+  addMessage,
+  initMsgNotis,
+  addMsgNoti,
+  openChatModal,
+} from '@src/store/slices/chat.slice';
 
 export const useSocketSetup = () => {
   const dispatch = useAppDispatch();
@@ -39,6 +47,8 @@ export const useSocketSetup = () => {
       if (!ok) return alert(message);
       alert(message);
       await dispatch(addChat({ newChat }));
+      await dispatch(openChatModal());
+      localStorage.setItem('chat', 'on');
     });
 
     socket.on('addMessage', async (newMessage) => {

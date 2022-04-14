@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectChats, openChatModal } from '@src/store/slices/chat.slice';
+import { useAppSelector } from '@src/store/app/hook';
+import { selectChats } from '@src/store/slices/chat.slice';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import socket from '@src/utils/socket';
 
@@ -10,7 +10,6 @@ interface IProps {
 }
 
 function ChatButton({ chatUserId }: IProps) {
-  const dispatch = useAppDispatch();
   const user = useAppSelector(selectAuthUser);
   const chats = useAppSelector(selectChats);
 
@@ -29,9 +28,7 @@ function ChatButton({ chatUserId }: IProps) {
     if (!user) {
       return alert('로그인 후 이용 가능합니다.');
     } else {
-      socket.emit('addChat', chatUserId);
-      await dispatch(openChatModal());
-      localStorage.setItem('chat', 'on');
+      return socket.emit('addChat', chatUserId);
     }
   };
 
