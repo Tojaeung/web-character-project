@@ -6,6 +6,6 @@ const etcRouter = Router();
 
 etcRouter.post('/etc/sendReport', auth, etcController.sendReport);
 etcRouter.post('/etc/getUserInfo', etcController.getUserInfo);
-etcRouter.post('/etc/calcExp', etcController.calcExp);
+etcRouter.post('/etc/calcExp', auth, etcController.calcExp);
 
 export default etcRouter;

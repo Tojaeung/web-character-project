@@ -28,15 +28,23 @@ function DisLikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
       if (existingLike || existingDisLike) {
         return alert('이미 선택하셨습니다.');
       } else {
-        await dispatch(addDrawingDisLike({ userId: user?.id!, drawingId: entityId }));
-        await dispatch(calcExp({ userId, value: -1 }));
+        try {
+          await dispatch(addDrawingDisLike({ userId: user?.id!, drawingId: entityId })).unwrap();
+          await dispatch(calcExp({ userId, value: -1 }));
+        } catch (err: any) {
+          alert(err.message);
+        }
       }
     } else {
       if (existingLike || existingDisLike) {
         return alert('이미 선택하셨습니다.');
       } else {
-        await dispatch(addPostDisLike({ userId: user?.id!, postId: entityId }));
-        await dispatch(calcExp({ userId, value: -1 }));
+        try {
+          await dispatch(addPostDisLike({ userId: user?.id!, postId: entityId })).unwrap();
+          await dispatch(calcExp({ userId, value: -1 }));
+        } catch (err: any) {
+          alert(err.message);
+        }
       }
     }
   };
