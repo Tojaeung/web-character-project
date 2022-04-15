@@ -9,11 +9,11 @@ import { sendReport } from '@src/store/requests/etc.request';
 
 interface IProps {
   isOpen: boolean;
-  closeModalHook: () => void;
+  closeModal: () => void;
   suspectId: number;
 }
 
-function Report({ isOpen, closeModalHook, suspectId }: IProps) {
+function Report({ isOpen, closeModal, suspectId }: IProps) {
   const location = useLocation();
 
   const dispatch = useAppDispatch();
@@ -22,7 +22,7 @@ function Report({ isOpen, closeModalHook, suspectId }: IProps) {
   const [report, setReport] = useState('');
 
   const handleCloseModal = (e: any) => {
-    closeModalHook();
+    closeModal();
     setReportType('');
     setReport('');
   };
@@ -33,7 +33,7 @@ function Report({ isOpen, closeModalHook, suspectId }: IProps) {
       alert(res.message);
       setReportType('');
       setReport('');
-      closeModalHook();
+      closeModal();
     } catch (err: any) {
       alert(err.message);
     }

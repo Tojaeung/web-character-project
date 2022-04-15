@@ -9,7 +9,7 @@ import { selectPostPost } from '@src/store/slices/post.slice';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { removePost } from '@src/store/requests/post.request';
 import ReportModal from '@src/modals/Report';
-import useModal from '@src/hook/useModal';
+import { useReportModal } from '@src/hook/useModal';
 import MoreButton from '@src/components/MoreButton';
 
 function Header() {
@@ -20,7 +20,7 @@ function Header() {
   const post = useAppSelector(selectPostPost);
 
   // 신고하기 모달 커스텀 훅
-  const { isOpen, openModalHook, closeModalHook } = useModal();
+  const { showReportModal, openReportModal, closeReportModal } = useReportModal();
 
   // 게시글 삭제
   const handleRemovePost = async (e: any) => {
@@ -42,6 +42,7 @@ function Header() {
             exp={post?.user.exp!}
             userId={post?.user.id!}
             chatUserId={post?.user.chatId!}
+            desc={post?.user.desc!}
             nickname={post?.user.nickname!}
             dropDown={true}
             size="medium"
@@ -68,11 +69,13 @@ function Header() {
             </>
           )}
 
-          <ReportPost color="red" size="small" onClick={openModalHook}>
+          <ReportPost color="red" size="small" onClick={openReportModal}>
             신고
           </ReportPost>
         </ButtonBox>
-        {isOpen && <ReportModal isOpen={isOpen} closeModalHook={closeModalHook} suspectId={post?.user.id!} />}
+        {showReportModal && (
+          <ReportModal isOpen={showReportModal} closeModal={closeReportModal} suspectId={post?.user.id!} />
+        )}
 
         <ResponsiveButtonBox>
           <BackBoardIcon onClick={(e) => navigate(`/board/${post?.board}`)} />

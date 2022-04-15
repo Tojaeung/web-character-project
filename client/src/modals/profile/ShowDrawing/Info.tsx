@@ -34,9 +34,10 @@ function Info() {
           <Avatar src={drawings[index!].user?.avatar} size="small" />
           <FlexBox>
             <Nickname
+              exp={drawings[index!].user?.exp!}
               userId={drawings[index!].user?.id}
               chatUserId={drawings[index!].user?.chatId}
-              exp={drawings[index!].user?.exp!}
+              desc={drawings[index!].user?.desc}
               nickname={drawings[index!].user?.nickname!}
               dropDown={true}
               size="small"

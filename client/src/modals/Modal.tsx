@@ -11,7 +11,6 @@ import FindPw from '@src/modals/auth/FindPw';
 import EditEmailModal from '@src/modals/settings/EditEmail';
 import EditNicknameModal from '@src/modals/settings/EditNickname';
 import EditPwModal from '@src/modals/settings/EditPw';
-import ShowDescModal from '@src/modals/profile/ShowDesc';
 import ShowDrawingModal from '@src/modals/profile/ShowDrawing';
 
 function Modal() {
@@ -37,7 +36,6 @@ function Modal() {
           {isOpen && mode === 'editEmail' && <EditEmailModal />}
           {isOpen && mode === 'editNickname' && <EditNicknameModal />}
           {isOpen && mode === 'editPw' && <EditPwModal />}
-          {isOpen && mode === 'showDesc' && <ShowDescModal />}
         </ModalBox>
       )}
       ))

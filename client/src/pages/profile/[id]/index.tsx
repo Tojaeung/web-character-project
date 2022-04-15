@@ -8,7 +8,6 @@ import Nickname from '@src/components/Nickname';
 import Button from '@src/components/Button';
 import { useAppSelector } from '@src/store/app/hook';
 import { selectProfileProfile } from '@src/store/slices/profile.slice';
-import MoreButton from './MoreButton';
 
 function Profile() {
   useGetProfile();
@@ -31,8 +30,15 @@ function Profile() {
         </AvatarBox>
 
         <UserInfoBox>
-          <Nickname exp={profile?.exp!} nickname={profile?.nickname!} size="large" />
-          <MoreButton profileId={profile?.id!} profileChatId={profile?.chatId!} />
+          <Nickname
+            exp={profile?.exp!}
+            userId={profile?.id!}
+            chatUserId={profile?.chatId!}
+            desc={profile?.desc!}
+            nickname={profile?.nickname!}
+            dropDown={true}
+            size="large"
+          />
         </UserInfoBox>
       </ProfileBox>
       <DrawingBox>

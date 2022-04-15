@@ -12,11 +12,11 @@ import { selectAuthUser } from '@src/store/slices/auth.slice';
 
 interface IProps {
   isOpen: boolean;
-  closeModalHook: () => void;
+  closeModal: () => void;
   userId: number;
 }
 
-function UserInfo({ isOpen, closeModalHook, userId }: IProps) {
+function UserInfo({ isOpen, closeModal, userId }: IProps) {
   const dispatch = useAppDispatch();
 
   const user = useAppSelector(selectAuthUser);
@@ -44,9 +44,9 @@ function UserInfo({ isOpen, closeModalHook, userId }: IProps) {
   if (!isOpen) return null;
   return createPortal(
     <Container>
-      <Background onClick={closeModalHook} />
+      <Background onClick={closeModal} />
       <ModalBox>
-        <CloseIcon onClick={closeModalHook} />
+        <CloseIcon onClick={closeModal} />
         <Title>{user?.id === userId ? '내 정보' : '유저정보'}</Title>
         <table>
           <thead></thead>

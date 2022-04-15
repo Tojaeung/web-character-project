@@ -1,26 +1,30 @@
 import React, { useState, useRef } from 'react';
-import getLevel from '@src/utils/exp.util';
 import styled, { css } from 'styled-components';
+import { Link } from 'react-router-dom';
+import getLevel from '@src/utils/exp.util';
 import ChatButton from '@src/components/ChatButton';
 import useDropDown from '@src/hook/useDropDown';
-import useModal from '@src/hook/useModal';
+import { useUserInfoModal, useDescModal } from '@src/hook/useModal';
+import Desc from '@src/modals/Desc';
 import UserInfoModal from '@src/modals/UserInfo';
 import { useAppSelector } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 
 interface IProps {
   exp: number;
-  userId?: number | null;
-  chatUserId?: string | null;
+  userId?: number;
+  chatUserId?: string;
+  desc?: string;
   nickname: string;
   dropDown?: boolean;
   size: 'small' | 'medium' | 'large';
 }
 
-function Nickname({ exp, userId = null, chatUserId = null, nickname, dropDown = false, size }: IProps) {
+function Nickname({ exp, userId, chatUserId, desc, nickname, dropDown = false, size }: IProps) {
   const user = useAppSelector(selectAuthUser);
 
-  const { isOpen, openModalHook, closeModalHook } = useModal();
+  const { showUserInfoModal, openUserInfoModal, closeUserInfoModal } = useUserInfoModal();
+  const { showDescModal, openDescModal, closeDescModal } = useDescModal();
 
   // 드롭다운 메뉴 커스텀 훅
   const [openDropDown, setOpenDropDown] = useState(false);
@@ -39,13 +43,22 @@ function Nickname({ exp, userId = null, chatUserId = null, nickname, dropDown = 
             <List>
               <GoProfile href={`/profile/${userId}`}>프로필 보기</GoProfile>
             </List>
+            {userId === user?.id && (
+              <List>
+                <Link to="/create/drawingForm">그림추가</Link>
+              </List>
+            )}
             <List>작성글 보기</List>
-            <List onClick={openModalHook}>{user?.id === userId ? '내 정보' : '유저정보'}</List>
+            <List onClick={openUserInfoModal}>{user?.id === userId ? '내 정보' : '유저정보'}</List>
+            <List onClick={openDescModal}>자기소개</List>
             <ChatButton chatUserId={chatUserId!} />
           </Dropdown>
         )}
       </Container>
-      {isOpen && <UserInfoModal isOpen={isOpen} closeModalHook={closeModalHook} userId={userId!} />}
+      {showUserInfoModal && (
+        <UserInfoModal isOpen={showUserInfoModal} closeModal={closeUserInfoModal} userId={userId!} />
+      )}
+      {showDescModal && <Desc isOpen={showDescModal} closeModal={closeDescModal} userId={userId!} desc={desc!} />}
     </>
   );
 }
