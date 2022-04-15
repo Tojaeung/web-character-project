@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import CreatedTime from '@src/components/CreatedTime';
-import { useAppDispatch } from '@src/store/app/hook';
+import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
+import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { removeDrawingComment } from '@src/store/requests/drawing.request';
 import { removePostComment } from '@src/store/requests/post.request';
 import { DrawingCommentType, PostCommentType } from '@src/types';
@@ -20,6 +21,7 @@ interface IProps {
 
 function CommentList({ type, comment, index, setCommentIndex, isSelected }: IProps) {
   const dispatch = useAppDispatch();
+  const user = useAppSelector(selectAuthUser);
 
   // 댓글 수정폼 나타내기
   const openEditCommemtForm = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -48,22 +50,31 @@ function CommentList({ type, comment, index, setCommentIndex, isSelected }: IPro
       <UserBox>
         <UserInfoBox>
           <Avatar src={comment.user.avatar} size="small" />
-          <Nickname exp={comment.user.exp} nickname={comment.user.nickname} size="small" />
+          <Nickname
+            exp={comment.user.exp}
+            userId={comment.user.id}
+            chatUserId={comment.user.chatId}
+            desc={comment.user.desc}
+            nickname={comment.user.nickname}
+            dropDown={true}
+            size="small"
+          />
         </UserInfoBox>
         <CreatedTime createdTime={comment.created_at} size="small" />
       </UserBox>
 
       <ContentBox>
         <Content>{comment.content}</Content>
-
-        <ButtonBox>
-          <EditButton color="green" size="small" inverse={true} onClick={openEditCommemtForm}>
-            수정
-          </EditButton>
-          <RemoveButton color="red" size="small" onClick={handleRemoveComment}>
-            삭제
-          </RemoveButton>
-        </ButtonBox>
+        {user?.id === comment.user.id && (
+          <ButtonBox>
+            <EditButton color="green" size="small" inverse={true} onClick={openEditCommemtForm}>
+              수정
+            </EditButton>
+            <RemoveButton color="red" size="small" onClick={handleRemoveComment}>
+              삭제
+            </RemoveButton>
+          </ButtonBox>
+        )}
       </ContentBox>
 
       {/* 수정폼  */}
