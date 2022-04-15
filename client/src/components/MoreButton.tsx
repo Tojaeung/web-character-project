@@ -8,8 +8,6 @@ import { useReportModal } from '@src/hook/useModal';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
-import { selectDrawingDrawings, selectDrawingIndex } from '@src/store/slices/drawing.slice';
-import { selectPostPost } from '@src/store/slices/post.slice';
 
 interface IProps {
   type: 'drawing' | 'board';
@@ -23,9 +21,6 @@ function MoreButton({ type, entityId, userId, handleRemove }: IProps) {
 
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectAuthUser);
-  const drawings = useAppSelector(selectDrawingDrawings);
-  const index = useAppSelector(selectDrawingIndex);
-  const post = useAppSelector(selectPostPost);
 
   // 신고하기 모달 커스텀 훅
   const { showReportModal, openReportModal, closeReportModal } = useReportModal();
@@ -46,10 +41,12 @@ function MoreButton({ type, entityId, userId, handleRemove }: IProps) {
         <MoreIcon onClick={(e) => setOpenDropDown(!openDropDown)} />
         {openDropDown && (
           <Dropdown ref={targetRef}>
-            {type === 'board' && user?.id === post?.user.id && <List onClick={goEdit}>수정</List>}
-
-            {type === 'drawing' && user?.id === drawings[index!].user_id && <List onClick={handleRemove}>삭제</List>}
-            {type === 'board' && user?.id === post?.user.id && <List onClick={handleRemove}>삭제</List>}
+            {user?.id === userId && (
+              <>
+                {type === 'board' && <List onClick={goEdit}>수정</List>}
+                <List onClick={handleRemove}>삭제</List>
+              </>
+            )}
 
             <List onClick={openReportModal}>신고</List>
           </Dropdown>
