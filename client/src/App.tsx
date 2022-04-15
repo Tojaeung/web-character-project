@@ -82,9 +82,6 @@ const AppScreen = styled.div`
   max-width: 120rem;
   margin: 0 auto;
   position: relative;
-  @media ${({ theme }) => theme.device.mobile} {
-    padding-bottom: 5rem;
-  }
 `;
 
 export default App;
