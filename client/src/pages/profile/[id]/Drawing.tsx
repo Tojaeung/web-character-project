@@ -4,9 +4,10 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { getDrawings, addDrawingView } from '@src/store/requests/drawing.request';
 import { selectDrawing, selectDrawingDrawings, selectDrawingIsLoading } from '@src/store/slices/drawing.slice';
-import { openModal } from '@src/store/slices/modal.slice';
 import loading from '@src/assets/images/loading.gif';
 import { useObserver } from '@src/hook/useObserver';
+import DrawingModal from '@src/modals/profile/drawing';
+import { useDrawingModal } from '@src/hook/useModal';
 
 function Drawing() {
   const { profileId } = useParams();
@@ -14,6 +15,8 @@ function Drawing() {
 
   const isLoading = useAppSelector(selectDrawingIsLoading);
   const drawings = useAppSelector(selectDrawingDrawings);
+
+  const { showDrawingModal, openDrawingModal, closeDrawingModal } = useDrawingModal();
 
   const [cursor, setCursor] = useState<number | null>(0);
 
@@ -37,22 +40,25 @@ function Drawing() {
   const openDrawing = (index: number) => async (e: React.MouseEvent<HTMLLIElement>) => {
     await dispatch(selectDrawing({ selectedIndex: index }));
     await dispatch(addDrawingView({ drawingId: drawings[index].id }));
-    await dispatch(openModal({ mode: 'showDrawingModal' }));
+    openDrawingModal();
   };
 
   return (
-    <Container>
-      <DrawingBox>
-        {drawings?.map((drawing, index) => (
-          <DrawingList key={index} onClick={openDrawing(index)}>
-            <Image src={drawing.url} alt="그림" />
-          </DrawingList>
-        ))}
-        {isLoading ? <Image src={loading} alt="로딩중..." /> : null}
+    <>
+      <Container>
+        <DrawingBox>
+          {drawings?.map((drawing, index) => (
+            <DrawingList key={index} onClick={openDrawing(index)}>
+              <Image src={drawing.url} alt="그림" />
+            </DrawingList>
+          ))}
+          {isLoading ? <Image src={loading} alt="로딩중..." /> : null}
 
-        <div className="observer" ref={targetRef} />
-      </DrawingBox>
-    </Container>
+          <div className="observer" ref={targetRef} />
+        </DrawingBox>
+      </Container>
+      {showDrawingModal && <DrawingModal isOpen={showDrawingModal} closeModal={closeDrawingModal} />}
+    </>
   );
 }
 

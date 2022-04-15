@@ -1,23 +1,29 @@
+import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { AiOutlineClose } from 'react-icons/ai';
-import ImageSide from '@src/modals/profile/ShowDrawing/ImageSide';
-import Info from '@src/modals/profile/ShowDrawing/Info';
+import ImageSide from '@src/modals/profile/drawing/ImageSide';
+import Info from '@src/modals/profile/drawing/Info';
 import Comment from '@src/components/comment';
 import CommentForm from '@src/components/CommentForm';
-import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
-import { closeModal } from '@src/store/slices/modal.slice';
+import { useAppSelector } from '@src/store/app/hook';
 import { selectDrawingDrawings, selectDrawingIndex } from '@src/store/slices/drawing.slice';
 
-function ShowDrawingModal() {
-  const dispatch = useAppDispatch();
+interface IProp {
+  isOpen: boolean;
+  closeModal: () => void;
+}
+
+function DrawingModal({ isOpen, closeModal }: IProp) {
   const drawings = useAppSelector(selectDrawingDrawings);
   const index = useAppSelector(selectDrawingIndex);
 
-  return (
+  if (!isOpen) return null;
+  return createPortal(
     <Container>
+      <Background onClick={closeModal} />
       <ImageSide />
       <InfoSide>
-        <IconBox onClick={(e) => dispatch(closeModal())}>
+        <IconBox onClick={closeModal}>
           <CloseIcon />
         </IconBox>
 
@@ -26,7 +32,8 @@ function ShowDrawingModal() {
         <CommentForm entityId={drawings[index!]?.id!} type="drawing" />
         <Comment comments={drawings[index!]?.drawingComments!} type="drawing" />
       </InfoSide>
-    </Container>
+    </Container>,
+    document.getElementById('modalPortal') as HTMLElement
   );
 }
 const Container = styled.div`
@@ -44,6 +51,14 @@ const Container = styled.div`
     align-items: center;
   }
 `;
+const Background = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+`;
 const InfoSide = styled.div`
   width: 50rem;
   height: 100vh;
@@ -53,6 +68,7 @@ const InfoSide = styled.div`
   flex-direction: column;
   gap: 1rem;
   padding: 0 1rem;
+  z-index: 1035;
   @media ${({ theme }) => theme.device.tablet} {
     width: 100%;
   }
@@ -71,4 +87,4 @@ const CloseIcon = styled(AiOutlineClose)`
   cursor: pointer;
 `;
 
-export default ShowDrawingModal;
+export default DrawingModal;

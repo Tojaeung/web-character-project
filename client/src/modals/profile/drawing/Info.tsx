@@ -85,6 +85,7 @@ const Container = styled.div`
   flex-direction: column;
   gap: 1rem;
   margin-top: 1rem;
+  z-index: 5232;
 `;
 const Header = styled.div`
   display: flex;
@@ -101,11 +102,6 @@ const UserBox = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-`;
-
-const MoreIcon = styled(AiOutlineMore)`
-  font-size: 2rem;
-  cursor: pointer;
 `;
 
 const Content = styled.div`

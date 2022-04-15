@@ -11,7 +11,6 @@ import FindPw from '@src/modals/auth/FindPw';
 import EditEmailModal from '@src/modals/settings/EditEmail';
 import EditNicknameModal from '@src/modals/settings/EditNickname';
 import EditPwModal from '@src/modals/settings/EditPw';
-import ShowDrawingModal from '@src/modals/profile/ShowDrawing';
 
 function Modal() {
   const dispatch = useAppDispatch();
@@ -22,10 +21,7 @@ function Modal() {
   return createPortal(
     <Container>
       <Background onClick={(e) => dispatch(closeModal())} />
-      {!isOpen && !mode && null}
-      {isOpen && mode === 'showDrawingModal' ? (
-        <ShowDrawingModal />
-      ) : (
+      {!isOpen && !mode ? null : (
         <ModalBox>
           <CloseIcon onClick={(e) => dispatch(closeModal())} />
           {isOpen && mode === 'login' && <LoginModal />}

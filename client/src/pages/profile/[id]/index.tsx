@@ -5,7 +5,6 @@ import { selectProfileOk } from '@src/store/slices/profile.slice';
 import NotFound from '@src/components/NotFound';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
-import Button from '@src/components/Button';
 import { useAppSelector } from '@src/store/app/hook';
 import { selectProfileProfile } from '@src/store/slices/profile.slice';
 
@@ -87,21 +86,7 @@ const UserInfoBox = styled.div`
   gap: 0.7rem;
   margin-top: 5.5rem;
 `;
-const Desc = styled.span`
-  font-size: 1.5rem;
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-const ButtonBox = styled.div`
-  display: flex;
-  gap: 1rem;
-`;
-const AddDrawingButton = styled(Button)``;
 
-const DrawingBox = styled.section`
-  /* margin-top: 16.5rem; */
-`;
+const DrawingBox = styled.section``;
 
 export default Profile;

@@ -47,3 +47,19 @@ export const useDescModal = () => {
 
   return { showDescModal, openDescModal, closeDescModal };
 };
+
+export const useDrawingModal = () => {
+  const [showDrawingModal, setShowDrawingModal] = useState(false);
+
+  const openDrawingModal = () => {
+    setShowDrawingModal(true);
+    document.body.style.overflow = 'hidden'; // 모달 뒤에 화면 고정
+  };
+
+  const closeDrawingModal = () => {
+    setShowDrawingModal(false);
+    document.body.style.overflow = 'unset'; // 모달 뒤에 화면 고정 해제
+  };
+
+  return { showDrawingModal, openDrawingModal, closeDrawingModal };
+};
