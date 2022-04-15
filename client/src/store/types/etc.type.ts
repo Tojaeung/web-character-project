@@ -33,3 +33,19 @@ export type getUserInfoErrorType = {
   ok: boolean;
   message: string;
 };
+
+export type calcExpReturnType = {
+  ok: boolean;
+  message: string;
+  calcedValue: number;
+};
+
+export type calcExpParamType = {
+  userId?: number;
+  value: number;
+};
+
+export type calcExpErrorType = {
+  ok: boolean;
+  message: string;
+};

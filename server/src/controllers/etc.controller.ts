@@ -100,6 +100,33 @@ const reportController = {
       return res.status(500).json({ ok: false, message: '유저정보 가져오기 에러' });
     }
   },
+  calcExp: async (req: Request, res: Response) => {
+    const userRepo = getCustomRepository(UserRepository);
+    try {
+      const { userId, value } = req.body;
+      const id = req.session.user?.id;
+
+      if (!userId) {
+        const result = await userRepo.calcExp(id as number, value);
+        if (result.affected === 0) {
+          logger.info('영감력 계산 실패하였습니다.');
+          return res.status(400).json({ ok: false, message: '영감력 계산 실패하였습니다.' });
+        }
+      } else {
+        const result = await userRepo.calcExp(Number(userId), value);
+        if (result.affected === 0) {
+          logger.info('영감력 계산 실패하였습니다.');
+          return res.status(400).json({ ok: false, message: '영감력 계산 실패하였습니다.' });
+        }
+      }
+
+      logger.info('영감력 계산 성공하였습니다.');
+      return res.status(200).json({ ok: true, message: '영감력 계산 성공하였습니다.', calcedValue: value });
+    } catch (err: any) {
+      logger.error('영감력 계산 에러', err);
+      return res.status(500).json({ ok: false, message: '영감력 계산 에러' });
+    }
+  },
 };
 
 export default reportController;

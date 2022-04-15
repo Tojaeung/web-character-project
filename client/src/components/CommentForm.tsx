@@ -5,6 +5,7 @@ import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { addDrawingComment } from '@src/store/requests/drawing.request';
 import { addPostComment } from '@src/store/requests/post.request';
 import Button from '@src/components/Button';
+import { calcExp } from '@src/store/requests/etc.request';
 
 interface IProp {
   type: 'drawing' | 'board';
@@ -18,7 +19,7 @@ function CommentForm({ id, type }: IProp) {
 
   const [content, setContent] = useState('');
 
-  const onAddComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (content.length > 100) {
       alert('댓글 글자 수를 초과하였습니다.');
       return;
@@ -28,11 +29,11 @@ function CommentForm({ id, type }: IProp) {
     }
     if (type === 'drawing') {
       try {
-        await dispatch(addDrawingComment({ userId: user?.id!, drawingId: id, content })).unwrap();
+        await dispatch(addDrawingComment({ userId: user?.id!, drawingId: id, content }));
+        await dispatch(calcExp({ value: 1 }));
         setContent('');
       } catch (err: any) {
         alert(err.message);
-        setContent('');
       }
     } else if (type === 'board') {
       try {
@@ -57,7 +58,7 @@ function CommentForm({ id, type }: IProp) {
         onChange={(e) => setContent(e.target.value)}
       />
 
-      <AddCommentButton color="green" size="small" onClick={onAddComment}>
+      <AddCommentButton color="green" size="small" onClick={handleAddComment}>
         등록
       </AddCommentButton>
     </Container>

@@ -10,6 +10,7 @@ import { useDefaultConfig } from '@src/hook/useReactQuillConfig';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { addDrawing } from '@src/store/requests/drawing.request';
+import { calcExp } from '@src/store/requests/etc.request';
 
 function DrawingForm() {
   const dispatch = useAppDispatch();
@@ -41,6 +42,7 @@ function DrawingForm() {
     try {
       const res = await dispatch(addDrawing(formData)).unwrap();
       alert(res.message);
+      await dispatch(calcExp({ value: 1 }));
       window.location.href = `/profile/${user?.id}`;
     } catch (err: any) {
       alert(err.message);

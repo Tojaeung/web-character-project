@@ -10,6 +10,7 @@ import {
   editDefaultCover,
   editDesc,
 } from '@src/store/requests/settings.request';
+import { calcExp } from '@src/store/requests/etc.request';
 
 interface AuthType {
   ok: boolean;
@@ -145,6 +146,18 @@ export const authSlice = createSlice({
       })
 
       .addCase(editDesc.rejected, (state, { payload }) => {
+        state.ok = payload?.ok!;
+        state.message = payload?.message!;
+        state.user = null;
+      });
+    builder
+      .addCase(calcExp.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.user!.exp += payload.calcedValue;
+      })
+
+      .addCase(calcExp.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
         state.user = null;

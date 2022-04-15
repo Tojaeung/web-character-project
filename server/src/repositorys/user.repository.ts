@@ -67,10 +67,10 @@ export class UserRepository extends AbstractRepository<User> {
   }
 
   // 댓글, 게시글 작성시 영감력(user테이블의 exp칼럼) 상승
-  addExp(id: number, addedExp: number) {
+  calcExp(id: number, calcedValue: number) {
     return this.createQueryBuilder('user')
       .update(User)
-      .set({ exp: () => `exp + ${addedExp}` })
+      .set({ exp: () => `exp + ${calcedValue}` })
       .where('id =:id', { id })
       .execute();
   }

@@ -11,6 +11,7 @@ import { boardCategory } from '@src/utils/boardCategory.util';
 import LengthCountInput from '@src/components/LengthCountInput';
 import { useAppDispatch } from '@src/store/app/hook';
 import { addPost, imageRemove } from '@src/store/requests/post.request';
+import { calcExp } from '@src/store/requests/etc.request';
 
 function PostForm() {
   const dispatch = useAppDispatch();
@@ -23,11 +24,12 @@ function PostForm() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
-  const onAddPost = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddPost = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       const res = await dispatch(addPost({ title, content, board: board!, imageKeys })).unwrap();
       const { message, post } = res;
       alert(message);
+      await dispatch(calcExp({ value: 1 }));
       navigate(`board/${post.board}/post/${post.id}`);
     } catch (err: any) {
       alert(err.message);
@@ -38,8 +40,7 @@ function PostForm() {
     setTitle('');
     setContent('');
 
-    if ((imageKeys as string[]).length === 0) {
-    } else {
+    if ((imageKeys as string[]).length !== 0) {
       try {
         await dispatch(imageRemove({ imageKeys })).unwrap();
       } catch (err: any) {
@@ -70,7 +71,7 @@ function PostForm() {
         placeholder="내용을 입력하세요....(최대 3000글자)"
       />
       <ButtonBox>
-        <RegisterButton color="green" size="medium" onClick={onAddPost}>
+        <RegisterButton color="green" size="medium" onClick={handleAddPost}>
           등록
         </RegisterButton>
         <BackToListButton color="green" size="medium" inverse={true} onClick={handleBackBoard}>

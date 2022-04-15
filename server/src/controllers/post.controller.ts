@@ -93,8 +93,6 @@ const postController = {
     try {
       const { title, content, board, imageKeys } = req.body;
       const { id } = req.session.user!;
-      console.log(title);
-      console.log(content);
 
       if (title.length > 50) {
         logger.info('게시글 제목을 입력글자가 초과되어 데이터에 추가 할 수 없습니다.');
