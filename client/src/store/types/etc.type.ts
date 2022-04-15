@@ -1,4 +1,4 @@
-import { DrawingType, PostType, UserType } from '@src/types';
+import { UserType } from '@src/types';
 
 export type sendReportReturnType = {
   ok: boolean;
@@ -9,7 +9,7 @@ export type sendReportParamType = {
   reportType: string;
   report: string;
   url: string;
-  proof: DrawingType | PostType;
+  suspectId: number;
 };
 export type sendReportErrorType = {
   ok: boolean;

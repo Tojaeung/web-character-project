@@ -44,7 +44,12 @@ function Info() {
             <CreatedTime createdTime={drawings[index!]?.created_at!} size="small" />
           </FlexBox>
         </UserBox>
-        <MoreButton type="drawing" entity={drawings[index!]} handleRemove={handleDrawingRemove} />
+        <MoreButton
+          type="drawing"
+          entityId={drawings[index!].id}
+          userId={drawings[index!].user?.id!}
+          handleRemove={handleDrawingRemove}
+        />
       </Header>
 
       <Content dangerouslySetInnerHTML={{ __html: drawings[index!]?.content as string }} />

@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import useDropDown from '@src/hook/useDropDown';
 import ReportModal from '@src/modals/Report';
 import useModal from '@src/hook/useModal';
-import { DrawingType, PostType } from '@src/types';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
@@ -14,11 +13,12 @@ import { selectPostPost } from '@src/store/slices/post.slice';
 
 interface IProps {
   type: 'drawing' | 'board';
-  entity: DrawingType | PostType;
+  entityId: number;
+  userId: number;
   handleRemove: (e: any) => void;
 }
 
-function MoreButton({ type, entity, handleRemove }: IProps) {
+function MoreButton({ type, entityId, userId, handleRemove }: IProps) {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
@@ -35,10 +35,10 @@ function MoreButton({ type, entity, handleRemove }: IProps) {
   const targetRef = useRef<HTMLUListElement>(null);
   useDropDown({ openDropDown, setOpenDropDown, targetRef });
 
-  // 수정
+  // 수정 (게시글만 수정가능, 그림은 수정 불가)
   const goEdit = async (e: React.MouseEvent<HTMLLIElement>) => {
     await dispatch(closeModal());
-    navigate(`/edit/postForm/${entity?.id}`);
+    navigate(`/edit/postForm/${entityId}`);
   };
   return (
     <>
@@ -55,7 +55,7 @@ function MoreButton({ type, entity, handleRemove }: IProps) {
           </Dropdown>
         )}
       </Container>
-      {isOpen && <ReportModal isOpen={isOpen} closeModalHook={closeModalHook} proof={entity} />}
+      {isOpen && <ReportModal isOpen={isOpen} closeModalHook={closeModalHook} suspectId={userId} />}
     </>
   );
 }

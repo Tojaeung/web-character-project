@@ -6,15 +6,14 @@ import { AiOutlineClose } from 'react-icons/ai';
 import Button from '@src/components/Button';
 import { useAppDispatch } from '@src/store/app/hook';
 import { sendReport } from '@src/store/requests/etc.request';
-import { DrawingType, PostType } from '@src/types';
 
 interface IProps {
   isOpen: boolean;
   closeModalHook: () => void;
-  proof: DrawingType | PostType;
+  suspectId: number;
 }
 
-function Report({ isOpen, closeModalHook, proof }: IProps) {
+function Report({ isOpen, closeModalHook, suspectId }: IProps) {
   const location = useLocation();
 
   const dispatch = useAppDispatch();
@@ -29,22 +28,14 @@ function Report({ isOpen, closeModalHook, proof }: IProps) {
   };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (reportType === '') {
-      return alert('신고 유형을 선택해주세요.');
-    } else if (report.length === 0) {
-      return alert('내용을 입력해주세요.');
-    } else if (report.length > 100) {
-      return alert('글자 수를 초과하였습니다.');
-    } else {
-      try {
-        const res = await dispatch(sendReport({ reportType, report, url: location.pathname, proof })).unwrap();
-        alert(res.message);
-        setReportType('');
-        setReport('');
-        closeModalHook();
-      } catch (err: any) {
-        alert(err.message);
-      }
+    try {
+      const res = await dispatch(sendReport({ reportType, report, url: location.pathname, suspectId })).unwrap();
+      alert(res.message);
+      setReportType('');
+      setReport('');
+      closeModalHook();
+    } catch (err: any) {
+      alert(err.message);
     }
   };
 

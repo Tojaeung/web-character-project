@@ -6,16 +6,25 @@ import { PostCommentRepository, PostRepository } from '@src/repositorys/board.re
 import { DrawingCommentRepository, DrawingRepository } from '@src/repositorys/drawing.repository';
 import { UserRepository } from '@src/repositorys/user.repository';
 
-const reportController = {
+const etcController = {
   sendReport: async (req: Request, res: Response) => {
     try {
-      const { reportType, report, url, proof } = req.body;
-      const { nickname } = req.session.user!;
+      const { reportType, report, url, suspectId } = req.body;
+      const id = req.session.user?.id;
+
+      if (reportType === '') {
+        logger.info('신고유형을 선택하세요.');
+        return res.status(400).json({ ok: false, message: '신고유형을 선택하세요.' });
+      } else if (report.length === 0) {
+        logger.info('신고내용을 입력해주세요.');
+        return res.status(400).json({ ok: false, message: '신고내용을 입력해주세요.' });
+      } else if (report.length > 100) {
+        logger.info('신고내용 글자수를 초과하였습니다.');
+        return res.status(400).json({ ok: false, message: '신고내용 글자수를 초과하였습니다.' });
+      }
 
       const webHookUrl = process.env.SLACK_WEBHOOK_URL as string;
       const webHook = new IncomingWebhook(webHookUrl);
-
-      const stringProof = JSON.stringify(proof, null, 2);
 
       const result = await webHook.send({
         blocks: [
@@ -40,7 +49,7 @@ const reportController = {
             type: 'section',
             text: {
               type: 'mrkdwn',
-              text: `신고자: ${nickname}\n신고서: ${report}`,
+              text: `신고자ID: ${id}\n신고서: ${report}`,
             },
           },
           {
@@ -51,7 +60,7 @@ const reportController = {
             text: {
               type: 'mrkdwn',
               text: `
-                증거: ${stringProof}
+                용의자ID: ${suspectId}
               `,
             },
           },
@@ -66,6 +75,8 @@ const reportController = {
       return res.status(200).json({ ok: true, message: '신고 성공하였습니다.' });
     } catch (err: any) {
       logger.error('신고하기 에러', err);
+      console.log(err);
+
       return res.status(500).json({ ok: false, message: '신고하기 에러' });
     }
   },
@@ -129,4 +140,4 @@ const reportController = {
   },
 };
 
-export default reportController;
+export default etcController;
