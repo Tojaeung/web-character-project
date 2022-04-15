@@ -173,36 +173,6 @@ export type addPostDisLikeErrorType = {
   message: string;
 };
 
-export type removePostLikeReturnType = {
-  ok: boolean;
-  message: string;
-  removedLikeUserId: number;
-};
-
-export type removePostLikeParamType = {
-  userId: number;
-};
-
-export type removePostLikeErrorType = {
-  ok: boolean;
-  message: string;
-};
-
-export type removePostDisLikeReturnType = {
-  ok: boolean;
-  message: string;
-  removedDisLikeUserId: number;
-};
-
-export type removePostDisLikeParamType = {
-  userId: number;
-};
-
-export type removePostDisLikeErrorType = {
-  ok: boolean;
-  message: string;
-};
-
 export type editPostCommentReturnType = {
   ok: boolean;
   message: string;

@@ -21,7 +21,5 @@ postRouter.patch('/post/editComment', auth, postController.editComment);
 
 postRouter.post('/post/addLike', auth, postController.addLike);
 postRouter.post('/post/addDisLike', auth, postController.addDisLike);
-postRouter.delete('/post/removeLike/:userId', auth, postController.removeLike);
-postRouter.delete('/post/removeDisLike/:userId', auth, postController.removeDisLike);
 
 export default postRouter;

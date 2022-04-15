@@ -183,44 +183,6 @@ const drawingController = {
       return res.status(500).json({ ok: false, message: '그림 싫어요 추가하기 에러' });
     }
   },
-  removeLike: async (req: Request, res: Response) => {
-    const drawingLikeRepo = getCustomRepository(LikeRepository);
-    try {
-      const { userId } = req.params;
-
-      const removedLike = await drawingLikeRepo.removeDrawingLike(Number(userId));
-
-      if (removedLike.affected === 0) {
-        logger.info('그림 좋아요 제거 실패하였습니다.');
-        return res.status(400).json({ ok: false, message: '그림 좋아요 제거 실패하였습니다.' });
-      }
-
-      logger.info('그림 좋아요 제거하기 성공');
-      return res.status(200).json({ ok: true, message: '그림 좋아요 제거하기 성공', removedLikeId: userId });
-    } catch (err: any) {
-      logger.info('그림 좋아요 제거하기 에러', err);
-      return res.status(500).json({ ok: false, message: '그림 좋아요 제거하기 에러' });
-    }
-  },
-  removeDisLike: async (req: Request, res: Response) => {
-    const drawingDisLikeRepo = getCustomRepository(DisLikeRepository);
-    try {
-      const { userId } = req.params;
-
-      const removedDisLike = await drawingDisLikeRepo.removeDrawingDisLike(Number(userId));
-
-      if (removedDisLike.affected === 0) {
-        logger.info('그림 싫어요 제거 실패하였습니다.');
-        return res.status(400).json({ ok: false, message: '그림 싫어요 제거 실패하였습니다.' });
-      }
-
-      logger.info('그림 싫어요 제거하기 성공');
-      return res.status(200).json({ ok: true, message: '그림 싫어요 제거하기 성공', removedDisLikeId: userId });
-    } catch (err: any) {
-      logger.info('그림 싫어요 제거하기 에러', err);
-      return res.status(500).json({ ok: false, message: '그림 싫어요 제거하기 에러' });
-    }
-  },
 
   removeComment: async (req: Request, res: Response) => {
     const drawingCommentRepo = getCustomRepository(DrawingCommentRepository);

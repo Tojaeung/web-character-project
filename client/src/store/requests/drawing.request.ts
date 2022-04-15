@@ -13,12 +13,6 @@ import {
   addLikeErrorType,
   addLikeParamType,
   addLikeReturnType,
-  removeDisLikeErrorType,
-  removeDisLikeParamType,
-  removeDisLikeReturnType,
-  removeLikeErrorType,
-  removeLikeParamType,
-  removeLikeReturnType,
   addViewReturnType,
   addViewParamType,
   addViewErrorType,
@@ -134,36 +128,6 @@ export const addDrawingDisLike = createAsyncThunk<
 >('ADD_DRAWING_DISLIKE', async (data, thunkApi) => {
   try {
     const res = await axios.post(`/api/drawing/addDisLike`, data, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
-  }
-});
-
-export const removeDrawingLike = createAsyncThunk<
-  removeLikeReturnType,
-  removeLikeParamType,
-  { state: RootState; rejectValue: removeLikeErrorType }
->('REMOVE_DRAWING_LIKE', async (data, thunkApi) => {
-  try {
-    const res = await axios.delete(`/api/drawing/removeLike/${data.userId}`, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
-  }
-});
-
-export const removeDrawingDisLike = createAsyncThunk<
-  removeDisLikeReturnType,
-  removeDisLikeParamType,
-  { state: RootState; rejectValue: removeDisLikeErrorType }
->('REMOVE_DRAWING_DISLIKE', async (data, thunkApi) => {
-  try {
-    const res = await axios.delete(`/api/drawing/removeDisLike/${data.userId}`, {
       withCredentials: true,
     });
     return res.data;

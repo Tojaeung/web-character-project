@@ -13,8 +13,6 @@ drawingRouter.post('/drawing/addView', drawingController.addView);
 drawingRouter.post('/drawing/addComment', auth, drawingController.addComment);
 drawingRouter.post('/drawing/addLike', auth, drawingController.addLike);
 drawingRouter.post('/drawing/addDisLike', auth, drawingController.addDisLike);
-drawingRouter.delete('/drawing/removeLike/:userId', auth, drawingController.removeLike);
-drawingRouter.delete('/drawing/removeDisLike/:userId', auth, drawingController.removeDisLike);
 drawingRouter.delete('/drawing/removeComment/:drawingCommentId', auth, drawingController.removeComment);
 drawingRouter.patch('/drawing/editComment', auth, drawingController.editComment);
 

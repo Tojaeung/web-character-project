@@ -9,8 +9,6 @@ import {
   addDrawingComment,
   addDrawingLike,
   addDrawingDisLike,
-  removeDrawingDisLike,
-  removeDrawingLike,
   removeDrawingComment,
   editDrawingComment,
 } from '../requests/drawing.request';
@@ -117,30 +115,6 @@ export const drawingSlice = createSlice({
       state.drawings[index!]!.dislikes?.push(payload.addedDislike);
     });
     builder.addCase(addDrawingDisLike.rejected, (state, { payload }) => {
-      state.ok = payload!.ok;
-      state.message = payload!.message;
-    });
-    builder.addCase(removeDrawingLike.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      const index = state.index;
-      const filteredLikes = state.drawings[index!]?.likes?.filter((like) => like.id !== payload.removedLikeId);
-      state.drawings[index!]!.likes = filteredLikes!;
-    });
-    builder.addCase(removeDrawingLike.rejected, (state, { payload }) => {
-      state.ok = payload!.ok;
-      state.message = payload!.message;
-    });
-    builder.addCase(removeDrawingDisLike.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      const index = state.index;
-      const filteredDisLikes = state.drawings[index!]?.dislikes?.filter(
-        (dislike) => dislike.id !== payload.removedDisLikeId
-      );
-      state.drawings[index!]!.dislikes = filteredDisLikes!;
-    });
-    builder.addCase(removeDrawingDisLike.rejected, (state, { payload }) => {
       state.ok = payload!.ok;
       state.message = payload!.message;
     });

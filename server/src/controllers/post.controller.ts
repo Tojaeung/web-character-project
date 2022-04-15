@@ -297,53 +297,6 @@ const postController = {
       return res.status(500).json({ ok: false, message: '게시판 싫어요 추가 에러' });
     }
   },
-
-  removeLike: async (req: Request, res: Response) => {
-    const postLikeRepo = getCustomRepository(LikeRepository);
-    try {
-      const { userId } = req.params;
-
-      const removedLike = await postLikeRepo.removePostLike(Number(userId));
-
-      if (removedLike.affected === 0) {
-        logger.info('게시글 좋아요 제거 실패하였습니다.');
-        return res.status(400).json({ ok: false, message: '게시글 댓글 좋아요 제거 실패하였습니다.' });
-      }
-
-      logger.info('게시글 좋아요 추가 성공하였습니다.');
-      return res.status(200).json({
-        ok: true,
-        message: '게시글 좋아요 추가 성공하였습니다.',
-        removedLikeUserId: Number(userId),
-      });
-    } catch (err: any) {
-      logger.info('게시글 좋아요 추가 에러', err);
-      return res.status(500).json({ ok: false, message: '게시글 좋아요 추가 에러' });
-    }
-  },
-  removeDisLike: async (req: Request, res: Response) => {
-    const postDisLikeRepo = getCustomRepository(DisLikeRepository);
-    try {
-      const { userId } = req.params;
-
-      const removedLike = await postDisLikeRepo.removePostDisLike(Number(userId));
-
-      if (removedLike.affected === 0) {
-        logger.info('게시글 좋아요 제거 실패하였습니다.');
-        return res.status(400).json({ ok: false, message: '게시글 댓글 좋아요 제거 실패하였습니다.' });
-      }
-
-      logger.info('게시글 싫어요 추가 성공하였습니다.');
-      return res.status(200).json({
-        ok: true,
-        message: '게시글 싫어요 추가 성공하였습니다.',
-        removedDisLikeUserId: Number(userId),
-      });
-    } catch (err: any) {
-      logger.info('게시글 싫어요 추가  에러', err);
-      return res.status(500).json({ ok: false, message: '게시판 싫어요 추가 에러' });
-    }
-  },
 };
 
 export default postController;

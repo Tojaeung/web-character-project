@@ -97,32 +97,6 @@ export type addDisLikeErrorType = {
   message: string;
 };
 
-export type removeLikeReturnType = {
-  ok: boolean;
-  message: string;
-  removedLikeId: number;
-};
-export type removeLikeParamType = {
-  userId: number;
-};
-export type removeLikeErrorType = {
-  ok: boolean;
-  message: string;
-};
-
-export type removeDisLikeReturnType = {
-  ok: boolean;
-  message: string;
-  removedDisLikeId: number;
-};
-export type removeDisLikeParamType = {
-  userId: number;
-};
-export type removeDisLikeErrorType = {
-  ok: boolean;
-  message: string;
-};
-
 export type removeCommentReturnType = {
   ok: boolean;
   message: string;

@@ -9,8 +9,6 @@ import {
   editPostComment,
   addPostLike,
   addPostDisLike,
-  removePostLike,
-  removePostDisLike,
   editPost,
   removePost,
 } from '@src/store/requests/post.request';
@@ -92,30 +90,6 @@ export const postSlice = createSlice({
         state.post?.dislikes.push(payload.addedDisLike!);
       })
       .addCase(addPostDisLike.rejected, (state, { payload }) => {
-        state.ok = payload!.ok;
-        state.message = payload!.message;
-      });
-    builder
-      .addCase(removePostLike.fulfilled, (state, { payload }) => {
-        state.ok = payload.ok;
-        state.message = payload.message;
-        const filteredLike = state.post?.likes.filter((like) => like.user_id !== payload.removedLikeUserId);
-        state.post!.likes = filteredLike!;
-      })
-      .addCase(removePostLike.rejected, (state, { payload }) => {
-        state.ok = payload!.ok;
-        state.message = payload!.message;
-      });
-    builder
-      .addCase(removePostDisLike.fulfilled, (state, { payload }) => {
-        state.ok = payload.ok;
-        state.message = payload.message;
-        const filteredDisLike = state.post?.dislikes.filter(
-          (dislike) => dislike.user_id !== payload.removedDisLikeUserId
-        );
-        state.post!.dislikes = filteredDisLike!;
-      })
-      .addCase(removePostDisLike.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
         state.message = payload!.message;
       });
