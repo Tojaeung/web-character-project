@@ -23,7 +23,7 @@ function ShowDrawingModal() {
 
         <Info />
 
-        <CommentForm id={drawings[index!]?.id!} type="drawing" />
+        <CommentForm entityId={drawings[index!]?.id!} type="drawing" />
         <Comment comments={drawings[index!]?.drawingComments!} type="drawing" />
       </InfoSide>
     </Container>

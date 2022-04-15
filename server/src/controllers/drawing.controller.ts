@@ -130,10 +130,17 @@ const drawingController = {
   },
 
   addComment: async (req: Request, res: Response) => {
-    const userRepo = getCustomRepository(UserRepository);
     const drawingCommentRepo = getCustomRepository(DrawingCommentRepository);
     try {
       const { userId, drawingId, content } = req.body;
+
+      if (content.length > 100) {
+        logger.info('글자 수를 초과하였습니다.');
+        return res.status(400).json({ ok: false, message: '글자 수를 초과하였습니다.' });
+      } else if (content.length === 0) {
+        logger.info('댓글을 입력해주세요.');
+        return res.status(400).json({ ok: false, message: '댓글을 입력해주세요.' });
+      }
 
       const drawingComment = new DrawingComment();
       drawingComment.user_id = userId;

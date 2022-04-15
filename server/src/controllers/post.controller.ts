@@ -188,10 +188,16 @@ const postController = {
 
   addComment: async (req: Request, res: Response) => {
     const postCommentRepo = getCustomRepository(PostCommentRepository);
-
     try {
       const { userId, postId, content } = req.body;
-      console.log(userId);
+
+      if (content.length > 100) {
+        logger.info('글자 수를 초과하였습니다.');
+        return res.status(400).json({ ok: false, message: '글자 수를 초과하였습니다.' });
+      } else if (content.length === 0) {
+        logger.info('댓글을 입력해주세요.');
+        return res.status(400).json({ ok: false, message: '댓글을 입력해주세요.' });
+      }
 
       const postComment = new PostComment();
       postComment.user_id = userId;

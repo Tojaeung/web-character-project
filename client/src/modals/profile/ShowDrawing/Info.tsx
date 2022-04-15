@@ -56,14 +56,16 @@ function Info() {
 
         <LikeButton
           type="drawing"
-          id={drawings[index!]?.id!}
+          entityId={drawings[index!]?.id!}
+          userId={drawings[index!]?.user?.id!}
           likes={drawings[index!]?.likes!}
           dislikes={drawings[index!]?.dislikes!}
         />
 
         <DisLikeButton
           type="drawing"
-          id={drawings[index!]?.id!}
+          entityId={drawings[index!]?.id!}
+          userId={drawings[index!]?.user?.id!}
           likes={drawings[index!]?.likes!}
           dislikes={drawings[index!]?.dislikes!}
         />

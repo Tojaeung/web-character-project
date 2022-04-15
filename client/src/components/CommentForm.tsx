@@ -9,10 +9,10 @@ import { calcExp } from '@src/store/requests/etc.request';
 
 interface IProp {
   type: 'drawing' | 'board';
-  id: number;
+  entityId: number;
 }
 
-function CommentForm({ id, type }: IProp) {
+function CommentForm({ entityId, type }: IProp) {
   const dispatch = useAppDispatch();
 
   const user = useAppSelector(selectAuthUser);
@@ -20,31 +20,23 @@ function CommentForm({ id, type }: IProp) {
   const [content, setContent] = useState('');
 
   const handleAddComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (content.length > 100) {
-      alert('댓글 글자 수를 초과하였습니다.');
-      return;
-    } else if (content.length === 0) {
-      alert('댓글을 입력해주세요.');
-      return;
-    }
     if (type === 'drawing') {
       try {
-        await dispatch(addDrawingComment({ userId: user?.id!, drawingId: id, content }));
+        await dispatch(addDrawingComment({ userId: user?.id!, drawingId: entityId, content })).unwrap();
         await dispatch(calcExp({ value: 1 }));
         setContent('');
       } catch (err: any) {
         alert(err.message);
       }
-    } else if (type === 'board') {
+    } else {
       try {
-        await dispatch(addPostComment({ userId: user?.id!, postId: id, content })).unwrap();
+        await dispatch(addPostComment({ userId: user?.id!, postId: entityId, content })).unwrap();
+        await dispatch(calcExp({ value: 1 }));
         setContent('');
       } catch (err: any) {
         alert(err.message);
-        setContent('');
       }
     }
-    return;
   };
 
   return (

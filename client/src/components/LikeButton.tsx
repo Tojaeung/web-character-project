@@ -1,20 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
+import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { DrawingLikeType, DrawingDisLikeType, PostLikeType, PostDisLikeType } from '@src/types';
 import { addDrawingLike } from '@src/store/requests/drawing.request';
 import { addPostLike } from '@src/store/requests/post.request';
-import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
+import { calcExp } from '@src/store/requests/etc.request';
 
 interface IProps {
   type: 'drawing' | 'board';
-  id: number;
+  entityId: number;
+  userId: number;
   likes: DrawingLikeType[] | PostLikeType[];
   dislikes: DrawingDisLikeType[] | PostDisLikeType[];
 }
 
-function LikeButton({ type, id, likes, dislikes }: IProps) {
+function LikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
   const dispatch = useAppDispatch();
 
   const user = useAppSelector(selectAuthUser);
@@ -26,13 +28,15 @@ function LikeButton({ type, id, likes, dislikes }: IProps) {
       if (existingLike || existingDisLike) {
         return alert('이미 선택하셨습니다.');
       } else {
-        await dispatch(addDrawingLike({ userId: user?.id!, drawingId: id }));
+        await dispatch(addDrawingLike({ userId: user?.id!, drawingId: entityId }));
+        await dispatch(calcExp({ userId, value: 3 }));
       }
     } else {
       if (existingLike || existingDisLike) {
         return alert('이미 선택하셨습니다.');
       } else {
-        await dispatch(addPostLike({ userId: user?.id!, postId: id }));
+        await dispatch(addPostLike({ userId: user?.id!, postId: entityId }));
+        await dispatch(calcExp({ userId, value: 3 }));
       }
     }
   };

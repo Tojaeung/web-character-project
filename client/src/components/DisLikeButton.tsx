@@ -1,20 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
+import { AiFillDislike, AiOutlineDislike } from 'react-icons/ai';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { DrawingLikeType, DrawingDisLikeType, PostLikeType, PostDisLikeType } from '@src/types';
 import { addDrawingDisLike } from '@src/store/requests/drawing.request';
 import { addPostDisLike } from '@src/store/requests/post.request';
-import { AiFillDislike, AiOutlineDislike } from 'react-icons/ai';
+import { calcExp } from '@src/store/requests/etc.request';
 
 interface IProps {
   type: 'drawing' | 'board';
-  id: number;
+  entityId: number;
+  userId: number;
   likes: DrawingLikeType[] | PostLikeType[];
   dislikes: DrawingDisLikeType[] | PostDisLikeType[];
 }
 
-function DisLikeButton({ type, id, likes, dislikes }: IProps) {
+function DisLikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
   const dispatch = useAppDispatch();
 
   const user = useAppSelector(selectAuthUser);
@@ -26,13 +28,15 @@ function DisLikeButton({ type, id, likes, dislikes }: IProps) {
       if (existingLike || existingDisLike) {
         return alert('이미 선택하셨습니다.');
       } else {
-        await dispatch(addDrawingDisLike({ userId: user?.id!, drawingId: id }));
+        await dispatch(addDrawingDisLike({ userId: user?.id!, drawingId: entityId }));
+        await dispatch(calcExp({ userId, value: -1 }));
       }
     } else {
       if (existingLike || existingDisLike) {
         return alert('이미 선택하셨습니다.');
       } else {
-        await dispatch(addPostDisLike({ userId: user?.id!, postId: id }));
+        await dispatch(addPostDisLike({ userId: user?.id!, postId: entityId }));
+        await dispatch(calcExp({ userId, value: -1 }));
       }
     }
   };
