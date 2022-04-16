@@ -36,22 +36,22 @@ export class User {
   desc: string;
 
   @Column({
-    default: 'https://character.s3.ap-northeast-2.amazonaws.com/avatar/default-avatar.png',
+    default: process.env.DEFAULT_AVATAR_URL as string,
   })
   avatar: string;
 
   @Column({
-    default: 'default-avatar.png',
+    default: process.env.DEFAULT_AVATAR_KEY as string,
   })
   avatarKey: string;
 
   @Column({
-    default: 'https://character.s3.ap-northeast-2.amazonaws.com/cover/default-cover.jpg',
+    default: process.env.DEFAULT_COVER_URL as string,
   })
   cover: string;
 
   @Column({
-    default: 'default-cover.jpg',
+    default: process.env.DEFAULT_COVER_KEY as string,
   })
   coverKey: string;
 

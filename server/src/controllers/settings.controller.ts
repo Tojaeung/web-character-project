@@ -105,7 +105,7 @@ const settingsController = {
       const user = await userRepo.findUserById(id as number);
 
       const currentAvatarKey = user?.avatarKey;
-      const defaultAvatarKey = 'default-avatar.png';
+      const defaultAvatarKey = process.env.DEFAULT_AVATAR_KEY as string;
 
       // s3 helper가 오류가 났을경우
       if (!newAvatar || !newAvatarKey) {
@@ -143,14 +143,14 @@ const settingsController = {
 
       const currentAvatarKey = user?.avatarKey;
       // 기본 프로필 사진 데이터입니다.
-      const defaultAvatar = 'https://character.s3.ap-northeast-2.amazonaws.com/avatar/default-avatar.png';
-      const defaultAvatarKey = 'default-avatar.png';
+      const defaultAvatarUrl = process.env.DEFAULT_AVATAR_URL as string;
+      const defaultAvatarKey = process.env.DEFAULT_AVATAR_KEY as string;
 
       // 현재 프로필 사진이 기본 이미지가 아닐때 이전 프로필 사진을 s3 객체삭제 합니다.
       if (currentAvatarKey !== defaultAvatarKey) s3Delete(req, res, currentAvatarKey as string);
 
       // 기본 프로필 이미지로 바꾸기 위해 user테이블을 업데이트 시켜준다.
-      const result = await userRepo.updateAvatar(id as number, defaultAvatar, defaultAvatarKey);
+      const result = await userRepo.updateAvatar(id as number, defaultAvatarUrl, defaultAvatarKey);
 
       if (result.affected === 0) {
         logger.info('프로필 기본이미지 변경 실패하였습니다.');
@@ -160,7 +160,7 @@ const settingsController = {
       logger.info('프로필 기본이미지 변경 성공하였습니다.');
       return res
         .status(200)
-        .json({ ok: true, message: '프로필 기본이미지 변경 성공하였습니다.', defaultAvatar, defaultAvatarKey });
+        .json({ ok: true, message: '프로필 기본이미지 변경 성공하였습니다.', defaultAvatarUrl, defaultAvatarKey });
     } catch (err: any) {
       logger.error('기본 프로필 사진 변경 에러', err);
       return res.status(500).json({ ok: false, message: '기본 프로필 이미지 변경 에러' });
@@ -178,7 +178,7 @@ const settingsController = {
       const user = await userRepo.findUserById(id as number);
 
       const currentCoverKey = user?.coverKey;
-      const defaultCoverKey = 'default-cover.jpg';
+      const defaultCoverKey = process.env.DEFAULT_COVER_KEY as string;
 
       // s3 helper가 오류가 났을경우
       if (!newCover || !newCoverKey) {
@@ -213,14 +213,14 @@ const settingsController = {
 
       const currentCoverKey = user?.coverKey;
       // 기본 프로필 사진 데이터입니다.
-      const defaultCover = 'https://character.s3.ap-northeast-2.amazonaws.com/cover/default-cover.jpg';
-      const defaultCoverKey = 'default-cover.jpg';
+      const defaultCoverUrl = process.env.DEFAULT_COVER_URL as string;
+      const defaultCoverKey = process.env.DEFAULT_COVER_KEY as string;
 
       // 현재 프로필 사진이 기본 이미지가 아닐때 이전 프로필 사진을 s3 객체삭제 합니다.
       if (currentCoverKey !== defaultCoverKey) s3Delete(req, res, currentCoverKey as string);
 
       // 기본 프로필 이미지로 바꾸기 위해 user테이블을 업데이트 시켜준다.
-      const result = await userRepo.updateCover(id as number, defaultCover, defaultCoverKey);
+      const result = await userRepo.updateCover(id as number, defaultCoverUrl, defaultCoverKey);
 
       if (result.affected === 0) {
         logger.info('기본 커버 이미지로 변경 실패하였습니다.');
@@ -230,7 +230,7 @@ const settingsController = {
       logger.info('기본 커버 이미지로 변경 성공하였습니다.');
       return res
         .status(200)
-        .json({ ok: true, message: '기본 커버 이미지로 변경 성공하였습니다.', defaultCover, defaultCoverKey });
+        .json({ ok: true, message: '기본 커버 이미지로 변경 성공하였습니다.', defaultCoverUrl, defaultCoverKey });
     } catch (err: any) {
       logger.error('기본 프로필 사진 변경 에러', err);
       return res.status(500).json({ ok: false, message: '기본 커버 이미지 변경 에러' });
