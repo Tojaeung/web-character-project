@@ -3,7 +3,7 @@ import { getCustomRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
 import logger from '@src/helpers/winston.helper';
 import { sendChangeEmail } from '@src/helpers/nodemailer.helper';
-import { s3 } from '@src/helpers/s3.helper';
+import { s3Delete } from '@src/utils/s3.utils';
 import { UserRepository } from '@src/repositorys/user.repository';
 import cluster from '@src/helpers/redis.helper';
 import { DrawingRepository } from '@src/repositorys/drawing.repository';
@@ -116,13 +116,6 @@ const settingsController = {
       // 현재 아바타가 기본 아바타가 아니면 s3에서 삭제한다.
       if (currentAvatarKey !== defaultAvatarKey) {
         // s3 최적화를 위해 현재 아바타가 기본 아바타가 아니라면 현재아바타를 삭제한다.
-        const bucketName = process.env.AWS_BUCKET_NAME as string;
-        s3.deleteObject({ Bucket: bucketName, Key: currentAvatarKey as string }, (err) => {
-          if (err) {
-            logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-            return res.status(400).json({ ok: false, message: 's3 최적화 실패하였습니다.' });
-          }
-        });
       }
 
       // user테이블에 avatar, avatarKey 정보를 업데이트 합니다.
@@ -153,17 +146,8 @@ const settingsController = {
       const defaultAvatar = 'https://character.s3.ap-northeast-2.amazonaws.com/avatar/default-avatar.png';
       const defaultAvatarKey = 'default-avatar.png';
 
-      // 이미 기본 이미지아닐떄 s3에서 삭제한다.
-      if (currentAvatarKey !== defaultAvatarKey) {
-        // 현재 프로필 사진이 기본 이미지가 아닐때 이전 프로필 사진을 s3 객체삭제 합니다.
-        const bucketName = process.env.AWS_BUCKET_NAME as string;
-        s3.deleteObject({ Bucket: bucketName, Key: currentAvatarKey as string }, (err) => {
-          if (err) {
-            logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-            return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
-          }
-        });
-      }
+      // 현재 프로필 사진이 기본 이미지가 아닐때 이전 프로필 사진을 s3 객체삭제 합니다.
+      if (currentAvatarKey !== defaultAvatarKey) s3Delete(req, res, currentAvatarKey as string);
 
       // 기본 프로필 이미지로 바꾸기 위해 user테이블을 업데이트 시켜준다.
       const result = await userRepo.updateAvatar(id as number, defaultAvatar, defaultAvatarKey);
@@ -202,17 +186,8 @@ const settingsController = {
         return res.status(400).json({ message: '변경할 커버 이미지를 찾지 못했습니다.' });
       }
 
-      // 현재 아바타가 기본 아바타아니라면 삭제하지 한다.
-      if (currentCoverKey !== defaultCoverKey) {
-        // s3 최적화를 위해 현재 아바타가 기본 아바타가 아니라면 현재아바타를 삭제한다.
-        const bucketName = process.env.AWS_BUCKET_NAME as string;
-        s3.deleteObject({ Bucket: bucketName, Key: currentCoverKey as string }, (err) => {
-          if (err) {
-            logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-            return res.status(400).json({ ok: false, message: 's3 최적화 실패하였습니다.' });
-          }
-        });
-      }
+      // s3 최적화를 위해 현재 아바타가 기본 아바타가 아니라면 현재아바타를 삭제한다.
+      if (currentCoverKey !== defaultCoverKey) s3Delete(req, res, currentCoverKey as string);
 
       // user테이블에 avatar, avatarKey 정보를 업데이트 합니다.
       const result = await userRepo.updateCover(id as number, newCover, newCoverKey);
@@ -241,17 +216,8 @@ const settingsController = {
       const defaultCover = 'https://character.s3.ap-northeast-2.amazonaws.com/cover/default-cover.jpg';
       const defaultCoverKey = 'default-cover.jpg';
 
-      // 이미 기본 이미지아닐때
-      if (currentCoverKey !== defaultCoverKey) {
-        // 현재 프로필 사진이 기본 이미지가 아닐때 이전 프로필 사진을 s3 객체삭제 합니다.
-        const bucketName = process.env.AWS_BUCKET_NAME as string;
-        s3.deleteObject({ Bucket: bucketName, Key: currentCoverKey as string }, (err) => {
-          if (err) {
-            logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-            return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
-          }
-        });
-      }
+      // 현재 프로필 사진이 기본 이미지가 아닐때 이전 프로필 사진을 s3 객체삭제 합니다.
+      if (currentCoverKey !== defaultCoverKey) s3Delete(req, res, currentCoverKey as string);
 
       // 기본 프로필 이미지로 바꾸기 위해 user테이블을 업데이트 시켜준다.
       const result = await userRepo.updateCover(id as number, defaultCover, defaultCoverKey);
@@ -290,48 +256,16 @@ const settingsController = {
       const defaultCoverKey = 'default-cover.jpg';
 
       // 기본이미지 제외, 탈퇴한 계정의 프로필 사진을 s3에서 객체삭제 합니다.
-      if (currentAvatarKey !== defaultAvatarKey) {
-        const bucketName = process.env.AWS_BUCKET_NAME as string;
-        s3.deleteObject({ Bucket: bucketName, Key: currentAvatarKey as string }, (err) => {
-          if (err) {
-            logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-            return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
-          }
-        });
-      }
+      if (currentAvatarKey !== defaultAvatarKey) s3Delete(req, res, currentAvatarKey as string);
 
       // 기본커버 제외, 탈퇴한 계정의 커버 사진을 s3에서 객체삭제 합니다.
-      if (currentCoverKey !== defaultCoverKey) {
-        const bucketName = process.env.AWS_BUCKET_NAME as string;
-        s3.deleteObject({ Bucket: bucketName, Key: currentCoverKey as string }, (err) => {
-          if (err) {
-            logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-            return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
-          }
-        });
-      }
+      if (currentCoverKey !== defaultCoverKey) s3Delete(req, res, currentCoverKey as string);
 
       // s3에 저장된 유저가 올린 모든 그림을 삭제합니다.
-      drawings.forEach(async (drawing) => {
-        const bucketName = process.env.AWS_BUCKET_NAME as string;
-        s3.deleteObject({ Bucket: bucketName, Key: drawing.key as string }, (err) => {
-          if (err) {
-            logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-            return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
-          }
-        });
-      });
+      drawings.forEach(async (drawing) => s3Delete(req, res, drawing.key as string));
 
       // s3에 저장된 유저가 올린 모든 게시물(post) 이미지를 삭제합니다.
-      imageKeys.forEach(async (imageKey) => {
-        const bucketName = process.env.AWS_BUCKET_NAME as string;
-        s3.deleteObject({ Bucket: bucketName, Key: imageKey.image_key as string }, (err) => {
-          if (err) {
-            logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-            return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
-          }
-        });
-      });
+      imageKeys.forEach(async (imageKey) => s3Delete(req, res, imageKey.image_key as string));
 
       // onDelete: cascade 때문에 관계된 모든 유저정보를 삭제합니다.
       const result = await userRepo.deleteUser(id as number);
@@ -342,8 +276,6 @@ const settingsController = {
       }
 
       // 레디스에 저장된 대화정보 등등 식제
-
-      // 세션도 제거 추가
       await cluster.del(`chats:${user?.chatId}`);
       await cluster.del(`messages:${user?.chatId}`);
       await cluster.del(`msgNotis:${user?.chatId}`);

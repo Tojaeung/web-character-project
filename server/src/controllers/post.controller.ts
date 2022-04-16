@@ -1,17 +1,11 @@
 import { Request, Response } from 'express';
 import { getCustomRepository, getRepository } from 'typeorm';
-import { s3 } from '@src/helpers/s3.helper';
 import { Post } from '@src/entities/board/post.entity';
 import { ImageKey } from '@src/entities/board/imageKey.entity';
 import { PostComment } from '@src/entities/board/postComment.entity';
+import { s3Delete } from '@src/utils/s3.utils';
 import logger from '@src/helpers/winston.helper';
-import {
-  DisLikeRepository,
-  ImageKeyRepository,
-  LikeRepository,
-  PostCommentRepository,
-  PostRepository,
-} from '@src/repositorys/board.repository';
+import { ImageKeyRepository, PostCommentRepository, PostRepository } from '@src/repositorys/board.repository';
 import { Like } from '@src/entities/board/like.entity';
 import { DisLike } from '@src/entities/board/dislike.entity';
 
@@ -72,15 +66,7 @@ const postController = {
     try {
       const { imageKeys } = req.body;
 
-      const bucketName = process.env.AWS_BUCKET_NAME as string;
-      imageKeys.forEach((imageKey: string) => {
-        s3.deleteObject({ Bucket: bucketName, Key: imageKey as string }, (err) => {
-          if (err) {
-            logger.warn('s3 board 객체삭제를 실패하였습니다.');
-            return res.status(400).json({ ok: false, message: 's3 최적화 실패하였습니다.' });
-          }
-        });
-      });
+      imageKeys.forEach((imageKey: string) => s3Delete(req, res, imageKey as string));
 
       logger.info('게시판 글쓰기 이미지 board 객체 삭제 성공하였습니다.');
       return res.status(200).json({ ok: true, message: '게시판 글쓰기 이미지 board 객체 삭제 성공하였습니다.' });
@@ -167,15 +153,9 @@ const postController = {
       console.log(imageKeys);
 
       if (imageKeys.length !== 0) {
-        const bucketName = process.env.AWS_BUCKET_NAME as string;
         imageKeys.forEach(async (imageKey) => {
           await imageKeyRepo.removeImageKeys(imageKey.id);
-          s3.deleteObject({ Bucket: bucketName, Key: imageKey.image_key as string }, (err) => {
-            if (err) {
-              logger.warn('s3 board 객체삭제를 실패하였습니다.');
-              return res.status(400).json({ ok: false, message: 's3 최적화 실패하였습니다.' });
-            }
-          });
+          s3Delete(req, res, imageKey.image_key as string);
         });
       }
 
