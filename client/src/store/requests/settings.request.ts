@@ -154,7 +154,7 @@ export const delAccount = createAsyncThunk<
   { state: RootState; rejectValue: delAccountErrorType }
 >('DEL_ACCOUNT', async (_, thunkApi) => {
   try {
-    const res = await axios.post('/api/settings/account/delAccount', {
+    const res = await axios.delete('/api/settings/account/delAccount', {
       withCredentials: true,
     });
     return res.data;

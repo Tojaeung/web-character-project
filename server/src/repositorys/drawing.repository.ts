@@ -53,6 +53,10 @@ export class DrawingRepository extends AbstractRepository<Drawing> {
   getDrawingsNum(userId: number) {
     return this.createQueryBuilder('drawing').select('COUNT(*)').where('user_id = :id', { id: userId }).getRawOne();
   }
+
+  findDrawingByUserId(id: number) {
+    return this.createQueryBuilder('drawing').where('user_id = :id', { id }).getMany();
+  }
 }
 
 @EntityRepository(DrawingComment)

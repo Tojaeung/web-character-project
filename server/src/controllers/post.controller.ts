@@ -117,6 +117,7 @@ const postController = {
 
       const image_key = new ImageKey();
       imageKeys.forEach(async (imageKey: string) => {
+        image_key.user_id = post.user_id;
         image_key.post_id = post.id;
         image_key.image_key = imageKey;
         await getRepository(ImageKey).save(image_key);

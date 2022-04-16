@@ -19,7 +19,7 @@ settingsRouter.get('/settings/account/defaultAvatar', auth, settingsController.d
 settingsRouter.post('/settings/account/editCover', auth, coverUpload.single('newCover'), settingsController.editCover);
 settingsRouter.get('/settings/account/defaultCover', auth, settingsController.defaultCover);
 
-settingsRouter.get('/settings/account/delAccount', auth, settingsController.delAccount);
+settingsRouter.delete('/settings/account/delAccount', auth, settingsController.delAccount);
 
 settingsRouter.get('/settings/account/verifyEmail', settingsController.verifyEmail);
 

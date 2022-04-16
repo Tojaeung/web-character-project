@@ -11,6 +11,7 @@ import { Drawing } from '../drawing/drawing.entity';
 import { DrawingComment } from '../drawing/drawingComment.entity';
 import { Post } from '../board/post.entity';
 import { PostComment } from '../board/postComment.entity';
+import { ImageKey } from '../board/imageKey.entity';
 
 @Entity('user', { schema: 'profile' })
 export class User {
@@ -91,4 +92,7 @@ export class User {
 
   @OneToMany(() => PostComment, (postComment) => postComment.user)
   postComments: PostComment[];
+
+  @OneToMany(() => ImageKey, (imageKey) => imageKey.user)
+  imageKeys: ImageKey[];
 }

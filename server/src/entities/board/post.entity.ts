@@ -13,6 +13,7 @@ import { User } from '../user/user.entity';
 import { PostComment } from './postComment.entity';
 import { Like } from './like.entity';
 import { DisLike } from './dislike.entity';
+import { ImageKey } from './imageKey.entity';
 
 @Entity('post', { schema: 'board' })
 export class Post {
@@ -41,7 +42,7 @@ export class Post {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => User, (user) => user.posts)
+  @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
@@ -53,4 +54,7 @@ export class Post {
 
   @OneToMany(() => DisLike, (dislike) => dislike.post)
   dislikes: DisLike[];
+
+  @OneToMany(() => ImageKey, (imageKey) => imageKey.post)
+  imageKeys: ImageKey[];
 }

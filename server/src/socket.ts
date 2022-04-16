@@ -5,7 +5,6 @@ import addChat from '@src/socketio/addChat';
 import addMessage from '@src/socketio/addMessage';
 import addMsgNoti from '@src/socketio/addMsgNoti';
 import deleteMsgNoti from '@src/socketio/deleteMsgNoti';
-import deleteUser from '@src/socketio/deleteUser';
 import deleteChat from '@src/socketio/deleteChat';
 import deleteMessage from '@src/socketio/deleteMessage';
 import updateLastMessage from '@src/socketio/updateLastMessage';
@@ -39,10 +38,6 @@ const socket = ({ io }: { io: Server }) => {
 
     socket.on('deleteMessage', (chatId) => {
       deleteMessage(socket, chatId);
-    });
-
-    socket.on('deleteUser', () => {
-      deleteUser(socket);
     });
 
     socket.on('updateLastMessage', async () => {

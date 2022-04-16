@@ -15,11 +15,10 @@ function DelAccount() {
   const onDelAccount = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       const res = await dispatch(delAccount()).unwrap();
-      alert(res.message);
-      socket.emit('deleteUser');
       socket.disconnect();
       await dispatch(closeModal());
       await dispatch(logoutUser());
+      alert(res.message);
     } catch (err: any) {
       alert(err.message);
     }

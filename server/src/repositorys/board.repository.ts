@@ -139,4 +139,8 @@ export class ImageKeyRepository extends AbstractRepository<ImageKey> {
   removeImageKeys(id: number) {
     return this.createQueryBuilder('imageKey').delete().from(ImageKey).where('id = :id', { id }).execute();
   }
+
+  findImageKeysByUserId(id: number) {
+    return this.createQueryBuilder('imageKey').where('post_id = :id', { id }).getMany();
+  }
 }

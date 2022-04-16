@@ -6,14 +6,19 @@ import { sendChangeEmail } from '@src/helpers/nodemailer.helper';
 import { s3 } from '@src/helpers/s3.helper';
 import { UserRepository } from '@src/repositorys/user.repository';
 import cluster from '@src/helpers/redis.helper';
+import { DrawingRepository } from '@src/repositorys/drawing.repository';
+import { ImageKeyRepository } from '@src/repositorys/board.repository';
 
 const settingsController = {
   // 이메일 변경을 위한 API입니다. (변경을 위해서 이메일 인증이 필요합니다.)
   editEmail: async (req: Request, res: Response) => {
     const userRepo = getCustomRepository(UserRepository);
     try {
+      const id = req.session.user?.id;
+      const user = await userRepo.findUserById(id as number);
+
       const newEmail = req.body.email;
-      const currentEmail = req.session.user?.email;
+      const currentEmail = user?.email;
 
       // 변경할 이메일이 존재하는지 확인합니다.
       const existingEmail = await userRepo.findUserByEmail(newEmail);
@@ -97,7 +102,9 @@ const settingsController = {
       const newAvatarKey = (req.file as Express.MulterS3.File).key;
 
       const id = req.session.user?.id;
-      const currentAvatarKey = req.session.user?.avatarKey;
+      const user = await userRepo.findUserById(id as number);
+
+      const currentAvatarKey = user?.avatarKey;
       const defaultAvatarKey = 'default-avatar.png';
 
       // s3 helper가 오류가 났을경우
@@ -139,8 +146,9 @@ const settingsController = {
     const userRepo = getCustomRepository(UserRepository);
     try {
       const id = req.session.user?.id;
-      const currentAvatarKey = req.session.user?.avatarKey;
+      const user = await userRepo.findUserById(id as number);
 
+      const currentAvatarKey = user?.avatarKey;
       // 기본 프로필 사진 데이터입니다.
       const defaultAvatar = 'https://character.s3.ap-northeast-2.amazonaws.com/avatar/default-avatar.png';
       const defaultAvatarKey = 'default-avatar.png';
@@ -183,7 +191,9 @@ const settingsController = {
       const newCoverKey = (req.file as Express.MulterS3.File).key;
 
       const id = req.session.user?.id;
-      const currentCoverKey = req.session.user?.coverKey;
+      const user = await userRepo.findUserById(id as number);
+
+      const currentCoverKey = user?.coverKey;
       const defaultCoverKey = 'default-cover.jpg';
 
       // s3 helper가 오류가 났을경우
@@ -224,8 +234,9 @@ const settingsController = {
     const userRepo = getCustomRepository(UserRepository);
     try {
       const id = req.session.user?.id;
-      const currentCoverKey = req.session.user?.coverKey;
+      const user = await userRepo.findUserById(id as number);
 
+      const currentCoverKey = user?.coverKey;
       // 기본 프로필 사진 데이터입니다.
       const defaultCover = 'https://character.s3.ap-northeast-2.amazonaws.com/cover/default-cover.jpg';
       const defaultCoverKey = 'default-cover.jpg';
@@ -263,12 +274,20 @@ const settingsController = {
   // 계정탈퇴를 위해 유저의 모든 정보를 삭제하는 API입니다.
   delAccount: async (req: Request, res: Response) => {
     const userRepo = getCustomRepository(UserRepository);
-
+    const drawingRepo = getCustomRepository(DrawingRepository);
+    const imageKeysRepo = getCustomRepository(ImageKeyRepository);
     try {
-      const { id, userId } = req.session.user!;
+      const id = req.session.user?.id;
 
-      const currentAvatarKey = req.session.user?.avatarKey;
+      const user = await userRepo.findUserById(id as number);
+      const drawings = await drawingRepo.findDrawingByUserId(id as number);
+      const imageKeys = await imageKeysRepo.findImageKeysByUserId(id as number);
+
+      const currentAvatarKey = user?.avatarKey;
+      const currentCoverKey = user?.coverKey;
+
       const defaultAvatarKey = 'default-avatar.png';
+      const defaultCoverKey = 'default-cover.jpg';
 
       // 기본이미지 제외, 탈퇴한 계정의 프로필 사진을 s3에서 객체삭제 합니다.
       if (currentAvatarKey !== defaultAvatarKey) {
@@ -280,15 +299,54 @@ const settingsController = {
           }
         });
       }
+
+      // 기본커버 제외, 탈퇴한 계정의 커버 사진을 s3에서 객체삭제 합니다.
+      if (currentCoverKey !== defaultCoverKey) {
+        const bucketName = process.env.AWS_BUCKET_NAME as string;
+        s3.deleteObject({ Bucket: bucketName, Key: currentCoverKey as string }, (err) => {
+          if (err) {
+            logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
+            return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
+          }
+        });
+      }
+
+      // s3에 저장된 유저가 올린 모든 그림을 삭제합니다.
+      drawings.forEach(async (drawing) => {
+        const bucketName = process.env.AWS_BUCKET_NAME as string;
+        s3.deleteObject({ Bucket: bucketName, Key: drawing.key as string }, (err) => {
+          if (err) {
+            logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
+            return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
+          }
+        });
+      });
+
+      // s3에 저장된 유저가 올린 모든 게시물(post) 이미지를 삭제합니다.
+      imageKeys.forEach(async (imageKey) => {
+        const bucketName = process.env.AWS_BUCKET_NAME as string;
+        s3.deleteObject({ Bucket: bucketName, Key: imageKey.image_key as string }, (err) => {
+          if (err) {
+            logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
+            return res.status(400).json({ ok: false, message: '최적화 실패하였습니다.' });
+          }
+        });
+      });
+
       // onDelete: cascade 때문에 관계된 모든 유저정보를 삭제합니다.
       const result = await userRepo.deleteUser(id as number);
+
       if (result.affected === 0) {
         logger.warn('계정 삭제 실패하였습니다.');
         return res.status(400).json({ ok: false, message: '계정 삭제 실패하였습니다.' });
       }
 
       // 레디스에 저장된 대화정보 등등 식제
-      await cluster.del(`chats:${userId}`, `messages:${userId}`, `msgNotis:${userId}`);
+
+      // 세션도 제거 추가
+      await cluster.del(`chats:${user?.chatId}`);
+      await cluster.del(`messages:${user?.chatId}`);
+      await cluster.del(`msgNotis:${user?.chatId}`);
 
       req.session.destroy((err: any) => {
         if (err) {
@@ -297,8 +355,8 @@ const settingsController = {
         }
       });
 
-      logger.warn('계정 삭제 성공 하였습니다.');
-      return res.status(200).json({ ok: true, message: '계정이 정상적으로 삭제되었습니다.' });
+      logger.info('계정 삭제 성공 하였습니다.');
+      return res.status(200).clearCookie('sid').json({ ok: true, message: '계정이 정상적으로 삭제되었습니다.' });
     } catch (err: any) {
       logger.error('계정탈퇴 에러', err);
       return res.status(500).json({ ok: false, message: '계정탈퇴 에러' });
