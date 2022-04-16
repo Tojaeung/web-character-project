@@ -30,7 +30,7 @@ function PostForm() {
       const { message, post } = res;
       alert(message);
       await dispatch(calcExp({ value: 1 }));
-      navigate(`board/${post.board}/post/${post.id}`);
+      navigate(`/board/${post.board}/post/${post.id}`);
     } catch (err: any) {
       alert(err.message);
     }
