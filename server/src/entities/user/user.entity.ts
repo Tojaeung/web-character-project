@@ -12,7 +12,7 @@ import { DrawingComment } from '../drawing/drawingComment.entity';
 import { Post } from '../board/post.entity';
 import { PostComment } from '../board/postComment.entity';
 
-@Entity('user', { schema: 'user' })
+@Entity('user', { schema: 'profile' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
