@@ -41,7 +41,7 @@ function Header() {
           <Nickname
             exp={post?.user.exp!}
             userId={post?.user.id!}
-            chatUserId={post?.user.chatId!}
+            chatId={post?.user.chatId!}
             desc={post?.user.desc!}
             nickname={post?.user.nickname!}
             dropDown={true}

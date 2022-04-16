@@ -53,7 +53,7 @@ function CommentList({ type, comment, index, setCommentIndex, isSelected }: IPro
           <Nickname
             exp={comment.user.exp}
             userId={comment.user.id}
-            chatUserId={comment.user.chatId}
+            chatId={comment.user.chatId}
             desc={comment.user.desc}
             nickname={comment.user.nickname}
             dropDown={true}

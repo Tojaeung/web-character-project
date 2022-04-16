@@ -10,6 +10,9 @@ import {
   calcExpErrorType,
   calcExpReturnType,
   calcExpParamType,
+  delAccountByAdminReturnType,
+  delAccountByAdminParamType,
+  delAccountByAdminErrorType,
 } from '@src/store/types/etc.type';
 import { RootState } from '../app/store';
 
@@ -50,6 +53,21 @@ export const calcExp = createAsyncThunk<
 >('CALC_EXP', async (data, thunkApi) => {
   try {
     const res = await axios.post(`/api/etc/calcExp`, data, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+
+export const delAccountByAdmin = createAsyncThunk<
+  delAccountByAdminReturnType,
+  delAccountByAdminParamType,
+  { state: RootState; rejectValue: delAccountByAdminErrorType }
+>('DEL_ACCOUNT_BY_ADMIN', async (data, thunkApi) => {
+  try {
+    const res = await axios.delete(`/api/etc/delAccountByAdmin/${data.userId}`, {
       withCredentials: true,
     });
     return res.data;

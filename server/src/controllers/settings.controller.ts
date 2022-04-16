@@ -246,14 +246,14 @@ const settingsController = {
       const id = req.session.user?.id;
 
       const user = await userRepo.findUserById(id as number);
-      const drawings = await drawingRepo.findDrawingByUserId(id as number);
-      const imageKeys = await imageKeysRepo.findImageKeysByUserId(id as number);
+      const drawings = await drawingRepo.findDrawingById(id as number);
+      const imageKeys = await imageKeysRepo.findImageKeysById(id as number);
 
       const currentAvatarKey = user?.avatarKey;
       const currentCoverKey = user?.coverKey;
 
-      const defaultAvatarKey = 'default-avatar.png';
-      const defaultCoverKey = 'default-cover.jpg';
+      const defaultAvatarKey = process.env.DEFAULT_AVATAR_KEY as string;
+      const defaultCoverKey = process.env.DEFAULT_COVER_KEY as string;
 
       // 기본이미지 제외, 탈퇴한 계정의 프로필 사진을 s3에서 객체삭제 합니다.
       if (currentAvatarKey !== defaultAvatarKey) s3Delete(req, res, currentAvatarKey as string);

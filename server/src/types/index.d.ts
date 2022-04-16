@@ -8,6 +8,7 @@ declare module 'express-session' {
       [key: string]: any;
       id: number;
       chatId: string;
+      role: string;
     };
   }
 }

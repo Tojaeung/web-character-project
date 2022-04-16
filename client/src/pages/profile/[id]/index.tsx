@@ -32,7 +32,7 @@ function Profile() {
           <Nickname
             exp={profile?.exp!}
             userId={profile?.id!}
-            chatUserId={profile?.chatId!}
+            chatId={profile?.chatId!}
             desc={profile?.desc!}
             nickname={profile?.nickname!}
             dropDown={true}

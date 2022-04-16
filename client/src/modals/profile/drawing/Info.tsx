@@ -36,7 +36,7 @@ function Info() {
             <Nickname
               exp={drawings[index!].user?.exp!}
               userId={drawings[index!].user?.id}
-              chatUserId={drawings[index!].user?.chatId}
+              chatId={drawings[index!].user?.chatId}
               desc={drawings[index!].user?.desc}
               nickname={drawings[index!].user?.nickname!}
               dropDown={true}

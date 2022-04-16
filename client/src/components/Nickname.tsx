@@ -7,20 +7,22 @@ import useDropDown from '@src/hook/useDropDown';
 import { useUserInfoModal, useDescModal } from '@src/hook/useModal';
 import Desc from '@src/modals/Desc';
 import UserInfoModal from '@src/modals/UserInfo';
-import { useAppSelector } from '@src/store/app/hook';
+import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { delAccountByAdmin } from '@src/store/requests/etc.request';
 
 interface IProps {
   exp: number;
   userId?: number;
-  chatUserId?: string;
+  chatId?: string;
   desc?: string;
   nickname: string;
   dropDown?: boolean;
   size: 'small' | 'medium' | 'large';
 }
 
-function Nickname({ exp, userId, chatUserId, desc, nickname, dropDown = false, size }: IProps) {
+function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, size }: IProps) {
+  const dispatch = useAppDispatch();
   const user = useAppSelector(selectAuthUser);
 
   const { showUserInfoModal, openUserInfoModal, closeUserInfoModal } = useUserInfoModal();
@@ -43,15 +45,21 @@ function Nickname({ exp, userId, chatUserId, desc, nickname, dropDown = false, s
             <List>
               <GoProfile href={`/profile/${userId}`}>프로필 보기</GoProfile>
             </List>
+
             {userId === user?.id && (
               <List>
                 <Link to="/create/drawingForm">그림추가</Link>
               </List>
             )}
+
             <List>작성글 보기</List>
             <List onClick={openUserInfoModal}>{user?.id === userId ? '내 정보' : '유저정보'}</List>
             <List onClick={openDescModal}>자기소개</List>
-            <ChatButton chatUserId={chatUserId!} />
+            <ChatButton chatUserId={chatId!} />
+
+            {user?.role === 'admin' && (
+              <List onClick={(e) => dispatch(delAccountByAdmin({ userId: userId as number }))}>계정삭제</List>
+            )}
           </Dropdown>
         )}
       </Container>

@@ -49,3 +49,17 @@ export type calcExpErrorType = {
   ok: boolean;
   message: string;
 };
+
+export type delAccountByAdminReturnType = {
+  ok: boolean;
+  message: string;
+};
+
+export type delAccountByAdminParamType = {
+  userId: number;
+};
+
+export type delAccountByAdminErrorType = {
+  ok: boolean;
+  message: string;
+};
