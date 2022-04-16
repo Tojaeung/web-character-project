@@ -51,6 +51,7 @@ function Board() {
           <BoardName>{boardTitle(board as string)}</BoardName>
           <LimitSelector setPage={setPage} limit={limit} setLimit={setLimit} />
         </Header>
+
         <table>
           <thead>
             <tr>
@@ -84,12 +85,16 @@ function Board() {
 
         <Footer>
           <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
-          <ScrollUpButton color="green" size="small" inverse={true} onClick={goTop}>
-            상단으로
-          </ScrollUpButton>
-          <CreatePostButton color="green" size="small" onClick={(e) => navigate(`/create/postForm/${board}`)}>
-            글쓰기
-          </CreatePostButton>
+          {selectedBoard && selectedBoard.length !== 0 && (
+            <>
+              <ScrollUpButton color="green" size="small" inverse={true} onClick={goTop}>
+                상단으로
+              </ScrollUpButton>
+              <CreatePostButton color="green" size="small" onClick={(e) => navigate(`/create/postForm/${board}`)}>
+                글쓰기
+              </CreatePostButton>
+            </>
+          )}
         </Footer>
       </Container>
 
