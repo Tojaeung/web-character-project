@@ -86,25 +86,25 @@ const drawingController = {
       const { profileId, cursor } = req.body;
 
       // 무한스크롤 작동할때마다 몇개의 그림이 뜨는지 정하는 변수
-      const drawingsLimit = 10;
-
+      const drawingsLimit = 20;
+      // 무한스크롤 작동시마다 클라이언트에 응답해줄 그림들
       let drawings;
+      // 무한스크롤 작동시 아직도 남아있는 그림이 없다면 null을 응답해줘서 무한스크롤을 중지시킨다.
       let newCursor;
+
       // 처음 drawings를 받아올때 cursor는 0이다.
       if (cursor === 0) {
         drawings = await drawingRepo.getDrawingsById(profileId, drawingsLimit);
-        if (drawings.length < drawingsLimit) {
-          newCursor = null;
-        } else {
-          newCursor = drawings[drawingsLimit - 1].id;
-        }
       } else {
         drawings = await drawingRepo.getDrawingsByCursor(profileId, Number(cursor), drawingsLimit);
-        if (drawings.length < drawingsLimit) {
-          newCursor = null;
-        } else {
-          newCursor = drawings[drawingsLimit - 1].id;
-        }
+      }
+
+      // 무한스크롤로 인해 요청받은 그림들이 limit보다 적다면(더이상 응답할 데이터가 없다는 뜻)
+      // 커서 값으로 null을 리턴해주어서 무한스크롤을 작동시키지 않는다.
+      if (drawings.length <= drawingsLimit) {
+        newCursor = null;
+      } else {
+        newCursor = drawings[drawingsLimit - 1].id;
       }
 
       logger.info('그림을 얻었습니다.');
