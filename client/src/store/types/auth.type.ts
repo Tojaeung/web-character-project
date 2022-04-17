@@ -29,11 +29,6 @@ export type loginErrorType = {
   message: string;
 };
 
-export type logoutReturnType = {
-  ok: boolean;
-  message: string | null;
-};
-
 export type logoutErrorType = {
   ok: boolean;
   message: string;

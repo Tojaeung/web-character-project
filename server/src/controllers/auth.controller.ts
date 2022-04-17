@@ -106,10 +106,10 @@ const authController = {
         }
       });
       logger.info('로그아웃 되었습니다.');
-      return res.status(200).clearCookie('sid').json({ ok: true, message: '로그아웃 되었습니다.' });
+      return res.status(200).clearCookie('sid').redirect('/');
     } catch (err: any) {
       logger.error('로그아웃 에러:', err);
-      return res.status(500).json({ ok: false, message: '로그아웃 에러' });
+      return res.status(500).clearCookie('sid').json({ ok: false, message: '로그아웃 에러' });
     }
   },
 

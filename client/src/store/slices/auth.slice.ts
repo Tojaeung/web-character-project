@@ -44,17 +44,15 @@ export const authSlice = createSlice({
 
     // 로그아웃
     builder
-      .addCase(logoutUser.fulfilled, (state, { payload }) => {
-        state.ok = payload.ok;
-        state.message = payload.message;
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.ok = true;
+        state.message = '로그아웃 되었습니다.';
         state.user = null;
-        localStorage.removeItem('login');
       })
       .addCase(logoutUser.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
         state.user = null;
-        localStorage.removeItem('login');
       });
 
     // 새로고침 로그인 유저정보 다시 가져오기

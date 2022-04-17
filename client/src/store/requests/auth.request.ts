@@ -9,7 +9,6 @@ import {
   loginErrorType,
   refreshLoginReturnType,
   refreshLoginErrorType,
-  logoutReturnType,
   logoutErrorType,
   findPwParamType,
   findPwReturnType,
@@ -50,7 +49,7 @@ export const loginUser = createAsyncThunk<
   }
 });
 
-export const logoutUser = createAsyncThunk<logoutReturnType, void, { state: RootState; rejectValue: logoutErrorType }>(
+export const logoutUser = createAsyncThunk<void, void, { state: RootState; rejectValue: logoutErrorType }>(
   'LOGOUT',
   async (_, thunkApi) => {
     try {

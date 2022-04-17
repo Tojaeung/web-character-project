@@ -60,12 +60,19 @@ export const useSocketSetup = () => {
     });
 
     socket.on('connect_error', async () => {
-      await dispatch(logoutUser());
-      alert('예기치 않은 오류로 로그아웃 되었습니다.');
+      try {
+        alert('예기치 않은 오류로 로그아웃 되었습니다.');
+        await dispatch(logoutUser()).unwrap();
+        localStorage.clear();
+        socket.disconnect();
+      } catch (err: any) {
+        alert(err.message);
+        localStorage.clear();
+        socket.disconnect();
+      }
     });
 
     return () => {
-      socket.off('connected');
       socket.off('initChatList');
       socket.off('initMessageList');
       socket.off('initNotiList');

@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { CgProfile } from 'react-icons/cg';
 import { BsBell } from 'react-icons/bs';
 import { FiSettings, FiLogOut } from 'react-icons/fi';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
@@ -13,7 +13,6 @@ import useDropDown from '@src/hook/useDropDown';
 import Chat from './Chat';
 
 function Profile() {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectAuthUser);
 
@@ -22,11 +21,16 @@ function Profile() {
 
   useDropDown({ openDropDown, setOpenDropDown, targetRef });
 
-  const onLogout = async (e: React.MouseEvent<HTMLLIElement>) => {
-    await dispatch(logoutUser());
-    localStorage.clear();
-    socket.disconnect();
-    navigate(0);
+  const handleLogout = async (e: React.MouseEvent<HTMLLIElement>) => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      localStorage.clear();
+      socket.disconnect();
+    } catch (err: any) {
+      alert(err.message);
+      localStorage.clear();
+      socket.disconnect();
+    }
   };
 
   const chatRef = useRef<HTMLDivElement>(null);
@@ -58,7 +62,7 @@ function Profile() {
             설정
           </NavLink>
 
-          <List onClick={onLogout}>
+          <List onClick={handleLogout}>
             <LogOutIcon />
             로그아웃
           </List>
