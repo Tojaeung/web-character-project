@@ -72,8 +72,8 @@ export class User {
   })
   isVerified: boolean;
 
-  @Column({ default: 0 })
-  exp: number;
+  @Column({ type: 'integer', default: 0, nullable: true })
+  exp: number | null;
 
   @CreateDateColumn()
   created_at: Date;

@@ -74,4 +74,8 @@ export class UserRepository extends AbstractRepository<User> {
       .where('id =:id', { id })
       .execute();
   }
+
+  updateExp(id: number, exp: number | null) {
+    return this.createQueryBuilder('user').update(User).set({ exp }).where('id =:id', { id }).execute();
+  }
 }

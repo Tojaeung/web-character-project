@@ -50,16 +50,16 @@ export type calcExpErrorType = {
   message: string;
 };
 
-export type delAccountByAdminReturnType = {
+export type penaltyByAdminReturnType = {
   ok: boolean;
   message: string;
 };
 
-export type delAccountByAdminParamType = {
+export type penaltyByAdminParamType = {
   userId: number;
 };
 
-export type delAccountByAdminErrorType = {
+export type penaltyByAdminErrorType = {
   ok: boolean;
   message: string;
 };

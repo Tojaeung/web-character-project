@@ -9,7 +9,7 @@ import Desc from '@src/modals/Desc';
 import UserInfoModal from '@src/modals/UserInfo';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
-import { delAccountByAdmin } from '@src/store/requests/etc.request';
+import { penaltyByAdmin } from '@src/store/requests/etc.request';
 
 interface IProps {
   exp: number;
@@ -32,6 +32,14 @@ function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, size 
   const [openDropDown, setOpenDropDown] = useState(false);
   const targetRef = useRef<HTMLUListElement>(null);
   useDropDown({ openDropDown, setOpenDropDown, targetRef });
+
+  const handelPanelty = async (e: React.MouseEvent<HTMLLIElement>) => {
+    try {
+      const res = await dispatch(penaltyByAdmin({ userId: userId as number })).unwrap();
+    } catch (err: any) {
+      alert(err.message);
+    }
+  };
 
   return (
     <>
@@ -57,9 +65,7 @@ function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, size 
             <List onClick={openDescModal}>자기소개</List>
             <ChatButton chatUserId={chatId!} />
 
-            {user?.role === 'admin' && (
-              <List onClick={(e) => dispatch(delAccountByAdmin({ userId: userId as number }))}>계정삭제</List>
-            )}
+            {user?.role === 'admin' && <List onClick={handelPanelty}>패널티</List>}
           </Dropdown>
         )}
       </Container>

@@ -10,9 +10,9 @@ import {
   calcExpErrorType,
   calcExpReturnType,
   calcExpParamType,
-  delAccountByAdminReturnType,
-  delAccountByAdminParamType,
-  delAccountByAdminErrorType,
+  penaltyByAdminReturnType,
+  penaltyByAdminParamType,
+  penaltyByAdminErrorType,
 } from '@src/store/types/etc.type';
 import { RootState } from '../app/store';
 
@@ -61,13 +61,13 @@ export const calcExp = createAsyncThunk<
   }
 });
 
-export const delAccountByAdmin = createAsyncThunk<
-  delAccountByAdminReturnType,
-  delAccountByAdminParamType,
-  { state: RootState; rejectValue: delAccountByAdminErrorType }
->('DEL_ACCOUNT_BY_ADMIN', async (data, thunkApi) => {
+export const penaltyByAdmin = createAsyncThunk<
+  penaltyByAdminReturnType,
+  penaltyByAdminParamType,
+  { state: RootState; rejectValue: penaltyByAdminErrorType }
+>('PENELTY_BY_ADMIN', async (data, thunkApi) => {
   try {
-    const res = await axios.delete(`/api/etc/delAccountByAdmin/${data.userId}`, {
+    const res = await axios.post(`/api/etc/penaltyByAdmin`, data, {
       withCredentials: true,
     });
     return res.data;
