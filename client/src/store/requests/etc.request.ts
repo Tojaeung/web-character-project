@@ -67,7 +67,7 @@ export const penaltyByAdmin = createAsyncThunk<
   { state: RootState; rejectValue: penaltyByAdminErrorType }
 >('PENELTY_BY_ADMIN', async (data, thunkApi) => {
   try {
-    const res = await axios.post(`/api/etc/penaltyByAdmin`, data, {
+    const res = await axios.patch(`/api/etc/penaltyByAdmin`, data, {
       withCredentials: true,
     });
     return res.data;

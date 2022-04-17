@@ -8,6 +8,6 @@ const etcRouter = Router();
 etcRouter.post('/etc/sendReport', auth, etcController.sendReport);
 etcRouter.post('/etc/getUserInfo', etcController.getUserInfo);
 etcRouter.post('/etc/calcExp', auth, etcController.calcExp);
-etcRouter.delete('/etc/penaltyByAdmin', auth, admin, etcController.penaltyByAdmin);
+etcRouter.patch('/etc/penaltyByAdmin', auth, admin, etcController.penaltyByAdmin);
 
 export default etcRouter;

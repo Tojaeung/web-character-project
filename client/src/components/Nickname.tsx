@@ -36,6 +36,7 @@ function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, size 
   const handelPanelty = async (e: React.MouseEvent<HTMLLIElement>) => {
     try {
       const res = await dispatch(penaltyByAdmin({ userId: userId as number })).unwrap();
+      alert(res.message);
     } catch (err: any) {
       alert(err.message);
     }

@@ -1,8 +1,9 @@
 // exp(경험치)로 레벨을 리턴하는 함수입니다.
 const getLevel = (exp: number | null) => {
-  if (!exp) {
-    return 0;
-  } else if (0 <= exp && exp <= 100) return 1;
+  console.log(exp);
+
+  if (exp === null) return 0;
+  else if (0 <= exp && exp <= 100) return 1;
   else if (100 < exp && exp <= 500) return 2;
   else if (500 < exp && exp <= 1500) return 3;
   else if (1500 < exp && exp <= 10000) return 4;

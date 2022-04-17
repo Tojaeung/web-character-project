@@ -13,7 +13,26 @@ export const useRefreshLogin = () => {
     try {
       const login = localStorage.getItem('login');
       if (!login) return;
-      dispatch(refreshLogin()).unwrap();
+      dispatch(refreshLogin())
+        .unwrap()
+        .then((res) => {
+          const { user } = res;
+
+          // 관리자 유무 확인
+          if (user?.role === 'admin') {
+            localStorage.setItem('admin', 'ok');
+          } else {
+            localStorage.removeItem('admin');
+          }
+
+          // 패널티를 먹은 불량유저인지 확인
+          if (user?.exp === null) {
+            localStorage.setItem('penalty_user', 'ok');
+          } else {
+            localStorage.removeItem('penalty_user');
+          }
+          return;
+        });
     } catch (err: any) {
       alert(err.message);
       dispatch(logoutUser());
