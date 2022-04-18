@@ -1,23 +1,36 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useGetProfile } from '@src/hook/useInitPage';
+import { useParams } from 'react-router-dom';
 import Drawing from '@src/pages/profile/[id]/Drawing';
-import { selectProfileOk } from '@src/store/slices/profile.slice';
-import NotFound from '@src/components/NotFound';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
-import { useAppSelector } from '@src/store/app/hook';
-import { selectProfileProfile } from '@src/store/slices/profile.slice';
+import { useAppDispatch } from '@src/store/app/hook';
+import { ProfileType } from '@src/types';
+import { getProfile } from '@src/store/requests/profile.request';
+import NotFound from '@src/components/NotFound';
 
 function Profile() {
-  useGetProfile();
+  const dispatch = useAppDispatch();
 
-  // 존재하지 않는 profileId를 url에서 조회할때 존재하지 않는경우 오류페이지를 보여준다.
-  const ok = useAppSelector(selectProfileOk);
-  const profile = useAppSelector(selectProfileProfile);
+  const { profileId } = useParams();
 
-  return !ok ? (
-    <NotFound />
-  ) : (
+  const [profile, setProfile] = useState<ProfileType>();
+
+  useEffect(() => {
+    try {
+      dispatch(getProfile({ profileId: Number(profileId) }))
+        .unwrap()
+        .then((res) => {
+          const { profile } = res;
+          setProfile(profile);
+        });
+    } catch (err: any) {
+      alert(err.message);
+    }
+  }, [dispatch, profileId]);
+
+  if (!profile) return <NotFound />;
+  return (
     <Container>
       <ProfileBox>
         <CoverBox>

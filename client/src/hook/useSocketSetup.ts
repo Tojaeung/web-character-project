@@ -12,7 +12,7 @@ import {
   openChatModal,
 } from '@src/store/slices/chat.slice';
 
-export const useSocketSetup = () => {
+const useSocketSetup = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -81,3 +81,5 @@ export const useSocketSetup = () => {
     };
   }, []);
 };
+
+export default useSocketSetup;
