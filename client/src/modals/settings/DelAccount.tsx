@@ -12,12 +12,13 @@ function DelAccount() {
   const dispatch = useAppDispatch();
   const [confirmText, setConfirmText] = useState('');
 
-  const onDelAccount = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDelAccount = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       const res = await dispatch(delAccount()).unwrap();
       socket.disconnect();
       await dispatch(closeModal());
       await dispatch(logoutUser());
+      localStorage.clear();
       alert(res.message);
     } catch (err: any) {
       alert(err.message);
@@ -39,7 +40,7 @@ function DelAccount() {
 
       <Input type="text" placeholder="계정탈퇴" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} />
 
-      <SubmitButton disabled={confirmText === '계정탈퇴' ? false : true} onClick={onDelAccount}>
+      <SubmitButton disabled={confirmText === '계정탈퇴' ? false : true} onClick={handleDelAccount}>
         계정탈퇴
       </SubmitButton>
     </Container>

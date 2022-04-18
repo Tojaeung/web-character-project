@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { useRefreshLogin } from '@src/hook/useInitPage';
 import { useSocketSetup } from '@src/hook/useSocketSetup';
 
-import { AuthRouter, PrivateRouter } from '@src/routes/PrivateRouter';
+import PublicRouter from '@src/routes/PublicRouter';
+import PrivateRouter from '@src/routes/PrivateRouter';
 
 import Header from '@src/layouts/Header';
 import Home from '@src/pages/Home';
@@ -23,51 +24,58 @@ import Alert from './pages/settings/Alert';
 import Desc from './pages/settings/Desc';
 import EditPostForm from '@src/pages/edit/PostForm';
 
+import { useAppSelector } from '@src/store/app/hook';
+import { selectAuthIsLoading } from '@src/store/slices/auth.slice';
+
 function App() {
+  const isLoading = useAppSelector(selectAuthIsLoading);
+
   useRefreshLogin();
   useSocketSetup();
 
   return (
     <BrowserRouter>
-      <FullScreen>
-        <AppScreen>
-          <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
+      {isLoading ? null : (
+        <FullScreen>
+          <AppScreen>
+            <Header />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/profile/:profileId" element={<Profile />} />
+              <Route path="/board/:board" element={<Board />} />
+              <Route path="/board/:board/post/:postId" element={<Post />} />
 
-            <Route path="/profile/:profileId" element={<Profile />} />
-
-            <Route path="/board/:board" element={<Board />} />
-            <Route path="/board/:board/post/:postId" element={<Post />} />
-
-            <Route path="/auth" element={<AuthRouter />}>
-              <Route path="signUp" element={<SignUp />} />
-              <Route path="editPw" element={<EditPw />} />
-            </Route>
-
-            <Route path="/" element={<PrivateRouter />}>
-              <Route path="settings">
-                <Route path="account" element={<Account />} />
-                <Route path="alert" element={<Alert />} />
-                <Route path="desc" element={<Desc />} />
-              </Route>
-              <Route path="editPw" element={<EditPw />} />
-              <Route path="create">
-                <Route path="drawingForm" element={<CreateDrawingForm />} />
-                <Route path="postForm/:board" element={<CreatePostForm />} />
+              <Route path="/auth" element={<PublicRouter />}>
+                <Route path="signUp" element={<SignUp />} />
+                <Route path="editPw" element={<EditPw />} />
               </Route>
 
-              <Route path="edit">
-                <Route path="postForm/:postId" element={<EditPostForm />} />
-              </Route>
-            </Route>
+              <Route path="/" element={<PrivateRouter />}>
+                <Route path="settings">
+                  <Route path="account" element={<Account />} />
+                  <Route path="alert" element={<Alert />} />
+                  <Route path="desc" element={<Desc />} />
+                </Route>
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Modal />
-          <Chat />
-        </AppScreen>
-      </FullScreen>
+                <Route path="editPw" element={<EditPw />} />
+
+                <Route path="create">
+                  <Route path="drawingForm" element={<CreateDrawingForm />} />
+                  <Route path="postForm/:board" element={<CreatePostForm />} />
+                </Route>
+
+                <Route path="edit">
+                  <Route path="postForm/:postId" element={<EditPostForm />} />
+                </Route>
+              </Route>
+
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <Modal />
+            <Chat />
+          </AppScreen>
+        </FullScreen>
+      )}
     </BrowserRouter>
   );
 }

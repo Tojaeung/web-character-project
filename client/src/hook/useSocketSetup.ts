@@ -63,11 +63,9 @@ export const useSocketSetup = () => {
       try {
         alert('예기치 않은 오류로 로그아웃 되었습니다.');
         await dispatch(logoutUser()).unwrap();
-        localStorage.removeItem('login');
         socket.disconnect();
       } catch (err: any) {
         alert(err.message);
-        localStorage.removeItem('login');
         socket.disconnect();
       }
     });

@@ -1,16 +1,12 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import useAuth from '@src/hook/useAuth';
 
-export const PrivateRouter = () => {
-  const login = localStorage.getItem('login');
-  if (!login) {
-    alert('로그인 후 이용 가능합니다.');
-  }
+const PrivateRouter = () => {
+  const { isLoggedIn } = useAuth();
 
-  return login === 'on' ? <Outlet /> : <Navigate to="/" />;
+  !isLoggedIn && alert('로그인 후 이용가능한 서비스입니다.');
+
+  return isLoggedIn ? <Outlet /> : <Navigate to="/" />;
 };
 
-export const AuthRouter = () => {
-  const login = localStorage.getItem('login');
-
-  return login === 'on' ? <Navigate to="/" /> : <Outlet />;
-};
+export default PrivateRouter;

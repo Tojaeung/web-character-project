@@ -42,7 +42,6 @@ function Login() {
           }
         });
       await dispatch(closeModal());
-      localStorage.setItem('login', 'on');
     } catch (err: any) {
       alert(err.message);
     }

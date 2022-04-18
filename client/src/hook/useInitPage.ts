@@ -41,7 +41,6 @@ export const useRefreshLogin = () => {
     } catch (err: any) {
       alert(err.message);
       dispatch(logoutUser());
-      localStorage.removeItem('login');
     }
   }, [dispatch]);
 };
