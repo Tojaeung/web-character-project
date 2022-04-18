@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { createTransport } from 'nodemailer';
 import logger from '@src/helpers/winston.helper';
 
-export const sendRegisterEmail = async (req: Request, res: Response, id: number, email: string, emailToken: string) => {
+export const sendAuthEmail = async (req: Request, res: Response, email: string, emailToken: string) => {
   const transporter = createTransport({
     host: process.env.MAIL_HOST,
     port: 587,
@@ -18,7 +18,7 @@ export const sendRegisterEmail = async (req: Request, res: Response, id: number,
     to: email,
     subject: '안뇽~',
     html: `<h3 style="background-color: green; text-align: center; color: pink;">안녕하세요. 캐릭캐릭체인지에 가입해주셔서 감사합니다.</h3>
-      <a href='http://${req.headers.host}/api/auth/verifyUser?id=${id}&email=${email}&emailToken=${emailToken}'>Verify your email</a>`,
+      <a href='http://${req.headers.host}/api/auth/verifyUser?email=${email}&emailToken=${emailToken}'>Verify your email</a>`,
   });
 
   if (!info) {
@@ -31,7 +31,7 @@ export const sendRegisterEmail = async (req: Request, res: Response, id: number,
   return;
 };
 
-export const sendFindEmail = async (req: Request, res: Response, id: number, email: string, pwToken: string) => {
+export const sendFindEmail = async (req: Request, res: Response, email: string, pwToken: string) => {
   const transporter = createTransport({
     host: process.env.MAIL_HOST,
     port: 587,
@@ -47,7 +47,7 @@ export const sendFindEmail = async (req: Request, res: Response, id: number, ema
     to: email,
     subject: '안뇽~',
     html: `<h3 style="background-color: green; text-align: center; color: pink;">비밀번호 재설정을 위해서 아래의 버튼을 눌러주세요.</h3>
-      <a href='http://${req.headers.host}/api/auth/verifyPw?id=${id}&pwToken=${pwToken}'>Verify your email</a>`,
+      <a href='http://${req.headers.host}/api/auth/verifyPw?pwToken=${pwToken}'>Verify your email</a>`,
   });
 
   if (!info) {

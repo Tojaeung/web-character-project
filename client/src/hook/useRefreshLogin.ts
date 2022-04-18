@@ -39,7 +39,7 @@ const useRefreshLogin = () => {
       alert(err.message);
       dispatch(logoutUser());
     }
-  }, [dispatch]);
+  }, [dispatch, isLoggedIn]);
 };
 
 export default useRefreshLogin;

@@ -11,6 +11,7 @@ import {
   editDesc,
 } from '@src/store/requests/settings.request';
 import { calcExp } from '@src/store/requests/etc.request';
+import socket from '@src/utils/socket';
 
 interface AuthType {
   isLoading: boolean;
@@ -56,6 +57,8 @@ export const authSlice = createSlice({
         state.ok = true;
         state.message = '로그아웃 되었습니다.';
         state.user = null;
+        socket.disconnect();
+        localStorage.clear();
       })
       .addCase(logoutUser.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;

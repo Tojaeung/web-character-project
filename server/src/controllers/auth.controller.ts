@@ -4,7 +4,7 @@ import { getCustomRepository, getRepository } from 'typeorm';
 import { User } from '@src/entities/user/user.entity';
 import { UserRepository } from '@src/repositorys/user.repository';
 import logger from '@src/helpers/winston.helper';
-import { sendRegisterEmail, sendFindEmail } from '@src/helpers/nodemailer.helper';
+import { sendAuthEmail, sendFindEmail } from '@src/helpers/nodemailer.helper';
 
 const authController = {
   // 회원가입  API 입니다.
@@ -42,7 +42,7 @@ const authController = {
       await getRepository(User).save(user);
 
       // 인증이메일을 발송합니다.
-      await sendRegisterEmail(req, res, user.id, email, emailToken);
+      await sendAuthEmail(req, res, email, emailToken);
 
       /*
        * 클라이언트에 엑세스토큰를 쿠키로 보냅니다. (만료기한 7일)
@@ -79,7 +79,7 @@ const authController = {
 
       // 인증되지 않은 회원일 경우에 다시 인증메일을 발송합니다.
       if (!existingUser?.isVerified) {
-        await sendRegisterEmail(req, res, existingUser.id, existingUser.email, existingUser.emailToken as string);
+        await sendAuthEmail(req, res, existingUser.email, existingUser.emailToken as string);
         logger.info('이메일 인증을 받지 않은 회원입니다.');
         return res.status(400).json({ ok: false, message: '인증되지 않은 사용자 입니다. 이메일 인증을 확인해주세요' });
       }
@@ -138,10 +138,10 @@ const authController = {
     const userRepo = getCustomRepository(UserRepository);
     try {
       // nodemailer.config.ts에서 보낸 쿼리 입니다.
-      const { id, email, emailToken } = req.query;
+      const { email, emailToken } = req.query;
 
       // 이메일 토큰으로 유저의 auth 정보를 가져온다.
-      const user = await userRepo.findUserById(Number(id));
+      const user = await userRepo.findUserByEmail(email as string);
       if (!user) {
         logger.warn('이메일토큰 정보로 회원을 찾을 수 없습니다.');
         return res.status(400).json({ ok: false, message: '인증이 실패하였습니다.' });
@@ -185,7 +185,7 @@ const authController = {
        * 유저가 존재한다면 비밀번호 찾기 인증 메일을 발송합니다.
        * 비밀번호 인증을 위해 auth테이블에 pwToken이 필요합니다.
        */
-      await sendFindEmail(req, res, user.id, email, user?.pwToken as string);
+      await sendFindEmail(req, res, email, user?.pwToken as string);
 
       return res.status(200).json({ ok: true, message: '인증 이메일을 발송하였습니다.' });
     } catch (err: any) {
@@ -199,14 +199,13 @@ const authController = {
     const userRepo = getCustomRepository(UserRepository);
     try {
       // nodemailer.config.ts에서 온 쿼리정보 입니다.
-      const { id, pwToken } = req.query;
-      console.log(id, pwToken);
+      const { pwToken } = req.query;
 
       /*
        * 요청받은 이메일로 유저를 찾습니다.
        * 쿼리스트링을 숫자형으로 바꿔준다.
        */
-      const user = await userRepo.findUserById(Number(id));
+      const user = await userRepo.findUserByPwToken(pwToken as string);
       if (!user) {
         logger.info('비밀번호 인증확인이 실패하였습니다.');
         return res.status(400).json({ ok: false, message: '비밀번호 인증확인이 실패하였습니다.' });
