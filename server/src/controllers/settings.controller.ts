@@ -324,7 +324,7 @@ const settingsController = {
       const id = req.session.user?.id;
 
       // 자기소개에 아무것도 입력하지 않고 수정버튼을 눌렀을때
-      if (desc.length === 0) {
+      if (!desc.length) {
         logger.info('자기소개 변경 글자가 없습니다.');
         return res.status(400).json({ ok: false, message: '자기소개를 입력해주세요.' });
       }

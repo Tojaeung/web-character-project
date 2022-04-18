@@ -22,7 +22,7 @@ const addMessage = async (socket: SessionSocket, message: MessageType) => {
   const chats = await cluster.lrange(`chats:${message.to}`, 0, -1);
   // 대화상대의 채팅상대에 내가 없다면 추가해준다.
   const existingChat = chats.filter((chat) => chat === message.from);
-  if (existingChat.length === 0) {
+  if (!existingChat.length) {
     await cluster.lpush(`chats:${message.to}`, message.from);
 
     const newChat = {

@@ -28,7 +28,7 @@ const drawingController = {
       const id = req.session.user?.id;
       const { content } = req.body;
 
-      if (content.length === 0 || content === '<p><br></p>') {
+      if (!content.length || content === '<p><br></p>') {
         logger.info('그림 내용을 입력하지 않아서 데이터에 추가 할 수 없습니다.');
         return res.status(400).json({ ok: false, message: '내용을 입력해주세요.' });
       } else if (content.length > 10000) {
@@ -137,7 +137,7 @@ const drawingController = {
       if (content.length > 100) {
         logger.info('글자 수를 초과하였습니다.');
         return res.status(400).json({ ok: false, message: '글자 수를 초과하였습니다.' });
-      } else if (content.length === 0) {
+      } else if (!content.length) {
         logger.info('댓글을 입력해주세요.');
         return res.status(400).json({ ok: false, message: '댓글을 입력해주세요.' });
       }

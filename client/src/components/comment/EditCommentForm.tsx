@@ -20,7 +20,7 @@ function EditCommentForm({ type, commentId, setCommentIndex }: IProp) {
     if (editedContent.length > 100) {
       alert('댓글 글자 수를 초과하였습니다.');
       return;
-    } else if (editedContent.length === 0) {
+    } else if (!editedContent.length) {
       alert('댓글을 입력해주세요.');
       return;
     }

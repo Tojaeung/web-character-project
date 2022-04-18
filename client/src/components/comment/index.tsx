@@ -19,7 +19,7 @@ function Comment({ comments, type }: IProp) {
 
   return (
     <>
-      {!comments || comments.length === 0 ? null : (
+      {!comments || !comments.length ? null : (
         <Container>
           <Header>
             <Topic>댓글</Topic>

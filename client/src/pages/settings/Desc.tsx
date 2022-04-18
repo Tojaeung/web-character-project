@@ -16,7 +16,7 @@ function Desc() {
   const [desc, setDesc] = useState('');
 
   const onSubmitDesc = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (desc.length === 0) {
+    if (!desc.length) {
       return alert('자기소개를 입력해주세요.');
     } else if (desc.length > 5000) {
       return alert('글자 수를 초과하였습니다.');

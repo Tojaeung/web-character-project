@@ -35,7 +35,7 @@ const deleteMessage = async (socket: SessionSocket, chatId: string) => {
     .filter((parsedMessage) => parsedMessage.from !== chatId)
     .filter((parsedMessage) => parsedMessage.to !== chatId);
 
-  if (newMessages.length === 0) {
+  if (!newMessages.length) {
     socket.emit('initMessages', undefined);
     return;
   }

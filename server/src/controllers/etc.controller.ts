@@ -16,7 +16,7 @@ const etcController = {
       if (reportType === '') {
         logger.info('신고유형을 선택하세요.');
         return res.status(400).json({ ok: false, message: '신고유형을 선택하세요.' });
-      } else if (report.length === 0) {
+      } else if (!report.length) {
         logger.info('신고내용을 입력해주세요.');
         return res.status(400).json({ ok: false, message: '신고내용을 입력해주세요.' });
       } else if (report.length > 100) {

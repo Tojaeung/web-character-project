@@ -37,7 +37,7 @@ function ChatList() {
         <CloseIcon onClick={closeChat} />
       </Header>
       <ChatListBox>
-        {chats.length === 0 ? (
+        {!chats.length ? (
           <GuideText>대화상대가 존재하지 않습니다...</GuideText>
         ) : (
           chats.map((chat) => {

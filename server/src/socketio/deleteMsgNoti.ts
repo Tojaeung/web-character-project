@@ -16,7 +16,7 @@ const deleteMsgNoti = async (socket: SessionSocket, chatId: string) => {
   // 메세지알림을 확인하였으니, 대화상대에게 온 메세지 알림을 제외해준다.
   const newMsgNotis = parsedMsgNotis.filter((parsedMsgNoti) => parsedMsgNoti.from !== chatId);
 
-  if (newMsgNotis.length === 0) {
+  if (!newMsgNotis.length) {
     socket.emit('initMsgNotis', undefined);
     return;
   }

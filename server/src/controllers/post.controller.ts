@@ -83,13 +83,13 @@ const postController = {
       if (title.length > 50) {
         logger.info('게시글 제목을 입력글자가 초과되어 데이터에 추가 할 수 없습니다.');
         return res.status(400).json({ ok: false, message: '제목 글자 수를 초과하였습니다.' });
-      } else if (title.length === 0) {
+      } else if (!title.length) {
         logger.info('게시글 제목을 입력하지 않아서 데이터에 추가 할 수 없습니다.');
         return res.status(400).json({ ok: false, message: '제목을 입력해주세요.' });
       } else if (content.length > 10000) {
         logger.info('게시글 내용 입력글자가 초과되어 데이터에 추가 할 수 없습니다.');
         return res.status(400).json({ ok: false, message: '내용 글자 수를 초과하였습니다.' });
-      } else if (content.length === 0 || content === '<p><br></p>') {
+      } else if (!content.length || content === '<p><br></p>') {
         logger.info('게시글 내용을 입력하지 않아서 데이터에 추가 할 수 없습니다.');
         return res.status(400).json({ ok: false, message: '내용을 입력해주세요.' });
       }
@@ -175,7 +175,7 @@ const postController = {
       if (content.length > 100) {
         logger.info('글자 수를 초과하였습니다.');
         return res.status(400).json({ ok: false, message: '글자 수를 초과하였습니다.' });
-      } else if (content.length === 0) {
+      } else if (!content.length) {
         logger.info('댓글을 입력해주세요.');
         return res.status(400).json({ ok: false, message: '댓글을 입력해주세요.' });
       }

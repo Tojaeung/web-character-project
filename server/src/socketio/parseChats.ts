@@ -17,7 +17,7 @@ const parseChats = async (chatId: string, chats: string[]) => {
     const filteredMessages = parsedMessages.filter((parsedMessage) => parsedMessage.from || parsedMessage.to === chat);
 
     // 대화상대와 기존 대화가 없을때 undefined로 지정
-    if (filteredMessages.length === 0) {
+    if (!filteredMessages.length) {
       newChats.push({
         chatId: chatUser?.chatId,
         nickname: chatUser?.nickname,

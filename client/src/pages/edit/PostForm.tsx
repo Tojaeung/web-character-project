@@ -39,11 +39,11 @@ function EditForm() {
   const handleModify = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (title.length > 50) {
       return alert('제목 글자 수를 초과하였습니다.');
-    } else if (title.length === 0) {
+    } else if (!title.length) {
       return alert('제목을 입력해주세요.');
     } else if (content.length > 10000) {
       return alert('내용 글자 수를 초과하였습니다.');
-    } else if (content.length === 0) {
+    } else if (!content.length) {
       return alert('내용을 입력해주세요.');
     } else if (content.length > 10000) {
       return alert('내용 글자 수를 초과하였습니다.');
@@ -61,7 +61,7 @@ function EditForm() {
     setTitle('');
     setContent('');
 
-    if ((imageKeys as string[]).length === 0) {
+    if (!(imageKeys as string[]).length) {
     } else {
       try {
         await dispatch(imageRemove({ imageKeys })).unwrap();
