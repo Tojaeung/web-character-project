@@ -24,11 +24,11 @@ function Profile() {
   const handleLogout = async (e: React.MouseEvent<HTMLLIElement>) => {
     try {
       await dispatch(logoutUser()).unwrap();
-      localStorage.clear();
+      localStorage.removeItem('login');
       socket.disconnect();
     } catch (err: any) {
       alert(err.message);
-      localStorage.clear();
+      localStorage.removeItem('login');
       socket.disconnect();
     }
   };

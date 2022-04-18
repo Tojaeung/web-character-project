@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
-import schedule from 'node-schedule';
 import moment from 'moment';
 import { IncomingWebhook } from '@slack/webhook';
 import logger from '@src/helpers/winston.helper';
@@ -154,13 +153,6 @@ const etcController = {
 
       // 1주일 후에 다시 exp가 0으로 돌아오면서 서비스를 이용할 수 있게된다.
       const date = moment().add(1, 'minutes').format();
-      schedule.scheduleJob(date, async () => {
-        const result = await userRepo.updateExp(Number(userId), 0);
-        if (result.affected === 0) {
-          logger.info('유저의 패널티가 풀리지 못했습니다.');
-          return res.status(400).json({ ok: false, message: '유저의 패널티가 풀리지 못했습니다.' });
-        }
-      });
 
       logger.info('관리자 권한으로 유저에게 패널티를 주었습니다.');
       return res.status(200).json({ ok: true, message: '관리자 권한으로 유저에게 패널티를 주었습니다.' });

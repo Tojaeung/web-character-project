@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import moment from 'moment';
 import { loginUser } from '@src/store/requests/auth.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { openModal, closeModal } from '@src/store/slices/modal.slice';
@@ -26,19 +27,19 @@ function Login() {
           const { user } = res;
 
           // 관리자 유무 확인
-          if (user?.role === 'admin') {
-            localStorage.setItem('admin', 'ok');
-          } else {
-            localStorage.removeItem('admin');
-          }
+          if (user?.role === 'admin') return localStorage.setItem('admin', 'ok');
+          localStorage.removeItem('admin');
 
           // 패널티를 먹은 불량유저인지 확인
-          if (user?.exp === null) {
-            localStorage.setItem('penalty_user', 'ok');
-          } else {
-            localStorage.removeItem('penalty_user');
+          if (user?.exp === null && localStorage.getItem('penalty')) {
+            return;
+          } else if (user?.exp === null && !localStorage.getItem('penalty')) {
+            const startDate = moment().format('YYYY-MM-DD LT');
+            const expireDate = moment().add(5, 'minutes').format('YYYY-MM-DD LT');
+            const penalty = { startDate, expireDate };
+
+            return localStorage.setItem('penalty', JSON.stringify(penalty));
           }
-          return;
         });
       await dispatch(closeModal());
       localStorage.setItem('login', 'on');
