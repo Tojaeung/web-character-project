@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
+import { selectAuthIsLoading } from '@src/store/slices/auth.slice';
+import { useAppSelector } from '@src/store/app/hook';
 
 import useRefreshLogin from '@src/hook/useRefreshLogin';
 import useSocketSetup from '@src/hook/useSocketSetup';
@@ -24,10 +26,9 @@ import Alert from './pages/settings/Alert';
 import Desc from './pages/settings/Desc';
 import EditPostForm from '@src/pages/edit/PostForm';
 
-import { useAppSelector } from '@src/store/app/hook';
-import { selectAuthIsLoading } from '@src/store/slices/auth.slice';
-
 function App() {
+  // 새로고침시, pending 상태일떄는 화면을 보여주지 않는다.
+  // 깜빡이면서 비로그인 상태가 잠깐 노출되기 때문이다.
   const isLoading = useAppSelector(selectAuthIsLoading);
 
   useRefreshLogin();
@@ -76,6 +77,7 @@ function App() {
           </AppScreen>
         </FullScreen>
       )}
+      )
     </BrowserRouter>
   );
 }

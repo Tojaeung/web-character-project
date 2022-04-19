@@ -9,7 +9,7 @@ const useRefreshLogin = () => {
 
   useEffect(() => {
     try {
-      if (isLoggedIn) return;
+      if (!isLoggedIn) return;
       dispatch(refreshLogin()).unwrap();
     } catch (err: any) {
       alert(err.message);

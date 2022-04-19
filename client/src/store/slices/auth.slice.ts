@@ -58,7 +58,7 @@ export const authSlice = createSlice({
         state.message = '로그아웃 되었습니다.';
         state.user = null;
         socket.disconnect();
-        localStorage.clear();
+        localStorage.removeItem('login');
       })
       .addCase(logoutUser.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;

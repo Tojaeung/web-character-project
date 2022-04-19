@@ -22,7 +22,7 @@ function Login() {
   const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
     try {
       await dispatch(loginUser({ email: data.email!, pw: data.pw! })).unwrap();
-
+      localStorage.setItem('login', 'on');
       await dispatch(closeModal());
     } catch (err: any) {
       alert(err.message);

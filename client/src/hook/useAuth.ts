@@ -1,10 +1,7 @@
-import { useAppSelector } from '@src/store/app/hook';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
-
 const useAuth = () => {
-  const user = useAppSelector(selectAuthUser);
+  const loginState = localStorage.getItem('login');
 
-  return { isLoggedIn: user ? true : false };
+  return { isLoggedIn: loginState ? true : false };
 };
 
 export default useAuth;

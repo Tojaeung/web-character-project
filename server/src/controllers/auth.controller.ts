@@ -117,10 +117,19 @@ const authController = {
   refreshLogin: async (req: Request, res: Response) => {
     const userRepo = getCustomRepository(UserRepository);
     try {
+      if (!req.session.user) {
+        logger.info('로그인 상태가 아니기 때문에 로그인 갱신 실패하였습니다.');
+        return res.status(400).json({ ok: false, message: '세션정보가 없습니다.' });
+      }
+
       const id = req.session.user!.id;
 
       const user = await userRepo.findUserById(id);
       if (!user) {
+        req.session.destroy((err: any) => {
+          logger.warn('세션제거 과정 중 에러 발생');
+          return res.status(400).json({ ok: false, message: '세션제거 과정 중 에러 발생' });
+        });
         logger.info('유저가 존재하지 않아 로그인 정보 갱신에 실패하였습니다.');
         return res.status(400).json({ ok: false, message: '로그인 정보 갱신 실패하였습니다.' });
       }

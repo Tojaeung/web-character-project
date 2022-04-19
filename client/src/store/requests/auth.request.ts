@@ -69,7 +69,7 @@ export const refreshLogin = createAsyncThunk<
   { state: RootState; rejectValue: refreshLoginErrorType }
 >('REFRESH_LOGIN', async (_, thunkApi) => {
   try {
-    const res = await axios.get('/api/auth/login', {
+    const res = await axios.get('/api/auth/refreshLogin', {
       withCredentials: true,
     });
     return res.data;
