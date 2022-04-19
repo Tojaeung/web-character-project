@@ -40,7 +40,7 @@ function MoreButton({ type, entityId, userId, handleRemove }: IProps) {
       <Container>
         <MoreIcon onClick={(e) => setOpenDropDown(!openDropDown)} />
         {openDropDown && (
-          <Dropdown ref={targetRef}>
+          <Dropdown ref={targetRef} onClick={(e) => setOpenDropDown(!openDropDown)}>
             {user?.id === userId && (
               <>
                 {type === 'board' && <List onClick={goEdit}>수정</List>}

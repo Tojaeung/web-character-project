@@ -50,7 +50,7 @@ function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, size 
           {nickname}
         </NickNameTag>
         {openDropDown && dropDown && (
-          <Dropdown ref={targetRef}>
+          <Dropdown ref={targetRef} onClick={(e) => setOpenDropDown(!openDropDown)}>
             <List>
               <GoProfile href={`/profile/${userId}`}>프로필 보기</GoProfile>
             </List>

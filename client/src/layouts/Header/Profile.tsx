@@ -17,7 +17,6 @@ function Profile() {
 
   const [openDropDown, setOpenDropDown] = useState(false);
   const targetRef = useRef<HTMLUListElement>(null);
-
   useDropDown({ openDropDown, setOpenDropDown, targetRef });
 
   const handleLogout = async (e: React.MouseEvent<HTMLLIElement>) => {
@@ -36,7 +35,7 @@ function Profile() {
         <Avatar src={user?.avatar} size="small" />
       </AvatarBox>
       {openDropDown && (
-        <DropDown ref={targetRef}>
+        <DropDown ref={targetRef} onClick={(e) => setOpenDropDown(!openDropDown)}>
           <GoProfile href={`/profile/${user?.id}`}>
             <ProfileIcon />
             프로필

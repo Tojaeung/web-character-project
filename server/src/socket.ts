@@ -12,7 +12,7 @@ import updateLastMessage from '@src/socketio/updateLastMessage';
 const socket = ({ io }: { io: Server }) => {
   io.on('connect', async (defaultSocket: Socket) => {
     const socket = <SessionSocket>defaultSocket;
-    console.log('nickname', `${socket.request.session.user.nickname}님 입장`);
+    console.log(`${socket.request.session.user.id}님 입장`);
 
     initUser(socket);
 
@@ -45,7 +45,7 @@ const socket = ({ io }: { io: Server }) => {
     });
 
     socket.on('disconnect', () => {
-      console.log('nickname', `${socket.request.session.user.nickname}님 퇴장`);
+      console.log(`${socket.request.session.user.id}님 퇴장`);
     });
   });
 };

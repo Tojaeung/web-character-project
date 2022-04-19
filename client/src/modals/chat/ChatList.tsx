@@ -21,7 +21,7 @@ function ChatList() {
   }, []);
 
   const handleSelectChatUser = (chat: ChatUserType) => async (e: React.MouseEvent<HTMLLIElement>) => {
-    await dispatch(selectChatUser({ selectedUser: chat }));
+    await dispatch(selectChatUser({ selectedChatUser: chat }));
   };
 
   const closeChat = async (e: React.MouseEvent<SVGElement>) => {
