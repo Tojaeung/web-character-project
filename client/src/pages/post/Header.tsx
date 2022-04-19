@@ -53,7 +53,7 @@ function Header() {
           <BackBoard color="black" size="small" inverse={true} onClick={(e) => navigate(`/board/${post?.board}`)}>
             목록
           </BackBoard>
-          {user?.id === post?.user.id && (
+          {(user?.id === post?.user.id || user?.role === 'admin') && (
             <>
               <EditPost
                 color="green"

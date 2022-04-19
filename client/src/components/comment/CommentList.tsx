@@ -65,7 +65,7 @@ function CommentList({ type, comment, index, setCommentIndex, isSelected }: IPro
 
       <ContentBox>
         <Content>{comment.content}</Content>
-        {user?.id === comment.user.id && (
+        {(user?.id === comment.user.id || user?.role === 'admin') && (
           <ButtonBox>
             <EditButton color="green" size="small" inverse={true} onClick={openEditCommemtForm}>
               수정

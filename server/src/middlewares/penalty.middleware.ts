@@ -3,7 +3,8 @@ import logger from '@src/helpers/winston.helper';
 
 const penalty = (req: Request, res: Response, next: NextFunction) => {
   const exp = req.session.user?.exp;
-  if (!exp) {
+
+  if (exp === null) {
     logger.info('일시적으로 서비스 이용에 제한을 받는 불량유저입니다.');
     return res.status(400).json({
       ok: false,
