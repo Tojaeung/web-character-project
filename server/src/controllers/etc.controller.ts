@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
 import moment from 'moment';
+import schedule from 'node-schedule';
 import { IncomingWebhook } from '@slack/webhook';
 import logger from '@src/helpers/winston.helper';
 import { PostCommentRepository, PostRepository } from '@src/repositorys/board.repository';
@@ -142,7 +143,7 @@ const etcController = {
   penaltyByAdmin: async (req: Request, res: Response) => {
     const userRepo = getCustomRepository(UserRepository);
     try {
-      const { userId } = req.body;
+      const { userId, penaltyPeriod } = req.body;
 
       // exp에 null 값을 주어서 패널티를 받고 있는 유저라는것을 나타낸다.
       const result = await userRepo.updateExp(Number(userId), null);
@@ -152,10 +153,17 @@ const etcController = {
       }
 
       // 1주일 후에 다시 exp가 0으로 돌아오면서 서비스를 이용할 수 있게된다.
-      const date = moment().add(1, 'minutes').format();
+      const date = moment().add(penaltyPeriod, 'days').format();
+      schedule.scheduleJob(date, async () => {
+        const result = await userRepo.updateExp(Number(userId), 0);
+        if (result.affected === 0) {
+          logger.info('유저의 패널티가 풀리지 못했습니다.');
+          return res.status(400).json({ ok: false, message: '유저의 패널티가 풀리지 못했습니다.' });
+        }
+      });
 
       logger.info('관리자 권한으로 유저에게 패널티를 주었습니다.');
-      return res.status(200).json({ ok: true, message: '관리자 권한으로 유저에게 패널티를 주었습니다.' });
+      return res.status(200).json({ ok: true, message: '관리자 권한으로 불량유저가 되었습니다.' });
     } catch (err: any) {
       logger.error('관리자 권한으로 계정 패널티 에러', err);
       return res.status(500).json({ ok: false, message: '관리자 권한으로 계정 패널티 에러' });

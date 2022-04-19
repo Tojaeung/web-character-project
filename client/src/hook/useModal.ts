@@ -63,3 +63,19 @@ export const useDrawingModal = () => {
 
   return { showDrawingModal, openDrawingModal, closeDrawingModal };
 };
+
+export const usePenaltyModal = () => {
+  const [showPenaltyModal, setShowPenaltyModal] = useState(false);
+
+  const openPenaltyModal = () => {
+    setShowPenaltyModal(true);
+    document.body.style.overflow = 'hidden'; // 모달 뒤에 화면 고정
+  };
+
+  const closePenaltyModal = () => {
+    setShowPenaltyModal(false);
+    document.body.style.overflow = 'unset'; // 모달 뒤에 화면 고정 해제
+  };
+
+  return { showPenaltyModal, openPenaltyModal, closePenaltyModal };
+};

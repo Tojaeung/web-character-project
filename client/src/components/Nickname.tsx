@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 import getLevel from '@src/utils/exp.util';
 import ChatButton from '@src/components/ChatButton';
 import useDropDown from '@src/hook/useDropDown';
-import { useUserInfoModal, useDescModal } from '@src/hook/useModal';
+import { useUserInfoModal, useDescModal, usePenaltyModal } from '@src/hook/useModal';
 import Desc from '@src/modals/Desc';
 import UserInfoModal from '@src/modals/UserInfo';
-import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
+import { useAppSelector } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
-import { penaltyByAdmin } from '@src/store/requests/etc.request';
+import Penalty from '@src/modals/Penalty';
 
 interface IProps {
   exp: number;
@@ -22,25 +22,16 @@ interface IProps {
 }
 
 function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, size }: IProps) {
-  const dispatch = useAppDispatch();
   const user = useAppSelector(selectAuthUser);
 
   const { showUserInfoModal, openUserInfoModal, closeUserInfoModal } = useUserInfoModal();
   const { showDescModal, openDescModal, closeDescModal } = useDescModal();
+  const { showPenaltyModal, openPenaltyModal, closePenaltyModal } = usePenaltyModal();
 
   // 드롭다운 메뉴 커스텀 훅
   const [openDropDown, setOpenDropDown] = useState(false);
   const targetRef = useRef<HTMLUListElement>(null);
   useDropDown({ openDropDown, setOpenDropDown, targetRef });
-
-  const handelPanelty = async (e: React.MouseEvent<HTMLLIElement>) => {
-    try {
-      const res = await dispatch(penaltyByAdmin({ userId: userId as number })).unwrap();
-      alert(res.message);
-    } catch (err: any) {
-      alert(err.message);
-    }
-  };
 
   return (
     <>
@@ -66,7 +57,7 @@ function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, size 
             <List onClick={openDescModal}>자기소개</List>
             <ChatButton chatUserId={chatId!} />
 
-            {user?.role === 'admin' && <List onClick={handelPanelty}>패널티</List>}
+            {user?.role === 'admin' && <List onClick={openPenaltyModal}>불량유저</List>}
           </Dropdown>
         )}
       </Container>
@@ -74,6 +65,7 @@ function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, size 
         <UserInfoModal isOpen={showUserInfoModal} closeModal={closeUserInfoModal} userId={userId!} />
       )}
       {showDescModal && <Desc isOpen={showDescModal} closeModal={closeDescModal} userId={userId!} desc={desc!} />}
+      {showPenaltyModal && <Penalty isOpen={showPenaltyModal} closeModal={closePenaltyModal} userId={userId!} />}
     </>
   );
 }

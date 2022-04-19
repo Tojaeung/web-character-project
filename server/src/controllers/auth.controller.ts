@@ -84,7 +84,12 @@ const authController = {
         return res.status(400).json({ ok: false, message: '인증되지 않은 사용자 입니다. 이메일 인증을 확인해주세요' });
       }
 
-      req.session.user = { id: existingUser.id, chatId: existingUser.chatId };
+      req.session.user = {
+        id: existingUser.id,
+        chatId: existingUser.chatId,
+        role: existingUser.role,
+        exp: existingUser.exp,
+      };
       req.session.save(() => {
         logger.info('로그인 되었습니다.');
         return res.status(200).json({ ok: true, message: '로그인 되었습니다.', user: existingUser });

@@ -57,6 +57,7 @@ export type penaltyByAdminReturnType = {
 
 export type penaltyByAdminParamType = {
   userId: number;
+  penaltyPeriod: number;
 };
 
 export type penaltyByAdminErrorType = {
