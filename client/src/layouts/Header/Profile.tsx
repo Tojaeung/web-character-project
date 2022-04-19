@@ -8,7 +8,6 @@ import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
 import { logoutUser } from '@src/store/requests/auth.request';
 import Avatar from '@src/components/Avatar';
-import socket from '@src/utils/socket';
 import useDropDown from '@src/hook/useDropDown';
 import Chat from './Chat';
 
@@ -24,10 +23,8 @@ function Profile() {
   const handleLogout = async (e: React.MouseEvent<HTMLLIElement>) => {
     try {
       await dispatch(logoutUser()).unwrap();
-      socket.disconnect();
     } catch (err: any) {
       alert(err.message);
-      socket.disconnect();
     }
   };
 

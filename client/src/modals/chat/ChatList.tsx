@@ -6,7 +6,7 @@ import socket from '@src/utils/socket';
 import 'moment/locale/ko';
 import relativeTime from '@src/utils/date.util';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectChats, isChatUser, selectMsgNotis, closeChatModal } from '@src/store/slices/chat.slice';
+import { selectChats, selectChatUser, selectMsgNotis, closeChatModal } from '@src/store/slices/chat.slice';
 import { ChatUserType } from '@src/store/types/chat.type';
 import Avatar from '@src/components/Avatar';
 import NotiCount from '@src/components/NotiCount';
@@ -20,9 +20,8 @@ function ChatList() {
     socket.emit('updateLastMessage');
   }, []);
 
-  const onAddChatUser = (chat: ChatUserType) => async (e: React.MouseEvent<HTMLLIElement>) => {
-    await dispatch(isChatUser({ chatUser: chat }));
-    localStorage.setItem('chatUser', JSON.stringify(chat));
+  const handleSelectChatUser = (chat: ChatUserType) => async (e: React.MouseEvent<HTMLLIElement>) => {
+    await dispatch(selectChatUser({ selectedUser: chat }));
   };
 
   const closeChat = async (e: React.MouseEvent<SVGElement>) => {
@@ -44,7 +43,7 @@ function ChatList() {
             const msgNotiNum = msgNotis.filter((msgNoti) => msgNoti.from === chat.chatId).length;
 
             return (
-              <ListBox key={v4()} onClick={onAddChatUser(chat)}>
+              <ListBox key={v4()} onClick={handleSelectChatUser(chat)}>
                 {msgNotiNum === 0 ? null : (
                   <NotiBox>
                     <NotiCount notiNum={msgNotiNum} />

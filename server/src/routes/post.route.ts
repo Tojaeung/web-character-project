@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import postController from '@src/controllers/post.controller';
 import auth from '@src/middlewares/auth.middleware';
-import penalty from '@src/middlewares/penalty.middleware';
 import { boardUpload } from '@src/helpers/s3.helper';
 
 const postRouter = Router();
@@ -12,7 +11,7 @@ postRouter.post('/post/addView', postController.addView);
 postRouter.post('/post/imageUpload', auth, boardUpload.single('image'), postController.imageUpload);
 postRouter.post('/post/imageRemove', auth, postController.imageRemove);
 
-postRouter.post('/post/addPost', auth, penalty, postController.addPost);
+postRouter.post('/post/addPost', auth, postController.addPost);
 postRouter.patch('/post/editPost', auth, postController.editPost);
 postRouter.delete('/post/removePost/:postId', auth, postController.removePost);
 

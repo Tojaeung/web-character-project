@@ -1,17 +1,17 @@
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import { selectChatUser, selectChatOk } from '@src/store/slices/chat.slice';
+import { selectChatIsChatUser, selectChatOk } from '@src/store/slices/chat.slice';
 import { useAppSelector } from '@src/store/app/hook';
 import Chatting from '@src/modals/chat/chatting';
-import ChatList from '@src/modals/chat/chatList';
+import ChatList from '@src/modals/chat/ChatList';
 
 function Chat() {
   const chatOk = useAppSelector(selectChatOk);
-  const chatUser = useAppSelector(selectChatUser);
+  const isChatUser = useAppSelector(selectChatIsChatUser);
 
   if (!chatOk) return null;
   return createPortal(
-    <Container>{chatUser ? <Chatting /> : <ChatList />}</Container>,
+    <Container>{isChatUser ? <Chatting /> : <ChatList />}</Container>,
     document.getElementById('chatPortal') as HTMLElement
   );
 }

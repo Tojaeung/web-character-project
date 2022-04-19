@@ -11,17 +11,10 @@ interface IProp {
 }
 
 function Chat({ chatRef }: IProp) {
-  // 확인 안한 메세지 알림 수
   const dispatch = useAppDispatch();
   const chatOk = useAppSelector(selectChatOk);
   const msgNotis = useAppSelector(selectMsgNotis);
   const [totalMsgNotiNum, setTotalMsgNotiNum] = useState<number>();
-
-  useEffect(() => {
-    const chatModalStatus = localStorage.getItem('chat');
-    if (!chatModalStatus) return;
-    dispatch(openChatModal());
-  }, []);
 
   useEffect(() => {
     const totalMsgNotiNum = msgNotis.length;

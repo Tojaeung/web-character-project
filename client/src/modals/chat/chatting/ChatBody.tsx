@@ -4,35 +4,38 @@ import styled, { css } from 'styled-components';
 import 'moment/locale/ko';
 import relativeTime from '@src/utils/date.util';
 import { useAppSelector } from '@src/store/app/hook';
-import { selectChatUser, selectMessages } from '@src/store/slices/chat.slice';
+import { selectChatIsChatUser, selectMessages } from '@src/store/slices/chat.slice';
 
 function ChatBody() {
   const messages = useAppSelector(selectMessages);
-  const chatUser = useAppSelector(selectChatUser);
+  const isChatUser = useAppSelector(selectChatIsChatUser);
 
   // 새로운 메세지 추가, 대화상대 바뀔때마다 스크롤 하단으로 내리기
   const messageBoxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     messageBoxRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, chatUser]);
+  }, [messages, isChatUser]);
+
+  console.log(messages);
 
   return (
     <Container>
-      {chatUser &&
+      {isChatUser &&
         messages.length > 0 &&
         messages
-          .filter((message) => message.to === chatUser.chatId || message.from === chatUser.chatId)
+          // .splice(0, 0, { type: 'guide', content: '대화 시작합니다.' })
+          .filter((message) => message.to === isChatUser.chatId || message.from === isChatUser.chatId)
           .map((message) => {
             return (
-              <MessageBox type={message.to === chatUser.chatId ? 'sent' : 'received'} key={v4()}>
-                <Message type={message.to === chatUser.chatId ? 'sent' : 'received'}>
+              <MessageBox type={message.to === isChatUser.chatId ? 'sent' : 'received'} key={v4()}>
+                <Message type={message.to === isChatUser.chatId ? 'sent' : 'received'}>
                   {message.type === 'text' ? (
                     <TextMessage>{message.content}</TextMessage>
                   ) : (
                     <Image src={message.content} alt="이미지" />
                   )}
                 </Message>
-                <div>{relativeTime(message.date)}</div>
+                <div>{relativeTime(message.date!)}</div>
               </MessageBox>
             );
           })}

@@ -4,7 +4,7 @@ import { ChatUserType, MessageType, MsgNotiType } from '@src/store/types/chat.ty
 
 interface ChatType {
   ok: boolean;
-  chatUser: ChatUserType | null;
+  isChatUser: ChatUserType | null;
   chats: ChatUserType[];
   messages: MessageType[];
   msgNotis: MsgNotiType[];
@@ -12,7 +12,7 @@ interface ChatType {
 
 const initialState: ChatType = {
   ok: false,
-  chatUser: null,
+  isChatUser: null,
   chats: [],
   messages: [],
   msgNotis: [],
@@ -28,8 +28,8 @@ export const chatSlice = createSlice({
     closeChatModal: (state) => {
       state.ok = false;
     },
-    isChatUser: (state, action) => {
-      state.chatUser = action.payload.chatUser;
+    selectChatUser: (state, action) => {
+      state.isChatUser = action.payload.selectedChatUser;
     },
 
     initChats: (state, action) => {
@@ -57,7 +57,7 @@ export const chatSlice = createSlice({
 export const {
   openChatModal,
   closeChatModal,
-  isChatUser,
+  selectChatUser,
   initChats,
   addChat,
   initMessages,
@@ -67,7 +67,7 @@ export const {
 } = chatSlice.actions;
 
 export const selectChatOk = (state: RootState) => state.chat.ok;
-export const selectChatUser = (state: RootState) => state.chat.chatUser;
+export const selectChatIsChatUser = (state: RootState) => state.chat.isChatUser;
 export const selectChats = (state: RootState) => state.chat.chats;
 export const selectMessages = (state: RootState) => state.chat.messages;
 export const selectMsgNotis = (state: RootState) => state.chat.msgNotis;

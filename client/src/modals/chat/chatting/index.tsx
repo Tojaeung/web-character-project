@@ -4,30 +4,23 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { IoIosArrowBack } from 'react-icons/io';
 import { ImExit } from 'react-icons/im';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { isChatUser, selectChatUser, closeChatModal } from '@src/store/slices/chat.slice';
+import { selectChatIsChatUser, selectChatUser, closeChatModal } from '@src/store/slices/chat.slice';
 import { openModal } from '@src/store/slices/modal.slice';
 import Avatar from '@src/components/Avatar';
 import ChatBody from '@src/modals/chat/chatting/ChatBody';
-import ChatFooter from '@src/modals/chat/chatting/ChatFooter';
+import ChatForm from '@src/modals/chat/chatting/ChatForm';
 
 function Chatting() {
   const dispatch = useAppDispatch();
-  const chatUser = useAppSelector(selectChatUser);
-
-  useEffect(() => {
-    const chatObj = JSON.parse(localStorage.getItem('chatUser') as string);
-    if (!chatObj) return;
-    dispatch(isChatUser({ chatUser: chatObj }));
-  }, []);
+  const isChatUser = useAppSelector(selectChatIsChatUser);
 
   // 대화창에서 대화목록으로 뒤로가기 됩니다.
   const backToChatList = async (e: React.MouseEvent<SVGElement>) => {
-    dispatch(isChatUser({ chatUser: null }));
-    localStorage.removeItem('chatUser');
+    dispatch(selectChatUser({ selectedChatUser: null }));
   };
 
   const exitChat = async (e: React.MouseEvent<SVGElement>) => {
-    if (!chatUser) return alert('나가고 싶은 채팅방을 선택해주세요.');
+    if (!isChatUser) return alert('나가고 싶은 채팅방을 선택해주세요.');
     await dispatch(openModal({ mode: 'exitChat' }));
   };
 
@@ -41,8 +34,8 @@ function Chatting() {
       <Header>
         <FlexBox>
           <BackIcon onClick={backToChatList} />
-          <Avatar src={chatUser?.avatar} size="small" />
-          <Nickname>{chatUser?.nickname}</Nickname>
+          <Avatar src={isChatUser?.avatar} size="small" />
+          <Nickname>{isChatUser?.nickname}</Nickname>
         </FlexBox>
         <FlexBox>
           <ExitChatIcon onClick={exitChat} />
@@ -50,7 +43,7 @@ function Chatting() {
         </FlexBox>
       </Header>
       <ChatBody />
-      <ChatFooter />
+      <ChatForm />
     </Container>
   );
 }

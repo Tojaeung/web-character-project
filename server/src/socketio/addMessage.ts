@@ -1,5 +1,7 @@
+import { getCustomRepository } from 'typeorm';
 import { SessionSocket } from '@src/types/index';
 import cluster from '@src/helpers/redis.helper';
+import { UserRepository } from '@src/repositorys/user.repository';
 
 interface MessageType {
   type: string;
@@ -12,6 +14,9 @@ interface MessageType {
 
 const addMessage = async (socket: SessionSocket, message: MessageType) => {
   const user = socket.request.session.user;
+  const userRepo = getCustomRepository(UserRepository);
+
+  const userData = await userRepo.findUserById(user.id);
 
   // 메세지 객체를 스트링으로 바꿔준후 나와 대화상대 레디스에 저장한다.
   const messageStr = [message.type, message.to, message.from, message.content, message.imgKey, message.date].join(',');
@@ -21,17 +26,19 @@ const addMessage = async (socket: SessionSocket, message: MessageType) => {
   // 채팅상대는 메세지를 받을때 나를 친구목록에 추가한다.
   const chats = await cluster.lrange(`chats:${message.to}`, 0, -1);
   // 대화상대의 채팅상대에 내가 없다면 추가해준다.
-  const existingChat = chats.filter((chat) => chat === message.from);
-  if (!existingChat.length) {
+  const existingChat = chats.some((chat) => chat === message.from);
+  if (!existingChat) {
     await cluster.lpush(`chats:${message.to}`, message.from);
 
     const newChat = {
       chatId: user.chatId,
-      nickname: user.nickname,
-      avatar: user.avatar,
+      nickname: userData?.nickname,
+      avatar: userData?.avatar,
     };
 
-    socket.to(message.to).emit('addChat', newChat);
+    const result = { ok: true, newChat };
+
+    socket.to(message.to).emit('addChat', result);
   }
 
   const newMessage = {

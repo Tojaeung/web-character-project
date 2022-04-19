@@ -21,26 +21,8 @@ function Login() {
 
   const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
     try {
-      await dispatch(loginUser({ email: data.email!, pw: data.pw! }))
-        .unwrap()
-        .then((res) => {
-          const { user } = res;
+      await dispatch(loginUser({ email: data.email!, pw: data.pw! })).unwrap();
 
-          // 관리자 유무 확인
-          if (user?.role === 'admin') return localStorage.setItem('admin', 'ok');
-          localStorage.removeItem('admin');
-
-          // 패널티를 먹은 불량유저인지 확인
-          if (user?.exp === null && localStorage.getItem('penalty')) {
-            return;
-          } else if (user?.exp === null && !localStorage.getItem('penalty')) {
-            const startDate = moment().format('YYYY-MM-DD LT');
-            const expireDate = moment().add(5, 'minutes').format('YYYY-MM-DD LT');
-            const penalty = { startDate, expireDate };
-
-            return localStorage.setItem('penalty', JSON.stringify(penalty));
-          }
-        });
       await dispatch(closeModal());
     } catch (err: any) {
       alert(err.message);
