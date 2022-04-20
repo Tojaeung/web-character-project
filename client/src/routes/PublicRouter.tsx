@@ -1,12 +1,11 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import useAuth from '@src/hook/useAuth';
+import { useAppSelector } from '@src/store/app/hook';
+import { selectAuthUser } from '@src/store/slices/auth.slice';
 
 const PublicRouter = () => {
-  const { isLoggedIn } = useAuth();
+  const user = useAppSelector(selectAuthUser);
 
-  isLoggedIn && alert('이미 로그인 하셨습니다.');
-
-  return isLoggedIn ? <Navigate to="/" /> : <Outlet />;
+  return user ? <Navigate to="/" /> : <Outlet />;
 };
 
 export default PublicRouter;

@@ -34,17 +34,6 @@ export type logoutErrorType = {
   message: string;
 };
 
-export type refreshLoginReturnType = {
-  ok: boolean;
-  message: string | null;
-  user: UserType | null;
-};
-
-export type refreshLoginErrorType = {
-  ok: boolean;
-  message: string;
-};
-
 export type findPwReturnType = {
   ok: boolean;
   message: string | null;

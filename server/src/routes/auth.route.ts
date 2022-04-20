@@ -5,7 +5,6 @@ const authRouter = Router();
 
 authRouter.post('/auth/signUp', authController.signUp);
 authRouter.post('/auth/login', authController.login);
-authRouter.get('/auth/refreshLogin', authController.refreshLogin);
 authRouter.get('/auth/logout', authController.logout);
 
 // 회원가입 인증메일 API로 보내주는 라우터 입니다.

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import { UserType } from '@src/types';
-import { loginUser, logoutUser, refreshLogin } from '../requests/auth.request';
+import { loginUser, logoutUser } from '../requests/auth.request';
 import {
   editNickname,
   editAvatar,
@@ -14,14 +14,12 @@ import { calcExp } from '@src/store/requests/etc.request';
 import socket from '@src/utils/socket';
 
 interface AuthType {
-  isLoading: boolean;
   ok: boolean;
   message: string | null;
   user: UserType | null;
 }
 
 const initialState: AuthType = {
-  isLoading: false,
   ok: false,
   message: null,
   user: null,
@@ -33,19 +31,13 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     // 로그인
-
     builder
-      .addCase(loginUser.pending, (state) => {
-        state.isLoading = true;
-      })
       .addCase(loginUser.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
         state.ok = payload.ok;
         state.message = payload.message;
         state.user = payload.user;
       })
       .addCase(loginUser.rejected, (state, { payload }) => {
-        state.isLoading = false;
         state.ok = payload?.ok!;
         state.message = payload?.message!;
         state.user = null;
@@ -58,27 +50,8 @@ export const authSlice = createSlice({
         state.message = '로그아웃 되었습니다.';
         state.user = null;
         socket.disconnect();
-        localStorage.removeItem('login');
       })
       .addCase(logoutUser.rejected, (state, { payload }) => {
-        state.ok = payload?.ok!;
-        state.message = payload?.message!;
-        state.user = null;
-      });
-
-    // 새로고침 로그인 유저정보 다시 가져오기
-    builder
-      .addCase(refreshLogin.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(refreshLogin.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
-        state.ok = payload.ok;
-        state.message = payload.message;
-        state.user = payload.user;
-      })
-      .addCase(refreshLogin.rejected, (state, { payload }) => {
-        state.isLoading = false;
         state.ok = payload?.ok!;
         state.message = payload?.message!;
         state.user = null;
@@ -180,7 +153,6 @@ export const authSlice = createSlice({
 });
 
 // export const { } = authSlice.actions;
-export const selectAuthIsLoading = (state: RootState) => state.auth.isLoading;
 export const selectAuthOk = (state: RootState) => state.auth.ok;
 export const selectAuthMessage = (state: RootState) => state.auth.message;
 export const selectAuthUser = (state: RootState) => state.auth.user;

@@ -118,35 +118,6 @@ const authController = {
     }
   },
 
-  // refresh시 다시 유저정보를 보내주는 API입니다.
-  refreshLogin: async (req: Request, res: Response) => {
-    const userRepo = getCustomRepository(UserRepository);
-    try {
-      if (!req.session.user) {
-        logger.info('로그인 상태가 아니기 때문에 로그인 갱신 실패하였습니다.');
-        return res.status(400).json({ ok: false, message: '세션정보가 없습니다.' });
-      }
-
-      const id = req.session.user!.id;
-
-      const user = await userRepo.findUserById(id);
-      if (!user) {
-        req.session.destroy((err: any) => {
-          logger.warn('세션제거 과정 중 에러 발생');
-          return res.status(400).json({ ok: false, message: '세션제거 과정 중 에러 발생' });
-        });
-        logger.info('유저가 존재하지 않아 로그인 정보 갱신에 실패하였습니다.');
-        return res.status(400).json({ ok: false, message: '로그인 정보 갱신 실패하였습니다.' });
-      }
-
-      logger.info('로그인 정보가 갱신되었습니다.');
-      return res.status(200).json({ ok: true, message: '로그인 정보가 갱신되었습니다.', user });
-    } catch (err: any) {
-      logger.error('로그인 갱신을 실패하였습니다.', err);
-      return res.status(500).json({ ok: false, message: '로그인 갱신 에러' });
-    }
-  },
-
   // 이메일 인증을 위한 API입니다.
   verifyUser: async (req: Request, res: Response) => {
     const userRepo = getCustomRepository(UserRepository);

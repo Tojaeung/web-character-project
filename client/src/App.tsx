@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 
-import useRefreshLogin from '@src/hook/useRefreshLogin';
 import useSocketSetup from '@src/hook/useSocketSetup';
 
 import PublicRouter from '@src/routes/PublicRouter';
@@ -25,7 +24,6 @@ import Desc from './pages/settings/Desc';
 import EditPostForm from '@src/pages/edit/PostForm';
 
 function App() {
-  useRefreshLogin();
   useSocketSetup();
 
   return (

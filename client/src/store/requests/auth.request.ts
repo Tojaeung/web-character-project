@@ -7,8 +7,6 @@ import {
   loginReturnType,
   loginParamType,
   loginErrorType,
-  refreshLoginReturnType,
-  refreshLoginErrorType,
   logoutErrorType,
   findPwParamType,
   findPwReturnType,
@@ -62,21 +60,6 @@ export const logoutUser = createAsyncThunk<void, void, { state: RootState; rejec
     }
   }
 );
-
-export const refreshLogin = createAsyncThunk<
-  refreshLoginReturnType,
-  void,
-  { state: RootState; rejectValue: refreshLoginErrorType }
->('REFRESH_LOGIN', async (_, thunkApi) => {
-  try {
-    const res = await axios.get('/api/auth/refreshLogin', {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
-  }
-});
 
 export const findPw = createAsyncThunk<
   findPwReturnType,
