@@ -25,7 +25,6 @@ function ChatList() {
   };
 
   const closeChat = async (e: React.MouseEvent<SVGElement>) => {
-    localStorage.removeItem('chat');
     await dispatch(closeChatModal());
   };
 

@@ -23,11 +23,9 @@ function Chat({ chatRef }: IProp) {
 
   const onChatModal = async (e: React.MouseEvent<HTMLDivElement>) => {
     if (!chatOk) {
-      localStorage.setItem('chat', 'on');
       await dispatch(openChatModal());
       return;
     }
-    localStorage.removeItem('chat');
     await dispatch(closeChatModal());
   };
 
