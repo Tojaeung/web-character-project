@@ -48,11 +48,12 @@ const useSocketSetup = () => {
 
     socket.on('connect_error', async () => {
       try {
-        alert('예기치 않은 오류로 로그아웃 되었습니다.');
         await dispatch(logoutUser()).unwrap();
         socket.disconnect();
+        alert('예기치 않은 오류로 로그아웃 되었습니다.');
       } catch (err: any) {
-        alert(err.message);
+        alert('예기치 않은 오류로 로그아웃 되었습니다.');
+        await dispatch(logoutUser()).unwrap();
         socket.disconnect();
       }
     });
