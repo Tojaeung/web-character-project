@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { IoIosSend } from 'react-icons/io';
 import { AiOutlineCamera } from 'react-icons/ai';
 import axios from 'axios';
@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import moment from 'moment';
 import socket from '@src/utils/socket';
 import { selectAuthUser } from '@src/store/slices/auth.slice';
-import { selectChatIsChatUser } from '@src/store/slices/chat.slice';
+import { selectChatIsChatUser, selectMessages } from '@src/store/slices/chat.slice';
 import { useAppSelector } from '@src/store/app/hook';
 import Input from '@src/components/Input';
 import Button from '@src/components/Button';
@@ -14,6 +14,16 @@ import Button from '@src/components/Button';
 function ChatForm() {
   const user = useAppSelector(selectAuthUser);
   const isChatUser = useAppSelector(selectChatIsChatUser);
+  const messages = useAppSelector(selectMessages);
+
+  // 대화방에서 상대방이 나갔다면 더이상 채팅입력을 하지 못하게 한다.
+  const [isEndChat, setIsEndChat] = useState(false);
+  useEffect(() => {
+    const isEndGuideMessage = messages
+      .filter((message) => (message.from || message.to) === isChatUser?.chatId)
+      .some((message) => message.type === 'endChat');
+    isEndGuideMessage && setIsEndChat(true);
+  }, [messages, isChatUser?.chatId]);
 
   const targetRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState<string | undefined>(undefined);
@@ -68,6 +78,7 @@ function ChatForm() {
         className="file-input"
         type="file"
         accept="image/png, image/jpeg.image/jpg"
+        disabled={isEndChat && true}
         ref={targetRef}
         onChange={onSendImgMsg}
       />
@@ -79,7 +90,12 @@ function ChatForm() {
         onChange={(e) => setMessage(e.target.value)}
         onKeyPress={(e) => e.key === 'Enter' && onSendTextMsg(e)}
       />
-      <SendButton color="green" size="small" disabled={!message ? true : false} onClick={onSendTextMsg}>
+      <SendButton
+        color="green"
+        size="small"
+        disabled={(!message && true) || (isEndChat && true)}
+        onClick={onSendTextMsg}
+      >
         <SendIcon />
       </SendButton>
     </Container>

@@ -16,8 +16,6 @@ function ChatBody() {
     messageBoxRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isChatUser]);
 
-  console.log(messages);
-
   return (
     <Container>
       {isChatUser &&
