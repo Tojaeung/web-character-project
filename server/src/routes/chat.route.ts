@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { chatUpload, s3 } from '@src/helpers/s3.helper';
+import { chatUpload } from '@src/helpers/s3.helper';
 
 const chatRouter = Router();
 

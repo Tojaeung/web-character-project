@@ -19,26 +19,14 @@ const useSocketSetup = () => {
     socket.connect();
 
     socket.on('initChats', async (parsedChats) => {
-      if (!parsedChats) {
-        await dispatch(initChats({ newChats: [] }));
-        return;
-      }
       await dispatch(initChats({ newChats: parsedChats }));
     });
 
     socket.on('initMessages', async (parsedMessages) => {
-      if (!parsedMessages) {
-        await dispatch(initMessages({ newMessages: [] }));
-        return;
-      }
       await dispatch(initMessages({ newMessages: parsedMessages }));
     });
 
     socket.on('initMsgNotis', async (parsedMsgNotis) => {
-      if (!parsedMsgNotis) {
-        await dispatch(initMsgNotis({ newMsgNotis: [] }));
-        return;
-      }
       await dispatch(initMsgNotis({ newMsgNotis: parsedMsgNotis }));
     });
 

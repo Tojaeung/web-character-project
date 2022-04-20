@@ -23,19 +23,23 @@ function ChatBody() {
       {isChatUser &&
         messages.length > 0 &&
         messages
-          // .splice(0, 0, { type: 'guide', content: '대화 시작합니다.' })
           .filter((message) => message.to === isChatUser.chatId || message.from === isChatUser.chatId)
           .map((message) => {
             return (
-              <MessageBox type={message.to === isChatUser.chatId ? 'sent' : 'received'} key={v4()}>
-                <Message type={message.to === isChatUser.chatId ? 'sent' : 'received'}>
-                  {message.type === 'text' ? (
-                    <TextMessage>{message.content}</TextMessage>
-                  ) : (
-                    <Image src={message.content} alt="이미지" />
-                  )}
+              <MessageBox
+                who={message.to === isChatUser.chatId ? 'me' : 'you'}
+                isEndMessage={message.type === 'endChat' ? true : false}
+                key={v4()}
+              >
+                <Message
+                  who={message.to === isChatUser.chatId ? 'me' : 'you'}
+                  isEndMessage={message.type === 'endChat' ? true : false}
+                >
+                  {message.type === 'text' && <TextMessage>{message.content}</TextMessage>}
+                  {message.type === 'image' && <Image src={message.content} alt="이미지" />}
+                  {message.type === 'endChat' && <GuideMessage>{message.content}</GuideMessage>}
                 </Message>
-                <div>{relativeTime(message.date!)}</div>
+                <MessageDate>{relativeTime(message.date!)}</MessageDate>
               </MessageBox>
             );
           })}
@@ -53,60 +57,79 @@ const Container = styled.div`
   max-height: 60rem;
   overflow-y: scroll;
 `;
-const MessageBox = styled.div<{ type: string }>`
-  ${({ type }) => {
-    if (type === 'sent') {
+const MessageBox = styled.div<{ who: string; isEndMessage: boolean }>`
+  border: 1px solid;
+  width: 100%;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: ${({ theme }) => theme.palette.white};
+  background-color: ${({ theme }) => theme.palette.white};
+  margin-bottom: 0.2rem;
+  ${({ who }) => {
+    if (who === 'me') {
       return css`
-        width: 100%;
-        padding: 0.5rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
         align-items: flex-end;
-        background-color: ${({ theme }) => theme.palette.white};
-        margin-bottom: 0.2rem;
       `;
-    } else {
+    } else if (who === 'you') {
       return css`
-        width: 100%;
-        padding: 0.5rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
         align-items: flex-start;
-        background-color: ${({ theme }) => theme.palette.white};
-        margin-bottom: 0.2rem;
+      `;
+    }
+  }}
+
+  ${({ isEndMessage }) => {
+    if (isEndMessage) {
+      return css`
+        align-items: center !important;
       `;
     }
   }}
 `;
-const Message = styled.div<{ type: string }>`
-  ${({ type }) => {
-    if (type === 'sent') {
+const Message = styled.div<{ who: string; isEndMessage: boolean }>`
+  padding: 1rem;
+  display: flex;
+  border-radius: 10px;
+  ${({ who }) => {
+    if (who === 'me') {
       return css`
-        padding: 1rem;
-        display: flex;
         justify-content: flex-end;
         background-color: ${({ theme }) => theme.palette.green};
-        border-radius: 10px;
       `;
-    } else {
+    } else if (who === 'you') {
       return css`
-        padding: 1rem;
-        display: flex;
         background-color: ${({ theme }) => theme.palette.red};
-        border-radius: 10px;
         justify-content: flex-start;
       `;
     }
   }}
+  ${({ isEndMessage }) => {
+    if (isEndMessage) {
+      return css`
+        color: ${({ theme }) => theme.palette.black} !important;
+        background-color: ${({ theme }) => theme.palette.gray} !important;
+        justify-content: center !important;
+      `;
+    }
+  }}
 `;
-
 const TextMessage = styled.div`
   font-size: 1.2rem;
   white-space: pre-wrap;
   word-break: break-all;
 `;
 const Image = styled.img``;
+
+const GuideMessage = styled.div`
+  font-size: 1.2rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+  text-align: center;
+`;
+
+const MessageDate = styled.div`
+  color: ${({ theme }) => theme.palette.black};
+`;
 
 export default ChatBody;

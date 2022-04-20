@@ -2,9 +2,9 @@ export type ChatUserType = {
   chatId: string;
   nickname: string;
   avatar: string;
-  lastType: string | undefined;
-  lastMessage: string | undefined;
-  lastDate: string | undefined;
+  lastType: string | null;
+  lastMessage: string | null;
+  lastDate: string | null;
 };
 
 export type MessageType = {

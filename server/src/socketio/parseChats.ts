@@ -5,6 +5,9 @@ import parseMessages from '@src/socketio/parseMessages';
 import moment from 'moment';
 
 const parseChats = async (chatId: string, chats: string[]) => {
+  if (!chats || !chats.length) {
+    return [];
+  }
   const userRepository = getCustomRepository(UserRepository);
   const newChats = [];
   for (const chat of chats) {
@@ -22,8 +25,8 @@ const parseChats = async (chatId: string, chats: string[]) => {
         chatId: chatUser?.chatId,
         nickname: chatUser?.nickname,
         avatar: chatUser?.avatar,
-        lastType: undefined,
-        lastMessage: undefined,
+        lastType: null,
+        lastMessage: null,
         lastDate: moment().format(),
       });
     } else {

@@ -16,18 +16,15 @@ const deleteMsgNoti = async (socket: SessionSocket, chatId: string) => {
   // 메세지알림을 확인하였으니, 대화상대에게 온 메세지 알림을 제외해준다.
   const newMsgNotis = parsedMsgNotis.filter((parsedMsgNoti) => parsedMsgNoti.from !== chatId);
 
-  if (!newMsgNotis.length) {
-    socket.emit('initMsgNotis', undefined);
-    return;
-  }
+  if (!newMsgNotis.length) return socket.emit('initMsgNotis', newMsgNotis);
 
   // 새롭게 메세지알림 정보를 레디스에 저장한다.
-  if (newMsgNotis.length > 0) {
-    for (const newMsgNoti of newMsgNotis) {
-      const msgNotiStr = [newMsgNoti.from, newMsgNoti.to].join(',');
-      await cluster.lpush(`msgNotis:${user.chatId}`, msgNotiStr);
-    }
+
+  for (const newMsgNoti of newMsgNotis) {
+    const msgNotiStr = [newMsgNoti.from, newMsgNoti.to].join(',');
+    await cluster.lpush(`msgNotis:${user.chatId}`, msgNotiStr);
   }
+
   socket.emit('initMsgNotis', newMsgNotis);
   return;
 };
