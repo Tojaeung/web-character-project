@@ -20,7 +20,7 @@ function ChatForm() {
   const [isEndChat, setIsEndChat] = useState(false);
   useEffect(() => {
     const isEndGuideMessage = messages
-      .filter((message) => (message.from || message.to) === isChatUser?.chatId)
+      .filter((message) => message.from === isChatUser?.chatId || message.to === isChatUser?.chatId)
       .some((message) => message.type === 'endChat');
     isEndGuideMessage && setIsEndChat(true);
   }, [messages, isChatUser?.chatId]);
