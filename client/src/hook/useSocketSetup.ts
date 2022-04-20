@@ -36,7 +36,6 @@ const useSocketSetup = () => {
       message && alert(message);
       await dispatch(addChat({ newChat }));
       await dispatch(openChatModal());
-      localStorage.setItem('chat', 'on');
     });
 
     socket.on('addMessage', async (newMessage) => {

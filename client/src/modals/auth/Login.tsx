@@ -1,13 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import moment from 'moment';
 import { loginUser } from '@src/store/requests/auth.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { openModal, closeModal } from '@src/store/slices/modal.slice';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { AuthInputsType, EmailInput, PwInput } from '@src/components/AuthInputs';
 import Button from '@src/components/Button';
+import socket from '@src/utils/socket';
 
 function Login() {
   const navigate = useNavigate();
@@ -21,8 +21,12 @@ function Login() {
 
   const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
     try {
+      console.log(123);
+
       await dispatch(loginUser({ email: data.email!, pw: data.pw! })).unwrap();
       localStorage.setItem('login', 'on');
+      socket.connect();
+      navigate('/');
       await dispatch(closeModal());
     } catch (err: any) {
       alert(err.message);
