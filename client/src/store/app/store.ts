@@ -6,7 +6,6 @@ import authSlice from '../slices/auth.slice';
 import chatSlice from '../slices/chat.slice';
 import modalSlice from '../slices/modal.slice';
 import drawingSlice from '../slices/drawing.slice';
-import boardSlice from '../slices/board.slice';
 import postSlice from '../slices/post.slice';
 
 const persistedReducer = persistReducer(
@@ -20,7 +19,6 @@ const persistedReducer = persistReducer(
     chat: chatSlice,
     modal: modalSlice,
     drawing: drawingSlice,
-    board: boardSlice,
     post: postSlice,
   })
 );

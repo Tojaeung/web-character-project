@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
 import { BsPencilSquare } from 'react-icons/bs';
 import { HiOutlineChevronDoubleUp } from 'react-icons/hi';
 import { getBoard } from '@src/store/requests/board.request';
-import { selectBoardSelectedBoard } from '@src/store/slices/board.slice';
-import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
+import { useAppDispatch } from '@src/store/app/hook';
 import Nickname from '@src/components/Nickname';
 import Pagination from './Pagination';
 import boardTitle from '@src/utils/boardTitle.util';
 import LimitSelector from './LimitSelector';
 import CreatedTime from '@src/components/CreatedTime';
 import Button from '@src/components/Button';
+import { PostType } from '@src/types';
 
 function Board() {
   const dispatch = useAppDispatch();
@@ -20,14 +20,13 @@ function Board() {
   const navigate = useNavigate();
   const { board } = useParams();
 
-  const selectedBoard = useAppSelector(selectBoardSelectedBoard);
-
+  const [posts, setPosts] = useState<PostType[]>([]);
   const [totalPostsNum, setTotalPostsNum] = useState<number>(0);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState<number>(10);
 
   // 게시글 데이터 가져오기
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(
       getBoard({
         board: board as string,
@@ -36,8 +35,20 @@ function Board() {
       })
     )
       .unwrap()
-      .then((res) => setTotalPostsNum(res.totalPostsNum));
+      .then((res) => {
+        const { posts, totalPostsNum } = res;
+        setPosts(posts);
+        setTotalPostsNum(totalPostsNum);
+      });
   }, [page, limit, board]);
+
+  const reloadBoard = (postId: number) => async (e: React.MouseEvent<any>) => {
+    const res = await dispatch(getBoard({ board: board as string, page, limit })).unwrap();
+    const { posts, totalPostsNum } = res;
+    setPosts(posts);
+    setTotalPostsNum(totalPostsNum);
+    navigate(`/board/${board}/post/${postId}`);
+  };
 
   // 스크롤 맨위로
   const goTop = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -64,22 +75,21 @@ function Board() {
           </thead>
 
           <tbody>
-            {selectedBoard &&
-              selectedBoard.map((post) => (
-                <tr key={v4()}>
-                  <td>{post.id}</td>
-                  <td className="post-title">
-                    <Link to={`/board/${board}/post/${post.id}`}>{post.title}</Link>
-                  </td>
-                  <td>
-                    <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />
-                  </td>
-                  <td>{post.views}</td>
-                  <td>
-                    <CreatedTime createdTime={post.created_at} size="small" />
-                  </td>
-                </tr>
-              ))}
+            {posts.map((post) => (
+              <tr key={v4()}>
+                <td>{post.id}</td>
+                <td className="post-title" onClick={reloadBoard(post.id)}>
+                  {post.title}
+                </td>
+                <td>
+                  <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />
+                </td>
+                <td>{post.views}</td>
+                <td>
+                  <CreatedTime createdTime={post.created_at} size="small" />
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
 
@@ -91,16 +101,6 @@ function Board() {
           <CreatePostButton color="green" size="small" onClick={(e) => navigate(`/create/postForm/${board}`)}>
             글쓰기
           </CreatePostButton>
-          {/* {selectedBoard && selectedBoard.length !== 0 && (
-            <>
-              <ScrollUpButton color="green" size="small" inverse={true} onClick={goTop}>
-                상단으로
-              </ScrollUpButton>
-              <CreatePostButton color="green" size="small" onClick={(e) => navigate(`/create/postForm/${board}`)}>
-                글쓰기
-              </CreatePostButton>
-            </>
-          )} */}
         </Footer>
       </Container>
 
@@ -110,19 +110,18 @@ function Board() {
           <LimitSelector setPage={setPage} limit={limit} setLimit={setLimit} />
         </Header>
 
-        {selectedBoard &&
-          selectedBoard.map((post) => (
-            <ListBox key={v4()}>
-              <PostLink to={`/board/${board}/post/${post.id}`}>{post.title}</PostLink>
+        {posts.map((post) => (
+          <ListBox key={v4()}>
+            <Title onClick={reloadBoard(post.id)}>{post.title}</Title>
 
-              <DetailBox>
-                <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />|
-                <Views>조회수: {post.views}</Views>
-                |
-                <CreatedTime createdTime={post.created_at} size="small" />
-              </DetailBox>
-            </ListBox>
-          ))}
+            <DetailBox>
+              <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />|
+              <Views>조회수: {post.views}</Views>
+              |
+              <CreatedTime createdTime={post.created_at} size="small" />
+            </DetailBox>
+          </ListBox>
+        ))}
 
         <Footer>
           <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
@@ -231,7 +230,7 @@ const ListBox = styled.div`
   border-bottom: 1px dotted;
 `;
 
-const PostLink = styled(Link)`
+const Title = styled.p`
   text-align: left;
   align-self: flex-start;
   font-size: 1.3rem;

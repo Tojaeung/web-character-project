@@ -32,13 +32,13 @@ const boardController = {
       const { board, page, limit } = req.body;
 
       const offset = (Number(page) - 1) * Number(limit);
-      const selectedBoard = await postRepo.getSelectedBoard(board, offset, Number(limit));
+      const posts = await postRepo.getSelectedBoard(board, offset, Number(limit));
       const result = await postRepo.CountPosts(board as string);
 
       logger.info('게시판 가져오기 성공하였습니다.');
       return res
         .status(200)
-        .json({ ok: true, message: '게시판 가져오기 성공하였습니다.', selectedBoard, totalPostsNum: result.count });
+        .json({ ok: true, message: '게시판 가져오기 성공하였습니다.', posts, totalPostsNum: result.count });
     } catch (err: any) {
       logger.info('게시판 가져오기 실패하였습니다.', err);
       return res.status(500).json({ ok: false, message: '게시판 가져오기 에러' });

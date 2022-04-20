@@ -17,7 +17,7 @@ export type getBoardsErrorType = {
 export type getBoardReturnType = {
   ok: boolean;
   message: string;
-  selectedBoard: PostType[];
+  posts: PostType[];
   totalPostsNum: number;
 };
 
