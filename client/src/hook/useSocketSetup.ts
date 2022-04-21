@@ -47,15 +47,9 @@ const useSocketSetup = () => {
     });
 
     socket.on('connect_error', async () => {
-      try {
-        await dispatch(logoutUser()).unwrap();
-        socket.disconnect();
-        alert('예기치 않은 오류로 로그아웃 되었습니다.');
-      } catch (err: any) {
-        alert('예기치 않은 오류로 로그아웃 되었습니다.');
-        await dispatch(logoutUser()).unwrap();
-        socket.disconnect();
-      }
+      await dispatch(logoutUser());
+      socket.disconnect();
+      alert('예기치 않은 오류로 로그아웃 되었습니다.');
     });
 
     return () => {
