@@ -27,6 +27,8 @@ import boardRouter from '@src/routes/board.route';
 import postRouter from '@src/routes/post.route';
 import etcRouter from '@src/routes/etc.route';
 
+import apiErrorHandler from '@src/errors/apiHandler.error';
+
 const app: Application = express();
 const http = createServer(app);
 const io = new Server(http, { cors: corsConfig });
@@ -58,6 +60,8 @@ app.use('/api', drawingRouter);
 app.use('/api', boardRouter);
 app.use('/api', postRouter);
 app.use('/api', etcRouter);
+
+app.use(apiErrorHandler);
 
 // Server & DB listening
 const port = process.env.PORT as string;
