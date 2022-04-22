@@ -18,15 +18,7 @@ import { sessionConfig, wrapper } from '@src/configs/session.config';
 import { authorizeUser } from '@src/middlewares/socket.middleware';
 import socket from './socket';
 
-import authRouter from '@src/routes/auth.route';
-import chatRouter from '@src/routes/chat.route';
-import settingsRouter from '@src/routes/settings.route';
-import profileRouter from '@src/routes/profile.route';
-import drawingRouter from '@src/routes/drawing.route';
-import boardRouter from '@src/routes/board.route';
-import postRouter from '@src/routes/post.route';
-import etcRouter from '@src/routes/etc.route';
-
+import router from '@src/routes';
 import apiErrorHandler from '@src/errors/apiHandler.error';
 
 const app: Application = express();
@@ -51,16 +43,8 @@ app.use(sessionConfig);
 io.use(wrapper(sessionConfig));
 io.use((defaultSocket: Socket, next: any) => authorizeUser(defaultSocket, next));
 
-// Routes
-app.use('/api', authRouter);
-app.use('/api', chatRouter);
-app.use('/api', settingsRouter);
-app.use('/api', profileRouter);
-app.use('/api', drawingRouter);
-app.use('/api', boardRouter);
-app.use('/api', postRouter);
-app.use('/api', etcRouter);
-
+// Route
+app.use('/api', router);
 app.use(apiErrorHandler);
 
 // Server & DB listening
