@@ -7,6 +7,8 @@ import etc from '@src/routes/etc.routes';
 import post from '@src/routes/post.routes';
 import profile from '@src/routes/profile.routes';
 import settings from '@src/routes/settings.routes';
+import session from '@src/routes/session.routes';
+import user from '@src/routes/user.routes';
 
 const router = express.Router();
 
@@ -18,5 +20,7 @@ router.use(etc);
 router.use(post);
 router.use(profile);
 router.use(settings);
+router.use(session);
+router.use(user);
 
 export default router;

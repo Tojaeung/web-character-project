@@ -73,6 +73,7 @@
     "typeorm": "^0.2.43",
     "uuid": "^8.3.2",
     "winston": "^3.3.4",
-    "winston-daily-rotate-file": "^4.5.5"
+    "winston-daily-rotate-file": "^4.5.5",
+    "zod": "^3.14.4"
   }
 }

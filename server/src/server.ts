@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import express, { Application } from 'express';
+import express, { Express, Application } from 'express';
 import cors from 'cors';
 import { createConnection } from 'typeorm';
 import path from 'path';
