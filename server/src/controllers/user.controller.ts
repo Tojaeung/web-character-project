@@ -74,7 +74,8 @@ export const forgotPw = async (req: Request<{}, {}, ForgotPwInput['body']>, res:
   const { email } = req.body;
 
   // 요청받은 email로 유저의 pwToken을 찾습니다.
-  const user = await userRepo.selectPwTokenByEmail(email);
+  // pw칼럼은 select: false 처리가 되어있기 때문에 쿼리빌더 addSelect를 이용해서 불러온다.
+  const user = await userRepo.findWithPwTokenByEmail(email);
   if (!user) {
     logger.warn('존재하지 않는 이메일로 비밀번호 찾기를 시도하고 있습니다.');
     throw ApiError.NotFound('이메일이 존재하지 않습니다.');

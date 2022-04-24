@@ -1,24 +1,28 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { getRepository } from 'typeorm';
+import { getCustomRepository, getRepository } from 'typeorm';
 import logger from '@src/helpers/winston.helper';
 import { SignInInput } from '@src/schemas/session.schema';
 import { sendAuthEmail } from '@src/helpers/nodemailer.helper';
 import ApiError from '@src/errors/api.error';
 import { User } from '@src/entities/user/user.entity';
+import { UserRepository } from '@src/repositorys/user.repository';
 
 export const signIn = async (req: Request<{}, {}, SignInInput['body']>, res: Response) => {
+  const userRepo = getCustomRepository(UserRepository);
+
   const { email, pw } = req.body;
 
   // 유효한 email인지 확인하기 위해 email를 조회합니다.
-  const user = await getRepository(User).findOne({ email });
+  // pw칼럼은 select: false 처리가 되어있기 때문에 쿼리빌더 addSelect를 이용해서 불러온다.
+  const user = await userRepo.findWithPwByEmail(email);
   if (!user) {
     logger.warn('이메일이 존재하지 않습니다.');
     throw ApiError.NotFound("'아이디 또는 비밀번호가 올바르지 않습니다.");
   }
 
   // 유효한 이메일이라면 비밀번호가 맞는지 확인합니다.
-  const decryptedPw = await bcrypt.compare(pw, user.pw as string);
+  const decryptedPw = await bcrypt.compare(pw, user?.pw as string);
   if (!decryptedPw) {
     logger.warn('비밀번호가 틀렸습니다.');
     throw ApiError.BadRequest('아이디 또는 비밀번호가 올바르지 않습니다.');
@@ -28,7 +32,7 @@ export const signIn = async (req: Request<{}, {}, SignInInput['body']>, res: Res
   if (!user?.isVerified) {
     await sendAuthEmail(req, res, user.email, user.emailToken as string);
     logger.warn('이메일 인증을 받지 않은 회원이 로그인을 시도합니다.');
-    throw ApiError.BadRequest('인증되지 않은 사용자 입니다.\n이메일 인증을 보냈으니 확인해주세요.');
+    throw ApiError.Unauthorized('인증되지 않은 사용자 입니다.\n이메일 인증을 보냈으니 확인해주세요.');
   }
 
   req.session.user = {

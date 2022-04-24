@@ -18,6 +18,7 @@ function Login() {
   const [hidePw, setHidePw] = useState(true);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       await dispatch(signIn({ email, pw })).unwrap();
       socket.connect();

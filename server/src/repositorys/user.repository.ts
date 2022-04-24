@@ -4,19 +4,20 @@ import { User } from '@src/entities/user/user.entity';
 @EntityRepository(User)
 export class UserRepository extends AbstractRepository<User> {
   // 비밀번호 변경시 사용되는 pwToken으로 유저정보를 찾는 쿼리입니다.
-  // pwToken은 엔티티에서 select: false 처리가 되어있기 때문에 콕 집어서 불러내야한다.
-  selectPwTokenByEmail(email: string) {
-    return this.createQueryBuilder('user')
-      .select('user.id')
-      .addSelect('user.nickname')
-      .addSelect('user.pwToken')
-      .where('user.email = :email', { email })
-      .getOne();
+  // pwToken은 엔티티에서 select: false 처리가 되어있기 때문에 addSelect이용해서 불러내야한다.
+  findWithPwTokenByEmail(email: string) {
+    return this.createQueryBuilder('user').addSelect('user.pwToken').where('user.email = :email', { email }).getOne();
   }
 
   // 로그인이 안된 상태에서 비밀번호찾기로 비밀번호를 변경하는 쿼리입니다.
   updatePwAndPwToken(id: number, pw: string, pwToken: string) {
     return this.createQueryBuilder('user').update(User).set({ pw, pwToken }).where('id = :id', { id }).execute();
+  }
+
+  // 로그인시, 입력 비밀번호와 데이터 해시된 비밀번호를 비교해야한다.
+  // pwToken은 엔티티에서 select: false 처리가 되어있기 때문에 addSelect이용해서 불러내야한다.
+  findWithPwByEmail(email: string) {
+    return this.createQueryBuilder('user').addSelect('user.pw').where('user.email = :email', { email }).getOne();
   }
 
   updateEmail(id: number, email: string) {

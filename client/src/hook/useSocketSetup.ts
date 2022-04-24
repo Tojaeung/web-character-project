@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import socket from '@src/utils/socket';
-import { useAppDispatch } from '@src/store/app/hook';
+import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
+import { selectUserUser } from '@src/store/slices/user.slice';
 import { signOut } from '@src/store/requests/session.request';
 import {
   addChat,
@@ -14,8 +15,11 @@ import {
 
 const useSocketSetup = () => {
   const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUserUser);
 
   useEffect(() => {
+    // 비로그인 새로고침시, 소켓세션정보 생성 시도를 막아준다.
+    if (!user) return;
     socket.connect();
 
     socket.on('initChats', async (parsedChats) => {
