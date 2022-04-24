@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { getProfileParamType, getProfileReturnType, getProfileErrorType } from '@src/store/types/profile.type';
+import { getProfileDataType, getProfileReturnType, getProfileErrorType } from '@src/store/types/profile.type';
 import { RootState } from '../app/store';
 
 export const getProfile = createAsyncThunk<
   getProfileReturnType,
-  getProfileParamType,
+  getProfileDataType,
   { state: RootState; rejectValue: getProfileErrorType }
 >('GET_PROFILE', async (data, thunkApi) => {
   try {

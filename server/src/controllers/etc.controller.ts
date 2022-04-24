@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getCustomRepository } from 'typeorm';
+import { getCustomRepository, getRepository } from 'typeorm';
 import moment from 'moment';
 import schedule from 'node-schedule';
 import { IncomingWebhook } from '@slack/webhook';
@@ -7,6 +7,7 @@ import logger from '@src/helpers/winston.helper';
 import { PostCommentRepository, PostRepository } from '@src/repositorys/board.repository';
 import { DrawingCommentRepository, DrawingRepository } from '@src/repositorys/drawing.repository';
 import { UserRepository } from '@src/repositorys/user.repository';
+import { User } from '@src/entities/user/user.entity';
 
 const etcController = {
   sendReport: async (req: Request, res: Response) => {
@@ -77,8 +78,6 @@ const etcController = {
       return res.status(200).json({ ok: true, message: '신고 성공하였습니다.' });
     } catch (err: any) {
       logger.error('신고하기 에러', err);
-      console.log(err);
-
       return res.status(500).json({ ok: false, message: '신고하기 에러' });
     }
   },
@@ -92,7 +91,7 @@ const etcController = {
     try {
       const { userId } = req.body;
 
-      const userInfo = await userRepo.findUserById(Number(userId));
+      const userInfo = await getRepository(User).findOne(userId);
       const drawingsNum = await drawingRepo.getDrawingsNum(Number(userId));
       const drawingCommentsNum = await drawingCommentRepo.getDrawingCommentsNum(Number(userId));
       const postsNum = await postRepo.getPostsNum(Number(userId));

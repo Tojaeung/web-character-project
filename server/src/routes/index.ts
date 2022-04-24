@@ -1,18 +1,17 @@
 import express from 'express';
-import auth from '@src/routes/auth.routes';
-import board from '@src/routes/board.routes';
-import chat from '@src/routes/chat.routes';
-import drawing from '@src/routes/drawing.routes';
-import etc from '@src/routes/etc.routes';
-import post from '@src/routes/post.routes';
-import profile from '@src/routes/profile.routes';
-import settings from '@src/routes/settings.routes';
-import session from '@src/routes/session.routes';
-import user from '@src/routes/user.routes';
+import board from '@src/routes/board.route';
+import chat from '@src/routes/chat.route';
+import drawing from '@src/routes/drawing.route';
+import etc from '@src/routes/etc.route';
+import post from '@src/routes/post.route';
+import profile from '@src/routes/profile.route';
+import settings from '@src/routes/settings.route';
+import session from '@src/routes/session.route';
+import user from '@src/routes/user.route';
 
 const router = express.Router();
 
-router.use(auth);
+router.use(user);
 router.use(board);
 router.use(chat);
 router.use(drawing);
@@ -21,6 +20,5 @@ router.use(post);
 router.use(profile);
 router.use(settings);
 router.use(session);
-router.use(user);
 
 export default router;

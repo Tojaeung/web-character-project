@@ -21,7 +21,7 @@ export type getBoardReturnType = {
   totalPostsNum: number;
 };
 
-export type getBoardParamType = {
+export type getBoardDataType = {
   board: string;
   page: number;
   limit: number;

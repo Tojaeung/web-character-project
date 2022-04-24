@@ -4,7 +4,7 @@ import { AiOutlineUnorderedList } from 'react-icons/ai';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import Button from '@src/components/Button';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectUserUser } from '@src/store/slices/user.slice';
 import { selectPostPost } from '@src/store/slices/post.slice';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { removePost } from '@src/store/requests/post.request';
@@ -16,7 +16,7 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector(selectAuthUser);
+  const user = useAppSelector(selectUserUser);
   const post = useAppSelector(selectPostPost);
 
   // 신고하기 모달 커스텀 훅

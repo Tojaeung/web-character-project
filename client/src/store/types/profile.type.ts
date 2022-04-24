@@ -7,7 +7,7 @@ export type getProfileReturnType = {
   profile: ProfileType;
 };
 
-export type getProfileParamType = {
+export type getProfileDataType = {
   profileId: number;
 };
 

@@ -7,7 +7,7 @@ export type getDrawingsReturnType = {
   newCursor: number | null;
 };
 
-export type getDrawingsParamType = {
+export type getDrawingsDataType = {
   profileId: number;
   cursor: number;
 };
@@ -22,7 +22,7 @@ export type addDrawingReturnType = {
   message: string;
   newDrawing: DrawingType;
 };
-export type addDrawingParamType = {};
+export type addDrawingDataType = {};
 export type addDrawingErrorType = {
   ok: boolean;
   message: string;
@@ -33,7 +33,7 @@ export type removeDrawingReturnType = {
   message: string;
   removedDrawingId: number;
 };
-export type removeDrawingParamType = {
+export type removeDrawingDataType = {
   drawingId: number;
 };
 export type removeDrawingErrorType = {
@@ -46,7 +46,7 @@ export type addViewReturnType = {
   message: string;
   views: number;
 };
-export type addViewParamType = {
+export type addViewDataType = {
   drawingId: number;
 };
 export type addViewErrorType = {
@@ -59,7 +59,7 @@ export type addCommentReturnType = {
   message: string;
   addedComment: DrawingCommentType;
 };
-export type addCommentParamType = {
+export type addCommentDataType = {
   content: string;
   userId: number;
   drawingId: number;
@@ -74,7 +74,7 @@ export type addLikeReturnType = {
   message: string;
   addedLike: DrawingLikeType;
 };
-export type addLikeParamType = {
+export type addLikeDataType = {
   userId: number;
   drawingId: number;
 };
@@ -88,7 +88,7 @@ export type addDisLikeReturnType = {
   message: string;
   addedDislike: DrawingDisLikeType;
 };
-export type addDisLikeParamType = {
+export type addDisLikeDataType = {
   userId: number;
   drawingId: number;
 };
@@ -102,7 +102,7 @@ export type removeCommentReturnType = {
   message: string;
   removedCommentId: number;
 };
-export type removeCommentParamType = {
+export type removeCommentDataType = {
   drawingCommentId: number;
 };
 export type removeCommentErrorType = {
@@ -116,7 +116,7 @@ export type editCommentReturnType = {
   drawingCommentId: number;
   editedContent: string;
 };
-export type editCommentParamType = {
+export type editCommentDataType = {
   drawingCommentId: number;
   editedContent: string;
 };

@@ -5,7 +5,7 @@ import { AiOutlineMenu, AiOutlineUser, AiOutlineKey, AiOutlineClose } from 'reac
 import { MdPlaylistAdd } from 'react-icons/md';
 import Profile from './Profile';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectUserUser } from '@src/store/slices/user.slice';
 import { openModal } from '@src/store/slices/modal.slice';
 import logo from '@src/assets/images/logo.jpg';
 import Button from '@src/components/Button';
@@ -14,7 +14,7 @@ function Header() {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const user = useAppSelector(selectAuthUser);
+  const user = useAppSelector(selectUserUser);
 
   const openLoginModal = async (e: any) => {
     await dispatch(openModal({ mode: 'login' }));
@@ -45,7 +45,7 @@ function Header() {
                 <UserIcon />
                 로그인
               </LoginButton>
-              <SignUpButton color="green" size="small" onClick={(e) => navigate('/auth/signUp')}>
+              <SignUpButton color="green" size="small" onClick={(e) => navigate('/signUp')}>
                 <AddIcon />
                 회원가입
               </SignUpButton>

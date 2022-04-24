@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { AiFillDislike, AiOutlineDislike } from 'react-icons/ai';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectUserUser } from '@src/store/slices/user.slice';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { DrawingLikeType, DrawingDisLikeType, PostLikeType, PostDisLikeType } from '@src/types';
 import { addDrawingDisLike } from '@src/store/requests/drawing.request';
@@ -19,7 +19,7 @@ interface IProps {
 function DisLikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector(selectAuthUser);
+  const user = useAppSelector(selectUserUser);
 
   const onAddDisLike = async (e: React.MouseEvent<HTMLSpanElement>) => {
     const existingLike = likes?.some((like) => like.user_id === user?.id);

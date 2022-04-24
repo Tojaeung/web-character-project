@@ -8,7 +8,7 @@ import { useUserInfoModal, useDescModal, usePenaltyModal } from '@src/hook/useMo
 import Desc from '@src/modals/Desc';
 import UserInfoModal from '@src/modals/UserInfo';
 import { useAppSelector } from '@src/store/app/hook';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectUserUser } from '@src/store/slices/user.slice';
 import Penalty from '@src/modals/Penalty';
 
 interface IProps {
@@ -22,7 +22,7 @@ interface IProps {
 }
 
 function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, size }: IProps) {
-  const user = useAppSelector(selectAuthUser);
+  const user = useAppSelector(selectUserUser);
 
   const { showUserInfoModal, openUserInfoModal, closeUserInfoModal } = useUserInfoModal();
   const { showDescModal, openDescModal, closeDescModal } = useDescModal();

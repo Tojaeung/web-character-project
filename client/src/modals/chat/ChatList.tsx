@@ -7,7 +7,7 @@ import 'moment/locale/ko';
 import relativeTime from '@src/utils/date.util';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectChats, selectChatUser, selectMsgNotis, closeChatModal } from '@src/store/slices/chat.slice';
-import { ChatUserType } from '@src/store/types/chat.type';
+import { ChatUserType } from '@src/types';
 import Avatar from '@src/components/Avatar';
 import NotiCount from '@src/components/NotiCount';
 

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { AiOutlineClose } from 'react-icons/ai';
 import Button from '@src/components/Button';
 import { useAppSelector } from '@src/store/app/hook';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectUserUser } from '@src/store/slices/user.slice';
 
 interface IProps {
   isOpen: boolean;
@@ -17,7 +17,7 @@ interface IProps {
 function Desc({ isOpen, closeModal, userId, desc }: IProps) {
   const navigate = useNavigate();
 
-  const user = useAppSelector(selectAuthUser);
+  const user = useAppSelector(selectUserUser);
 
   if (!isOpen) return null;
   return createPortal(

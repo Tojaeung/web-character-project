@@ -4,7 +4,7 @@ import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import CreatedTime from '@src/components/CreatedTime';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectUserUser } from '@src/store/slices/user.slice';
 import { removeDrawingComment } from '@src/store/requests/drawing.request';
 import { removePostComment } from '@src/store/requests/post.request';
 import { DrawingCommentType, PostCommentType } from '@src/types';
@@ -21,7 +21,7 @@ interface IProps {
 
 function CommentList({ type, comment, index, setCommentIndex, isSelected }: IProps) {
   const dispatch = useAppDispatch();
-  const user = useAppSelector(selectAuthUser);
+  const user = useAppSelector(selectUserUser);
 
   // 댓글 수정폼 나타내기
   const openEditCommemtForm = (e: React.MouseEvent<HTMLButtonElement>) => {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { AiOutlineWarning } from 'react-icons/ai';
 import styled from 'styled-components';
 import socket from '@src/utils/socket';
-import { logoutUser } from '@src/store/requests/auth.request';
+import { signOut } from '@src/store/requests/session.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
 import Input from '@src/components/Input';
@@ -17,7 +17,7 @@ function DelAccount() {
       const res = await dispatch(delAccount()).unwrap();
       socket.disconnect();
       await dispatch(closeModal());
-      await dispatch(logoutUser());
+      await dispatch(signOut());
       localStorage.clear();
       alert(res.message);
     } catch (err: any) {

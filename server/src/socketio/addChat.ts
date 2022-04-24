@@ -1,11 +1,10 @@
-import { getCustomRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { SessionSocket } from '@src/types/index';
 import cluster from '@src/helpers/redis.helper';
-import { UserRepository } from '@src/repositorys/user.repository';
+import { User } from '@src/entities/user/user.entity';
 
 /* 대화상대 추가 */
 const addChat = async (socket: SessionSocket, chatId: string) => {
-  const userRepository = getCustomRepository(UserRepository);
   const user = socket.request.session.user;
 
   // 자기 자신을 채팅상대로 추가했는지 확인합니다.
@@ -16,7 +15,7 @@ const addChat = async (socket: SessionSocket, chatId: string) => {
   }
 
   // 추가한 채팅상대가 존재하는 유저인지 확인합니다.
-  const chatUser = await userRepository.findUserByChatId(chatId);
+  const chatUser = await getRepository(User).findOne(chatId);
   if (!chatUser) {
     const result = { ok: false, message: '존재하지 않는 유저입니다.' };
     socket.emit('addChat', result);

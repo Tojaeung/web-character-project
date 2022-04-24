@@ -1,10 +1,10 @@
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { logoutUser } from '@src/store/requests/auth.request';
+import { signOut } from '@src/store/requests/session.request';
 import { useAppDispatch } from '@src/store/app/hook';
-import { AuthInputsType, PwInput, ConfirmPwInput } from '@src/components/AuthInputs';
 import { closeModal } from '@src/store/slices/modal.slice';
+import Input from '@src/components/Input';
 import Button from '@src/components/Button';
 import { editPw } from '@src/store/requests/settings.request';
 
@@ -12,18 +12,16 @@ function EditPw() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<AuthInputsType>({ mode: 'onChange' });
+  const [currentPw, setCurrentPw] = useState('');
+  const [newPw, setNewPw] = useState('');
+  const [newPwConfirmation, setNewPwConfirmation] = useState('');
 
-  const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      const res = await dispatch(editPw({ currentPw: data.currentPw!, newPw: data.pw! })).unwrap();
+      const res = await dispatch(editPw({ currentPw, newPw, newPwConfirmation })).unwrap();
       alert(res.message);
       await dispatch(closeModal());
-      await dispatch(logoutUser());
+      await dispatch(signOut());
       navigate('/');
     } catch (err: any) {
       alert(err.message);
@@ -31,14 +29,43 @@ function EditPw() {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit}>
       <Title>비밀번호 변경</Title>
 
       <Content>변경할 비밀번호를 입력해주세요 🔒🔒</Content>
 
-      <PwInput label="현재 비밀번호" name="currentPw" register={register} error={errors.currentPw} />
-      <PwInput label="변경할 비밀번호" name="pw" register={register} error={errors.pw} />
-      <ConfirmPwInput label="비밀번호 확인" name="confirmPw" register={register} error={errors.confirmPw} />
+      <InputBox>
+        <Label htmlFor="currentPw">현재 비밀번호</Label>
+        <Input
+          color="green"
+          autoComplete="off"
+          type="password"
+          value={currentPw}
+          onChange={(e) => setCurrentPw(e.target.value)}
+        />
+      </InputBox>
+
+      <InputBox>
+        <Label htmlFor="pw">변경할 비밀번호</Label>
+        <Input
+          color="green"
+          autoComplete="off"
+          type="password"
+          value={newPw}
+          onChange={(e) => setNewPw(e.target.value)}
+        />
+      </InputBox>
+
+      <InputBox>
+        <Label htmlFor="pwConfirmation">변경할 비밀번호 확인</Label>
+        <Input
+          color="green"
+          autoComplete="off"
+          type="password"
+          value={newPwConfirmation}
+          onChange={(e) => setNewPwConfirmation(e.target.value)}
+        />
+      </InputBox>
 
       <SubmitButton type="submit" color="green" size="medium">
         비밀번호 변경하기
@@ -59,6 +86,20 @@ const Title = styled.h1`
 `;
 const Content = styled.p`
   font-size: 1.5rem;
+`;
+
+const InputBox = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+`;
+const Label = styled.label`
+  font-size: 1.5rem;
+  align-self: flex-start;
+  white-space: nowrap;
 `;
 const SubmitButton = styled(Button)``;
 

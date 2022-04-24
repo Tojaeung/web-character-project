@@ -2,18 +2,20 @@ import React, { useState, useRef } from 'react';
 import { CgProfile } from 'react-icons/cg';
 import { BsBell } from 'react-icons/bs';
 import { FiSettings, FiLogOut } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
-import { logoutUser } from '@src/store/requests/auth.request';
+import { selectUserUser } from '@src/store/slices/user.slice';
+import { signOut } from '@src/store/requests/session.request';
 import Avatar from '@src/components/Avatar';
 import useDropDown from '@src/hook/useDropDown';
 import Chat from './Chat';
 
 function Profile() {
   const dispatch = useAppDispatch();
-  const user = useAppSelector(selectAuthUser);
+  const navigate = useNavigate();
+
+  const user = useAppSelector(selectUserUser);
 
   const [openDropDown, setOpenDropDown] = useState(false);
   const targetRef = useRef<HTMLUListElement>(null);
@@ -21,7 +23,8 @@ function Profile() {
 
   const handleLogout = async (e: React.MouseEvent<HTMLLIElement>) => {
     try {
-      await dispatch(logoutUser()).unwrap();
+      await dispatch(signOut()).unwrap();
+      navigate('/');
     } catch (err: any) {
       alert(err.message);
     }

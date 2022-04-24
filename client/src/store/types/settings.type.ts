@@ -3,7 +3,7 @@ export type editEmailReturnType = {
   message: string;
 };
 
-export type editEmailParamType = {
+export type editEmailDataType = {
   email: string;
 };
 
@@ -18,7 +18,7 @@ export type editNicknameReturnType = {
   newNickname: string;
 };
 
-export type editNicknameParamType = {
+export type editNicknameDataType = {
   nickname: string;
 };
 
@@ -32,9 +32,10 @@ export type editPwReturnType = {
   message: string;
 };
 
-export type editPwParamType = {
+export type editPwDataType = {
   currentPw: string;
   newPw: string;
+  newPwConfirmation: string;
 };
 
 export type editPwErrorType = {
@@ -49,7 +50,7 @@ export type editAvatarReturnType = {
   newAvatarKey: string;
 };
 
-export type editAvatarParamType = {};
+export type editAvatarDataType = {};
 
 export type editAvatarErrorType = {
   ok: boolean;
@@ -74,7 +75,7 @@ export type editCoverReturnType = {
   newCover: string;
   newCoverKey: string;
 };
-export type editCoverParamType = {};
+export type editCoverDataType = {};
 
 export type editCoverErrorType = {
   ok: boolean;
@@ -98,7 +99,7 @@ export type editDescReturnType = {
   message: string;
   desc: string;
 };
-export type editDescParamType = {
+export type editDescDataType = {
   desc: string;
 };
 

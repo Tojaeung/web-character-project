@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import Drawing from '@src/pages/profile/[id]/Drawing';
+import Drawing from '@src/pages/profile/Drawing';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import { useAppDispatch } from '@src/store/app/hook';

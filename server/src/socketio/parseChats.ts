@@ -1,8 +1,9 @@
-import { getCustomRepository } from 'typeorm';
+import { getCustomRepository, getRepository } from 'typeorm';
+import moment from 'moment';
+import { User } from '@src/entities/user/user.entity';
 import { UserRepository } from '@src/repositorys/user.repository';
 import cluster from '@src/helpers/redis.helper';
 import parseMessages from '@src/socketio/parseMessages';
-import moment from 'moment';
 
 const parseChats = async (chatId: string, chats: string[]) => {
   if (!chats || !chats.length) {
@@ -12,7 +13,7 @@ const parseChats = async (chatId: string, chats: string[]) => {
   const newChats = [];
   for (const chat of chats) {
     // 대화상대의 정보를 가져온다.
-    const chatUser = await userRepository.findUserByChatId(chat);
+    const chatUser = await getRepository(User).findOne(chat);
 
     // 대화상대와의 메세지 정보를 가져온다.
     const messages = await cluster.lrange(`messages:${chatId}`, 0, -1);

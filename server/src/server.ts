@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import express, { Express, Application } from 'express';
+import express from 'express';
 import cors from 'cors';
 import { createConnection } from 'typeorm';
 import path from 'path';
@@ -21,7 +21,7 @@ import socket from './socket';
 import router from '@src/routes';
 import apiErrorHandler from '@src/errors/apiHandler.error';
 
-const app: Application = express();
+const app = express();
 const http = createServer(app);
 const io = new Server(http, { cors: corsConfig });
 

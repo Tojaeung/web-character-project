@@ -1,17 +1,15 @@
 import { Request, Response } from 'express';
-import { getCustomRepository, getRepository } from 'typeorm';
-import { UserRepository } from '@src/repositorys/user.repository';
+import { getRepository } from 'typeorm';
 import logger from '@src/helpers/winston.helper';
+import { User } from '@src/entities/user/user.entity';
 
 const profileController = {
   //  프로필유저 정보를 클라이언트에 보내는 API입니다.
   getProfile: async (req: Request, res: Response) => {
-    const userRepo = getCustomRepository(UserRepository);
-
     try {
       const { profileId } = req.body;
 
-      const profile = await userRepo.findProfile(profileId);
+      const profile = await getRepository(User).findOne(profileId);
 
       if (!profile) {
         logger.warn('url를 이용해서 존재하지 않는 profileId에 접근하고 있습니다.');

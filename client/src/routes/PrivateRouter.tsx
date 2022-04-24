@@ -1,9 +1,9 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAppSelector } from '@src/store/app/hook';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectUserUser } from '@src/store/slices/user.slice';
 
 const PrivateRouter = () => {
-  const user = useAppSelector(selectAuthUser);
+  const user = useAppSelector(selectUserUser);
 
   return user ? <Outlet /> : <Navigate to="/" />;
 };

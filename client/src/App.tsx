@@ -13,8 +13,8 @@ import CreateDrawingForm from '@src/pages/create/DrawingForm';
 import Modal from '@src/modals/Modal';
 import Chat from '@src/modals/chat';
 import Profile from '@src/pages/profile/[id]';
-import EditPw from '@src/pages/auth/EditPw';
-import SignUp from '@src/pages/auth/SignUp';
+import ResetPw from '@src/pages/user/ResetPw';
+import SignUp from '@src/pages/user/SignUp';
 import Board from '@src/pages/board/[board]';
 import Post from '@src/pages/post/[id]';
 import NotFound from '@src/components/NotFound';
@@ -37,9 +37,9 @@ function App() {
             <Route path="/board/:board" element={<Board />} />
             <Route path="/board/:board/post/:postId" element={<Post />} />
 
-            <Route path="/auth" element={<PublicRouter />}>
+            <Route path="/" element={<PublicRouter />}>
               <Route path="signUp" element={<SignUp />} />
-              <Route path="editPw" element={<EditPw />} />
+              <Route path="resetPw" element={<ResetPw />} />
             </Route>
 
             <Route path="/" element={<PrivateRouter />}>
@@ -48,8 +48,6 @@ function App() {
                 <Route path="alert" element={<Alert />} />
                 <Route path="desc" element={<Desc />} />
               </Route>
-
-              <Route path="editPw" element={<EditPw />} />
 
               <Route path="create">
                 <Route path="drawingForm" element={<CreateDrawingForm />} />

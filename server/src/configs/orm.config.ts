@@ -11,7 +11,7 @@ const ormconfig: ConnectionOptions = {
   password: process.env.PG_PASSWORD as string,
   database: process.env.PG_DATABASE as string,
   synchronize: (process.env.NODE_ENV as string) === 'production' ? false : true,
-  // logging: ['query', 'error'],
+  logging: ['query', 'error'],
   entities: ['src/entities/**/*.ts'],
   migrations: ['src/migrations/**/*.ts'],
   cli: {

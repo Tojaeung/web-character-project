@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectUserUser } from '@src/store/slices/user.slice';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { DrawingLikeType, DrawingDisLikeType, PostLikeType, PostDisLikeType } from '@src/types';
 import { addDrawingLike } from '@src/store/requests/drawing.request';
@@ -19,7 +19,7 @@ interface IProps {
 function LikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector(selectAuthUser);
+  const user = useAppSelector(selectUserUser);
 
   const onAddLike = async (e: React.MouseEvent<HTMLSpanElement>) => {
     const existingLike = likes.some((like) => like.user_id === user?.id);

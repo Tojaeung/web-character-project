@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
-import { ChatUserType, MessageType, MsgNotiType } from '@src/store/types/chat.type';
+import { ChatUserType, MessageType, MsgNotiType } from '@src/types';
 
 interface ChatType {
   ok: boolean;

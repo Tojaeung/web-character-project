@@ -8,14 +8,14 @@ import Nickname from '@src/components/Nickname';
 import Button from '@src/components/Button';
 import { useDefaultConfig } from '@src/hook/useReactQuillConfig';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectUserUser } from '@src/store/slices/user.slice';
 import { addDrawing } from '@src/store/requests/drawing.request';
 import { calcExp } from '@src/store/requests/etc.request';
 
 function DrawingForm() {
   const dispatch = useAppDispatch();
   const [defaultModules] = useDefaultConfig();
-  const user = useAppSelector(selectAuthUser);
+  const user = useAppSelector(selectUserUser);
 
   const drawingInputRef = useRef<HTMLInputElement>(null);
 

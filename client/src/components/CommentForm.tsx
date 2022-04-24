@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectUserUser } from '@src/store/slices/user.slice';
 import { addDrawingComment } from '@src/store/requests/drawing.request';
 import { addPostComment } from '@src/store/requests/post.request';
 import Button from '@src/components/Button';
@@ -15,7 +15,7 @@ interface IProp {
 function CommentForm({ entityId, type }: IProp) {
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector(selectAuthUser);
+  const user = useAppSelector(selectUserUser);
 
   const [content, setContent] = useState('');
 

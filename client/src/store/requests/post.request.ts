@@ -3,46 +3,46 @@ import axios from 'axios';
 import { RootState } from '../app/store';
 import {
   getPostErrorType,
-  getPostParamType,
+  getPostDataType,
   getPostReturnType,
   addPostErrorType,
-  addPostParamType,
+  addPostDataType,
   addPostReturnType,
   addPostCommentErrorType,
-  addPostCommentParamType,
+  addPostCommentDataType,
   addPostCommentReturnType,
   imageUploadErrorType,
-  imageUploadParamType,
+  imageUploadDataType,
   imageUploadReturnType,
   imageRemoveErrorType,
-  imageRemoveParamType,
+  imageRemoveDataType,
   imageRemoveReturnType,
   removePostErrorType,
-  removePostParamType,
+  removePostDataType,
   removePostReturnType,
   editPostErrorType,
-  editPostParamType,
+  editPostDataType,
   editPostReturnType,
   addPostLikeReturnType,
-  addPostLikeParamType,
+  addPostLikeDataType,
   addPostLikeErrorType,
   addPostDisLikeReturnType,
-  addPostDisLikeParamType,
+  addPostDisLikeDataType,
   addPostDisLikeErrorType,
   editPostCommentErrorType,
-  editPostCommentParamType,
+  editPostCommentDataType,
   editPostCommentReturnType,
   removePostCommentErrorType,
-  removePostCommentParamType,
+  removePostCommentDataType,
   removePostCommentReturnType,
   addViewErrorType,
-  addViewParamType,
+  addViewDataType,
   addViewReturnType,
 } from '@src/store/types/post.type';
 
 export const addView = createAsyncThunk<
   addViewReturnType,
-  addViewParamType,
+  addViewDataType,
   { state: RootState; rejectValue: addViewErrorType }
 >('ADD_VIEW', async (data, thunkApi) => {
   try {
@@ -57,7 +57,7 @@ export const addView = createAsyncThunk<
 
 export const getPost = createAsyncThunk<
   getPostReturnType,
-  getPostParamType,
+  getPostDataType,
   { state: RootState; rejectValue: getPostErrorType }
 >('GET_POST', async (data, thunkApi) => {
   try {
@@ -72,7 +72,7 @@ export const getPost = createAsyncThunk<
 
 export const addPost = createAsyncThunk<
   addPostReturnType,
-  addPostParamType,
+  addPostDataType,
   { state: RootState; rejectValue: addPostErrorType }
 >('ADD_POST', async (data, thunkApi) => {
   try {
@@ -87,7 +87,7 @@ export const addPost = createAsyncThunk<
 
 export const editPost = createAsyncThunk<
   editPostReturnType,
-  editPostParamType,
+  editPostDataType,
   { state: RootState; rejectValue: editPostErrorType }
 >('EDIT_POST', async (data, thunkApi) => {
   try {
@@ -102,7 +102,7 @@ export const editPost = createAsyncThunk<
 
 export const removePost = createAsyncThunk<
   removePostReturnType,
-  removePostParamType,
+  removePostDataType,
   { state: RootState; rejectValue: removePostErrorType }
 >('REMOVE_POST', async (data, thunkApi) => {
   try {
@@ -117,7 +117,7 @@ export const removePost = createAsyncThunk<
 
 export const imageUpload = createAsyncThunk<
   imageUploadReturnType,
-  imageUploadParamType,
+  imageUploadDataType,
   { state: RootState; rejectValue: imageUploadErrorType }
 >('IMAGE_UPLOAD', async (data, thunkApi) => {
   try {
@@ -132,7 +132,7 @@ export const imageUpload = createAsyncThunk<
 
 export const imageRemove = createAsyncThunk<
   imageRemoveReturnType,
-  imageRemoveParamType,
+  imageRemoveDataType,
   { state: RootState; rejectValue: imageRemoveErrorType }
 >('IMAGE_REMOVE', async (data, thunkApi) => {
   try {
@@ -147,7 +147,7 @@ export const imageRemove = createAsyncThunk<
 
 export const addPostComment = createAsyncThunk<
   addPostCommentReturnType,
-  addPostCommentParamType,
+  addPostCommentDataType,
   { state: RootState; rejectValue: addPostCommentErrorType }
 >('ADD_POST_COMMENT', async (data, thunkApi) => {
   try {
@@ -162,7 +162,7 @@ export const addPostComment = createAsyncThunk<
 
 export const removePostComment = createAsyncThunk<
   removePostCommentReturnType,
-  removePostCommentParamType,
+  removePostCommentDataType,
   { state: RootState; rejectValue: removePostCommentErrorType }
 >('REMOVE_POST_COMMENT', async (data, thunkApi) => {
   try {
@@ -177,7 +177,7 @@ export const removePostComment = createAsyncThunk<
 
 export const addPostLike = createAsyncThunk<
   addPostLikeReturnType,
-  addPostLikeParamType,
+  addPostLikeDataType,
   { state: RootState; rejectValue: addPostLikeErrorType }
 >('ADD_POST_LIKE', async (data, thunkApi) => {
   try {
@@ -192,7 +192,7 @@ export const addPostLike = createAsyncThunk<
 
 export const addPostDisLike = createAsyncThunk<
   addPostDisLikeReturnType,
-  addPostDisLikeParamType,
+  addPostDisLikeDataType,
   { state: RootState; rejectValue: addPostDisLikeErrorType }
 >('ADD_POST_DISLIKE', async (data, thunkApi) => {
   try {
@@ -207,7 +207,7 @@ export const addPostDisLike = createAsyncThunk<
 
 export const editPostComment = createAsyncThunk<
   editPostCommentReturnType,
-  editPostCommentParamType,
+  editPostCommentDataType,
   { state: RootState; rejectValue: editPostCommentErrorType }
 >('EDIT_POST_COMMENT', async (data, thunkApi) => {
   try {

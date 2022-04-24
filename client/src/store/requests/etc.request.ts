@@ -1,24 +1,24 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {
-  sendReportParamType,
+  sendReportDataType,
   sendReportErrorType,
   sendReportReturnType,
   getUserInfoErrorType,
-  getUserInfoParamType,
+  getUserInfoDataType,
   getUserInfoReturnType,
   calcExpErrorType,
   calcExpReturnType,
-  calcExpParamType,
+  calcExpDataType,
   penaltyByAdminReturnType,
-  penaltyByAdminParamType,
+  penaltyByAdminDataType,
   penaltyByAdminErrorType,
 } from '@src/store/types/etc.type';
 import { RootState } from '../app/store';
 
 export const sendReport = createAsyncThunk<
   sendReportReturnType,
-  sendReportParamType,
+  sendReportDataType,
   { state: RootState; rejectValue: sendReportErrorType }
 >('SEND_REPORT', async (data, thunkApi) => {
   try {
@@ -33,7 +33,7 @@ export const sendReport = createAsyncThunk<
 
 export const getUserInfo = createAsyncThunk<
   getUserInfoReturnType,
-  getUserInfoParamType,
+  getUserInfoDataType,
   { state: RootState; rejectValue: getUserInfoErrorType }
 >('GET_USER_INFO', async (data, thunkApi) => {
   try {
@@ -48,7 +48,7 @@ export const getUserInfo = createAsyncThunk<
 
 export const calcExp = createAsyncThunk<
   calcExpReturnType,
-  calcExpParamType,
+  calcExpDataType,
   { state: RootState; rejectValue: calcExpErrorType }
 >('CALC_EXP', async (data, thunkApi) => {
   try {
@@ -63,7 +63,7 @@ export const calcExp = createAsyncThunk<
 
 export const penaltyByAdmin = createAsyncThunk<
   penaltyByAdminReturnType,
-  penaltyByAdminParamType,
+  penaltyByAdminDataType,
   { state: RootState; rejectValue: penaltyByAdminErrorType }
 >('PENELTY_BY_ADMIN', async (data, thunkApi) => {
   try {

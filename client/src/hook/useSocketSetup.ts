@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import socket from '@src/utils/socket';
 import { useAppDispatch } from '@src/store/app/hook';
-import { logoutUser } from '@src/store/requests/auth.request';
+import { signOut } from '@src/store/requests/session.request';
 import {
   addChat,
   initChats,
@@ -47,7 +47,7 @@ const useSocketSetup = () => {
     });
 
     socket.on('connect_error', async () => {
-      await dispatch(logoutUser());
+      await dispatch(signOut());
       socket.disconnect();
       alert('예기치 않은 오류로 로그아웃 되었습니다.');
     });

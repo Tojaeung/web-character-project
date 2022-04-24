@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getCustomRepository } from 'typeorm';
+import { getCustomRepository, getRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
 import logger from '@src/helpers/winston.helper';
 import { sendChangeEmail } from '@src/helpers/nodemailer.helper';
@@ -8,20 +8,20 @@ import { UserRepository } from '@src/repositorys/user.repository';
 import cluster from '@src/helpers/redis.helper';
 import { DrawingRepository } from '@src/repositorys/drawing.repository';
 import { ImageKeyRepository } from '@src/repositorys/board.repository';
+import { User } from '@src/entities/user/user.entity';
 
 const settingsController = {
   // 이메일 변경을 위한 API입니다. (변경을 위해서 이메일 인증이 필요합니다.)
   editEmail: async (req: Request, res: Response) => {
-    const userRepo = getCustomRepository(UserRepository);
     try {
       const id = req.session.user?.id;
-      const user = await userRepo.findUserById(id as number);
+      const user = await getRepository(User).findOne(id as number);
 
       const newEmail = req.body.email;
       const currentEmail = user?.email;
 
       // 변경할 이메일이 존재하는지 확인합니다.
-      const existingEmail = await userRepo.findUserByEmail(newEmail);
+      const existingEmail = await getRepository(User).findOne({ email: newEmail });
       if (existingEmail) {
         return res.status(400).json({ ok: false, message: '이미 존재하는 이메일 입니다.' });
       }
@@ -48,7 +48,7 @@ const settingsController = {
       const id = req.session.user?.id;
 
       // 변경할 닉네임이 존재하는지 확인합니다.
-      const existingNickname = await userRepo.findUserByNickname(newNickname);
+      const existingNickname = await getRepository(User).findOne({ nickname: newNickname });
       if (existingNickname) return res.status(400).json({ ok: false, message: '이미 존재하는 닉네임 입니다.' });
 
       const result = await userRepo.updateNickname(id as number, newNickname);
@@ -73,7 +73,7 @@ const settingsController = {
       const id = req.session.user?.id;
 
       // 비밀번호 일치 확인
-      const user = await userRepo.findUserById(id as number);
+      const user = await getRepository(User).findOne(id as number);
       const decryptedPw = await bcrypt.compare(currentPw, user?.pw as string);
       if (!decryptedPw) return res.status(400).json({ ok: false, message: '비밀번호가 틀렸습니다.' });
 
@@ -102,7 +102,7 @@ const settingsController = {
       const newAvatarKey = (req.file as Express.MulterS3.File).key;
 
       const id = req.session.user?.id;
-      const user = await userRepo.findUserById(id as number);
+      const user = await getRepository(User).findOne(id as number);
 
       const currentAvatarKey = user?.avatarKey;
       const defaultAvatarKey = process.env.DEFAULT_AVATAR_KEY as string;
@@ -139,7 +139,7 @@ const settingsController = {
     const userRepo = getCustomRepository(UserRepository);
     try {
       const id = req.session.user?.id;
-      const user = await userRepo.findUserById(id as number);
+      const user = await getRepository(User).findOne(id as number);
 
       const currentAvatarKey = user?.avatarKey;
       // 기본 프로필 사진 데이터입니다.
@@ -175,7 +175,7 @@ const settingsController = {
       const newCoverKey = (req.file as Express.MulterS3.File).key;
 
       const id = req.session.user?.id;
-      const user = await userRepo.findUserById(id as number);
+      const user = await getRepository(User).findOne(id as number);
 
       const currentCoverKey = user?.coverKey;
       const defaultCoverKey = process.env.DEFAULT_COVER_KEY as string;
@@ -209,7 +209,7 @@ const settingsController = {
     const userRepo = getCustomRepository(UserRepository);
     try {
       const id = req.session.user?.id;
-      const user = await userRepo.findUserById(id as number);
+      const user = await getRepository(User).findOne(id as number);
 
       const currentCoverKey = user?.coverKey;
       // 기본 프로필 사진 데이터입니다.
@@ -245,7 +245,7 @@ const settingsController = {
     try {
       const id = req.session.user?.id;
 
-      const user = await userRepo.findUserById(id as number);
+      const user = await getRepository(User).findOne(id);
       const drawings = await drawingRepo.findDrawingById(id as number);
       const imageKeys = await imageKeysRepo.findImageKeysById(id as number);
 

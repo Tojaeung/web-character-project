@@ -5,7 +5,7 @@ export type sendReportReturnType = {
   message: string;
 };
 
-export type sendReportParamType = {
+export type sendReportDataType = {
   reportType: string;
   report: string;
   url: string;
@@ -26,7 +26,7 @@ export type getUserInfoReturnType = {
   postCommentsNum: number;
 };
 
-export type getUserInfoParamType = {
+export type getUserInfoDataType = {
   userId: number;
 };
 export type getUserInfoErrorType = {
@@ -40,7 +40,7 @@ export type calcExpReturnType = {
   calcedValue: number;
 };
 
-export type calcExpParamType = {
+export type calcExpDataType = {
   userId?: number;
   value: number;
 };
@@ -55,7 +55,7 @@ export type penaltyByAdminReturnType = {
   message: string;
 };
 
-export type penaltyByAdminParamType = {
+export type penaltyByAdminDataType = {
   userId: number;
   penaltyPeriod: number;
 };

@@ -1,7 +1,7 @@
-import { getCustomRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { SessionSocket } from '@src/types/index';
 import cluster from '@src/helpers/redis.helper';
-import { UserRepository } from '@src/repositorys/user.repository';
+import { User } from '@src/entities/user/user.entity';
 
 interface MessageType {
   type: string;
@@ -14,9 +14,8 @@ interface MessageType {
 
 const addMessage = async (socket: SessionSocket, message: MessageType) => {
   const user = socket.request.session.user;
-  const userRepo = getCustomRepository(UserRepository);
 
-  const userData = await userRepo.findUserById(user.id);
+  const userData = await getRepository(User).findOne(user.id);
 
   // 메세지 객체를 스트링으로 바꿔준후 나와 대화상대 레디스에 저장한다.
   const messageStr = [message.type, message.to, message.from, message.content, message.imgKey, message.date].join(',');

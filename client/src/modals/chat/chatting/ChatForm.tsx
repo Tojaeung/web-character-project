@@ -5,14 +5,14 @@ import axios from 'axios';
 import styled from 'styled-components';
 import moment from 'moment';
 import socket from '@src/utils/socket';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectUserUser } from '@src/store/slices/user.slice';
 import { selectChatIsChatUser, selectMessages } from '@src/store/slices/chat.slice';
 import { useAppSelector } from '@src/store/app/hook';
 import Input from '@src/components/Input';
 import Button from '@src/components/Button';
 
 function ChatForm() {
-  const user = useAppSelector(selectAuthUser);
+  const user = useAppSelector(selectUserUser);
   const isChatUser = useAppSelector(selectChatIsChatUser);
   const messages = useAppSelector(selectMessages);
 

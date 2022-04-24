@@ -1,25 +1,20 @@
-import { useForm, SubmitHandler } from 'react-hook-form';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { AiOutlineUser } from 'react-icons/ai';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
-import { NicknameInput, AuthInputsType } from '@src/components/AuthInputs';
+import Input from '@src/components/Input';
 import Button from '@src/components/Button';
 import { editNickname } from '@src/store/requests/settings.request';
 
 function EditNickname() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<AuthInputsType>({ mode: 'onChange' });
+  const [nickname, setNickname] = useState('');
 
-  const onSubmit: SubmitHandler<AuthInputsType> = async (data) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      const res = await dispatch(editNickname({ nickname: data.nickname! })).unwrap();
+      const res = await dispatch(editNickname({ nickname })).unwrap();
       alert(res.message);
       await dispatch(closeModal());
     } catch (err: any) {
@@ -28,10 +23,20 @@ function EditNickname() {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit}>
       <Title>닉네임 변경</Title>
       <Content>변경할 닉네임을 입력해주세요.😮😮</Content>
-      <NicknameInput label="닉네임" name="nickname" register={register} error={errors.nickname} />
+      <InputBox>
+        <Input
+          color="green"
+          type="text"
+          placeholder="닉네임"
+          autoComplete="off"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
+        />
+        <UserIcon />
+      </InputBox>
 
       <SubmitButton type="submit" color="green" size="medium">
         닉네임 변경하기
@@ -54,6 +59,22 @@ const Title = styled.h1`
 const Content = styled.p`
   font-size: 1.5rem;
 `;
+const InputBox = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const UserIcon = styled(AiOutlineUser)`
+  position: absolute;
+  font-size: 2rem;
+  top: 3.5rem;
+  right: 1.5rem;
+`;
+
 const SubmitButton = styled(Button)``;
 
 export default EditNickname;

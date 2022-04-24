@@ -8,7 +8,7 @@ import getLevel from '@src/utils/exp.util';
 import relativeTime from '@src/utils/date.util';
 import { UserType } from '@src/types';
 import { useAppSelector } from '@src/store/app/hook';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectUserUser } from '@src/store/slices/user.slice';
 
 interface IProps {
   isOpen: boolean;
@@ -19,7 +19,7 @@ interface IProps {
 function UserInfo({ isOpen, closeModal, userId }: IProps) {
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector(selectAuthUser);
+  const user = useAppSelector(selectUserUser);
 
   const [userInfo, setUserInfo] = useState<UserType | null>(null);
   const [drawingsNum, setDrawingsNum] = useState<number | null>(null);

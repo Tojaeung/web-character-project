@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import { combineReducers } from 'redux';
-import authSlice from '../slices/auth.slice';
+import userSlice from '../slices/user.slice';
 import chatSlice from '../slices/chat.slice';
 import modalSlice from '../slices/modal.slice';
 import drawingSlice from '../slices/drawing.slice';
@@ -10,12 +10,12 @@ import postSlice from '../slices/post.slice';
 
 const persistedReducer = persistReducer(
   {
-    key: 'auth',
+    key: 'user',
     storage,
-    whitelist: ['auth'],
+    whitelist: ['user'],
   },
   combineReducers({
-    auth: authSlice,
+    user: userSlice,
     chat: chatSlice,
     modal: modalSlice,
     drawing: drawingSlice,

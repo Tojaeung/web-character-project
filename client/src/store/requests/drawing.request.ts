@@ -2,38 +2,38 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {
   getDrawingsReturnType,
-  getDrawingsParamType,
+  getDrawingsDataType,
   getDrawingsErrorType,
   addCommentErrorType,
-  addCommentParamType,
+  addCommentDataType,
   addCommentReturnType,
   addDisLikeErrorType,
-  addDisLikeParamType,
+  addDisLikeDataType,
   addDisLikeReturnType,
   addLikeErrorType,
-  addLikeParamType,
+  addLikeDataType,
   addLikeReturnType,
   addViewReturnType,
-  addViewParamType,
+  addViewDataType,
   addViewErrorType,
   removeCommentReturnType,
-  removeCommentParamType,
+  removeCommentDataType,
   removeCommentErrorType,
   editCommentReturnType,
-  editCommentParamType,
+  editCommentDataType,
   editCommentErrorType,
   addDrawingReturnType,
-  addDrawingParamType,
+  addDrawingDataType,
   addDrawingErrorType,
   removeDrawingErrorType,
-  removeDrawingParamType,
+  removeDrawingDataType,
   removeDrawingReturnType,
 } from '@src/store/types/drawing.type';
 import { RootState } from '../app/store';
 
 export const getDrawings = createAsyncThunk<
   getDrawingsReturnType,
-  getDrawingsParamType,
+  getDrawingsDataType,
   { state: RootState; rejectValue: getDrawingsErrorType }
 >('GET_DRAWINGS', async (data, thunkApi) => {
   try {
@@ -48,7 +48,7 @@ export const getDrawings = createAsyncThunk<
 
 export const addDrawing = createAsyncThunk<
   addDrawingReturnType,
-  addDrawingParamType,
+  addDrawingDataType,
   { state: RootState; rejectValue: addDrawingErrorType }
 >('ADD_DRAWING', async (data, thunkApi) => {
   try {
@@ -63,7 +63,7 @@ export const addDrawing = createAsyncThunk<
 
 export const removeDrawing = createAsyncThunk<
   removeDrawingReturnType,
-  removeDrawingParamType,
+  removeDrawingDataType,
   { state: RootState; rejectValue: removeDrawingErrorType }
 >('REMOVE_DRAWING', async (data, thunkApi) => {
   try {
@@ -78,7 +78,7 @@ export const removeDrawing = createAsyncThunk<
 
 export const addDrawingView = createAsyncThunk<
   addViewReturnType,
-  addViewParamType,
+  addViewDataType,
   { state: RootState; rejectValue: addViewErrorType }
 >('ADD_DRAWING_VIEW', async (data, thunkApi) => {
   try {
@@ -93,7 +93,7 @@ export const addDrawingView = createAsyncThunk<
 
 export const addDrawingComment = createAsyncThunk<
   addCommentReturnType,
-  addCommentParamType,
+  addCommentDataType,
   { state: RootState; rejectValue: addCommentErrorType }
 >('ADD_DRAWING_COMMENT', async (data, thunkApi) => {
   try {
@@ -108,7 +108,7 @@ export const addDrawingComment = createAsyncThunk<
 
 export const addDrawingLike = createAsyncThunk<
   addLikeReturnType,
-  addLikeParamType,
+  addLikeDataType,
   { state: RootState; rejectValue: addLikeErrorType }
 >('ADD_DRAWING_LIKE', async (data, thunkApi) => {
   try {
@@ -123,7 +123,7 @@ export const addDrawingLike = createAsyncThunk<
 
 export const addDrawingDisLike = createAsyncThunk<
   addDisLikeReturnType,
-  addDisLikeParamType,
+  addDisLikeDataType,
   { state: RootState; rejectValue: addDisLikeErrorType }
 >('ADD_DRAWING_DISLIKE', async (data, thunkApi) => {
   try {
@@ -138,7 +138,7 @@ export const addDrawingDisLike = createAsyncThunk<
 
 export const removeDrawingComment = createAsyncThunk<
   removeCommentReturnType,
-  removeCommentParamType,
+  removeCommentDataType,
   { state: RootState; rejectValue: removeCommentErrorType }
 >('REMOVE_DRAWING_COMMENT', async (data, thunkApi) => {
   try {
@@ -153,7 +153,7 @@ export const removeDrawingComment = createAsyncThunk<
 
 export const editDrawingComment = createAsyncThunk<
   editCommentReturnType,
-  editCommentParamType,
+  editCommentDataType,
   { state: RootState; rejectValue: editCommentErrorType }
 >('EDIT_DRAWING_COMMENT', async (data, thunkApi) => {
   try {

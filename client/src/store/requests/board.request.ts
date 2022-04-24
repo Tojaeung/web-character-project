@@ -5,7 +5,7 @@ import {
   getBoardsErrorType,
   getBoardsReturnType,
   getBoardErrorType,
-  getBoardParamType,
+  getBoardDataType,
   getBoardReturnType,
 } from '../types/board.type';
 
@@ -26,7 +26,7 @@ export const getBoards = createAsyncThunk<
 
 export const getBoard = createAsyncThunk<
   getBoardReturnType,
-  getBoardParamType,
+  getBoardDataType,
   { state: RootState; rejectValue: getBoardErrorType }
 >('GET_BOARD', async (data, thunkApi) => {
   try {

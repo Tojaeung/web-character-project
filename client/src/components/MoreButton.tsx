@@ -7,7 +7,7 @@ import ReportModal from '@src/modals/Report';
 import { useReportModal } from '@src/hook/useModal';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
-import { selectAuthUser } from '@src/store/slices/auth.slice';
+import { selectUserUser } from '@src/store/slices/user.slice';
 
 interface IProps {
   type: 'drawing' | 'board';
@@ -20,7 +20,7 @@ function MoreButton({ type, entityId, userId, handleRemove }: IProps) {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const user = useAppSelector(selectAuthUser);
+  const user = useAppSelector(selectUserUser);
 
   // 신고하기 모달 커스텀 훅
   const { showReportModal, openReportModal, closeReportModal } = useReportModal();

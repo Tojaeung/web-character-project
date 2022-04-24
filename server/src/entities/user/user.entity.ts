@@ -18,7 +18,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ name: 'chat_id' })
   @Generated('uuid')
   chatId: string;
 
@@ -42,6 +42,7 @@ export class User {
 
   @Column({
     default: process.env.DEFAULT_AVATAR_KEY as string,
+    name: 'avatar_key',
   })
   avatarKey: string;
 
@@ -52,23 +53,25 @@ export class User {
 
   @Column({
     default: process.env.DEFAULT_COVER_KEY as string,
+    name: 'cover_key',
   })
   coverKey: string;
 
   @Column({ default: 'user' })
   role: string;
 
-  @Column({ type: 'varchar' })
-  pw: string | undefined;
+  @Column({ type: 'varchar', select: false })
+  pw: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', name: 'email_token', nullable: true, select: false })
   emailToken: string | null;
 
-  @Column({ type: 'varchar' })
-  pwToken: string | undefined;
+  @Column({ type: 'varchar', name: 'pw_token', select: false })
+  pwToken: string;
 
   @Column({
     default: false,
+    name: 'is_verified',
   })
   isVerified: boolean;
 

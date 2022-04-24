@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import { UserType } from '@src/types';
-import { loginUser, logoutUser } from '../requests/auth.request';
+import { signIn, signOut } from '@src/store/requests/session.request';
 import {
   editNickname,
   editAvatar,
@@ -13,31 +13,31 @@ import {
 import { calcExp } from '@src/store/requests/etc.request';
 import socket from '@src/utils/socket';
 
-interface AuthType {
+interface UserSliceType {
   ok: boolean;
   message: string | null;
   user: UserType | null;
 }
 
-const initialState: AuthType = {
+const initialState: UserSliceType = {
   ok: false,
   message: null,
   user: null,
 };
 
-export const authSlice = createSlice({
-  name: 'authentication',
+export const userSlice = createSlice({
+  name: 'user',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     // 로그인
     builder
-      .addCase(loginUser.fulfilled, (state, { payload }) => {
+      .addCase(signIn.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
         state.user = payload.user;
       })
-      .addCase(loginUser.rejected, (state, { payload }) => {
+      .addCase(signIn.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
         state.user = null;
@@ -45,16 +45,20 @@ export const authSlice = createSlice({
 
     // 로그아웃
     builder
-      .addCase(logoutUser.fulfilled, (state) => {
-        state.ok = true;
-        state.message = '로그아웃 되었습니다.';
+      .addCase(signOut.fulfilled, (state, { payload }) => {
+        console.log(payload.ok);
+        console.log(payload.message);
+
+        state.ok = payload.ok;
+        state.message = payload.message;
         state.user = null;
         socket.disconnect();
       })
-      .addCase(logoutUser.rejected, (state, { payload }) => {
+      .addCase(signOut.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
         state.user = null;
+        socket.disconnect();
       });
 
     builder
@@ -153,8 +157,8 @@ export const authSlice = createSlice({
 });
 
 // export const { } = authSlice.actions;
-export const selectAuthOk = (state: RootState) => state.auth.ok;
-export const selectAuthMessage = (state: RootState) => state.auth.message;
-export const selectAuthUser = (state: RootState) => state.auth.user;
+export const selectUserOk = (state: RootState) => state.user.ok;
+export const selectUserMessage = (state: RootState) => state.user.message;
+export const selectUserUser = (state: RootState) => state.user.user;
 
-export default authSlice.reducer;
+export default userSlice.reducer;

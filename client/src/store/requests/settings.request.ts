@@ -2,26 +2,26 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {
   editEmailErrorType,
-  editEmailParamType,
+  editEmailDataType,
   editEmailReturnType,
   editNicknameErrorType,
-  editNicknameParamType,
+  editNicknameDataType,
   editNicknameReturnType,
   editPwErrorType,
-  editPwParamType,
+  editPwDataType,
   editPwReturnType,
   editAvatarErrorType,
-  editAvatarParamType,
+  editAvatarDataType,
   editAvatarReturnType,
   defaultAvatarErrorType,
   defaultAvatarReturnType,
   editCoverErrorType,
-  editCoverParamType,
+  editCoverDataType,
   editCoverReturnType,
   defaultCoverErrorType,
   defaultCoverReturnType,
   editDescErrorType,
-  editDescParamType,
+  editDescDataType,
   editDescReturnType,
   delAccountErrorType,
   delAccountReturnType,
@@ -30,7 +30,7 @@ import { RootState } from '../app/store';
 
 export const editEmail = createAsyncThunk<
   editEmailReturnType,
-  editEmailParamType,
+  editEmailDataType,
   { state: RootState; rejectValue: editEmailErrorType }
 >('EDIT_EMAIL', async (data, thunkApi) => {
   try {
@@ -45,7 +45,7 @@ export const editEmail = createAsyncThunk<
 
 export const editNickname = createAsyncThunk<
   editNicknameReturnType,
-  editNicknameParamType,
+  editNicknameDataType,
   { state: RootState; rejectValue: editNicknameErrorType }
 >('EDIT_NICKNAME', async (data, thunkApi) => {
   try {
@@ -60,7 +60,7 @@ export const editNickname = createAsyncThunk<
 
 export const editPw = createAsyncThunk<
   editPwReturnType,
-  editPwParamType,
+  editPwDataType,
   { state: RootState; rejectValue: editPwErrorType }
 >('EDIT_PW', async (data, thunkApi) => {
   try {
@@ -75,7 +75,7 @@ export const editPw = createAsyncThunk<
 
 export const editAvatar = createAsyncThunk<
   editAvatarReturnType,
-  editAvatarParamType,
+  editAvatarDataType,
   { state: RootState; rejectValue: editAvatarErrorType }
 >('EDIT_AVATAR', async (data, thunkApi) => {
   try {
@@ -105,7 +105,7 @@ export const editDefaultAvatar = createAsyncThunk<
 
 export const editCover = createAsyncThunk<
   editCoverReturnType,
-  editCoverParamType,
+  editCoverDataType,
   { state: RootState; rejectValue: editCoverErrorType }
 >('EDIT_COVER', async (data, thunkApi) => {
   try {
@@ -135,7 +135,7 @@ export const editDefaultCover = createAsyncThunk<
 
 export const editDesc = createAsyncThunk<
   editDescReturnType,
-  editDescParamType,
+  editDescDataType,
   { state: RootState; rejectValue: editDescErrorType }
 >('EDIT_DESC', async (data, thunkApi) => {
   try {

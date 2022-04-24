@@ -6,7 +6,7 @@ export type addViewReturnType = {
   postId: number;
 };
 
-export type addViewParamType = {
+export type addViewDataType = {
   postId: number;
 };
 
@@ -21,7 +21,7 @@ export type getPostReturnType = {
   post: PostType | null;
 };
 
-export type getPostParamType = {
+export type getPostDataType = {
   postId: number;
 };
 
@@ -36,7 +36,7 @@ export type addPostCommentReturnType = {
   newPostComment: PostCommentType | null;
 };
 
-export type addPostCommentParamType = {
+export type addPostCommentDataType = {
   userId: number;
   postId: number;
   content: string;
@@ -54,7 +54,7 @@ export type imageUploadReturnType = {
   imageKey: string;
 };
 
-export type imageUploadParamType = {};
+export type imageUploadDataType = {};
 
 export type imageUploadErrorType = {
   ok: boolean;
@@ -66,7 +66,7 @@ export type imageRemoveReturnType = {
   message: string;
 };
 
-export type imageRemoveParamType = {
+export type imageRemoveDataType = {
   imageKeys: string[];
 };
 
@@ -81,7 +81,7 @@ export type addPostReturnType = {
   post: PostType;
 };
 
-export type addPostParamType = {
+export type addPostDataType = {
   title: string;
   content: string;
   board: string;
@@ -99,7 +99,7 @@ export type editPostReturnType = {
   editedPost: PostType;
 };
 
-export type editPostParamType = {
+export type editPostDataType = {
   postId: number;
   title: string;
   content: string;
@@ -117,7 +117,7 @@ export type removePostReturnType = {
   message: string;
 };
 
-export type removePostParamType = {
+export type removePostDataType = {
   postId: number;
 };
 
@@ -132,7 +132,7 @@ export type removePostCommentReturnType = {
   removedCommentId: number;
 };
 
-export type removePostCommentParamType = {
+export type removePostCommentDataType = {
   postCommentId: number;
 };
 
@@ -147,7 +147,7 @@ export type addPostLikeReturnType = {
   addedLike: PostLikeType;
 };
 
-export type addPostLikeParamType = {
+export type addPostLikeDataType = {
   userId: number;
   postId: number;
 };
@@ -163,7 +163,7 @@ export type addPostDisLikeReturnType = {
   addedDisLike: PostDisLikeType;
 };
 
-export type addPostDisLikeParamType = {
+export type addPostDisLikeDataType = {
   userId: number;
   postId: number;
 };
@@ -180,7 +180,7 @@ export type editPostCommentReturnType = {
   editedContent: string;
 };
 
-export type editPostCommentParamType = {
+export type editPostCommentDataType = {
   postCommentId: number;
   editedContent: string;
 };

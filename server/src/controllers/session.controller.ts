@@ -1,22 +1,20 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { getCustomRepository, getRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import logger from '@src/helpers/winston.helper';
-import { UserRepository } from '@src/repositorys/user.repository';
 import { SignInInput } from '@src/schemas/session.schema';
 import { sendAuthEmail } from '@src/helpers/nodemailer.helper';
 import ApiError from '@src/errors/api.error';
 import { User } from '@src/entities/user/user.entity';
 
 export const signIn = async (req: Request<{}, {}, SignInInput['body']>, res: Response) => {
-  const userRepo = getCustomRepository(UserRepository);
   const { email, pw } = req.body;
 
   // 유효한 email인지 확인하기 위해 email를 조회합니다.
-  const user = await getRepository(User).findOne({ where: email });
+  const user = await getRepository(User).findOne({ email });
   if (!user) {
     logger.warn('이메일이 존재하지 않습니다.');
-    throw ApiError.BadRequest("'아이디 또는 비밀번호가 올바르지 않습니다.");
+    throw ApiError.NotFound("'아이디 또는 비밀번호가 올바르지 않습니다.");
   }
 
   // 유효한 이메일이라면 비밀번호가 맞는지 확인합니다.
@@ -41,15 +39,18 @@ export const signIn = async (req: Request<{}, {}, SignInInput['body']>, res: Res
   };
   req.session.save(() => {
     logger.info('로그인 되었습니다.');
-    return res.status(200).json({ message: '로그인 되었습니다.', user });
+    return res.status(200).json({ ok: true, message: '로그인 되었습니다.', user });
   });
 };
 
-export const logOut = async (req: Request, res: Response) => {
+export const signOut = async (req: Request, res: Response): Promise<any> => {
   req.session.destroy((err: any) => {
-    logger.error('내부적인 에러문제로 로그아웃에 실패하였습니다.', err);
-    ApiError.InternalServerError('로그아웃 실패하였습니다.');
+    if (err) {
+      logger.error('내부적인 문제로 로그아웃 실패하였습니다.');
+      throw ApiError.InternalServerError('로그아웃 실패하였습니다.');
+    } else {
+      logger.info('로그아웃 성공하였습니다.');
+      return res.status(205).clearCookie('sid').json({ ok: true, message: '로그아웃 성공하였습니다.' });
+    }
   });
-  logger.info('로그아웃 되었습니다.');
-  return res.status(200).clearCookie('sid').redirect('/');
 };

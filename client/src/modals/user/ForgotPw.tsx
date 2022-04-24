@@ -4,23 +4,22 @@ import { useNavigate } from 'react-router-dom';
 import { AiOutlineMail } from 'react-icons/ai';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
-import { signOut } from '@src/store/requests/session.request';
 import Input from '@src/components/Input';
 import Button from '@src/components/Button';
-import { editEmail } from '@src/store/requests/settings.request';
+import { forgotPw } from '@src/store/requests/user.request';
 
-function EditEmail() {
+function ForgotPw() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [email, setEmail] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
-      const res = await dispatch(editEmail({ email })).unwrap();
+      const res = await dispatch(forgotPw({ email })).unwrap();
       alert(res.message);
       await dispatch(closeModal());
-      await dispatch(signOut());
       navigate('/');
     } catch (err: any) {
       alert(err.message);
@@ -29,13 +28,12 @@ function EditEmail() {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Title>이메일 변경</Title>
+      <Title>비밀번호를 잃어버리셨나요?😂😂</Title>
       <Content>
-        변경할 이메일 주소를 정확하게 입력해주세요.🔍
-        <br />
-        <i>'인증메일'</i>이 전송됩니다.
+        기업이름에 가입한 이메일을 정확히 입력해 주세요.🌙 이메일을 통해 비밀번호 수정 링크가 전송됩니다.🌤
       </Content>
       <InputBox>
+        <Label htmlFor="email">이메일</Label>
         <Input
           color="green"
           type="text"
@@ -53,18 +51,14 @@ function EditEmail() {
     </Form>
   );
 }
+
 const Form = styled.form`
-  width: 32rem;
+  width: 40rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   gap: 2rem;
 `;
-
-const Title = styled.h1`
-  align-self: flex-start;
-`;
+const Title = styled.h2``;
 const Content = styled.p`
   font-size: 1.5rem;
 `;
@@ -76,6 +70,11 @@ const InputBox = styled.div`
   align-items: center;
   gap: 1rem;
 `;
+const Label = styled.label`
+  font-size: 1.5rem;
+  align-self: flex-start;
+  white-space: nowrap;
+`;
 
 const MailIcon = styled(AiOutlineMail)`
   position: absolute;
@@ -83,7 +82,8 @@ const MailIcon = styled(AiOutlineMail)`
   top: 3.5rem;
   right: 1.5rem;
 `;
+const SubmitButton = styled(Button)`
+  width: 100%;
+`;
 
-const SubmitButton = styled(Button)``;
-
-export default EditEmail;
+export default ForgotPw;
