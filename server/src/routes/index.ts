@@ -5,7 +5,6 @@ import drawing from '@src/routes/drawing.route';
 import etc from '@src/routes/etc.route';
 import post from '@src/routes/post.route';
 import profile from '@src/routes/profile.route';
-import settings from '@src/routes/settings.route';
 import session from '@src/routes/session.route';
 import user from '@src/routes/user.route';
 
@@ -18,7 +17,6 @@ router.use(drawing);
 router.use(etc);
 router.use(post);
 router.use(profile);
-router.use(settings);
 router.use(session);
 
 export default router;

@@ -60,12 +60,7 @@ export const sendFindEmail = async (req: Request, res: Response, email: string, 
   return;
 };
 
-export const sendChangeEmail = async (
-  req: Request,
-  res: Response,
-  newEmail: string,
-  currentEmail: string | undefined
-) => {
+export const sendChangeEmail = async (req: Request, res: Response, id: number, newEmail: string) => {
   const transporter = createTransport({
     host: process.env.MAIL_HOST,
     port: 587,
@@ -81,7 +76,7 @@ export const sendChangeEmail = async (
     to: newEmail,
     subject: '안뇽~',
     html: `<h3 style="background-color: green; text-align: center; color: pink;">이메일 변경을 위해서 아래의 버튼을 눌러주세요.</h3>
-      <a href='http://${req.headers.host}/api/settings/account/verifyEmail?newEmail=${newEmail}&currentEmail=${currentEmail}'>Verify your email</a>`,
+      <a href='http://${req.headers.host}/api/users/${id}/email?newEmail=${newEmail}&'>Verify your email</a>`,
   });
 
   if (!info) {
