@@ -18,6 +18,7 @@ import {
   updateCover,
   updateDefaultCover,
   deleteAccount,
+  getUser,
 } from '@src/controllers/user.controller';
 import {
   signUpSchema,
@@ -34,6 +35,7 @@ import {
   updateCoverSchema,
   updateDefaultCoverSchema,
   deleteAccountSchema,
+  getUserSchema,
 } from '@src/schemas/user.schema';
 
 const router = Router();
@@ -48,6 +50,9 @@ router.patch('/users/reset-pw', validator(resetPwSchema), asyncHandler(resetPw))
 // 이메일 변경, 그에따른 이메일 인증
 router.post('/users/:id/verify-email', auth, validator(verifyEmailSchema), asyncHandler(verifyEmail));
 router.patch('/users/:id/email', auth, validator(updateEmailSchema), asyncHandler(updateEmail));
+
+// 유저정보 가져오기 (프로필 유저정보 가져올때 사용)
+router.get('/users/:id', validator(getUserSchema), asyncHandler(getUser));
 
 // 유저정보 변경
 router.patch('/users/:id/nickname', auth, validator(updateNicknameSchema), asyncHandler(updateNickname));

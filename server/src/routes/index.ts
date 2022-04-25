@@ -4,7 +4,6 @@ import chat from '@src/routes/chat.route';
 import drawing from '@src/routes/drawing.route';
 import etc from '@src/routes/etc.route';
 import post from '@src/routes/post.route';
-import profile from '@src/routes/profile.route';
 import session from '@src/routes/session.route';
 import user from '@src/routes/user.route';
 
@@ -16,7 +15,6 @@ router.use(chat);
 router.use(drawing);
 router.use(etc);
 router.use(post);
-router.use(profile);
 router.use(session);
 
 export default router;

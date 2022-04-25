@@ -2,11 +2,14 @@ import { Request, Response } from 'express';
 import { getCustomRepository, getRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
 import { User } from '@src/entities/user/user.entity';
+import { Drawing } from '@src/entities/drawing/drawing.entity';
+import { ImageKey } from '@src/entities/board/imageKey.entity';
 import { UserRepository } from '@src/repositorys/user.repository';
 import logger from '@src/helpers/winston.helper';
 import { sendAuthEmail, sendFindEmail, sendChangeEmail } from '@src/helpers/nodemailer.helper';
 import ApiError from '@src/errors/api.error';
 import { s3Delete } from '@src/utils/s3.utils';
+import cluster from '@src/helpers/redis.helper';
 import {
   SignUpInput,
   ForgotPwInput,
@@ -22,10 +25,8 @@ import {
   updateCoverInput,
   updateDefaultCoverInput,
   deleteAccountInput,
+  GetUserInput,
 } from '@src/schemas/user.schema';
-import { Drawing } from '@src/entities/drawing/drawing.entity';
-import { ImageKey } from '@src/entities/board/imageKey.entity';
-import cluster from '@src/helpers/redis.helper';
 
 export const signUp = async (req: Request<{}, {}, SignUpInput['body']>, res: Response): Promise<any> => {
   const { email, nickname, pw } = req.body;
@@ -132,6 +133,19 @@ export const resetPw = async (
 
   logger.info('비밀번호가 재설정 되었습니다.');
   return res.status(200).json({ ok: true, message: '비밀번호가 재설정 되었습니다.' });
+};
+
+export const getUser = async (req: Request<GetUserInput['params'], {}, {}>, res: Response): Promise<any> => {
+  const { id } = req.params;
+
+  const user = await getRepository(User).findOne({ id: Number(id) });
+  if (!user) {
+    logger.warn('존재하지 않는 유저가 유저정보를 가져오려고 시도합니다.');
+    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+  }
+
+  logger.info('유저정보를 가져왔습니다.');
+  return res.status(200).json({ ok: true, message: '유저정보를 가져왔습니다.', user });
 };
 
 export const verifyEmail = async (

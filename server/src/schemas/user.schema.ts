@@ -63,6 +63,12 @@ export const resetPwSchema = object({
   }),
 });
 
+export const getUserSchema = object({
+  params: object({
+    id: string(),
+  }),
+});
+
 export const verifyEmailSchema = object({
   params: object({
     id: string(),
@@ -178,6 +184,8 @@ export type SignUpInput = z.infer<typeof signUpSchema>;
 export type VerifyUserInput = z.infer<typeof verifyUserSchema>;
 export type ForgotPwInput = z.infer<typeof forgotPwSchema>;
 export type ResetPwInput = z.infer<typeof resetPwSchema>;
+
+export type GetUserInput = z.infer<typeof getUserSchema>;
 
 export type verifyEmailInput = z.infer<typeof verifyEmailSchema>;
 export type updateEmailInput = z.infer<typeof updateEmailSchema>;
