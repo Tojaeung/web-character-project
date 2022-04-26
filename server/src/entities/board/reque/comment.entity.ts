@@ -9,22 +9,22 @@ import {
   Column,
 } from 'typeorm';
 import User from '@src/entities/user/user.entity';
-import Request from '@src/entities/board/request/request.entity';
+import Reque from '@src/entities/board/reque/reque.entity';
 
 class Relation {
-  @ManyToOne(() => User, (user) => user.requestComments, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.requeComments, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Request, (request) => request.comments, {
+  @ManyToOne(() => Reque, (reque) => reque.comments, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinColumn({ name: 'request_id' })
-  request: Request;
+  @JoinColumn({ name: 'reque_id' })
+  reque: Reque;
 }
 
-@Entity({ schema: 'request' })
+@Entity({ schema: 'reque' })
 class Comment extends Relation {
   @PrimaryGeneratedColumn()
   id: number;
@@ -36,9 +36,9 @@ class Comment extends Relation {
   @Column()
   user_id: number;
 
-  @Index('request_id-requestCommentIdx')
+  @Index('reque_id-requeCommentIdx')
   @Column()
-  request_id: number;
+  reque_id: number;
 
   @CreateDateColumn()
   created_at: Date;

@@ -15,9 +15,9 @@ import CommissionImageKey from '@src/entities/board/commission/imageKey.entity';
 import Free from '@src/entities/board/free/free.entity';
 import FreeComment from '@src/entities/board/free/comment.entity';
 import FreeImageKey from '@src/entities/board/free/imageKey.entity';
-import Request from '@src/entities/board/request/request.entity';
-import RequestComment from '@src/entities/board/request/comment.entity';
-import RequestImageKey from '@src/entities/board/request/imageKey.entity';
+import Reque from '@src/entities/board/reque/reque.entity';
+import RequeComment from '@src/entities/board/reque/comment.entity';
+import RequeImageKey from '@src/entities/board/reque/imageKey.entity';
 import Sale from '@src/entities/board/sale/sale.entity';
 import SaleComment from '@src/entities/board/sale/comment.entity';
 import SaleImageKey from '@src/entities/board/sale/imageKey.entity';
@@ -47,14 +47,14 @@ class Relation {
   @OneToMany(() => FreeImageKey, (freeImageKey) => freeImageKey.user)
   freeImageKeys: FreeImageKey[];
 
-  @OneToMany(() => Request, (request) => request.user)
-  requests: Request[];
+  @OneToMany(() => Reque, (reque) => reque.user)
+  reques: Reque[];
 
-  @OneToMany(() => RequestComment, (requestComment) => requestComment.user)
-  requestComments: RequestComment[];
+  @OneToMany(() => RequeComment, (requeComment) => requeComment.user)
+  requeComments: RequeComment[];
 
-  @OneToMany(() => RequestImageKey, (requestimageKey) => requestimageKey.user)
-  requestImageKeys: RequestImageKey[];
+  @OneToMany(() => RequeImageKey, (requeImageKey) => requeImageKey.user)
+  requeImageKeys: RequeImageKey[];
 
   @OneToMany(() => Sale, (sale) => sale.user)
   sales: Sale[];

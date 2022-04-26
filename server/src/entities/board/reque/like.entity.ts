@@ -1,13 +1,13 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import Request from '@src/entities/board/request/request.entity';
+import Reque from '@src/entities/board/reque/reque.entity';
 
 class Relation {
-  @ManyToOne(() => Request, (request) => request.likes, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @ManyToOne(() => Reque, (reque) => reque.likes, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'request_id' })
-  request: Request;
+  reque: Reque;
 }
 
-@Entity('like', { schema: 'request' })
+@Entity('like', { schema: 'reque' })
 class Like extends Relation {
   @PrimaryGeneratedColumn()
   id: number;
@@ -15,9 +15,9 @@ class Like extends Relation {
   @Column()
   user_id: number;
 
-  @Index('request_id-likeIdx')
+  @Index('reque_id-likeIdx')
   @Column()
-  request_id: number;
+  reque_id: number;
 }
 
 export default Like;
