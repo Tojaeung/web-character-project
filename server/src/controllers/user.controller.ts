@@ -51,8 +51,8 @@ export const signUp = async (req: Request<{}, {}, SignUpInput['body']>, res: Res
   const pwToken = await bcrypt.hash(nickname, 8);
 
   // 유저 테이블에 정보를 저장합니다.
-  const user = getRepository(User).create({ email, nickname, pw: encryptedPw, emailToken, pwToken });
-  await getRepository(User).save(user);
+  const newUser = getRepository(User).create({ email, nickname, pw: encryptedPw, emailToken, pwToken });
+  await getRepository(User).save(newUser);
 
   // 인증이메일을 발송합니다.
   await sendAuthEmail(req, res, email, emailToken);

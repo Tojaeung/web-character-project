@@ -39,6 +39,7 @@ import {
 } from '@src/schemas/user.schema';
 
 const router = Router();
+
 // 회원가입, 그에 따른 이메일 인증
 router.post('/users', validator(signUpSchema), asyncHandler(signUp));
 router.patch('/users/verify-user', validator(verifyUserSchema), asyncHandler(verifyUser));
@@ -48,7 +49,7 @@ router.post('/users/forgot-pw', validator(forgotPwSchema), asyncHandler(forgotPw
 router.patch('/users/reset-pw', validator(resetPwSchema), asyncHandler(resetPw));
 
 // 이메일 변경, 그에따른 이메일 인증
-router.post('/users/:id/verify-email', auth, validator(verifyEmailSchema), asyncHandler(verifyEmail));
+router.post('/verify-email', auth, validator(verifyEmailSchema), asyncHandler(verifyEmail));
 router.patch('/users/:id/email', auth, validator(updateEmailSchema), asyncHandler(updateEmail));
 
 // 유저정보 가져오기 (프로필 유저정보 가져올때 사용)

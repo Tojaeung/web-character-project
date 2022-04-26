@@ -12,230 +12,180 @@ import { DrawingComment } from '@src/entities/drawing/drawingComment.entity';
 import { Like } from '@src/entities/drawing/like.entity';
 import { DisLike } from '@src/entities/drawing/dislike.entity';
 import { UserRepository } from '@src/repositorys/user.repository';
+import {
+  createCommentInput,
+  createDisLikeInput,
+  createDrawingInput,
+  createLikeInput,
+  deleteCommentInput,
+  getDrawingsInput,
+  incrementViewInput,
+} from '@src/schemas/drawing.schema';
+import ApiError from '@src/errors/api.error';
+import { User } from '@src/entities/user/user.entity';
 
-const drawingController = {
-  addDrawing: async (req: Request, res: Response) => {
-    const drawingRepo = getCustomRepository(DrawingRepository);
-    try {
-      const drawingUrl = (req.file as Express.MulterS3.File).location;
-      const drawingKey = (req.file as Express.MulterS3.File).key;
+export const createDrawing = async (
+  req: Request<createDrawingInput['params'], {}, createDrawingInput['body']>,
+  res: Response
+): Promise<any> => {
+  const drawingRepo = getCustomRepository(DrawingRepository);
 
-      if (!drawingUrl || !drawingKey) {
-        logger.info('그림 자료를 가져오지 못했습니다.');
-        return res.status(400).json({ ok: false, message: '그림을 업로드 하지 않았습니다.' });
-      }
+  const { id } = req.params;
+  const { content } = req.body;
+  const drawingUrl = (req.file as Express.MulterS3.File).location;
+  const drawingKey = (req.file as Express.MulterS3.File).key;
 
-      const id = req.session.user?.id;
-      const { content } = req.body;
+  if (!drawingUrl || !drawingKey) {
+    logger.error('s3에서 새로운 그림정보를 받아오지 못했습니다.');
+    throw ApiError.InternalServerError('내부적인 문제로 그림을 업로드 실패하였습니다.');
+  }
 
-      if (!content.length || content === '<p><br></p>') {
-        logger.info('그림 내용을 입력하지 않아서 데이터에 추가 할 수 없습니다.');
-        return res.status(400).json({ ok: false, message: '내용을 입력해주세요.' });
-      } else if (content.length > 10000) {
-        logger.info('그림 내용을 너무 많이 입력해서 데이터에 추가 할 수 없습니다.');
-        return res.status(400).json({ ok: false, message: '내용 글자 수를 초과하였습니다.' });
-      }
+  const newDrawing = getRepository(Drawing).create({ content, url: drawingUrl, key: drawingKey, user_id: Number(id) });
+  await getRepository(Drawing).save(newDrawing);
 
-      // drawing 테이블에 정보를 저장합니다.
-      const drawing = new Drawing();
-      drawing.content = content;
-      drawing.url = drawingUrl;
-      drawing.key = drawingKey;
-      drawing.user_id = id!;
+  // 위에 newDrawing은 user정보가 없다.
+  // drawing으로 응답을 보내면 새로 추가된 그림은 user 정보가 빠진 view를 보여주게 된다.
+  // 그래서. drawing과 user를 결합시킨 newDrawing으로 응답을 보내준다.
+  const newDrawingJoinUser = await drawingRepo.joinUser(Number(id));
 
-      await getRepository(Drawing).save(drawing);
-
-      // 위에 drawing은 user정보가 없다.
-      // drawing으로 응답을 보내면 새로 추가된 그림은 user 정보가 빠진 view를 보여주게 된다.
-      // 그래서. drawing과 user를 결합시킨 newDrawing으로 응답을 보내준다.
-      const newDrawing = await drawingRepo.drawingJoinUser(Number(id));
-
-      logger.info('그림을 저장하였습니다.');
-      return res.status(200).json({ ok: true, message: '그림을 저장하였습니다.', newDrawing });
-    } catch (err: any) {
-      logger.info('그림저장 에러', err);
-      return res.status(500).json({ ok: false, message: '그림저장 에러' });
-    }
-  },
-
-  removeDrawing: async (req: Request, res: Response) => {
-    const drawingRepo = getCustomRepository(DrawingRepository);
-    try {
-      const { drawingId } = req.params;
-
-      const result = await drawingRepo.removeDrawing(Number(drawingId));
-
-      if (result.affected === 0) {
-        logger.info('그림 제거 실패하였습니다.');
-        return res.status(400).json({ ok: false, message: '그림 제거 실패하였습니다.' });
-      }
-
-      logger.info('그림 제거 성공하였습니다.');
-      return res
-        .status(200)
-        .json({ ok: true, message: '그림 제거 성공하였습니다.', removedDrawingId: Number(drawingId) });
-    } catch (err: any) {
-      logger.info('그림제거 에러', err);
-      return res.status(500).json({ ok: false, message: '그림제거 에러' });
-    }
-  },
-  getDrawings: async (req: Request, res: Response) => {
-    const drawingRepo = getCustomRepository(DrawingRepository);
-
-    try {
-      const { profileId, cursor } = req.body;
-
-      // 무한스크롤 작동할때마다 몇개의 그림이 뜨는지 정하는 변수
-      const drawingsLimit = 20;
-      // 무한스크롤 작동시마다 클라이언트에 응답해줄 그림들
-      let drawings;
-      // 무한스크롤 작동시 아직도 남아있는 그림이 없다면 null을 응답해줘서 무한스크롤을 중지시킨다.
-      let newCursor;
-
-      // 처음 drawings를 받아올때 cursor는 0이다.
-      if (cursor === 0) {
-        drawings = await drawingRepo.getDrawingsById(profileId, drawingsLimit);
-      } else {
-        drawings = await drawingRepo.getDrawingsByCursor(profileId, Number(cursor), drawingsLimit);
-      }
-
-      // 무한스크롤로 인해 요청받은 그림들이 limit보다 적다면(더이상 응답할 데이터가 없다는 뜻)
-      // 커서 값으로 null을 리턴해주어서 무한스크롤을 작동시키지 않는다.
-      if (drawings.length <= drawingsLimit) {
-        newCursor = null;
-      } else {
-        newCursor = drawings[drawingsLimit - 1].id;
-      }
-
-      logger.info('그림을 얻었습니다.');
-      return res.status(200).json({ ok: true, message: '그림을 얻었습니다.', drawings, newCursor });
-    } catch (err: any) {
-      logger.info('그림 불러오기 에러', err);
-      return res.status(500).json({ ok: false, message: '그림 불러오기 에러' });
-    }
-  },
-  addView: async (req: Request, res: Response) => {
-    const drawingRepo = getCustomRepository(DrawingRepository);
-    try {
-      const { drawingId } = req.body;
-
-      await drawingRepo.addDrawingView(drawingId);
-
-      logger.info('그림 조회수 추가하기 성공');
-      return res.status(200).json({ ok: true, message: '그림 조회수 추가하기 성공' });
-    } catch (err: any) {
-      logger.info('그림 조회수 추가하기 에러', err);
-      return res.status(500).json({ ok: false, message: '그림 조회수 추가하기 에러' });
-    }
-  },
-
-  addComment: async (req: Request, res: Response) => {
-    const drawingCommentRepo = getCustomRepository(DrawingCommentRepository);
-    try {
-      const { userId, drawingId, content } = req.body;
-
-      if (content.length > 100) {
-        logger.info('글자 수를 초과하였습니다.');
-        return res.status(400).json({ ok: false, message: '글자 수를 초과하였습니다.' });
-      } else if (!content.length) {
-        logger.info('댓글을 입력해주세요.');
-        return res.status(400).json({ ok: false, message: '댓글을 입력해주세요.' });
-      }
-
-      const drawingComment = new DrawingComment();
-      drawingComment.user_id = userId;
-      drawingComment.drawing_id = drawingId;
-      drawingComment.content = content;
-      await getRepository(DrawingComment).save(drawingComment);
-
-      const addedComment = await drawingCommentRepo.drawingCommentJoinUser(drawingComment.id);
-
-      logger.info('그림 댓글 추가하기 성공');
-      return res.status(200).json({ ok: true, message: '그림 댓글 추가하기 성공', addedComment });
-    } catch (err: any) {
-      logger.info('그림 댓글 추가하기 에러', err);
-      return res.status(500).json({ ok: false, message: '그림 댓글 추가하기 에러' });
-    }
-  },
-
-  addLike: async (req: Request, res: Response) => {
-    try {
-      const { userId, drawingId } = req.body;
-
-      const addedLike = new Like();
-      addedLike.user_id = userId;
-      addedLike.drawing_id = drawingId;
-      await getRepository(Like).save(addedLike);
-
-      logger.info('그림 좋아요 추가하기 성공');
-      return res.status(200).json({ ok: true, message: '그림 좋아요 추가하기 성공', addedLike });
-    } catch (err: any) {
-      logger.info('그림 좋아요 추가하기 에러', err);
-      return res.status(500).json({ ok: false, message: '그림 좋아요 추가하기 에러' });
-    }
-  },
-  addDisLike: async (req: Request, res: Response) => {
-    try {
-      const { userId, drawingId } = req.body;
-
-      const addedDislike = new DisLike();
-      addedDislike.user_id = userId;
-      addedDislike.drawing_id = drawingId;
-      await getRepository(DisLike).save(addedDislike);
-
-      logger.info('그림 싫어요 추가하기 성공');
-      return res.status(200).json({ ok: true, message: '그림 싫어요 추가하기 성공', addedDislike });
-    } catch (err: any) {
-      logger.info('그림 싫어요 추가하기 에러', err);
-      return res.status(500).json({ ok: false, message: '그림 싫어요 추가하기 에러' });
-    }
-  },
-
-  removeComment: async (req: Request, res: Response) => {
-    const drawingCommentRepo = getCustomRepository(DrawingCommentRepository);
-    try {
-      const { drawingCommentId } = req.params;
-
-      const removedDrawingComment = drawingCommentRepo.removeDrawingComment(Number(drawingCommentId));
-
-      if ((await removedDrawingComment).affected === 0) {
-        logger.info('그림 댓글 삭제 실패하였습니다.');
-        return res.status(400).json({ ok: false, message: '그림 댓글 삭제 실패하였습니다.' });
-      }
-
-      logger.info('그림 댓글 삭제하기 성공');
-      return res
-        .status(200)
-        .json({ ok: true, message: '그림 댓글 삭제하기 성공', removedCommentId: Number(drawingCommentId) });
-    } catch (err: any) {
-      logger.info('그림 댓글 삭제하기 에러', err);
-      return res.status(500).json({ ok: false, message: '그림 댓글 삭제하기 에러' });
-    }
-  },
-  editComment: async (req: Request, res: Response) => {
-    const drawingCommentRepo = getCustomRepository(DrawingCommentRepository);
-    try {
-      const { drawingCommentId, editedContent } = req.body;
-
-      const editedDrawingComment = await drawingCommentRepo.editDrawingComment(drawingCommentId, editedContent);
-
-      if (editedDrawingComment.affected === 0) {
-        logger.info('해당하는 그림 댓글이 존재하지 않습니다.');
-        return res.status(400).json({ ok: false, message: '그림 댓글 수정하기 실패' });
-      }
-
-      logger.info('그림 댓글 수정하기 완료');
-      return res.status(200).json({
-        ok: true,
-        message: '그림 댓글 수정하기 완료',
-        drawingCommentId: Number(drawingCommentId),
-        editedContent,
-      });
-    } catch (err: any) {
-      logger.info('그림 댓글 수정하기 에러', err);
-      return res.status(500).json({ ok: false, message: '그림 댓글 수정하기 에러' });
-    }
-  },
+  logger.info(`${id}님 그림을 저장하였습니다.`);
+  return res.status(200).json({ ok: true, message: '그림을 저장하였습니다.', newDrawingJoinUser });
 };
 
-export default drawingController;
+export const getDrawings = async (
+  req: Request<getDrawingsInput['params'], getDrawingsInput['query']>,
+  res: Response
+) => {
+  const drawingRepo = getCustomRepository(DrawingRepository);
+
+  const { id } = req.params;
+  const { cursor } = req.query;
+
+  // 무한스크롤 작동할때마다 몇개의 그림이 뜨는지 정하는 변수
+  const limit = 20;
+  // 무한스크롤 작동시마다 클라이언트에 응답해줄 그림들
+  let drawings;
+  // 무한스크롤 작동시 아직도 남아있는 그림이 없다면 null을 응답해줘서 무한스크롤을 중지시킨다.
+  let newCursor;
+
+  // 처음 drawings를 받아올때 cursor는 0이다.
+  if (Number(cursor) === 0) {
+    drawings = await drawingRepo.getDrawingsById(Number(id), limit);
+  } else {
+    drawings = await drawingRepo.getDrawingsByCursor(Number(id), Number(cursor), limit);
+  }
+
+  // 무한스크롤로 인해 요청받은 그림들이 limit보다 적다면(더이상 응답할 데이터가 없다는 뜻)
+  // 커서 값으로 null을 리턴해주어서 무한스크롤을 작동시키지 않는다.
+  if (drawings.length <= limit) {
+    newCursor = null;
+  } else {
+    newCursor = drawings[limit - 1].id;
+  }
+
+  logger.info(`${drawings.length}장의 그림을 얻었습니다.`);
+  return res.status(200).json({ ok: true, message: '그림을 얻었습니다.', drawings, newCursor });
+};
+
+export const deleteDrawing = async (req: Request<createDrawingInput['params']>, res: Response): Promise<any> => {
+  const { id } = req.params;
+
+  const isExistingDrawing = await getRepository(Drawing).count({ id: Number(id) });
+  if (!isExistingDrawing) {
+    logger.warn('존재하지 않는 그림을 삭제 시도하려고 합니다.');
+    throw ApiError.NotFound('존재하지 않는 그림입니다.');
+  }
+
+  await getRepository(Drawing).delete({ id: Number(id) });
+
+  logger.info(`${id}님 그림 제거 성공하였습니다.`);
+  return res.status(200).json({ ok: true, message: '그림 제거 성공하였습니다.', deletedId: id });
+};
+
+export const incrementView = async (req: Request<incrementViewInput['params']>, res: Response) => {
+  const { id } = req.params;
+
+  await getRepository(Drawing).increment({ id: Number(id) }, 'views', 1);
+
+  logger.info('그림 조회수 추가하기 성공');
+  return res.status(200).json({ ok: true, message: '그림 조회수 추가하기 성공' });
+};
+
+export const createComment = async (
+  req: Request<createCommentInput['params'], {}, createCommentInput['body']>,
+  res: Response
+) => {
+  const commentRepo = getCustomRepository(DrawingCommentRepository);
+
+  const { userId, drawingId } = req.params;
+  const { content } = req.body;
+
+  const newComment = await getRepository(DrawingComment).create({
+    user_id: Number(userId),
+    drawing_id: Number(drawingId),
+    content: content,
+  });
+  await getRepository(DrawingComment).save(newComment);
+
+  const newCommentJoinUser = await commentRepo.joinUser(Number(newComment.id));
+
+  logger.info('그림 댓글 추가하기 성공하였습니다.');
+  return res.status(200).json({ ok: true, message: '그림 댓글 추가하기 성공하였습니다.', newCommentJoinUser });
+};
+
+export const createLike = async (req: Request<createLikeInput['params']>, res: Response): Promise<any> => {
+  const { userId, drawingId } = req.body;
+
+  const isExistingUser = await getRepository(User).count({ id: Number(userId) });
+  if (!isExistingUser) {
+    logger.warn('존재하지 않는 유저가 그림 좋아요를 추가하려고 시도합니다.');
+    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+  }
+  const isExistingdrawing = await getRepository(Drawing).count({ id: Number(drawingId) });
+  if (!isExistingdrawing) {
+    logger.warn('존재하지 않는 그림에 좋아요를 추가하려고 시도합니다.');
+    throw ApiError.NotFound('존재하지 않는 그림입니다.');
+  }
+
+  const newLike = await getRepository(Like).create({ user_id: userId, drawing_id: drawingId });
+  await getRepository(Like).save(newLike);
+
+  logger.info('그림 좋아요 추가하기 성공');
+  return res.status(200).json({ ok: true, message: '그림 좋아요 추가하기 성공', newLike });
+};
+
+export const createDisLike = async (req: Request<createDisLikeInput['params']>, res: Response): Promise<any> => {
+  const { userId, drawingId } = req.body;
+
+  const isExistingUser = await getRepository(User).count({ id: Number(userId) });
+  if (!isExistingUser) {
+    logger.warn('존재하지 않는 유저가 그림 싫어요를 추가하려고 시도합니다.');
+    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+  }
+  const isExistingdrawing = await getRepository(Drawing).count({ id: Number(drawingId) });
+  if (!isExistingdrawing) {
+    logger.warn('존재하지 않는 그림에 싫어요를 추가하려고 시도합니다.');
+    throw ApiError.NotFound('존재하지 않는 그림입니다.');
+  }
+
+  const newDisLike = await getRepository(Like).create({ user_id: userId, drawing_id: drawingId });
+  await getRepository(Like).save(newDisLike);
+
+  logger.info('그림 싫어요 추가하기 성공');
+  return res.status(200).json({ ok: true, message: '그림 싫어요 추가하기 성공', newDisLike });
+};
+
+export const deleteComment = async (req: Request<deleteCommentInput['params']>, res: Response): Promise<any> => {
+  const { id } = req.params;
+
+  const isExistingComment = await getRepository(DrawingComment).count({ id: Number(id) });
+  if (!isExistingComment) {
+    logger.warn('존재하지 않는 댓글을 삭제하려고 시도합니다.');
+    throw ApiError.NotFound('존재하지 않는 댓글입니다.');
+  }
+
+  await getRepository(DrawingComment).delete({ id: Number(id) });
+
+  logger.info('그림 댓글 삭제 성공하였습니다.');
+  return res.status(200).json({ ok: true, message: '그림 댓글 삭제 성공하였습니다.', deletedCommentId: id });
+};
