@@ -1,9 +1,12 @@
 import { Router } from 'express';
-import boardController from '@src/controllers/board.controller';
+import asyncHandler from 'express-async-handler';
+import validator from '@src/middlewares/validator.middleware';
+import { getBoardSchema } from '@src/schemas/board.schema';
+import { getAllBoards, getBoard } from '@src/controllers/board.controller';
 
-const boardRouter = Router();
+const router = Router();
 
-boardRouter.get('/board/getBoards', boardController.getBoards);
-boardRouter.post('/board/getBoard', boardController.getBoard);
+router.get('/boards', asyncHandler(getAllBoards));
+router.get('/boards/:board', validator(getBoardSchema), asyncHandler(getBoard));
 
-export default boardRouter;
+export default router;

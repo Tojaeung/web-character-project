@@ -7,14 +7,67 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Drawing } from '../drawing/drawing.entity';
-import { DrawingComment } from '../drawing/drawingComment.entity';
-import { Post } from '../board/post.entity';
-import { PostComment } from '../board/postComment.entity';
-import { ImageKey } from '../board/imageKey.entity';
+import Drawing from '@src/entities/drawing/drawing.entity';
+import DrawingComment from '@src/entities/drawing/comment.entity';
+import Commission from '@src/entities/board/commission/commission.entity';
+import CommissionComment from '@src/entities/board/commission/comment.entity';
+import CommissionImageKey from '@src/entities/board/commission/imageKey.entity';
+import Free from '@src/entities/board/free/free.entity';
+import FreeComment from '@src/entities/board/free/comment.entity';
+import FreeImageKey from '@src/entities/board/free/imageKey.entity';
+import Request from '@src/entities/board/request/request.entity';
+import RequestComment from '@src/entities/board/request/comment.entity';
+import RequestImageKey from '@src/entities/board/request/imageKey.entity';
+import Sale from '@src/entities/board/sale/sale.entity';
+import SaleComment from '@src/entities/board/sale/comment.entity';
+import SaleImageKey from '@src/entities/board/sale/imageKey.entity';
+
+class Relation {
+  @OneToMany(() => Drawing, (drawing) => drawing.user)
+  drawings: Drawing[];
+
+  @OneToMany(() => DrawingComment, (drawingComment) => drawingComment.user)
+  drawingComments: DrawingComment[];
+
+  @OneToMany(() => Commission, (commission) => commission.user)
+  commissions: Commission[];
+
+  @OneToMany(() => CommissionComment, (commissionComment) => commissionComment.user)
+  commissionComments: CommissionComment[];
+
+  @OneToMany(() => CommissionImageKey, (commissionimageKey) => commissionimageKey.user)
+  commissionImageKeys: CommissionImageKey[];
+
+  @OneToMany(() => Free, (free) => free.user)
+  frees: Free[];
+
+  @OneToMany(() => FreeComment, (freeComment) => freeComment.user)
+  freeComments: FreeComment[];
+
+  @OneToMany(() => FreeImageKey, (freeImageKey) => freeImageKey.user)
+  freeImageKeys: FreeImageKey[];
+
+  @OneToMany(() => Request, (request) => request.user)
+  requests: Request[];
+
+  @OneToMany(() => RequestComment, (requestComment) => requestComment.user)
+  requestComments: RequestComment[];
+
+  @OneToMany(() => RequestImageKey, (requestimageKey) => requestimageKey.user)
+  requestImageKeys: RequestImageKey[];
+
+  @OneToMany(() => Sale, (sale) => sale.user)
+  sales: Sale[];
+
+  @OneToMany(() => SaleComment, (saleComment) => saleComment.user)
+  saleComments: SaleComment[];
+
+  @OneToMany(() => SaleImageKey, (saleimageKey) => saleimageKey.user)
+  saleImageKeys: SaleImageKey[];
+}
 
 @Entity('user', { schema: 'profile' })
-export class User {
+class User extends Relation {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -83,19 +136,6 @@ export class User {
 
   @UpdateDateColumn()
   updated_at: Date;
-
-  @OneToMany(() => Drawing, (drawing) => drawing.user)
-  drawings: Drawing[];
-
-  @OneToMany(() => DrawingComment, (drawingComment) => drawingComment.user)
-  drawingComments: DrawingComment[];
-
-  @OneToMany(() => Post, (post) => post.user)
-  posts: Post[];
-
-  @OneToMany(() => PostComment, (postComment) => postComment.user)
-  postComments: PostComment[];
-
-  @OneToMany(() => ImageKey, (imageKey) => imageKey.user)
-  imageKeys: ImageKey[];
 }
+
+export default User;

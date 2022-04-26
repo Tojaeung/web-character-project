@@ -1,6 +1,6 @@
 import { AbstractRepository, EntityRepository } from 'typeorm';
 import { Drawing } from '@src/entities/drawing/drawing.entity';
-import { Comment } from '@src/entities/drawing/drawingComment.entity';
+import { Comment } from '@src/entities/drawing/comment.entity';
 import { Like } from '@src/entities/drawing/like.entity';
 import { DisLike } from '@src/entities/drawing/dislike.entity';
 

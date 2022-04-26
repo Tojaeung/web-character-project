@@ -1,17 +1,13 @@
 import { Request, Response } from 'express';
 import { getRepository, getCustomRepository } from 'typeorm';
 import logger from '@src/helpers/winston.helper';
-import {
-  DrawingRepository,
-  DrawingCommentRepository,
-  LikeRepository,
-  DisLikeRepository,
-} from '@src/repositorys/drawing.repository';
-import { Drawing } from '@src/entities/drawing/drawing.entity';
-import { DrawingComment } from '@src/entities/drawing/drawingComment.entity';
-import { Like } from '@src/entities/drawing/like.entity';
-import { DisLike } from '@src/entities/drawing/dislike.entity';
-import { UserRepository } from '@src/repositorys/user.repository';
+import { DrawingRepository, DrawingCommentRepository } from '@src/repositorys/drawing.repository';
+import User from '@src/entities/user/user.entity';
+import Drawing from '@src/entities/drawing/drawing.entity';
+import DrawingComment from '@src/entities/drawing/comment.entity';
+import Like from '@src/entities/drawing/like.entity';
+import DisLike from '@src/entities/drawing/dislike.entity';
+
 import {
   createCommentInput,
   createDisLikeInput,
@@ -22,7 +18,6 @@ import {
   incrementViewInput,
 } from '@src/schemas/drawing.schema';
 import ApiError from '@src/errors/api.error';
-import { User } from '@src/entities/user/user.entity';
 
 export const createDrawing = async (
   req: Request<createDrawingInput['params'], {}, createDrawingInput['body']>,
@@ -168,7 +163,7 @@ export const createDisLike = async (req: Request<createDisLikeInput['params']>, 
     throw ApiError.NotFound('존재하지 않는 그림입니다.');
   }
 
-  const newDisLike = await getRepository(Like).create({ user_id: userId, drawing_id: drawingId });
+  const newDisLike = await getRepository(DisLike).create({ user_id: userId, drawing_id: drawingId });
   await getRepository(Like).save(newDisLike);
 
   logger.info('그림 싫어요 추가하기 성공');

@@ -2,6 +2,28 @@ import { Request, Response } from 'express';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { PostCommentRepository, PostRepository } from '@src/repositorys/board.repository';
 import logger from '@src/helpers/winston.helper';
+import { GetBoardInput } from '@src/schemas/board.schema';
+
+export const getAllBoards = async (req: Request, res: Response): Promise<any> => {
+  const free = await getRepository(Free).findOne({});
+
+  logger.info('게시판 모두 가져오기 성공하였습니다.');
+  return res.status(200).json({
+    ok: true,
+    message: '게시판 모두 가져오기 성공하였습니다.',
+    free,
+    drawingCommission,
+    drawingRequest,
+    drawingSale,
+  });
+};
+
+export const getBoard = async (req: Request<GetBoardInput['params']>, res: Response): Promise<any> => {
+  logger.info('게시판 가져오기 성공하였습니다.');
+  return res
+    .status(200)
+    .json({ ok: true, message: '게시판 가져오기 성공하였습니다.', posts, totalPostsNum: result.count });
+};
 
 const boardController = {
   getBoards: async (req: Request, res: Response) => {

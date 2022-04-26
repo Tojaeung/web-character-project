@@ -1,8 +1,14 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Drawing } from './drawing.entity';
+import Drawing from '@src/entities/drawing/drawing.entity';
+
+class Relation {
+  @ManyToOne(() => Drawing, (drawing) => drawing.dislikes, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @JoinColumn({ name: 'drawing_id' })
+  drawing: Drawing;
+}
 
 @Entity('dislike', { schema: 'drawing' })
-export class DisLike {
+class DisLike extends Relation {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -12,8 +18,6 @@ export class DisLike {
   @Index('drawing_id-dislikeIdx')
   @Column()
   drawing_id: number;
-
-  @ManyToOne(() => Drawing, (drawing) => drawing.dislikes, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
-  @JoinColumn({ name: 'drawing_id' })
-  drawing: Drawing;
 }
+
+export default DisLike;
