@@ -39,7 +39,7 @@ router.get('/boards', asyncHandler(getAllBoards));
 router.get('/boards/:board', validator(getBoardSchema), asyncHandler(getBoard));
 
 // 조회수 같이
-router.get('/boards/:board/posts/:id', validator(getPostSchema), asyncHandler(getPost));
+router.get('/boards/:board/posts/:postId', validator(getPostSchema), asyncHandler(getPost));
 
 // 게시글 이미지 업로드 할시
 router.post(

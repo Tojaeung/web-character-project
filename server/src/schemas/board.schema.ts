@@ -13,7 +13,7 @@ export const getBoardSchema = object({
 export const getPostSchema = object({
   params: object({
     board: string(),
-    id: string(),
+    postId: string(),
   }),
 });
 

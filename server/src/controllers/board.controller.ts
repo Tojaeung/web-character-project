@@ -91,31 +91,31 @@ export const getBoard = async (
 };
 
 export const getPost = async (req: Request<GetPostInput['params']>, res: Response): Promise<any> => {
-  const { board, id } = req.params;
+  const { board, postId } = req.params;
 
   let post;
   if (board === 'free') {
-    post = await getRepository(Free).findOne({ id: Number(id) });
+    post = await getRepository(Free).findOne({ id: Number(postId) });
     // 조회수 증가
-    await getRepository(Free).increment({ id: Number(id) }, 'views', 1);
+    await getRepository(Free).increment({ id: Number(postId) }, 'views', 1);
   } else if (board === 'commission') {
-    post = await getRepository(Commission).findOne({ id: Number(id) });
+    post = await getRepository(Commission).findOne({ id: Number(postId) });
     // 조회수 증가
-    await getRepository(Commission).increment({ id: Number(id) }, 'views', 1);
+    await getRepository(Commission).increment({ id: Number(postId) }, 'views', 1);
   } else if (board === 'reque') {
-    post = await getRepository(Reque).findOne({ id: Number(id) });
+    post = await getRepository(Reque).findOne({ id: Number(postId) });
     // 조회수 증가
-    await getRepository(Reque).increment({ id: Number(id) }, 'views', 1);
+    await getRepository(Reque).increment({ id: Number(postId) }, 'views', 1);
   } else if (board === 'sale') {
-    post = await getRepository(Sale).findOne({ id: Number(id) });
+    post = await getRepository(Sale).findOne({ id: Number(postId) });
     // 조회수 증가
-    await getRepository(Sale).increment({ id: Number(id) }, 'views', 1);
+    await getRepository(Sale).increment({ id: Number(postId) }, 'views', 1);
   } else {
     logger.warn('존재하지 않는 게시글을 가져오려는 시도가 있습니다.');
     throw ApiError.NotFound('존재하지 않는 게시글입니다.');
   }
 
-  logger.info(`${id}번 게시글 가져오기 성공하였습니다.`);
+  logger.info(`${postId}번 게시글 가져오기 성공하였습니다.`);
   return res.status(200).json({ ok: true, message: '게시글 가져오기 성공하였습니다.', post });
 };
 
