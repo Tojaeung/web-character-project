@@ -17,8 +17,8 @@ class ImageKey extends Relation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'image_key' })
-  imageKey: string;
+  @Column()
+  key: string;
 
   @Column()
   user_id: number;

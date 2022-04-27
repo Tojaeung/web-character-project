@@ -1,9 +1,6 @@
 import { object, z, string } from 'zod';
 
 export const createDrawingSchema = object({
-  params: object({
-    id: string(),
-  }),
   body: object({
     newDrawing: string({
       required_error: '업로드할 그림을 선택하지 않았습니다.',
@@ -17,9 +14,6 @@ export const createDrawingSchema = object({
 });
 
 export const getDrawingsSchema = object({
-  params: object({
-    id: string(),
-  }),
   query: object({
     cursor: string(),
   }),
@@ -27,33 +21,18 @@ export const getDrawingsSchema = object({
 
 export const deleteDrawingSchema = object({
   params: object({
-    id: string(),
+    drawingId: string(),
   }),
 });
 
 export const incrementViewSchema = object({
   params: object({
-    id: string(),
-  }),
-});
-
-export const createLikeSchema = object({
-  params: object({
-    userId: string(),
-    drawingId: string(),
-  }),
-});
-
-export const createDisLikeSchema = object({
-  params: object({
-    userId: string(),
     drawingId: string(),
   }),
 });
 
 export const createCommentSchema = object({
   params: object({
-    userId: string(),
     drawingId: string(),
   }),
   body: object({
@@ -61,9 +40,30 @@ export const createCommentSchema = object({
   }),
 });
 
+export const updateCommentSchema = object({
+  params: object({
+    commentId: string(),
+  }),
+  body: object({
+    content: string({ required_error: '댓글을 입력해주세요.' }).max(100, '댓글 글자 수가 초과되었습니다.'),
+  }),
+});
+
 export const deleteCommentSchema = object({
   params: object({
-    id: string(),
+    commentId: string(),
+  }),
+});
+
+export const createLikeSchema = object({
+  params: object({
+    drawingId: string(),
+  }),
+});
+
+export const createDisLikeSchema = object({
+  params: object({
+    drawingId: string(),
   }),
 });
 
@@ -72,8 +72,9 @@ export type getDrawingsInput = z.infer<typeof getDrawingsSchema>;
 export type deleteDrawingInput = z.infer<typeof deleteDrawingSchema>;
 export type incrementViewInput = z.infer<typeof incrementViewSchema>;
 
+export type createCommentInput = z.infer<typeof createCommentSchema>;
+export type updateCommentInput = z.infer<typeof updateCommentSchema>;
+export type deleteCommentInput = z.infer<typeof deleteCommentSchema>;
+
 export type createLikeInput = z.infer<typeof createLikeSchema>;
 export type createDisLikeInput = z.infer<typeof createDisLikeSchema>;
-
-export type createCommentInput = z.infer<typeof createCommentSchema>;
-export type deleteCommentInput = z.infer<typeof deleteCommentSchema>;

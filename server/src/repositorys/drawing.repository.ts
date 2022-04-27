@@ -1,8 +1,8 @@
 import { AbstractRepository, EntityRepository } from 'typeorm';
-import { Drawing } from '@src/entities/drawing/drawing.entity';
-import { Comment } from '@src/entities/drawing/comment.entity';
-import { Like } from '@src/entities/drawing/like.entity';
-import { DisLike } from '@src/entities/drawing/dislike.entity';
+import Drawing from '@src/entities/drawing/drawing.entity';
+import Comment from '@src/entities/drawing/comment.entity';
+import Like from '@src/entities/drawing/like.entity';
+import DisLike from '@src/entities/drawing/dislike.entity';
 
 @EntityRepository(Drawing)
 export class DrawingRepository extends AbstractRepository<Drawing> {
@@ -34,16 +34,8 @@ export class DrawingRepository extends AbstractRepository<Drawing> {
   joinUser(drawingId: number) {
     return this.createQueryBuilder('drawing')
       .leftJoinAndSelect('drawing.user', 'user')
-      .where('drawing.user_id = :drawingId', { drawingId })
+      .where('drawing.id = :drawingId', { drawingId })
       .getOne();
-  }
-
-  getDrawingsNum(userId: number) {
-    return this.createQueryBuilder('drawing').select('COUNT(*)').where('user_id = :id', { id: userId }).getRawOne();
-  }
-
-  findDrawingById(id: number) {
-    return this.createQueryBuilder('drawing').where('user_id = :id', { id }).getMany();
   }
 }
 
@@ -55,40 +47,9 @@ export class DrawingCommentRepository extends AbstractRepository<Comment> {
       .where('drawingComment.id = :commentId', { commentId })
       .getOne();
   }
-
-  editDrawingComment(drawingCommentId: number, editedContent: string) {
-    return this.createQueryBuilder('drawingComment')
-      .update(Comment)
-      .set({ content: editedContent })
-      .where('id = :id', { id: drawingCommentId })
-      .execute();
-  }
-
-  removeDrawingComment(drawingCommentId: number) {
-    return this.createQueryBuilder('drawingComment')
-      .delete()
-      .from(Comment)
-      .where('id = :id', { id: drawingCommentId })
-      .execute();
-  }
-
-  getDrawingCommentsNum(userId: number) {
-    return this.createQueryBuilder('drawingComment')
-      .select('COUNT(*)')
-      .where('user_id = :id', { id: userId })
-      .getRawOne();
-  }
 }
 
 @EntityRepository(Like)
-export class LikeRepository extends AbstractRepository<Like> {
-  removeDrawingLike(userId: number) {
-    return this.createQueryBuilder('like').delete().from(Like).where('user_id = :userId', { userId }).execute();
-  }
-}
+export class LikeRepository extends AbstractRepository<Like> {}
 @EntityRepository(DisLike)
-export class DisLikeRepository extends AbstractRepository<DisLike> {
-  removeDrawingDisLike(userId: number) {
-    return this.createQueryBuilder('dislike').delete().from(DisLike).where('user_id = :userId', { userId }).execute();
-  }
-}
+export class DisLikeRepository extends AbstractRepository<DisLike> {}

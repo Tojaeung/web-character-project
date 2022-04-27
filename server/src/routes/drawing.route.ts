@@ -11,12 +11,14 @@ import {
   createLikeSchema,
   deleteCommentSchema,
   getDrawingsSchema,
+  updateCommentSchema,
 } from '@src/schemas/drawing.schema';
 import {
   createComment,
   createDisLike,
   createDrawing,
   createLike,
+  updateComment,
   deleteComment,
   deleteDrawing,
   getDrawings,
@@ -25,23 +27,18 @@ import {
 
 const router = Router();
 
-router.post('/drawings/users/:id', auth, penalty, drawingUpload.single('newDrawing'), asyncHandler(createDrawing));
-router.get('/drawings/users/:id', validator(getDrawingsSchema), getDrawings);
+router.post('/drawings', auth, penalty, drawingUpload.single('newDrawing'), asyncHandler(createDrawing));
+router.get('/drawings', validator(getDrawingsSchema), getDrawings);
 
-router.delete('/drawings/:id', auth, validator(deleteAccountSchema), deleteDrawing);
+router.delete('/drawings/:drawingId', auth, validator(deleteAccountSchema), deleteDrawing);
 
-router.patch('/drawings/:id/view', incrementView);
+router.patch('/drawings/:drawingId/view', incrementView);
 
-router.post('/drawings/:drawingId/users/:userId/like', auth, penalty, validator(createLikeSchema), createLike);
-router.post('/drawings/:drawingId/users/:userId/dislike', auth, penalty, validator(createDisLikeSchema), createDisLike);
+router.post('/drawings/:drawingId/comments', auth, penalty, validator(createCommentSchema), createComment);
+router.patch('/drawings/comments/:commentId', auth, validator(updateCommentSchema), updateComment);
+router.delete('/drawings/comments/:commentId', auth, validator(deleteCommentSchema), deleteComment);
 
-router.post(
-  '/drawings/:drawingId/users/:userId/comments',
-  auth,
-  penalty,
-  validator(createCommentSchema),
-  createComment
-);
-router.delete('/drawings/comments/:id', auth, validator(deleteCommentSchema), deleteComment);
+router.post('/drawings/:drawingId/like', auth, penalty, validator(createLikeSchema), createLike);
+router.post('/drawings/:drawingId/dislike', auth, penalty, validator(createDisLikeSchema), createDisLike);
 
 export default router;

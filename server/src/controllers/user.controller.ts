@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { getCustomRepository, getRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
-import { User } from '@src/entities/user/user.entity';
-import { Drawing } from '@src/entities/drawing/drawing.entity';
-import { ImageKey } from '@src/entities/board/imageKey.entity';
+import _ from 'lodash';
+import User from '@src/entities/user/user.entity';
+import Drawing from '@src/entities/drawing/drawing.entity';
 import { UserRepository } from '@src/repositorys/user.repository';
 import logger from '@src/helpers/winston.helper';
 import { sendAuthEmail, sendFindEmail, sendChangeEmail } from '@src/helpers/nodemailer.helper';
@@ -27,6 +27,10 @@ import {
   deleteAccountInput,
   GetUserInput,
 } from '@src/schemas/user.schema';
+import FreeImageKey from '@src/entities/board/commission/imageKey.entity';
+import CommissionImageKey from '@src/entities/board/free/imageKey.entity';
+import RequeImageKey from '@src/entities/board/reque/imageKey.entity';
+import SaleImageKey from '@src/entities/board/sale/imageKey.entity';
 
 export const signUp = async (req: Request<{}, {}, SignUpInput['body']>, res: Response): Promise<any> => {
   const { email, nickname, pw } = req.body;
@@ -51,8 +55,7 @@ export const signUp = async (req: Request<{}, {}, SignUpInput['body']>, res: Res
   const pwToken = await bcrypt.hash(nickname, 8);
 
   // 유저 테이블에 정보를 저장합니다.
-  const newUser = getRepository(User).create({ email, nickname, pw: encryptedPw, emailToken, pwToken });
-  await getRepository(User).save(newUser);
+  await getRepository(User).insert({ email, nickname, pw: encryptedPw, emailToken, pwToken });
 
   // 인증이메일을 발송합니다.
   await sendAuthEmail(req, res, email, emailToken);
@@ -112,7 +115,6 @@ export const resetPw = async (
   req: Request<{}, ResetPwInput['query'], ResetPwInput['body']>,
   res: Response
 ): Promise<any> => {
-  const userRepo = getCustomRepository(UserRepository);
   const { pw } = req.body;
   const { pwToken } = req.query;
 
@@ -128,17 +130,16 @@ export const resetPw = async (
   const newPwToken = await bcrypt.hash(user?.nickname as string, 8);
 
   // 새로운 비밀번호 토큰과 비밀번호를 업데이트 합니다.
-  // 하나의 쿼리로 2개의 칼럼을 바꿀 수 있다.
-  await userRepo.updatePwAndPwToken(user.id, encryptedPw, newPwToken);
+  await getRepository(User).update(user.id, { pw: encryptedPw, pwToken: newPwToken });
 
   logger.info('비밀번호가 재설정 되었습니다.');
   return res.status(200).json({ ok: true, message: '비밀번호가 재설정 되었습니다.' });
 };
 
-export const getUser = async (req: Request<GetUserInput['params'], {}, {}>, res: Response): Promise<any> => {
-  const { id } = req.params;
+export const getUser = async (req: Request<GetUserInput['params']>, res: Response): Promise<any> => {
+  const { userId } = req.params;
 
-  const user = await getRepository(User).findOne({ id: Number(id) });
+  const user = await getRepository(User).findOne({ id: Number(userId) });
   if (!user) {
     logger.warn('존재하지 않는 유저가 유저정보를 가져오려고 시도합니다.');
     throw ApiError.NotFound('존재하지 않는 유저입니다.');
@@ -148,14 +149,11 @@ export const getUser = async (req: Request<GetUserInput['params'], {}, {}>, res:
   return res.status(200).json({ ok: true, message: '유저정보를 가져왔습니다.', user });
 };
 
-export const verifyEmail = async (
-  req: Request<verifyEmailInput['params'], {}, verifyEmailInput['body']>,
-  res: Response
-): Promise<any> => {
-  const { id } = req.params;
+export const verifyEmail = async (req: Request<{}, {}, verifyEmailInput['body']>, res: Response): Promise<any> => {
+  const id = req.session.user?.id!;
   const { newEmail } = req.body;
 
-  const isExistingUser = await getRepository(User).count({ id: Number(id) });
+  const isExistingUser = await getRepository(User).count({ id: id });
   if (!isExistingUser) {
     logger.warn('존재하지 않은 유저가 이메일 변경을 시도합니다.');
     throw ApiError.NotFound('존재하지 않는 유저입니다.');
@@ -166,7 +164,7 @@ export const verifyEmail = async (
     throw ApiError.Conflict('이미 존재하는 이메일 입니다.');
   }
 
-  await sendChangeEmail(req, res, Number(id), newEmail);
+  await sendChangeEmail(req, res, id, newEmail);
 
   logger.info('이메일 변경 인증 메세지를 보냈습니다.');
   return res.status(200).json({ ok: true, message: '이메일 변경을 위한 인증 메세지를 보냈습니다.' });
@@ -187,41 +185,38 @@ export const updateEmail = async (
 };
 
 export const updateNickname = async (
-  req: Request<updateNicknameInput['params'], {}, updateNicknameInput['body']>,
+  req: Request<{}, {}, updateNicknameInput['body']>,
   res: Response
 ): Promise<any> => {
-  const { id } = req.params;
-  const { newNickname } = req.body;
+  const id = req.session.user?.id!;
+  const { nickname } = req.body;
 
   const isExistingUser = await getRepository(User).count({ id: Number(id) });
   if (!isExistingUser) {
     logger.warn('존재하지 않은 유저가 닉네임 변경을 시도합니다.');
     throw ApiError.NotFound('존재하지 않는 유저입니다.');
   }
-  const isExistingNickname = await getRepository(User).findOne({ nickname: newNickname });
+  const isExistingNickname = await getRepository(User).findOne({ nickname });
   if (!isExistingNickname) {
     logger.warn('이미 존재하는 닉네임으로 닉네임 변경을 시도하고 있습니다.');
     throw ApiError.Conflict('이미 존재하는 닉네임 입니다.');
   }
 
   // 닉네임을 변경해줍니다.
-  await getRepository(User).update(Number(id), { nickname: newNickname as string });
+  await getRepository(User).update(Number(id), { nickname });
 
   logger.info(`${id}님의 닉네임 변경이 완료되었습니다.`);
-  return res.status(200).json({ ok: true, message: '닉네임 변경 완료되었습니다.', newNickname });
+  return res.status(200).json({ ok: true, message: '닉네임 변경 완료되었습니다.', updatedNickname: nickname });
 };
 
-export const updatePw = async (
-  req: Request<updatePwInput['params'], {}, updatePwInput['body']>,
-  res: Response
-): Promise<any> => {
+export const updatePw = async (req: Request<{}, {}, updatePwInput['body']>, res: Response): Promise<any> => {
   const userRepo = getCustomRepository(UserRepository);
 
-  const { id } = req.params;
+  const id = req.session.user?.id!;
   const { currentPw, newPw } = req.body;
 
   // select: false 처리된 pw를 가져오기위해 쿼리빌더를 addSelect를 사용한다.
-  const user = await userRepo.findWithPwByEmail(id);
+  const user = await userRepo.findWithPwById(id);
   if (!user) {
     logger.warn('존재하지 않은 유저가 닉네임 변경을 시도합니다.');
     throw ApiError.NotFound('존재하지 않는 유저입니다.');
@@ -241,30 +236,25 @@ export const updatePw = async (
   return res.status(200).json({ ok: true, message: '비밀번호 변경 완료되었습니다.\n 다시 로그인 해주세요.' });
 };
 
-export const updateDesc = async (
-  req: Request<updateDescInput['params'], {}, updateDescInput['body']>,
-  res: Response
-): Promise<any> => {
-  const { id } = req.params;
-  const { newDesc } = req.body;
+export const updateDesc = async (req: Request<{}, {}, updateDescInput['body']>, res: Response): Promise<any> => {
+  const id = req.session.user?.id!;
+  const { desc } = req.body;
 
-  const isExistingUser = await getRepository(User).count({ id: Number(id) });
+  const isExistingUser = await getRepository(User).count({ id });
   if (!isExistingUser) {
     logger.warn('존재하지 않은 유저가 자기소개 변경을 시도합니다.');
     throw ApiError.NotFound('존재하지 않는 유저입니다.');
   }
 
   // 자기소개를 변경해줍니다.
-  await getRepository(User).update(Number(id), { desc: newDesc });
+  await getRepository(User).update(Number(id), { desc });
 
   logger.info(`${id}님의 자기소개 변경이 완료되었습니다.`);
-  return res.status(200).json({ ok: true, message: '자기소개 변경 완료되었습니다.', newDesc });
+  return res.status(200).json({ ok: true, message: '자기소개 변경 완료되었습니다.', updatedDesc: desc });
 };
 
-export const updateAvatar = async (req: Request<updateAvatarInput['params'], {}, {}>, res: Response): Promise<any> => {
-  const userRepo = getCustomRepository(UserRepository);
-
-  const { id } = req.params;
+export const updateAvatar = async (req: Request<updateAvatarInput['body']>, res: Response): Promise<any> => {
+  const id = req.session.user?.id!;
   const newAvatar = (req.file as Express.MulterS3.File).location;
   const newAvatarKey = (req.file as Express.MulterS3.File).key;
 
@@ -274,7 +264,7 @@ export const updateAvatar = async (req: Request<updateAvatarInput['params'], {},
     throw ApiError.InternalServerError('내부적인 문제로 프로필 변경을 실패하였습니다.');
   }
 
-  const user = await getRepository(User).findOne({ id: Number(id) });
+  const user = await getRepository(User).findOne({ id });
   if (!user) {
     logger.warn('존재하지 않은 유저가 프로필사진 변경을 시도합니다.');
     throw ApiError.NotFound('존재하지 않는 유저입니다.');
@@ -283,24 +273,23 @@ export const updateAvatar = async (req: Request<updateAvatarInput['params'], {},
   const defaultAvatarKey = process.env.DEFAULT_AVATAR_KEY as string;
 
   // 기존의 아바타가 기본 아바타가 아니라면 s3최적화를 위해 삭제한다.
-  if (currentAvatarKey !== defaultAvatarKey) s3Delete(req, res, currentAvatarKey);
+  if (currentAvatarKey !== defaultAvatarKey) s3Delete(currentAvatarKey);
 
-  // 쿼리빌더를 사용해 한번에 업데이트 한다.
-  await userRepo.updateAvatarAndAvatarKey(Number(id), newAvatar, newAvatarKey);
+  await getRepository(User).update(id, { avatar: newAvatar, avatarKey: newAvatarKey });
 
   logger.info(`${id}님의 프로필이미지 변경 완료되었습니다.`);
-  return res.status(200).json({ ok: true, message: '프로필이미지 변경 완료되었습니다.', newAvatar, newAvatarKey });
+  return res.status(200).json({
+    ok: true,
+    message: '프로필이미지 변경 완료되었습니다.',
+    updatedAvatar: newAvatar,
+    updatedAvatarKey: newAvatarKey,
+  });
 };
 
-export const updateDefaultAvatar = async (
-  req: Request<updateDefaultAvatarInput['params'], {}, {}>,
-  res: Response
-): Promise<any> => {
-  const userRepo = getCustomRepository(UserRepository);
+export const updateDefaultAvatar = async (req: Request, res: Response): Promise<any> => {
+  const id = req.session.user?.id!;
 
-  const { id } = req.params;
-
-  const user = await getRepository(User).findOne({ id: Number(id) });
+  const user = await getRepository(User).findOne({ id });
   if (!user) {
     logger.warn('존재하지 않은 유저가 프로필사진 변경을 시도합니다.');
     throw ApiError.NotFound('존재하지 않는 유저입니다.');
@@ -313,21 +302,22 @@ export const updateDefaultAvatar = async (
   const defaultAvatarKey = process.env.DEFAULT_AVATAR_KEY as string;
 
   // 기존의 아바타가 기본 아바타가 아니라면 s3최적화를 위해 삭제한다.
-  if (currentAvatarKey !== defaultAvatarKey) s3Delete(req, res, currentAvatarKey);
+  if (currentAvatarKey !== defaultAvatarKey) s3Delete(currentAvatarKey);
 
-  // 쿼리빌더를 사용해 한번에 업데이트 한다.
-  await userRepo.updateAvatarAndAvatarKey(Number(id), defaultAvatar, defaultAvatarKey);
+  // 기본 아바타, 아바타키로 업데이트한다.
+  await getRepository(User).update(id, { avatar: defaultAvatar, avatarKey: defaultAvatarKey });
 
   logger.info(`${id}님의 기본이미지로 변경 완료되었습니다.`);
-  return res
-    .status(200)
-    .json({ ok: true, message: '기본이미지로 변경 완료되었습니다.', defaultAvatar, defaultAvatarKey });
+  return res.status(200).json({
+    ok: true,
+    message: '기본이미지로 변경 완료되었습니다.',
+    updatedAvatar: defaultAvatar,
+    updatedAvatarKey: defaultAvatarKey,
+  });
 };
 
-export const updateCover = async (req: Request<updateCoverInput['params'], {}, {}>, res: Response): Promise<any> => {
-  const userRepo = getCustomRepository(UserRepository);
-
-  const { id } = req.params;
+export const updateCover = async (req: Request<updateCoverInput['body']>, res: Response): Promise<any> => {
+  const id = req.session.user?.id!;
   const newCover = (req.file as Express.MulterS3.File).location;
   const newCoverKey = (req.file as Express.MulterS3.File).key;
 
@@ -346,24 +336,24 @@ export const updateCover = async (req: Request<updateCoverInput['params'], {}, {
   const defaultCoverKey = process.env.DEFAULT_Cover_KEY as string;
 
   // 기존의 아바타가 기본 아바타가 아니라면 s3최적화를 위해 삭제한다.
-  if (currentCoverKey !== defaultCoverKey) s3Delete(req, res, currentCoverKey);
+  if (currentCoverKey !== defaultCoverKey) s3Delete(currentCoverKey);
 
-  // 쿼리빌더를 사용해 한번에 업데이트 한다.
-  await userRepo.updateCoverAndCoverKey(Number(id), newCover, newCoverKey);
+  // 새로운 커버이미지, 커버이미지키로 업데이트한다.
+  await getRepository(User).update(id, { cover: newCover, coverKey: newCoverKey });
 
   logger.info(`${id}님의 커버이미지 변경 완료되었습니다.`);
-  return res.status(200).json({ ok: true, message: '커버이미지 변경 완료되었습니다.', newCover, newCoverKey });
+  return res.status(200).json({
+    ok: true,
+    message: '커버이미지 변경 완료되었습니다.',
+    updatedCover: newCover,
+    updatedCoverKey: newCoverKey,
+  });
 };
 
-export const updateDefaultCover = async (
-  req: Request<updateDefaultCoverInput['params'], {}, {}>,
-  res: Response
-): Promise<any> => {
-  const userRepo = getCustomRepository(UserRepository);
+export const updateDefaultCover = async (req: Request, res: Response): Promise<any> => {
+  const id = req.session.user?.id!;
 
-  const { id } = req.params;
-
-  const user = await getRepository(User).findOne({ id: Number(id) });
+  const user = await getRepository(User).findOne({ id });
   if (!user) {
     logger.warn('존재하지 않은 유저가 프로필사진 변경을 시도합니다.');
     throw ApiError.NotFound('존재하지 않는 유저입니다.');
@@ -376,27 +366,34 @@ export const updateDefaultCover = async (
   const defaultCoverKey = process.env.DEFAULT_Cover_KEY as string;
 
   // 기존의 아바타가 기본 아바타가 아니라면 s3최적화를 위해 삭제한다.
-  if (currentCoverKey !== defaultCoverKey) s3Delete(req, res, currentCoverKey);
+  if (currentCoverKey !== defaultCoverKey) s3Delete(currentCoverKey);
 
-  // 쿼리빌더를 사용해 한번에 업데이트 한다.
-  await userRepo.updateCoverAndCoverKey(Number(id), defaultCover, defaultCoverKey);
+  // 기본 커버 이미지 , 키로 업데이트한다.
+  await getRepository(User).update(id, { cover: defaultCover, coverKey: defaultCoverKey });
 
   logger.info(`${id}님의 기본 커버이미지로 변경 완료되었습니다.`);
-  return res
-    .status(200)
-    .json({ ok: true, message: '기본 커버이미지로 변경 완료되었습니다.', defaultCover, defaultCoverKey });
+  return res.status(200).json({
+    ok: true,
+    message: '기본 커버이미지로 변경 완료되었습니다.',
+    updatedCover: defaultCover,
+    updatedCoverKey: defaultCoverKey,
+  });
 };
 
-export const deleteAccount = async (req: Request<deleteAccountInput['params']>, res: Response): Promise<any> => {
-  const { id } = req.params;
+export const deleteAccount = async (req: Request, res: Response): Promise<any> => {
+  const id = req.session.user?.id!;
 
-  const user = await getRepository(User).findOne({ id: Number(id) });
+  const user = await getRepository(User).findOne({ id });
   if (!user) {
     logger.warn('존재하지 않은 유저가 계정삭제를 시도합니다.');
     throw ApiError.NotFound('존재하지 않는 유저입니다.');
   }
-  const drawings = await getRepository(Drawing).find({ user_id: Number(id) });
-  const imageKeys = await getRepository(ImageKey).find({ user_id: Number(id) });
+  const drawings = await getRepository(Drawing).find({ user_id: id });
+
+  const freeImageKeys = await getRepository(FreeImageKey).find({ user_id: id });
+  const commissionImageKeys = await getRepository(CommissionImageKey).find({ user_id: id });
+  const requeImageKeys = await getRepository(RequeImageKey).find({ user_id: id });
+  const saleImageKeys = await getRepository(SaleImageKey).find({ user_id: id });
 
   const currentAvatarKey = user?.avatarKey;
   const currentCoverKey = user?.coverKey;
@@ -404,15 +401,18 @@ export const deleteAccount = async (req: Request<deleteAccountInput['params']>, 
   const defaultCoverKey = process.env.DEFAULT_COVER_KEY as string;
 
   // 기본이미지 제외, 탈퇴한 계정의 프로필 사진을 s3에서 객체삭제 합니다.
-  if (currentAvatarKey !== defaultAvatarKey) s3Delete(req, res, currentAvatarKey as string);
+  if (currentAvatarKey !== defaultAvatarKey) s3Delete(currentAvatarKey as string);
   // 기본커버 제외, 탈퇴한 계정의 커버 사진을 s3에서 객체삭제 합니다.
-  if (currentCoverKey !== defaultCoverKey) s3Delete(req, res, currentCoverKey as string);
+  if (currentCoverKey !== defaultCoverKey) s3Delete(currentCoverKey as string);
   // s3에 저장된 유저가 올린 모든 그림을 삭제합니다.
-  drawings.forEach(async (drawing) => s3Delete(req, res, drawing.key as string));
+  drawings.forEach(async (drawing) => s3Delete(drawing.key as string));
   // s3에 저장된 유저가 올린 모든 게시물(post) 이미지를 삭제합니다.
-  imageKeys.forEach(async (imageKey) => s3Delete(req, res, imageKey.image_key as string));
+  freeImageKeys.forEach(async (imageKey) => s3Delete(imageKey.key as string));
+  commissionImageKeys.forEach(async (imageKey) => s3Delete(imageKey.key as string));
+  requeImageKeys.forEach(async (imageKey) => s3Delete(imageKey.key as string));
+  saleImageKeys.forEach(async (imageKey) => s3Delete(imageKey.key as string));
 
-  await getRepository(User).delete({ id: Number(id) });
+  await getRepository(User).delete({ id });
 
   // 레디스에 저장된 대화정보 등등 식제
   await cluster.del(`chats:${user?.chatId}`);

@@ -65,14 +65,11 @@ export const resetPwSchema = object({
 
 export const getUserSchema = object({
   params: object({
-    id: string(),
+    userId: string(),
   }),
 });
 
 export const verifyEmailSchema = object({
-  params: object({
-    id: string(),
-  }),
   body: object({
     newEmail: string({
       required_error: '이메일을 입력해주세요.',
@@ -90,11 +87,8 @@ export const updateEmailSchema = object({
 });
 
 export const updateNicknameSchema = object({
-  params: object({
-    id: string(),
-  }),
   body: object({
-    newNickname: string({
+    nickname: string({
       required_error: '닉네임을 입력해주세요.',
     })
       .min(2, '최소 2글자 이상입니다.')
@@ -130,20 +124,14 @@ export const updatePwSchema = object({
 });
 
 export const updateDescSchema = object({
-  params: object({
-    id: string(),
-  }),
   body: object({
-    newDesc: string({
+    desc: string({
       required_error: '자기소개를 입력해주세요.',
     }).max(5000, '자기소개 글자를 초과하였습니다.'),
   }),
 });
 
 export const updateAvatarSchema = object({
-  params: object({
-    id: string(),
-  }),
   body: object({
     newAvatar: string({
       required_error: '변경할 프로필사진을 업로드 하지 않았습니다.',
@@ -151,16 +139,9 @@ export const updateAvatarSchema = object({
   }),
 });
 
-export const updateDefaultAvatarSchema = object({
-  params: object({
-    id: string(),
-  }),
-});
+export const updateDefaultAvatarSchema = object({});
 
 export const updateCoverSchema = object({
-  params: object({
-    id: string(),
-  }),
   body: object({
     newCover: string({
       required_error: '변경할 커버사진을 업로드 하지 않았습니다.',
@@ -168,17 +149,9 @@ export const updateCoverSchema = object({
   }),
 });
 
-export const updateDefaultCoverSchema = object({
-  params: object({
-    id: string(),
-  }),
-});
+export const updateDefaultCoverSchema = object({});
 
-export const deleteAccountSchema = object({
-  params: object({
-    id: string(),
-  }),
-});
+export const deleteAccountSchema = object({});
 
 export type SignUpInput = z.infer<typeof signUpSchema>;
 export type VerifyUserInput = z.infer<typeof verifyUserSchema>;
