@@ -6,7 +6,7 @@ import User from '@src/entities/user/user.entity';
 import Drawing from '@src/entities/drawing/drawing.entity';
 import { UserRepository } from '@src/repositorys/user.repository';
 import logger from '@src/helpers/winston.helper';
-import { sendAuthEmail, sendFindEmail, sendChangeEmail } from '@src/helpers/nodemailer.helper';
+import { sendAuthEmail, sendEmailForResetPw, sendEmailForUpdateEmail } from '@src/helpers/nodemailer.helper';
 import ApiError from '@src/errors/api.error';
 import { s3Delete } from '@src/utils/s3.utils';
 import cluster from '@src/helpers/redis.helper';
@@ -21,10 +21,7 @@ import {
   updatePwInput,
   updateDescInput,
   updateAvatarInput,
-  updateDefaultAvatarInput,
   updateCoverInput,
-  updateDefaultCoverInput,
-  deleteAccountInput,
   GetUserInput,
 } from '@src/schemas/user.schema';
 import FreeImageKey from '@src/entities/board/commission/imageKey.entity';
@@ -58,7 +55,7 @@ export const signUp = async (req: Request<{}, {}, SignUpInput['body']>, res: Res
   await getRepository(User).insert({ email, nickname, pw: encryptedPw, emailToken, pwToken });
 
   // 인증이메일을 발송합니다.
-  await sendAuthEmail(req, res, email, emailToken);
+  await sendAuthEmail(email, emailToken);
 
   /*
    * 클라이언트에 엑세스토큰를 쿠키로 보냅니다. (만료기한 7일)
@@ -106,7 +103,7 @@ export const forgotPw = async (req: Request<{}, {}, ForgotPwInput['body']>, res:
 
   // 유저가 존재한다면 비밀번호 찾기 인증 메일을 발송합니다.
   // 비밀번호 인증을 위해 auth테이블에 pwToken이 필요합니다.
-  await sendFindEmail(req, res, email, user.pwToken);
+  await sendEmailForResetPw(email, user.pwToken);
 
   return res.status(200).json({ ok: true, message: '인증 이메일을 발송하였습니다.' });
 };
@@ -164,7 +161,7 @@ export const verifyEmail = async (req: Request<{}, {}, verifyEmailInput['body']>
     throw ApiError.Conflict('이미 존재하는 이메일 입니다.');
   }
 
-  await sendChangeEmail(req, res, id, newEmail);
+  await sendEmailForUpdateEmail(id, newEmail);
 
   logger.info('이메일 변경 인증 메세지를 보냈습니다.');
   return res.status(200).json({ ok: true, message: '이메일 변경을 위한 인증 메세지를 보냈습니다.' });
@@ -174,13 +171,13 @@ export const updateEmail = async (
   req: Request<updateEmailInput['params'], updateEmailInput['query'], {}>,
   res: Response
 ): Promise<any> => {
-  const { id } = req.params;
+  const { userId } = req.params;
   const { newEmail } = req.query;
 
   // 이메일을 변경해줍니다.
-  await getRepository(User).update(Number(id), { email: newEmail as string });
+  await getRepository(User).update(Number(userId), { email: newEmail as string });
 
-  logger.info(`${id}님 이메일 변경 완료되었습니다.`);
+  logger.info(`${userId}님 이메일 변경 완료되었습니다.`);
   return res.status(200).redirect(process.env.CLIENT_ADDR as string);
 };
 

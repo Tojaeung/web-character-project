@@ -50,7 +50,7 @@ router.patch('/users/reset-pw', validator(resetPwSchema), asyncHandler(resetPw))
 
 // 이메일 변경, 그에따른 이메일 인증
 router.post('/users/verify-email', auth, validator(verifyEmailSchema), asyncHandler(verifyEmail));
-router.patch('/users/email', auth, validator(updateEmailSchema), asyncHandler(updateEmail));
+router.patch('/users/:userId/email', auth, validator(updateEmailSchema), asyncHandler(updateEmail));
 
 // 유저정보 가져오기 (프로필 유저정보 가져올때 사용)
 router.get('/users/:userId', validator(getUserSchema), asyncHandler(getUser));

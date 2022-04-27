@@ -29,7 +29,7 @@ export const signIn = async (req: Request<{}, {}, SignInInput['body']>, res: Res
 
   // 인증되지 않은 회원일 경우에 다시 인증메일을 발송합니다.
   if (!user?.isVerified) {
-    await sendAuthEmail(req, res, user.email, user.emailToken as string);
+    await sendAuthEmail(user.email, user.emailToken as string);
     logger.warn('이메일 인증을 받지 않은 회원이 로그인을 시도합니다.');
     throw ApiError.Unauthorized('인증되지 않은 사용자 입니다.\n이메일 인증을 보냈으니 확인해주세요.');
   }

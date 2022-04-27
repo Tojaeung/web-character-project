@@ -1,8 +1,9 @@
-import { Request, Response } from 'express';
 import { createTransport } from 'nodemailer';
 import logger from '@src/helpers/winston.helper';
+import ApiError from '@src/errors/api.error';
 
-export const sendAuthEmail = async (req: Request, res: Response, email: string, emailToken: string) => {
+// 회원가입시, 이메일 인증 메일이다. (인증 메일을 확인해야 로그인이 가능하다.)
+export const sendAuthEmail = async (email: string, emailToken: string) => {
   const transporter = createTransport({
     host: process.env.MAIL_HOST,
     port: 587,
@@ -16,22 +17,22 @@ export const sendAuthEmail = async (req: Request, res: Response, email: string, 
   const info = await transporter.sendMail({
     from: process.env.MY_MAIL,
     to: email,
-    subject: '안뇽~',
-    html: `<h3 style="background-color: green; text-align: center; color: pink;">안녕하세요. 캐릭캐릭체인지에 가입해주셔서 감사합니다.</h3>
-      <a href='http://${req.headers.host}/api/users/verify-user?emailToken=${emailToken}'>Verify your email</a>`,
+    subject: '<i>그림러들</i> 회원가입 인증메일 입니다.',
+    html: `<h2>안녕하세요. <i>그림러들</i>에 가입해주셔서 감사합니다.</h2>
+    <p>아래 링크를 클릭하면, 그림러들 홈페이지로 돌아갑니다.</p>
+    <p>그 다음, 로그인이 가능합니다.</p>
+      <a href='http://${process.env.SERVER_ADDR}/api/users/verify-user?emailToken=${emailToken}'>이메일 인증 확인</a>`,
   });
 
   if (!info) {
-    logger.error('이메일 송신 실패하였습니다.');
-    return res.status(500).json({ ok: false, message: '이메일 송신 에러' });
-  } else {
-    logger.info('이메일 송신 성공하였습니다.');
+    logger.error('이메일 인증메일 보내기 실패하였습니다.');
+    throw ApiError.InternalServerError('내부적인 문제로 회원가입 인증메일 보내기 실패하였습니다.');
   }
-
-  return;
+  logger.info('회원가입 인증메일 보내기 성공하였습니다.');
 };
 
-export const sendFindEmail = async (req: Request, res: Response, email: string, pwToken: string) => {
+// 잊어버린 비밀번호를 찾는과정에서, 비밀번호를 재설정하기위해 메일인증이 필요합니다.
+export const sendEmailForResetPw = async (email: string, pwToken: string) => {
   const transporter = createTransport({
     host: process.env.MAIL_HOST,
     port: 587,
@@ -45,22 +46,21 @@ export const sendFindEmail = async (req: Request, res: Response, email: string, 
   const info = await transporter.sendMail({
     from: process.env.MY_MAIL,
     to: email,
-    subject: '안뇽~',
-    html: `<h3 style="background-color: green; text-align: center; color: pink;">비밀번호 재설정을 위해서 아래의 버튼을 눌러주세요.</h3>
-      <a href='${process.env.CLIENT_ADDR}/resetPw?pwToken=${pwToken}'>Verify your email</a>`,
+    subject: '<i>그림러들</i> 비밀번호 찾기 인증메일 입니다.',
+    html: `<h2>비밀번호를 잊어버리셨군요?</h2>
+    <p>아래 링크를 클릭하면, 비밀번호 재설정 페이지로 이동합니다.</p>
+    <a href='${process.env.CLIENT_ADDR}/resetPw?pwToken=${pwToken}'>비밀번호 재설정하기</a>,`,
   });
 
   if (!info) {
-    logger.error('이메일 송신 실패하였습니다.');
-    return res.status(500).json({ ok: false, message: '이메일 송신 에러' });
-  } else {
-    logger.info('이메일 송신 성공하였습니다.');
+    logger.error('비밀번호 재설정을 위한 이메일 보내기 실패하였습니다.');
+    throw ApiError.InternalServerError('내부적인 문제로 비밀번호 재설정을 위한 이메일 보내기 실패하였습니다.');
   }
-
-  return;
+  logger.info('비밀번호 재설정을 위한 인증메일 보내기 성공하였습니다.');
 };
 
-export const sendChangeEmail = async (req: Request, res: Response, id: number, newEmail: string) => {
+// 이메일 변경을 위한 인증메일 입니다.
+export const sendEmailForUpdateEmail = async (userId: number, newEmail: string) => {
   const transporter = createTransport({
     host: process.env.MAIL_HOST,
     port: 587,
@@ -74,17 +74,16 @@ export const sendChangeEmail = async (req: Request, res: Response, id: number, n
   const info = await transporter.sendMail({
     from: process.env.MY_MAIL,
     to: newEmail,
-    subject: '안뇽~',
-    html: `<h3 style="background-color: green; text-align: center; color: pink;">이메일 변경을 위해서 아래의 버튼을 눌러주세요.</h3>
-      <a href='http://${req.headers.host}/api/users/${id}/email?newEmail=${newEmail}&'>Verify your email</a>`,
+    subject: '<i>그림러들</i> 이메일변경을 위한 인증메일 입니다.',
+    html: `<h2>이메일 변경하기</h2>
+    <p>아래 링크를 클릭하면, 그림러들 홈페이지로 이동합니다.</p>
+    <p>그 다음, 새로운 이메일로 로그인을 시도해주세요.</p>
+    <a href='http://${process.env.SERVER_ADDR}/api/users/${userId}/email?newEmail=${newEmail}&'>이메일 변경완료</a>`,
   });
 
   if (!info) {
-    logger.error('이메일 송신 실패하였습니다.');
-    return res.status(500).json({ ok: false, message: '이메일 송신 에러' });
-  } else {
-    logger.info('이메일 송신 성공하였습니다.');
+    logger.error('이메일 을 위한 인증메일 보내기 실패하였습니다.');
+    throw ApiError.InternalServerError('이메일 을 위한 인증메일 보내기 실패하였습니다.');
   }
-
-  return;
+  logger.info('이메일 변경을 위한 인증메일 보내기 성공하였습니다.');
 };

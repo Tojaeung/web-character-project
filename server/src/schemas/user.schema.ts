@@ -79,7 +79,7 @@ export const verifyEmailSchema = object({
 
 export const updateEmailSchema = object({
   params: object({
-    id: string(),
+    userId: string(),
   }),
   query: object({
     newEmail: string(),
