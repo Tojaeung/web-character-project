@@ -334,25 +334,30 @@ export const deleteComment = async (req: Request<DeleteCommentInput['params']>, 
   return res.status(200).json({ ok: true, message: '게시글 댓글 제거 성공하였습니다.', deletedComment });
 };
 
-export const createLike = async (
-  req: Request<CreateLikeInput['params'], {}, CreateLikeInput['body']>,
-  res: Response
-): Promise<any> => {
+export const createLike = async (req: Request<CreateLikeInput['params']>, res: Response): Promise<any> => {
   const id = req.session.user?.id!;
   const { board, postId } = req.params;
-  const { authorId } = req.body;
 
   let newLike;
+  let authorId; // 게시글 작성자 id
   if (board === 'free') {
+    const post = await getRepository(Free).findOne({ id });
+    authorId = post?.user_id;
     const result = await getRepository(FreeLike).insert({ valuerId: id, free_id: Number(postId) });
     newLike = result.raw[0];
   } else if (board === 'commission') {
+    const post = await getRepository(Commission).findOne({ id });
+    authorId = post?.user_id;
     const result = await getRepository(CommissionLike).insert({ valuerId: id, commission_id: Number(postId) });
     newLike = result.raw[0];
   } else if (board === 'reque') {
+    const post = await getRepository(Reque).findOne({ id });
+    authorId = post?.user_id;
     const result = await getRepository(RequeLike).insert({ valuerId: id, reque_id: Number(postId) });
     newLike = result.raw[0];
   } else if (board === 'sale') {
+    const post = await getRepository(Sale).findOne({ id });
+    authorId = post?.user_id;
     const result = await getRepository(SaleLike).insert({ valuerId: id, sale_id: Number(postId) });
     newLike = result.raw[0];
   } else {
@@ -367,25 +372,30 @@ export const createLike = async (
   return res.status(200).json({ ok: true, message: '게시글 좋아요 생성 성공하였습니다.', newLike });
 };
 
-export const createDisLike = async (
-  req: Request<CreateDisLikeInput['params'], {}, CreateDisLikeInput['body']>,
-  res: Response
-): Promise<any> => {
+export const createDisLike = async (req: Request<CreateDisLikeInput['params']>, res: Response): Promise<any> => {
   const id = req.session.user?.id!;
   const { board, postId } = req.params;
-  const { authorId } = req.body;
 
   let newDisLike;
+  let authorId; // 게시글 작성자 id
   if (board === 'free') {
+    const post = await getRepository(Free).findOne({ id });
+    authorId = post?.user_id;
     const result = await getRepository(FreeDisLike).insert({ valuerId: id, free_id: Number(postId) });
     newDisLike = result.raw[0];
   } else if (board === 'commission') {
+    const post = await getRepository(Commission).findOne({ id });
+    authorId = post?.user_id;
     const result = await getRepository(CommissionDisLike).insert({ valuerId: id, commission_id: Number(postId) });
     newDisLike = result.raw[0];
   } else if (board === 'reque') {
+    const post = await getRepository(Reque).findOne({ id });
+    authorId = post?.user_id;
     const result = await getRepository(RequeDisLike).insert({ valuerId: id, reque_id: Number(postId) });
     newDisLike = result.raw[0];
   } else if (board === 'sale') {
+    const post = await getRepository(Sale).findOne({ id });
+    authorId = post?.user_id;
     const result = await getRepository(SaleDisLike).insert({ valuerId: id, sale_id: Number(postId) });
     newDisLike = result.raw[0];
   } else {
@@ -393,8 +403,8 @@ export const createDisLike = async (
     throw ApiError.NotFound('존재하지 않는 게시판입니다.');
   }
 
-  // 게시글 작성자는 좋아요를 받음에 따라 경험치(영감력)를 얻는다.
-  await getRepository(User).decrement({ id: authorId }, 'exp', -3);
+  // 게시글 작성자는 싫어요를 받음에 따라 경험치(영감력)가 깍인다.
+  await getRepository(User).decrement({ id: authorId }, 'exp', -2);
 
   logger.info('게시글 싫어요 생성 성공하였습니다.');
   return res.status(200).json({ ok: true, message: '게시글 싫어요 생성 성공하였습니다.', newDisLike });

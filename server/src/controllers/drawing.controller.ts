@@ -177,14 +177,17 @@ export const createLike = async (req: Request<createLikeInput['params']>, res: R
     logger.warn('존재하지 않는 유저가 그림 좋아요를 추가하려고 시도합니다.');
     throw ApiError.NotFound('존재하지 않는 유저입니다.');
   }
-  const isExistingdrawing = await getRepository(Drawing).count({ id: Number(drawingId) });
-  if (!isExistingdrawing) {
+  const drawing = await getRepository(Drawing).findOne({ id: Number(drawingId) });
+  if (!drawing) {
     logger.warn('존재하지 않는 그림에 좋아요를 추가하려고 시도합니다.');
     throw ApiError.NotFound('존재하지 않는 그림입니다.');
   }
 
   const result = await getRepository(Like).insert({ valuerId: id, drawing_id: Number(drawingId) });
   const newLike = result.raw[0];
+
+  // 그림 올린 사람은 좋아요를 받음에 따라 경험치(영감력)를 얻는다.
+  await getRepository(User).increment({ id: drawing.user_id }, 'exp', 5);
 
   logger.info('그림 좋아요 추가하기 성공');
   return res.status(200).json({ ok: true, message: '그림 좋아요 추가하기 성공', newLike });
@@ -199,11 +202,14 @@ export const createDisLike = async (req: Request<createDisLikeInput['params']>, 
     logger.warn('존재하지 않는 유저가 그림 싫어요를 추가하려고 시도합니다.');
     throw ApiError.NotFound('존재하지 않는 유저입니다.');
   }
-  const isExistingdrawing = await getRepository(Drawing).count({ id: Number(drawingId) });
-  if (!isExistingdrawing) {
+  const drawing = await getRepository(Drawing).findOne({ id: Number(drawingId) });
+  if (!drawing) {
     logger.warn('존재하지 않는 그림에 싫어요를 추가하려고 시도합니다.');
     throw ApiError.NotFound('존재하지 않는 그림입니다.');
   }
+
+  // 그림 올린 사람은 싫어요를 받음에 따라 경험치(영감력)가 깍인다.
+  await getRepository(User).decrement({ id: drawing.user_id }, 'exp', -2);
 
   const result = await getRepository(DisLike).insert({ valuerId: id, drawing_id: Number(drawingId) });
   const newDisLike = result.raw[0];

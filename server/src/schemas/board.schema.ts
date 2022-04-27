@@ -91,18 +91,12 @@ export const createLikeSchema = object({
     board: string(),
     postId: string(),
   }),
-  body: object({
-    authorId: number({ required_error: '게시글 작성자 정보를 찾을 수 없습니다.' }),
-  }),
 });
 
 export const createDisLikeSchema = object({
   params: object({
     board: string(),
     postId: string(),
-  }),
-  body: object({
-    authorId: number({ required_error: '게시글 작성자 정보를 찾을 수 없습니다.' }),
   }),
 });
 
