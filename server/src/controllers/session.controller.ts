@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { getCustomRepository } from 'typeorm';
+import { getCustomRepository, getRepository } from 'typeorm';
 import logger from '@src/helpers/winston.helper';
 import { SignInInput } from '@src/schemas/session.schema';
 import { sendAuthEmail } from '@src/helpers/nodemailer.helper';
 import ApiError from '@src/errors/api.error';
 import { UserRepository } from '@src/repositorys/user.repository';
+import User from '@src/entities/user/user.entity';
 
 export const signIn = async (req: Request<{}, {}, SignInInput['body']>, res: Response) => {
   const userRepo = getCustomRepository(UserRepository);
@@ -43,6 +44,36 @@ export const signIn = async (req: Request<{}, {}, SignInInput['body']>, res: Res
   req.session.save(() => {
     logger.info('로그인 되었습니다.');
     return res.status(200).json({ ok: true, message: '로그인 되었습니다.', user });
+  });
+};
+
+export const refreshLogin = async (req: Request, res: Response): Promise<any> => {
+  const id = req.session.user?.id!;
+
+  const user = await getRepository(User).findOne({ id });
+  if (!user) {
+    req.session.destroy((err: any) => {
+      if (err) {
+        logger.error('내부적인 문제로 로그아웃 실패하였습니다.');
+        throw ApiError.InternalServerError('로그아웃 실패하였습니다.');
+      } else {
+        logger.info('로그아웃 성공하였습니다.');
+        return res.status(205).clearCookie('sid').json({ ok: true, message: '로그아웃 성공하였습니다.' });
+      }
+    });
+    logger.warn('존재하지 않는 유저가 로그인 정보를 새로 가져오려고 합니다.');
+    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+  }
+
+  req.session.user = {
+    id: user.id,
+    chatId: user.chatId,
+    role: user.role,
+    exp: user.exp,
+  };
+  req.session.save(() => {
+    logger.info('로그인 정보를 새로 불러왔습니다.');
+    return res.status(200).json({ ok: true, message: '로그인 정보를 새로 불러왔습니다.', user });
   });
 };
 
