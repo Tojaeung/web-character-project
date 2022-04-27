@@ -20,17 +20,4 @@ export class UserRepository extends AbstractRepository<User> {
   findWithPwById(id: number) {
     return this.createQueryBuilder('user').addSelect('user.pw').where('user.id = :id', { id }).getOne();
   }
-
-  // 댓글, 게시글 작성시 영감력(user테이블의 exp칼럼) 상승
-  calcExp(id: number, calcedValue: number) {
-    return this.createQueryBuilder('user')
-      .update(User)
-      .set({ exp: () => `exp + ${calcedValue}` })
-      .where('id =:id', { id })
-      .execute();
-  }
-
-  updateExp(id: number, exp: number | null) {
-    return this.createQueryBuilder('user').update(User).set({ exp }).where('id =:id', { id }).execute();
-  }
 }
