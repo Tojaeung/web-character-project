@@ -48,16 +48,16 @@ export const resetPwSchema = object({
   }),
 
   body: object({
-    pw: string({
+    updatedPw: string({
       required_error: '비밀번호를 입력해주세요.',
     }).regex(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/,
       '영문,숫자,특수문자 조합하여 8자리 이상'
     ),
-    pwConfirmation: string({
+    updatedPwConfirmation: string({
       required_error: '비밀번호 확인을 입력해주세요.',
     }),
-  }).refine((val) => val.pw === val.pwConfirmation, {
+  }).refine((val) => val.updatedPw === val.updatedPwConfirmation, {
     message: '비밀번호가 일치하지 않습니다.',
     path: ['passwordConfirmation'],
   }),
@@ -71,7 +71,7 @@ export const getUserSchema = object({
 
 export const verifyEmailSchema = object({
   body: object({
-    newEmail: string({
+    updatedEmail: string({
       required_error: '이메일을 입력해주세요.',
     }).email('이메일 형식이 아닙니다.'),
   }),
@@ -82,13 +82,13 @@ export const updateEmailSchema = object({
     userId: string(),
   }),
   query: object({
-    newEmail: string(),
+    updatedEmail: string(),
   }),
 });
 
 export const updateNicknameSchema = object({
   body: object({
-    nickname: string({
+    updatedNickname: string({
       required_error: '닉네임을 입력해주세요.',
     })
       .min(2, '최소 2글자 이상입니다.')
@@ -98,9 +98,6 @@ export const updateNicknameSchema = object({
 });
 
 export const updatePwSchema = object({
-  params: object({
-    id: string(),
-  }),
   body: object({
     currentPw: string({
       required_error: '현재 비밀번호를 입력해주세요.',
@@ -108,16 +105,16 @@ export const updatePwSchema = object({
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/,
       '영문,숫자.특수문자 조합하여 8자리 이상'
     ),
-    newPw: string({
+    updatedPw: string({
       required_error: '새로운 비밀번호를 입력해주세요.',
     }).regex(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/,
       '영문,숫자.특수문자 조합하여 8자리 이상'
     ),
-    newPwConfirmation: string({
+    updatedPwConfirmation: string({
       required_error: '비밀번호 확인을 입력해주세요.',
     }),
-  }).refine((val) => val.newPw === val.newPwConfirmation, {
+  }).refine((val) => val.updatedPw === val.updatedPwConfirmation, {
     message: '새로운 비밀번호가 일치하지 않습니다.',
     path: ['newPwConfirmation'],
   }),
@@ -125,7 +122,7 @@ export const updatePwSchema = object({
 
 export const updateDescSchema = object({
   body: object({
-    desc: string({
+    updatedDesc: string({
       required_error: '자기소개를 입력해주세요.',
     }).max(5000, '자기소개 글자를 초과하였습니다.'),
   }),
@@ -133,7 +130,7 @@ export const updateDescSchema = object({
 
 export const updateAvatarSchema = object({
   body: object({
-    newAvatar: string({
+    updatedAvatar: string({
       required_error: '변경할 프로필사진을 업로드 하지 않았습니다.',
     }),
   }),
@@ -143,7 +140,7 @@ export const updateDefaultAvatarSchema = object({});
 
 export const updateCoverSchema = object({
   body: object({
-    newCover: string({
+    updatedCover: string({
       required_error: '변경할 커버사진을 업로드 하지 않았습니다.',
     }),
   }),

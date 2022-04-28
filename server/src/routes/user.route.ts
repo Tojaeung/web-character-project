@@ -65,14 +65,14 @@ router.patch(
   '/users/avatar',
   auth,
   validator(updateAvatarSchema),
-  avatarUpload.single('newAvatar'),
+  avatarUpload.single('updatedAvatar'),
   asyncHandler(updateAvatar)
 );
 router.patch('/users/default-avatar', auth, validator(updateDefaultAvatarSchema), asyncHandler(updateDefaultAvatar));
 router.patch(
   '/users/cover',
   auth,
-  coverUpload.single('newCover'),
+  coverUpload.single('updatedCover'),
   validator(updateCoverSchema),
   asyncHandler(updateCover)
 );

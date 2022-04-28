@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectModalIsOpen, selectModalMode, closeModal } from '@src/store/slices/modal.slice';
 import { AiOutlineClose } from 'react-icons/ai';
-import LoginModal from '@src/modals/user/Login';
-import DelAccountModal from '@src/modals/settings/DelAccount';
-import ExitChatModal from '@src/modals/chat/ExitChat';
-import SignUpGuideModal from '@src/modals/user/SignUpGuide';
-import FindPw from '@src/modals/user/ForgotPw';
-import EditEmailModal from '@src/modals/settings/EditEmail';
-import EditNicknameModal from '@src/modals/settings/EditNickname';
-import EditPwModal from '@src/modals/settings/EditPw';
+import Login from '@src/modals/user/Login';
+import DeleteAccount from '@src/modals/settings/DeleteAccount';
+import ExitChat from '@src/modals/chat/ExitChat';
+import SignUpGuide from '@src/modals/user/SignUpGuide';
+import ForgotPw from '@src/modals/user/ForgotPw';
+import ChangeEmail from '@src/modals/settings/ChangeEmail';
+import ChangeNickname from '@src/modals/settings/ChangeNickname';
+import ChangePw from '@src/modals/settings/ChangePw';
 
 function Modal() {
   const dispatch = useAppDispatch();
@@ -24,14 +24,14 @@ function Modal() {
       {!isOpen && !mode ? null : (
         <ModalBox>
           <CloseIcon onClick={(e) => dispatch(closeModal())} />
-          {isOpen && mode === 'login' && <LoginModal />}
-          {isOpen && mode === 'delAccount' && <DelAccountModal />}
-          {isOpen && mode === 'exitChat' && <ExitChatModal />}
-          {isOpen && mode === 'signUpGuideModal' && <SignUpGuideModal />}
-          {isOpen && mode === 'findPw' && <FindPw />}
-          {isOpen && mode === 'editEmail' && <EditEmailModal />}
-          {isOpen && mode === 'editNickname' && <EditNicknameModal />}
-          {isOpen && mode === 'editPw' && <EditPwModal />}
+          {isOpen && mode === 'login' && <Login />}
+          {isOpen && mode === 'deleteAccount' && <DeleteAccount />}
+          {isOpen && mode === 'exitChat' && <ExitChat />}
+          {isOpen && mode === 'signUpGuide' && <SignUpGuide />}
+          {isOpen && mode === 'forgotPw' && <ForgotPw />}
+          {isOpen && mode === 'changeEmail' && <ChangeEmail />}
+          {isOpen && mode === 'changeNickname' && <ChangeNickname />}
+          {isOpen && mode === 'changePw' && <ChangePw />}
         </ModalBox>
       )}
       ))

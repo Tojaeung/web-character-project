@@ -1,25 +1,23 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '@src/store/app/hook';
 import { openModal } from '@src/store/slices/modal.slice';
 import TabMenu from './TabMenu';
 import Button from '@src/components/Button';
-import { editAvatar, editCover, editDefaultAvatar, editDefaultCover } from '@src/store/requests/settings.request';
+import { updateAvatar, updateCover, updateDefaultAvatar, updateDefaultCover } from '@src/store/requests/user.request';
 
 function Account() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   // 프로필 사진 변경
   const avatarRef = useRef<HTMLInputElement>(null);
   const handleEditAvatar = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target?.files) return;
     const formData = new FormData();
-    formData.append('newAvatar', e.target?.files[0]);
+    formData.append('updatedAvatar', e.target?.files[0]);
 
     try {
-      const res = await dispatch(editAvatar(formData)).unwrap();
+      const res = await dispatch(updateAvatar(formData)).unwrap();
       alert(res.message);
     } catch (err: any) {
       alert(err.message);
@@ -28,7 +26,7 @@ function Account() {
 
   const handleDefaultAvatar = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
-      const res = await dispatch(editDefaultAvatar()).unwrap();
+      const res = await dispatch(updateDefaultAvatar()).unwrap();
       alert(res.message);
     } catch (err: any) {
       alert(err.message);
@@ -40,10 +38,10 @@ function Account() {
   const handleEditCover = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target?.files) return;
     const formData = new FormData();
-    formData.append('newCover', e.target?.files[0]);
+    formData.append('updatedCover', e.target?.files[0]);
 
     try {
-      const res = await dispatch(editCover(formData)).unwrap();
+      const res = await dispatch(updateCover(formData)).unwrap();
       alert(res.message);
     } catch (err: any) {
       alert(err.message);
@@ -52,7 +50,7 @@ function Account() {
 
   const handleDefaultCover = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
-      const res = await dispatch(editDefaultCover()).unwrap();
+      const res = await dispatch(updateDefaultCover()).unwrap();
       alert(res.message);
     } catch (err: any) {
       alert(err.message);

@@ -7,22 +7,17 @@ import { useDefaultConfig } from '@src/hook/useReactQuillConfig';
 import TabMenu from './TabMenu';
 import Button from '@src/components/Button';
 import { useAppDispatch } from '@src/store/app/hook';
-import { editDesc } from '@src/store/requests/settings.request';
+import { updateDesc } from '@src/store/requests/user.request';
 
 function Desc() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [defaultModules] = useDefaultConfig();
-  const [desc, setDesc] = useState('');
+  const [updatedDesc, setUpdatedDesc] = useState('');
 
   const onSubmitDesc = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!desc.length) {
-      return alert('자기소개를 입력해주세요.');
-    } else if (desc.length > 5000) {
-      return alert('글자 수를 초과하였습니다.');
-    }
     try {
-      const res = await dispatch(editDesc({ desc })).unwrap();
+      const res = await dispatch(updateDesc({ updatedDesc })).unwrap();
       alert(res.message);
       navigate(0);
     } catch (err: any) {
@@ -31,7 +26,7 @@ function Desc() {
   };
 
   const onCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setDesc('');
+    setUpdatedDesc('');
     navigate(-1);
   };
   return (
@@ -40,8 +35,8 @@ function Desc() {
 
       <ReactQuill
         className="ql-editor"
-        value={desc}
-        onChange={setDesc}
+        value={updatedDesc}
+        onChange={setUpdatedDesc}
         modules={defaultModules}
         theme="snow"
         placeholder="내용을 입력하세요....(최대 1000글자)"

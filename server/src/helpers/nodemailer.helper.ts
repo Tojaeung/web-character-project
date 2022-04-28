@@ -60,7 +60,7 @@ export const sendEmailForResetPw = async (email: string, pwToken: string) => {
 };
 
 // 이메일 변경을 위한 인증메일 입니다.
-export const sendEmailForUpdateEmail = async (userId: number, newEmail: string) => {
+export const sendEmailForUpdateEmail = async (userId: number, updatedEmail: string) => {
   const transporter = createTransport({
     host: process.env.MAIL_HOST,
     port: 587,
@@ -73,12 +73,12 @@ export const sendEmailForUpdateEmail = async (userId: number, newEmail: string) 
 
   const info = await transporter.sendMail({
     from: process.env.MY_MAIL,
-    to: newEmail,
+    to: updatedEmail,
     subject: '<i>그림러들</i> 이메일변경을 위한 인증메일 입니다.',
     html: `<h2>이메일 변경하기</h2>
     <p>아래 링크를 클릭하면, 그림러들 홈페이지로 이동합니다.</p>
     <p>그 다음, 새로운 이메일로 로그인을 시도해주세요.</p>
-    <a href='http://${process.env.SERVER_ADDR}/api/users/${userId}/email?newEmail=${newEmail}&'>이메일 변경완료</a>`,
+    <a href='http://${process.env.SERVER_ADDR}/api/users/${userId}/updatedEmail=${updatedEmail}&'>이메일 변경완료</a>`,
   });
 
   if (!info) {

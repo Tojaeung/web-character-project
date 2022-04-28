@@ -7,17 +7,17 @@ import { useAppDispatch } from '@src/store/app/hook';
 import { signOut } from '@src/store/requests/session.request';
 import Input from '@src/components/Input';
 import Button from '@src/components/Button';
-import { editEmail } from '@src/store/requests/settings.request';
+import { verifyEmail } from '@src/store/requests/user.request';
 
-function EditEmail() {
+function ChangeEmail() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const [email, setEmail] = useState('');
+  const [updatedEmail, setUpdatedEmail] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      const res = await dispatch(editEmail({ email })).unwrap();
+      const res = await dispatch(verifyEmail({ updatedEmail })).unwrap();
       alert(res.message);
       await dispatch(closeModal());
       await dispatch(signOut());
@@ -41,8 +41,8 @@ function EditEmail() {
           type="text"
           placeholder="이메일 (email@xxxxx.com)"
           autoComplete="off"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={updatedEmail}
+          onChange={(e) => setUpdatedEmail(e.target.value)}
         />
         <MailIcon />
       </InputBox>
@@ -86,4 +86,4 @@ const MailIcon = styled(AiOutlineMail)`
 
 const SubmitButton = styled(Button)``;
 
-export default EditEmail;
+export default ChangeEmail;

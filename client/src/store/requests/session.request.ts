@@ -5,6 +5,8 @@ import {
   signInErrorType,
   signInDataType,
   signInReturnType,
+  refreshLoginReturnType,
+  refreshLoginErrorType,
   signOutErrorType,
   signOutReturnType,
 } from '@src/store/types/session.type';
@@ -16,6 +18,21 @@ export const signIn = createAsyncThunk<
 >('SIGN_IN', async (data, thunkApi) => {
   try {
     const res = await axios.post('/api/sessions', data, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+
+export const refreshLogin = createAsyncThunk<
+  refreshLoginReturnType,
+  void,
+  { state: RootState; rejectValue: refreshLoginErrorType }
+>('REFRESH_LOGIN', async (_, thunkApi) => {
+  try {
+    const res = await axios.get('/api/sessions', {
       withCredentials: true,
     });
     return res.data;

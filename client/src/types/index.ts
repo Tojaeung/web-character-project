@@ -9,7 +9,6 @@ export type UserType = {
   cover: string;
   coverKey: string;
   role: string;
-  emailToken: string | null;
   isVerified: boolean;
   exp: number;
   created_at: Date;

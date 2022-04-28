@@ -1,16 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import { UserType } from '@src/types';
-import { signIn, signOut } from '@src/store/requests/session.request';
+import { signIn, signOut, refreshLogin } from '@src/store/requests/session.request';
 import {
-  editNickname,
-  editAvatar,
-  editDefaultAvatar,
-  editCover,
-  editDefaultCover,
-  editDesc,
-} from '@src/store/requests/settings.request';
-import { calcExp } from '@src/store/requests/etc.request';
+  updateAvatar,
+  updateCover,
+  updateDefaultAvatar,
+  updateDefaultCover,
+  updateDesc,
+  updateNickname,
+} from '@src/store/requests/user.request';
 import socket from '@src/utils/socket';
 
 interface UserSliceType {
@@ -43,6 +42,18 @@ export const userSlice = createSlice({
         state.user = null;
       });
 
+    builder
+      .addCase(refreshLogin.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.user = payload.user;
+      })
+      .addCase(refreshLogin.rejected, (state, { payload }) => {
+        state.ok = payload?.ok!;
+        state.message = payload?.message!;
+        state.user = null;
+      });
+
     // 로그아웃
     builder
       .addCase(signOut.fulfilled, (state, { payload }) => {
@@ -62,93 +73,81 @@ export const userSlice = createSlice({
       });
 
     builder
-      .addCase(editNickname.fulfilled, (state, { payload }) => {
+      .addCase(updateNickname.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-        state.user!.nickname = payload.newNickname;
+        state.user!.nickname = payload.updatedNickname;
       })
-      .addCase(editNickname.rejected, (state, { payload }) => {
+      .addCase(updateNickname.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
         state.user = null;
       });
 
     builder
-      .addCase(editAvatar.fulfilled, (state, { payload }) => {
+      .addCase(updateAvatar.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-        state.user!.avatar = payload.newAvatar;
-        state.user!.avatarKey = payload.newAvatarKey;
+        state.user!.avatar = payload.updatedAvatar;
+        state.user!.avatarKey = payload.updatedAvatarKey;
       })
 
-      .addCase(editAvatar.rejected, (state, { payload }) => {
+      .addCase(updateAvatar.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
         state.user = null;
       });
 
     builder
-      .addCase(editDefaultAvatar.fulfilled, (state, { payload }) => {
+      .addCase(updateDefaultAvatar.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-        state.user!.avatar = payload.defaultAvatar;
-        state.user!.avatarKey = payload.defaultAvatarKey;
+        state.user!.avatar = payload.updatedAvatar;
+        state.user!.avatarKey = payload.updatedAvatarKey;
       })
 
-      .addCase(editDefaultAvatar.rejected, (state, { payload }) => {
+      .addCase(updateDefaultAvatar.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
         state.user = null;
       });
 
     builder
-      .addCase(editCover.fulfilled, (state, { payload }) => {
+      .addCase(updateCover.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-        state.user!.cover = payload.newCover;
-        state.user!.coverKey = payload.newCoverKey;
+        state.user!.cover = payload.updatedCover;
+        state.user!.coverKey = payload.updatedCoverKey;
       })
 
-      .addCase(editCover.rejected, (state, { payload }) => {
+      .addCase(updateCover.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
         state.user = null;
       });
 
     builder
-      .addCase(editDefaultCover.fulfilled, (state, { payload }) => {
+      .addCase(updateDefaultCover.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-        state.user!.cover = payload.defaultCover;
-        state.user!.coverKey = payload.defaultCoverKey;
+        state.user!.cover = payload.updatedCover;
+        state.user!.coverKey = payload.updatedCoverKey;
       })
 
-      .addCase(editDefaultCover.rejected, (state, { payload }) => {
+      .addCase(updateDefaultCover.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
         state.user = null;
       });
 
     builder
-      .addCase(editDesc.fulfilled, (state, { payload }) => {
+      .addCase(updateDesc.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-        state.user!.desc = payload.desc;
+        state.user!.desc = payload.updatedDesc;
       })
 
-      .addCase(editDesc.rejected, (state, { payload }) => {
-        state.ok = payload?.ok!;
-        state.message = payload?.message!;
-        state.user = null;
-      });
-    builder
-      .addCase(calcExp.fulfilled, (state, { payload }) => {
-        state.ok = payload.ok;
-        state.message = payload.message;
-        state.user!.exp += payload.calcedValue;
-      })
-
-      .addCase(calcExp.rejected, (state, { payload }) => {
+      .addCase(updateDesc.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
         state.user = null;

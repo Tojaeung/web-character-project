@@ -5,16 +5,16 @@ import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
 import Input from '@src/components/Input';
 import Button from '@src/components/Button';
-import { editNickname } from '@src/store/requests/settings.request';
+import { updateNickname } from '@src/store/requests/user.request';
 
-function EditNickname() {
+function ChangeNickname() {
   const dispatch = useAppDispatch();
 
-  const [nickname, setNickname] = useState('');
+  const [updatedNickname, setUpdatedNickname] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      const res = await dispatch(editNickname({ nickname })).unwrap();
+      const res = await dispatch(updateNickname({ updatedNickname })).unwrap();
       alert(res.message);
       await dispatch(closeModal());
     } catch (err: any) {
@@ -32,8 +32,8 @@ function EditNickname() {
           type="text"
           placeholder="닉네임"
           autoComplete="off"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
+          value={updatedNickname}
+          onChange={(e) => setUpdatedNickname(e.target.value)}
         />
         <UserIcon />
       </InputBox>
@@ -77,4 +77,4 @@ const UserIcon = styled(AiOutlineUser)`
 
 const SubmitButton = styled(Button)``;
 
-export default EditNickname;
+export default ChangeNickname;

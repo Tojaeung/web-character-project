@@ -6,15 +6,15 @@ import { signOut } from '@src/store/requests/session.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
 import Input from '@src/components/Input';
-import { delAccount } from '@src/store/requests/settings.request';
+import { deleteAccount } from '@src/store/requests/user.request';
 
-function DelAccount() {
+function DeleteAccount() {
   const dispatch = useAppDispatch();
   const [confirmText, setConfirmText] = useState('');
 
   const handleDelAccount = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
-      const res = await dispatch(delAccount()).unwrap();
+      const res = await dispatch(deleteAccount()).unwrap();
       socket.disconnect();
       await dispatch(closeModal());
       await dispatch(signOut());
@@ -91,4 +91,4 @@ const SubmitButton = styled.button`
   }
 `;
 
-export default DelAccount;
+export default DeleteAccount;

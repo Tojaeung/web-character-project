@@ -6,19 +6,19 @@ import { useAppDispatch } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
 import Input from '@src/components/Input';
 import Button from '@src/components/Button';
-import { editPw } from '@src/store/requests/settings.request';
+import { updatePw } from '@src/store/requests/user.request';
 
-function EditPw() {
+function ChangePw() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [currentPw, setCurrentPw] = useState('');
-  const [newPw, setNewPw] = useState('');
-  const [newPwConfirmation, setNewPwConfirmation] = useState('');
+  const [updatedPw, setUpdatedPw] = useState('');
+  const [updatedPwConfirmation, setUpdatedPwConfirmation] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      const res = await dispatch(editPw({ currentPw, newPw, newPwConfirmation })).unwrap();
+      const res = await dispatch(updatePw({ currentPw, updatedPw, updatedPwConfirmation })).unwrap();
       alert(res.message);
       await dispatch(closeModal());
       await dispatch(signOut());
@@ -51,8 +51,8 @@ function EditPw() {
           color="green"
           autoComplete="off"
           type="password"
-          value={newPw}
-          onChange={(e) => setNewPw(e.target.value)}
+          value={updatedPw}
+          onChange={(e) => setUpdatedPw(e.target.value)}
         />
       </InputBox>
 
@@ -62,8 +62,8 @@ function EditPw() {
           color="green"
           autoComplete="off"
           type="password"
-          value={newPwConfirmation}
-          onChange={(e) => setNewPwConfirmation(e.target.value)}
+          value={updatedPwConfirmation}
+          onChange={(e) => setUpdatedPwConfirmation(e.target.value)}
         />
       </InputBox>
 
@@ -103,4 +103,4 @@ const Label = styled.label`
 `;
 const SubmitButton = styled(Button)``;
 
-export default EditPw;
+export default ChangePw;
