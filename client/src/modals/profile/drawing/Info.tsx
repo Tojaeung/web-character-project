@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { AiOutlineEye, AiOutlineMore } from 'react-icons/ai';
+import { AiOutlineEye } from 'react-icons/ai';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import CreatedTime from '@src/components/CreatedTime';
@@ -8,7 +8,7 @@ import DisLikeButton from '@src/components/DisLikeButton';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectDrawingDrawings, selectDrawingIndex } from '@src/store/slices/drawing.slice';
 import { closeModal } from '@src/store/slices/modal.slice';
-import { removeDrawing } from '@src/store/requests/drawing.request';
+import { deleteDrawing } from '@src/store/requests/drawing.request';
 import MoreButton from '@src/components/MoreButton';
 
 function Info() {
@@ -19,7 +19,7 @@ function Info() {
 
   const handleDrawingRemove = async (e: any) => {
     try {
-      const res = await dispatch(removeDrawing({ drawingId: drawings[index!].id })).unwrap();
+      const res = await dispatch(deleteDrawing({ drawingId: drawings[index!].id })).unwrap();
       await dispatch(closeModal());
       alert(res.message);
     } catch (err: any) {

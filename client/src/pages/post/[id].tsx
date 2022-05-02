@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
-import boardTitle from '@src/utils/boardTitle.util';
-import Board from '@src/pages/board/[board]';
+import boardName from '@src/utils/boardName.util';
 import { selectPostPost } from '@src/store/slices/post.slice';
-import { getPost, addView } from '@src/store/requests/post.request';
+import { getPost } from '@src/store/requests/board.request';
 import CreatedTime from '@src/components/CreatedTime';
 import Comment from '@src/components/comment';
 import CommentForm from '@src/components/CommentForm';
@@ -16,22 +15,21 @@ import Header from './Header';
 function Post() {
   const dispatch = useAppDispatch();
 
-  const { postId } = useParams();
+  const { board, postId } = useParams();
 
   const post = useAppSelector(selectPostPost);
 
   useEffect(() => {
     document.documentElement.scrollTop = 0;
-    dispatch(getPost({ postId: Number(postId) }));
-    dispatch(addView({ postId: Number(postId) }));
+    dispatch(getPost({ board: board as string, postId: Number(postId) }));
   }, [postId]);
 
   return (
     <Container>
-      <BoardName>{boardTitle(post?.board as string)}</BoardName>
+      <BoardName>{boardName(board as string)}</BoardName>
       <TitleBox>
         <PostTitle>{post?.title}</PostTitle>
-        <CreatedTime createdTime={post?.user.created_at!} size="small" />
+        <CreatedTime createdTime={post?.created_at!} size="small" />
       </TitleBox>
 
       <Header />
@@ -42,7 +40,7 @@ function Post() {
         <LikeButton
           type="board"
           entityId={post?.id!}
-          userId={post?.user.id!}
+          userId={post?.user?.id!}
           likes={post?.likes!}
           dislikes={post?.dislikes!}
         />
@@ -50,7 +48,7 @@ function Post() {
         <DisLikeButton
           type="board"
           entityId={post?.id!}
-          userId={post?.user.id!}
+          userId={post?.user?.id!}
           likes={post?.likes!}
           dislikes={post?.dislikes!}
         />
@@ -58,8 +56,7 @@ function Post() {
       </LikeButtonBox>
 
       <CommentForm type="board" entityId={post?.id!} />
-      <Comment type="board" comments={post?.postComments!} />
-      <Board />
+      <Comment type="board" comments={post?.comments!} />
     </Container>
   );
 }

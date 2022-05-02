@@ -17,11 +17,11 @@ export const sendAuthEmail = async (email: string, emailToken: string) => {
   const info = await transporter.sendMail({
     from: process.env.MY_MAIL,
     to: email,
-    subject: '<i>그림러들</i> 회원가입 인증메일 입니다.',
-    html: `<h2>안녕하세요. <i>그림러들</i>에 가입해주셔서 감사합니다.</h2>
+    subject: '그림러들 회원가입 인증메일 입니다.',
+    html: `<h2>안녕하세요. <b>그림러들</b>에 가입해주셔서 감사합니다.</h2>
     <p>아래 링크를 클릭하면, 그림러들 홈페이지로 돌아갑니다.</p>
     <p>그 다음, 로그인이 가능합니다.</p>
-      <a href='http://${process.env.SERVER_ADDR}/api/users/verify-user?emailToken=${emailToken}'>이메일 인증 확인</a>`,
+      <a href='${process.env.SERVER_ADDR}/api/users/verify-user?emailToken=${emailToken}'>이메일 인증 확인</a>`,
   });
 
   if (!info) {
@@ -78,7 +78,7 @@ export const sendEmailForUpdateEmail = async (userId: number, updatedEmail: stri
     html: `<h2>이메일 변경하기</h2>
     <p>아래 링크를 클릭하면, 그림러들 홈페이지로 이동합니다.</p>
     <p>그 다음, 새로운 이메일로 로그인을 시도해주세요.</p>
-    <a href='http://${process.env.SERVER_ADDR}/api/users/${userId}/updatedEmail=${updatedEmail}&'>이메일 변경완료</a>`,
+    <a href='${process.env.SERVER_ADDR}/api/users/${userId}/updatedEmail=${updatedEmail}'>이메일 변경완료</a>`,
   });
 
   if (!info) {

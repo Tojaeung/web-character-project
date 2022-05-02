@@ -10,10 +10,6 @@ export type signUpDataType = {
   pw: string;
   pwConfirmation: string;
 };
-export type signUpErrorType = {
-  ok: boolean;
-  message: string;
-};
 
 export type forgotPwReturnType = {
   ok: boolean;
@@ -22,11 +18,6 @@ export type forgotPwReturnType = {
 
 export type forgotPwDataType = {
   email: string;
-};
-
-export type forgotPwErrorType = {
-  ok: boolean;
-  message: string;
 };
 
 export type resetPwReturnType = {
@@ -40,11 +31,6 @@ export type resetPwDataType = {
   pwToken: string;
 };
 
-export type resetPwErrorType = {
-  ok: boolean;
-  message: string;
-};
-
 export type getUserReturnType = {
   ok: boolean;
   message: string;
@@ -55,23 +41,13 @@ export type getUserDataType = {
   userId: number;
 };
 
-export type getUserErrorType = {
+export type updateEmailReturnType = {
   ok: boolean;
   message: string;
 };
 
-export type verifyEmailReturnType = {
-  ok: boolean;
-  message: string;
-};
-
-export type verifyEmailDataType = {
+export type updateEmailDataType = {
   updatedEmail: string;
-};
-
-export type verifyEmailErrorType = {
-  ok: boolean;
-  message: string;
 };
 
 export type updateNicknameReturnType = {
@@ -82,11 +58,6 @@ export type updateNicknameReturnType = {
 
 export type updateNicknameDataType = {
   updatedNickname: string;
-};
-
-export type updateNicknameErrorType = {
-  ok: boolean;
-  message: string;
 };
 
 export type updatePwReturnType = {
@@ -100,11 +71,6 @@ export type updatePwDataType = {
   updatedPwConfirmation: string;
 };
 
-export type updatePwErrorType = {
-  ok: boolean;
-  message: string;
-};
-
 export type updateDescReturnType = {
   ok: boolean;
   message: string;
@@ -113,11 +79,6 @@ export type updateDescReturnType = {
 
 export type updateDescDataType = {
   updatedDesc: string;
-};
-
-export type updateDescErrorType = {
-  ok: boolean;
-  message: string;
 };
 
 export type updateAvatarReturnType = {
@@ -129,20 +90,11 @@ export type updateAvatarReturnType = {
 
 export type updateAvatarDataType = {};
 
-export type updateAvatarErrorType = {
-  ok: boolean;
-  message: string;
-};
-
 export type updateDefaultAvatarReturnType = {
   ok: boolean;
   message: string;
   updatedAvatar: string;
   updatedAvatarKey: string;
-};
-export type updateDefaultAvatarErrorType = {
-  ok: boolean;
-  message: string;
 };
 
 export type updateCoverReturnType = {
@@ -154,11 +106,6 @@ export type updateCoverReturnType = {
 
 export type updateCoverDataType = {};
 
-export type updateCoverErrorType = {
-  ok: boolean;
-  message: string;
-};
-
 export type updateDefaultCoverReturnType = {
   ok: boolean;
   message: string;
@@ -166,17 +113,7 @@ export type updateDefaultCoverReturnType = {
   updatedCoverKey: string;
 };
 
-export type updateDefaultCoverErrorType = {
-  ok: boolean;
-  message: string;
-};
-
 export type deleteAccountReturnType = {
-  ok: boolean;
-  message: string;
-};
-
-export type deleteAccountErrorType = {
   ok: boolean;
   message: string;
 };

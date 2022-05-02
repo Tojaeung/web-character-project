@@ -4,15 +4,7 @@ import auth from '@src/middlewares/auth.middleware';
 import penalty from '@src/middlewares/penalty.middleware';
 import { drawingUpload } from '@src/helpers/s3.helper';
 import validator from '@src/middlewares/validator.middleware';
-import { deleteAccountSchema } from '@src/schemas/user.schema';
-import {
-  createCommentSchema,
-  createDisLikeSchema,
-  createLikeSchema,
-  deleteCommentSchema,
-  getDrawingsSchema,
-  updateCommentSchema,
-} from '@src/schemas/drawing.schema';
+import { createCommentSchema, updateCommentSchema } from '@src/schemas/drawing.schema';
 import {
   createComment,
   createDisLike,
@@ -28,17 +20,23 @@ import {
 const router = Router();
 
 router.post('/drawings', auth, penalty, drawingUpload.single('newDrawing'), asyncHandler(createDrawing));
-router.get('/drawings', validator(getDrawingsSchema), getDrawings);
+router.get('/drawings/users/:userId', asyncHandler(getDrawings));
 
-router.delete('/drawings/:drawingId', auth, validator(deleteAccountSchema), deleteDrawing);
+router.delete('/drawings/:drawingId', auth, asyncHandler(deleteDrawing));
 
-router.patch('/drawings/:drawingId/view', incrementView);
+router.patch('/drawings/:drawingId/view', asyncHandler(incrementView));
 
-router.post('/drawings/:drawingId/comments', auth, penalty, validator(createCommentSchema), createComment);
-router.patch('/drawings/comments/:commentId', auth, validator(updateCommentSchema), updateComment);
-router.delete('/drawings/comments/:commentId', auth, validator(deleteCommentSchema), deleteComment);
+router.post(
+  '/drawings/:drawingId/comments',
+  auth,
+  penalty,
+  validator(createCommentSchema),
+  asyncHandler(createComment)
+);
+router.patch('/drawings/comments/:commentId', auth, validator(updateCommentSchema), asyncHandler(updateComment));
+router.delete('/drawings/comments/:commentId', auth, asyncHandler(deleteComment));
 
-router.post('/drawings/:drawingId/like', auth, penalty, validator(createLikeSchema), createLike);
-router.post('/drawings/:drawingId/dislike', auth, penalty, validator(createDisLikeSchema), createDisLike);
+router.post('/drawings/:drawingId/like', auth, penalty, asyncHandler(createLike));
+router.post('/drawings/:drawingId/dislike', auth, penalty, asyncHandler(createDisLike));
 
 export default router;

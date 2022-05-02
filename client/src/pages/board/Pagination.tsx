@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
+import { useNavigate, useParams } from 'react-router-dom';
 import { v4 } from 'uuid';
 
 interface IProps {
@@ -10,6 +11,9 @@ interface IProps {
 }
 
 function Pagination({ total, page, setPage, limit }: IProps) {
+  const navigate = useNavigate();
+  const { board } = useParams();
+
   // 페이지 수 범위
   const pageRange = 10;
   // 전체 페이지 수
@@ -37,6 +41,11 @@ function Pagination({ total, page, setPage, limit }: IProps) {
     setPage(page + 1);
   };
 
+  const goPage = (index: number) => (e: React.MouseEvent<HTMLButtonElement>) => {
+    setPage(index + minPageLimit + 1);
+    navigate(`/board/${board}?page=${index + minPageLimit + 1}&limit=${limit}`);
+  };
+
   return (
     <>
       {pageNum === 0 ? null : (
@@ -51,7 +60,7 @@ function Pagination({ total, page, setPage, limit }: IProps) {
               <PageButton
                 key={v4()}
                 isSelected={page === index + minPageLimit + 1 ? true : false}
-                onClick={(e) => setPage(index + minPageLimit + 1)}
+                onClick={goPage(index)}
               >
                 {index + minPageLimit + 1}
               </PageButton>

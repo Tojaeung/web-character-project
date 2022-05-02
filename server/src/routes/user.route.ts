@@ -23,26 +23,18 @@ import {
 import {
   signUpSchema,
   forgotPwSchema,
-  verifyUserSchema,
   resetPwSchema,
   verifyEmailSchema,
-  updateEmailSchema,
   updateNicknameSchema,
   updatePwSchema,
   updateDescSchema,
-  updateAvatarSchema,
-  updateDefaultAvatarSchema,
-  updateCoverSchema,
-  updateDefaultCoverSchema,
-  deleteAccountSchema,
-  getUserSchema,
 } from '@src/schemas/user.schema';
 
 const router = Router();
 
 // 회원가입, 그에 따른 이메일 인증
 router.post('/users', validator(signUpSchema), asyncHandler(signUp));
-router.patch('/users/verify-user', validator(verifyUserSchema), asyncHandler(verifyUser));
+router.get('/users/verify-user', asyncHandler(verifyUser));
 
 // 비밀번호 찾기, 그에 따른 비밀번호 재설정
 router.post('/users/forgot-pw', validator(forgotPwSchema), asyncHandler(forgotPw));
@@ -50,10 +42,10 @@ router.patch('/users/reset-pw', validator(resetPwSchema), asyncHandler(resetPw))
 
 // 이메일 변경, 그에따른 이메일 인증
 router.post('/users/verify-email', auth, validator(verifyEmailSchema), asyncHandler(verifyEmail));
-router.patch('/users/:userId/email', auth, validator(updateEmailSchema), asyncHandler(updateEmail));
+router.patch('/users/:userId/email', auth, asyncHandler(updateEmail));
 
 // 유저정보 가져오기 (프로필 유저정보 가져올때 사용)
-router.get('/users/:userId', validator(getUserSchema), asyncHandler(getUser));
+router.get('/users/:userId', asyncHandler(getUser));
 
 // 유저정보 변경
 router.patch('/users/nickname', auth, validator(updateNicknameSchema), asyncHandler(updateNickname));
@@ -61,24 +53,12 @@ router.patch('/users/pw', auth, validator(updatePwSchema), asyncHandler(updatePw
 router.patch('/users/desc', auth, validator(updateDescSchema), asyncHandler(updateDesc));
 
 // 유저 프로필, 커버 사진 변경
-router.patch(
-  '/users/avatar',
-  auth,
-  validator(updateAvatarSchema),
-  avatarUpload.single('updatedAvatar'),
-  asyncHandler(updateAvatar)
-);
-router.patch('/users/default-avatar', auth, validator(updateDefaultAvatarSchema), asyncHandler(updateDefaultAvatar));
-router.patch(
-  '/users/cover',
-  auth,
-  coverUpload.single('updatedCover'),
-  validator(updateCoverSchema),
-  asyncHandler(updateCover)
-);
-router.patch('/users/default-cover', auth, validator(updateDefaultCoverSchema), asyncHandler(updateDefaultCover));
+router.patch('/users/avatar', auth, avatarUpload.single('updatedAvatar'), asyncHandler(updateAvatar));
+router.patch('/users/default-avatar', auth, asyncHandler(updateDefaultAvatar));
+router.patch('/users/cover', auth, coverUpload.single('updatedCover'), asyncHandler(updateCover));
+router.patch('/users/default-cover', auth, asyncHandler(updateDefaultCover));
 
 // 계정삭제
-router.delete('/users', auth, validator(deleteAccountSchema), asyncHandler(deleteAccount));
+router.delete('/users', auth, asyncHandler(deleteAccount));
 
 export default router;

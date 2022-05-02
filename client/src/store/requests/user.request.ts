@@ -3,47 +3,34 @@ import axios from 'axios';
 import { RootState } from '../app/store';
 import {
   signUpReturnType,
-  signUpErrorType,
   signUpDataType,
   forgotPwDataType,
   forgotPwReturnType,
-  forgotPwErrorType,
-  resetPwErrorType,
   resetPwDataType,
   resetPwReturnType,
   getUserReturnType,
   getUserDataType,
-  getUserErrorType,
-  verifyEmailReturnType,
-  verifyEmailDataType,
-  verifyEmailErrorType,
+  updateEmailReturnType,
+  updateEmailDataType,
   updateNicknameReturnType,
   updateNicknameDataType,
-  updateNicknameErrorType,
   updatePwReturnType,
   updatePwDataType,
-  updatePwErrorType,
   updateDescReturnType,
   updateDescDataType,
-  updateDescErrorType,
   updateAvatarReturnType,
   updateAvatarDataType,
-  updateAvatarErrorType,
   updateDefaultAvatarReturnType,
-  updateDefaultAvatarErrorType,
   updateCoverReturnType,
   updateCoverDataType,
-  updateCoverErrorType,
   updateDefaultCoverReturnType,
-  updateDefaultCoverErrorType,
   deleteAccountReturnType,
-  deleteAccountErrorType,
 } from '@src/store/types/user.type';
 
 export const signUp = createAsyncThunk<
   signUpReturnType,
   signUpDataType,
-  { state: RootState; rejectValue: signUpErrorType }
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('SIGN_UP', async (data, thunkApi) => {
   try {
     const res = await axios.post('/api/users', data, {
@@ -58,7 +45,7 @@ export const signUp = createAsyncThunk<
 export const forgotPw = createAsyncThunk<
   forgotPwReturnType,
   forgotPwDataType,
-  { state: RootState; rejectValue: forgotPwErrorType }
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('FORGOT_PW', async (data, thunkApi) => {
   try {
     const res = await axios.post('/api/users/forgot-pw', data, {
@@ -73,12 +60,13 @@ export const forgotPw = createAsyncThunk<
 export const resetPw = createAsyncThunk<
   resetPwReturnType,
   resetPwDataType,
-  { state: RootState; rejectValue: resetPwErrorType }
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('RESET_PW', async (data, thunkApi) => {
   try {
+    const { pwToken, updatedPw, updatedPwConfirmation } = data;
     const res = await axios.patch(
-      `/api/users/reset-pw?pwToken=${data.pwToken}`,
-      { updatedPw: data.updatedPw, updatedPwConfirmation: data.updatedPwConfirmation },
+      `/api/users/reset-pw?pwToken=${pwToken}`,
+      { updatedPw, updatedPwConfirmation },
       {
         withCredentials: true,
       }
@@ -92,10 +80,11 @@ export const resetPw = createAsyncThunk<
 export const getUser = createAsyncThunk<
   getUserReturnType,
   getUserDataType,
-  { state: RootState; rejectValue: getUserErrorType }
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('GET_USER', async (data, thunkApi) => {
   try {
-    const res = await axios.get(`/api/users/${data.userId}`, {
+    const { userId } = data;
+    const res = await axios.get(`/api/users/${userId}`, {
       withCredentials: true,
     });
     return res.data;
@@ -104,11 +93,11 @@ export const getUser = createAsyncThunk<
   }
 });
 
-export const verifyEmail = createAsyncThunk<
-  verifyEmailReturnType,
-  verifyEmailDataType,
-  { state: RootState; rejectValue: verifyEmailErrorType }
->('VERIFY_EMAIL', async (data, thunkApi) => {
+export const updateEmail = createAsyncThunk<
+  updateEmailReturnType,
+  updateEmailDataType,
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
+>('UPDATE_EMAIL', async (data, thunkApi) => {
   try {
     const res = await axios.patch(`/api/users/verify-email`, data, {
       withCredentials: true,
@@ -122,7 +111,7 @@ export const verifyEmail = createAsyncThunk<
 export const updateNickname = createAsyncThunk<
   updateNicknameReturnType,
   updateNicknameDataType,
-  { state: RootState; rejectValue: updateNicknameErrorType }
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_NICKNAME', async (data, thunkApi) => {
   try {
     const res = await axios.patch(`/api/users/nickname`, data, {
@@ -137,7 +126,7 @@ export const updateNickname = createAsyncThunk<
 export const updatePw = createAsyncThunk<
   updatePwReturnType,
   updatePwDataType,
-  { state: RootState; rejectValue: updatePwErrorType }
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_PW', async (data, thunkApi) => {
   try {
     const res = await axios.patch(`/api/users/nickname`, data, {
@@ -152,7 +141,7 @@ export const updatePw = createAsyncThunk<
 export const updateDesc = createAsyncThunk<
   updateDescReturnType,
   updateDescDataType,
-  { state: RootState; rejectValue: updateDescErrorType }
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_DESC', async (data, thunkApi) => {
   try {
     const res = await axios.patch(`/api/users/desc`, data, {
@@ -167,7 +156,7 @@ export const updateDesc = createAsyncThunk<
 export const updateAvatar = createAsyncThunk<
   updateAvatarReturnType,
   updateAvatarDataType,
-  { state: RootState; rejectValue: updateAvatarErrorType }
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_AVATAR', async (data, thunkApi) => {
   try {
     const res = await axios.patch(`/api/users/avatar`, data, {
@@ -182,7 +171,7 @@ export const updateAvatar = createAsyncThunk<
 export const updateDefaultAvatar = createAsyncThunk<
   updateDefaultAvatarReturnType,
   void,
-  { state: RootState; rejectValue: updateDefaultAvatarErrorType }
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_DEFAULT_AVATAR', async (_, thunkApi) => {
   try {
     const res = await axios.patch(`/api/users/default-avatar`, {
@@ -197,7 +186,7 @@ export const updateDefaultAvatar = createAsyncThunk<
 export const updateCover = createAsyncThunk<
   updateCoverReturnType,
   updateCoverDataType,
-  { state: RootState; rejectValue: updateCoverErrorType }
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_COVER', async (data, thunkApi) => {
   try {
     const res = await axios.patch(`/api/users/cover`, data, {
@@ -212,7 +201,7 @@ export const updateCover = createAsyncThunk<
 export const updateDefaultCover = createAsyncThunk<
   updateDefaultCoverReturnType,
   void,
-  { state: RootState; rejectValue: updateDefaultCoverErrorType }
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_DEFAULT_COVER', async (_, thunkApi) => {
   try {
     const res = await axios.patch(`/api/users/default-cover`, {
@@ -227,7 +216,7 @@ export const updateDefaultCover = createAsyncThunk<
 export const deleteAccount = createAsyncThunk<
   deleteAccountReturnType,
   void,
-  { state: RootState; rejectValue: deleteAccountErrorType }
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('DELETE_ACCOUNT', async (_, thunkApi) => {
   try {
     const res = await axios.delete(`/api/users`, {

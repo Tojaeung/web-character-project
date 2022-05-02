@@ -3,7 +3,7 @@ import ReactQuill from 'react-quill';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import 'react-quill/dist/quill.snow.css';
-import { useDefaultConfig } from '@src/hook/useReactQuillConfig';
+import { useDefaultConfig } from '@src/hooks/useReactQuillConfig';
 import TabMenu from './TabMenu';
 import Button from '@src/components/Button';
 import { useAppDispatch } from '@src/store/app/hook';

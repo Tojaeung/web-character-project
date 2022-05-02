@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '@src/store/app/hook';
-import { editDrawingComment } from '@src/store/requests/drawing.request';
-import { editPostComment } from '@src/store/requests/post.request';
+import { updateDrawingComment } from '@src/store/requests/drawing.request';
+import { updatePostComment } from '@src/store/requests/board.request';
 import Button from '@src/components/Button';
 
 interface IProp {
@@ -13,28 +14,25 @@ interface IProp {
 
 function EditCommentForm({ type, commentId, setCommentIndex }: IProp) {
   const dispatch = useAppDispatch();
+  const { board } = useParams();
 
-  const [editedContent, setEditedContent] = useState('');
+  const [content, setContent] = useState('');
 
   const handleEditComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (editedContent.length > 100) {
-      alert('댓글 글자 수를 초과하였습니다.');
-      return;
-    } else if (!editedContent.length) {
-      alert('댓글을 입력해주세요.');
-      return;
-    }
     if (type === 'drawing') {
       try {
-        await dispatch(editDrawingComment({ drawingCommentId: commentId, editedContent })).unwrap();
-        setEditedContent('');
+        await dispatch(updateDrawingComment({ commentId: commentId, updatedContent: content })).unwrap();
+        setContent('');
       } catch (err: any) {
         alert(err.message);
       }
-    } else if (type === 'board') {
+    }
+    if (type === 'board') {
       try {
-        await dispatch(editPostComment({ postCommentId: commentId, editedContent })).unwrap();
-        setEditedContent('');
+        await dispatch(
+          updatePostComment({ board: board as string, commentId: commentId, updatedContent: content })
+        ).unwrap();
+        setContent('');
       } catch (err: any) {
         alert(err.message);
       }
@@ -56,8 +54,8 @@ function EditCommentForm({ type, commentId, setCommentIndex }: IProp) {
           cols={20}
           rows={3}
           wrap="hard"
-          value={editedContent}
-          onChange={(e) => setEditedContent(e.target.value)}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
         />
         <ButtonBox>
           <EditButton color="green" size="small" onClick={handleEditComment}>

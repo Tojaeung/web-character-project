@@ -1,17 +1,17 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Button from '@src/components/Button';
 import NotFound from '@src/components/NotFound';
-import boardTitle from '@src/utils/boardTitle.util';
-import { useImageUploadConfig } from '@src/hook/useReactQuillConfig';
-import { boardCategory } from '@src/utils/boardCategory.util';
+import boardCategory from '@src/utils/boardCategory.util';
+import boardName from '@src/utils/boardName.util';
+import { useImageUploadConfig } from '@src/hooks/useReactQuillConfig';
 import LengthCountInput from '@src/components/LengthCountInput';
 import { useAppDispatch } from '@src/store/app/hook';
-import { addPost, imageRemove } from '@src/store/requests/post.request';
-import { calcExp } from '@src/store/requests/etc.request';
+import { createPost } from '@src/store/requests/board.request';
 
 function PostForm() {
   const dispatch = useAppDispatch();
@@ -26,11 +26,10 @@ function PostForm() {
 
   const handleAddPost = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
-      const res = await dispatch(addPost({ title, content, board: board!, imageKeys })).unwrap();
-      const { message, post } = res;
+      const res = await dispatch(createPost({ title, content, board: board!, imageKeys })).unwrap();
+      const { message, newPostJoinAll } = res;
       alert(message);
-      await dispatch(calcExp({ value: 1 }));
-      navigate(`/board/${post.board}/post/${post.id}`);
+      navigate(`/board/${board}/post/${newPostJoinAll.id}`);
     } catch (err: any) {
       alert(err.message);
     }
@@ -42,7 +41,7 @@ function PostForm() {
 
     if ((imageKeys as string[]).length !== 0) {
       try {
-        await dispatch(imageRemove({ imageKeys })).unwrap();
+        await axios.post('/api/posts/remove-imagekey', imageKeys, { withCredentials: true });
       } catch (err: any) {
         alert(err.message);
       }
@@ -54,7 +53,7 @@ function PostForm() {
     <NotFound />
   ) : (
     <Container>
-      <Title>{boardTitle(board as string)}</Title>
+      <Title>{boardName(board as string)}</Title>
       <LengthCountInput
         limit={50}
         placeholder="제목"

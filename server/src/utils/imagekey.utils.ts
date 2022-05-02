@@ -10,7 +10,7 @@ export const createImageKey = (board: string, imageKeys: string[], userId: numbe
   if (board === 'free') {
     const freeImageKey = new FreeImageKey();
     imageKeys.forEach(async (imageKey) => {
-      freeImageKey.imageKey = imageKey;
+      freeImageKey.key = imageKey;
       freeImageKey.user_id = userId;
       freeImageKey.free_id = postId;
       await getRepository(FreeImageKey).save(freeImageKey);
@@ -18,7 +18,7 @@ export const createImageKey = (board: string, imageKeys: string[], userId: numbe
   } else if (board === 'commission') {
     const commissionImageKey = new CommissionImageKey();
     imageKeys.forEach(async (imageKey) => {
-      commissionImageKey.imageKey = imageKey;
+      commissionImageKey.key = imageKey;
       commissionImageKey.user_id = userId;
       commissionImageKey.commission_id = postId;
       await getRepository(FreeImageKey).save(commissionImageKey);
@@ -26,7 +26,7 @@ export const createImageKey = (board: string, imageKeys: string[], userId: numbe
   } else if (board === 'reque') {
     const requeImageKey = new RequeImageKey();
     imageKeys.forEach(async (imageKey) => {
-      requeImageKey.imageKey = imageKey;
+      requeImageKey.key = imageKey;
       requeImageKey.user_id = userId;
       requeImageKey.reque_id = postId;
       await getRepository(FreeImageKey).save(requeImageKey);
@@ -34,7 +34,7 @@ export const createImageKey = (board: string, imageKeys: string[], userId: numbe
   } else if (board === 'sale') {
     const saleImageKey = new SaleImageKey();
     imageKeys.forEach(async (imageKey) => {
-      saleImageKey.imageKey = imageKey;
+      saleImageKey.key = imageKey;
       saleImageKey.user_id = userId;
       saleImageKey.sale_id = postId;
       await getRepository(FreeImageKey).save(saleImageKey);
@@ -54,7 +54,7 @@ export const deleteImageKey = async (board: string, userId: number, postId: numb
     });
     const existingImageKeys = _.map(ImageKeysBeforeUpdate, 'imageKey');
     existingImageKeys.forEach(async (imageKey) => {
-      await getRepository(FreeImageKey).delete({ imageKey });
+      await getRepository(FreeImageKey).delete({ key: imageKey });
       await s3Delete(imageKey);
     });
   } else if (board === 'commission') {
@@ -68,7 +68,7 @@ export const deleteImageKey = async (board: string, userId: number, postId: numb
     });
     const existingImageKeys = _.map(ImageKeysBeforeUpdate, 'imageKey');
     existingImageKeys.forEach(async (imageKey) => {
-      await getRepository(CommissionImageKey).delete({ imageKey });
+      await getRepository(CommissionImageKey).delete({ key: imageKey });
       await s3Delete(imageKey);
     });
   } else if (board === 'reque') {
@@ -82,7 +82,7 @@ export const deleteImageKey = async (board: string, userId: number, postId: numb
     });
     const existingImageKeys = _.map(ImageKeysBeforeUpdate, 'imageKey');
     existingImageKeys.forEach(async (imageKey) => {
-      await getRepository(RequeImageKey).delete({ imageKey });
+      await getRepository(RequeImageKey).delete({ key: imageKey });
       await s3Delete(imageKey);
     });
   } else if (board === 'sale') {
@@ -96,7 +96,7 @@ export const deleteImageKey = async (board: string, userId: number, postId: numb
     });
     const existingImageKeys = _.map(ImageKeysBeforeUpdate, 'imageKey');
     existingImageKeys.forEach(async (imageKey) => {
-      await getRepository(SaleImageKey).delete({ imageKey });
+      await getRepository(SaleImageKey).delete({ key: imageKey });
       await s3Delete(imageKey);
     });
   }

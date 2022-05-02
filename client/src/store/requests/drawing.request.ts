@@ -3,41 +3,53 @@ import axios from 'axios';
 import {
   getDrawingsReturnType,
   getDrawingsDataType,
-  getDrawingsErrorType,
-  addCommentErrorType,
-  addCommentDataType,
-  addCommentReturnType,
-  addDisLikeErrorType,
-  addDisLikeDataType,
-  addDisLikeReturnType,
-  addLikeErrorType,
-  addLikeDataType,
-  addLikeReturnType,
-  addViewReturnType,
-  addViewDataType,
-  addViewErrorType,
-  removeCommentReturnType,
-  removeCommentDataType,
-  removeCommentErrorType,
-  editCommentReturnType,
-  editCommentDataType,
-  editCommentErrorType,
-  addDrawingReturnType,
-  addDrawingDataType,
-  addDrawingErrorType,
-  removeDrawingErrorType,
-  removeDrawingDataType,
-  removeDrawingReturnType,
+  createDrawingReturnType,
+  createDrawingDataType,
+  incrementViewReturnType,
+  incrementViewDataType,
+  deleteDrawingReturnType,
+  deleteDrawingDataType,
+  createCommentReturnType,
+  createCommentDataType,
+  updateCommentReturnType,
+  updateCommentDataType,
+  deleteCommentReturnType,
+  deleteCommentDataType,
+  createLikeReturnType,
+  createLikeDataType,
+  createDisLikeReturnType,
+  createDisLikeDataType,
 } from '@src/store/types/drawing.type';
 import { RootState } from '../app/store';
 
 export const getDrawings = createAsyncThunk<
   getDrawingsReturnType,
   getDrawingsDataType,
-  { state: RootState; rejectValue: getDrawingsErrorType }
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('GET_DRAWINGS', async (data, thunkApi) => {
+  const { userId, cursor } = data;
   try {
-    const res = await axios.post('/api/drawing/getDrawings', data, {
+    const res = await axios.get(
+      `/api/drawings/users/${userId}?cursor=${cursor}`,
+
+      {
+        withCredentials: true,
+      }
+    );
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+
+export const incrementView = createAsyncThunk<
+  incrementViewReturnType,
+  incrementViewDataType,
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
+>('INCREMENT_VIEW', async (data, thunkApi) => {
+  try {
+    const { drawingId } = data;
+    const res = await axios.patch(`/api/drawings/${drawingId}/view`, {
       withCredentials: true,
     });
     return res.data;
@@ -46,13 +58,13 @@ export const getDrawings = createAsyncThunk<
   }
 });
 
-export const addDrawing = createAsyncThunk<
-  addDrawingReturnType,
-  addDrawingDataType,
-  { state: RootState; rejectValue: addDrawingErrorType }
->('ADD_DRAWING', async (data, thunkApi) => {
+export const createDrawing = createAsyncThunk<
+  createDrawingReturnType,
+  createDrawingDataType,
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
+>('CREATE_DRAWING', async (data, thunkApi) => {
   try {
-    const res = await axios.post('/api/drawing/addDrawing', data, {
+    const res = await axios.post('/api/drawings', data, {
       withCredentials: true,
     });
     return res.data;
@@ -61,13 +73,14 @@ export const addDrawing = createAsyncThunk<
   }
 });
 
-export const removeDrawing = createAsyncThunk<
-  removeDrawingReturnType,
-  removeDrawingDataType,
-  { state: RootState; rejectValue: removeDrawingErrorType }
->('REMOVE_DRAWING', async (data, thunkApi) => {
+export const deleteDrawing = createAsyncThunk<
+  deleteDrawingReturnType,
+  deleteDrawingDataType,
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
+>('DELETE_DRAWING', async (data, thunkApi) => {
   try {
-    const res = await axios.delete(`/api/drawing/removeDrawing/${data.drawingId}`, {
+    const { drawingId } = data;
+    const res = await axios.delete(`/api/drawings/${drawingId}`, {
       withCredentials: true,
     });
     return res.data;
@@ -76,13 +89,54 @@ export const removeDrawing = createAsyncThunk<
   }
 });
 
-export const addDrawingView = createAsyncThunk<
-  addViewReturnType,
-  addViewDataType,
-  { state: RootState; rejectValue: addViewErrorType }
->('ADD_DRAWING_VIEW', async (data, thunkApi) => {
+export const createDrawingComment = createAsyncThunk<
+  createCommentReturnType,
+  createCommentDataType,
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
+>('CREATE_DRAWING_COMMENT', async (data, thunkApi) => {
   try {
-    const res = await axios.post(`/api/drawing/addView`, data, {
+    const { content, drawingId } = data;
+    const res = await axios.post(
+      `/api/drawings/${drawingId}`,
+      { content },
+      {
+        withCredentials: true,
+      }
+    );
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+
+export const updateDrawingComment = createAsyncThunk<
+  updateCommentReturnType,
+  updateCommentDataType,
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
+>('UPDATE_DRAWING_COMMENT', async (data, thunkApi) => {
+  try {
+    const { commentId, updatedContent } = data;
+    const res = await axios.patch(
+      `/api/drawings/comments/${commentId}`,
+      { updatedContent },
+      {
+        withCredentials: true,
+      }
+    );
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+
+export const deleteDrawingComment = createAsyncThunk<
+  deleteCommentReturnType,
+  deleteCommentDataType,
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
+>('DELETE_DRAWING_COMMENT', async (data, thunkApi) => {
+  try {
+    const { commentId } = data;
+    const res = await axios.delete(`/api/drawings/comments/${commentId}`, {
       withCredentials: true,
     });
     return res.data;
@@ -91,75 +145,40 @@ export const addDrawingView = createAsyncThunk<
   }
 });
 
-export const addDrawingComment = createAsyncThunk<
-  addCommentReturnType,
-  addCommentDataType,
-  { state: RootState; rejectValue: addCommentErrorType }
->('ADD_DRAWING_COMMENT', async (data, thunkApi) => {
+export const createDrawingLike = createAsyncThunk<
+  createLikeReturnType,
+  createLikeDataType,
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
+>('CREATE_DRAWING_LIKE', async (data, thunkApi) => {
   try {
-    const res = await axios.post(`/api/drawing/addComment`, data, {
-      withCredentials: true,
-    });
+    const { userId, drawingId } = data;
+    const res = await axios.post(
+      `/api/drawings/${drawingId}/like`,
+      { userId },
+      {
+        withCredentials: true,
+      }
+    );
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
   }
 });
 
-export const addDrawingLike = createAsyncThunk<
-  addLikeReturnType,
-  addLikeDataType,
-  { state: RootState; rejectValue: addLikeErrorType }
->('ADD_DRAWING_LIKE', async (data, thunkApi) => {
+export const createDrawingDisLike = createAsyncThunk<
+  createDisLikeReturnType,
+  createDisLikeDataType,
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
+>('CREATE_DRAWING_DISLIKE', async (data, thunkApi) => {
   try {
-    const res = await axios.post(`/api/drawing/addLike`, data, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
-  }
-});
-
-export const addDrawingDisLike = createAsyncThunk<
-  addDisLikeReturnType,
-  addDisLikeDataType,
-  { state: RootState; rejectValue: addDisLikeErrorType }
->('ADD_DRAWING_DISLIKE', async (data, thunkApi) => {
-  try {
-    const res = await axios.post(`/api/drawing/addDisLike`, data, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
-  }
-});
-
-export const removeDrawingComment = createAsyncThunk<
-  removeCommentReturnType,
-  removeCommentDataType,
-  { state: RootState; rejectValue: removeCommentErrorType }
->('REMOVE_DRAWING_COMMENT', async (data, thunkApi) => {
-  try {
-    const res = await axios.delete(`/api/drawing/removeComment/${data.drawingCommentId}`, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
-  }
-});
-
-export const editDrawingComment = createAsyncThunk<
-  editCommentReturnType,
-  editCommentDataType,
-  { state: RootState; rejectValue: editCommentErrorType }
->('EDIT_DRAWING_COMMENT', async (data, thunkApi) => {
-  try {
-    const res = await axios.patch(`/api/drawing/editComment`, data, {
-      withCredentials: true,
-    });
+    const { userId, drawingId } = data;
+    const res = await axios.post(
+      `/api/drawings/${drawingId}/dislike`,
+      { userId },
+      {
+        withCredentials: true,
+      }
+    );
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });

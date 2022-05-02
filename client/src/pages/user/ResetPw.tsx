@@ -12,8 +12,8 @@ function ResetPw() {
   const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
 
-  const [updatedPw, setUpdatedPw] = useState('');
-  const [updatedPwConfirmation, setUpdatedPwConfirmation] = useState('');
+  const [pw, setPw] = useState('');
+  const [pwConfirmation, setPwConfirmation] = useState('');
   const [hidePw, setHidePw] = useState(true);
   const [hidePwConfirmation, setHidePwConfirmation] = useState(true);
 
@@ -21,7 +21,9 @@ function ResetPw() {
     e.preventDefault();
     const query = searchParams.get('pwToken');
     try {
-      const res = await dispatch(resetPw({ updatedPw, updatedPwConfirmation, pwToken: query as string })).unwrap();
+      const res = await dispatch(
+        resetPw({ updatedPw: pw, updatedPwConfirmation: pwConfirmation, pwToken: query as string })
+      ).unwrap();
       alert(res.message);
       navigate('/');
     } catch (err: any) {
@@ -41,8 +43,8 @@ function ResetPw() {
           type={hidePw ? 'password' : 'text'}
           placeholder="새 비밀번호"
           autoComplete="off"
-          value={updatedPw}
-          onChange={(e) => setUpdatedPw(e.target.value)}
+          value={pw}
+          onChange={(e) => setPw(e.target.value)}
         />
         {hidePw ? <ShowPwIcon onClick={(e) => setHidePw(false)} /> : <HidePwIcon onClick={(e) => setHidePw(true)} />}
       </InputBox>
@@ -54,8 +56,8 @@ function ResetPw() {
           type={hidePwConfirmation ? 'password' : 'text'}
           placeholder="새 비밀번호 확인"
           autoComplete="off"
-          value={updatedPwConfirmation}
-          onChange={(e) => setUpdatedPwConfirmation(e.target.value)}
+          value={pwConfirmation}
+          onChange={(e) => setPwConfirmation(e.target.value)}
         />
         {hidePwConfirmation ? (
           <ShowPwIcon onClick={(e) => setHidePwConfirmation(false)} />

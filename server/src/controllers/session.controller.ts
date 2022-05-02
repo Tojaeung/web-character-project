@@ -35,6 +35,9 @@ export const signIn = async (req: Request<{}, {}, SignInInput['body']>, res: Res
     throw ApiError.Unauthorized('인증되지 않은 사용자 입니다.\n이메일 인증을 보냈으니 확인해주세요.');
   }
 
+  // 로그인시, 비밀번호와 같이 불러온 user에서 pw속성을 제거하고 클라이언트에 보내준다.
+  delete user.pw;
+
   req.session.user = {
     id: user.id,
     chatId: user.chatId,

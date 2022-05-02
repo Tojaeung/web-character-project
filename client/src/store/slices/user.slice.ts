@@ -57,9 +57,6 @@ export const userSlice = createSlice({
     // 로그아웃
     builder
       .addCase(signOut.fulfilled, (state, { payload }) => {
-        console.log(payload.ok);
-        console.log(payload.message);
-
         state.ok = payload.ok;
         state.message = payload.message;
         state.user = null;

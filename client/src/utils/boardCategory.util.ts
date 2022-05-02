@@ -1,1 +1,3 @@
-export const boardCategory = ['free', 'drawingCommission', 'drawingRequest', 'drawingSale'];
+const boardCategory = ['free', 'commission', 'reque', 'sale'];
+
+export default boardCategory;

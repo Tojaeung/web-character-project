@@ -114,13 +114,13 @@ class User extends Relation {
   role: string;
 
   @Column({ type: 'varchar', select: false })
-  pw: string;
+  pw?: string;
 
-  @Column({ type: 'varchar', name: 'email_token', nullable: true, select: false })
+  @Column({ type: 'varchar', name: 'email_token', nullable: true })
   emailToken: string | null;
 
   @Column({ type: 'varchar', name: 'pw_token', select: false })
-  pwToken: string;
+  pwToken?: string;
 
   @Column({
     default: false,

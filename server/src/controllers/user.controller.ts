@@ -10,38 +10,24 @@ import { sendAuthEmail, sendEmailForResetPw, sendEmailForUpdateEmail } from '@sr
 import ApiError from '@src/errors/api.error';
 import { s3Delete } from '@src/utils/s3.utils';
 import cluster from '@src/helpers/redis.helper';
-import {
-  SignUpInput,
-  ForgotPwInput,
-  VerifyUserInput,
-  ResetPwInput,
-  updateEmailInput,
-  verifyEmailInput,
-  updateNicknameInput,
-  updatePwInput,
-  updateDescInput,
-  updateAvatarInput,
-  updateCoverInput,
-  GetUserInput,
-} from '@src/schemas/user.schema';
 import FreeImageKey from '@src/entities/board/commission/imageKey.entity';
 import CommissionImageKey from '@src/entities/board/free/imageKey.entity';
 import RequeImageKey from '@src/entities/board/reque/imageKey.entity';
 import SaleImageKey from '@src/entities/board/sale/imageKey.entity';
 
-export const signUp = async (req: Request<{}, {}, SignUpInput['body']>, res: Response): Promise<any> => {
+export const signUp = async (req: Request, res: Response): Promise<any> => {
   const { email, nickname, pw } = req.body;
 
   // 기존 이메일 존재 유무를 확인합니다.
   const isExistingEmail = await getRepository(User).count({ email });
-  if (!isExistingEmail) {
+  if (isExistingEmail) {
     logger.warn('이미 존재하는 이메일로 회원가입을 시도합니다.');
     throw ApiError.Conflict('이미 존재하는 이메일 입니다.');
   }
 
   // 기존 닉네임 존재 유무를 확인합니다.
   const isExistingNickname = await getRepository(User).count({ nickname });
-  if (!isExistingNickname) {
+  if (isExistingNickname) {
     logger.warn('이미 존재하는 닉네임으로 회원가입을 시도합니다.');
     throw ApiError.Conflict('이미 존재하는 닉네임 입니다.');
   }
@@ -65,7 +51,7 @@ export const signUp = async (req: Request<{}, {}, SignUpInput['body']>, res: Res
   return res.status(201).json({ ok: true, message: '회원가입 되었습니다.' });
 };
 
-export const verifyUser = async (req: Request<{}, VerifyUserInput['query'], {}>, res: Response): Promise<any> => {
+export const verifyUser = async (req: Request, res: Response): Promise<any> => {
   const { emailToken } = req.query;
 
   const user = await getRepository(User).findOne({ emailToken: emailToken as string });
@@ -88,7 +74,7 @@ export const verifyUser = async (req: Request<{}, VerifyUserInput['query'], {}>,
   return res.status(200).redirect(process.env.CLIENT_ADDR as string);
 };
 
-export const forgotPw = async (req: Request<{}, {}, ForgotPwInput['body']>, res: Response): Promise<any> => {
+export const forgotPw = async (req: Request, res: Response): Promise<any> => {
   const userRepo = getCustomRepository(UserRepository);
 
   const { email } = req.body;
@@ -103,15 +89,12 @@ export const forgotPw = async (req: Request<{}, {}, ForgotPwInput['body']>, res:
 
   // 유저가 존재한다면 비밀번호 찾기 인증 메일을 발송합니다.
   // 비밀번호 인증을 위해 auth테이블에 pwToken이 필요합니다.
-  await sendEmailForResetPw(email, user.pwToken);
+  await sendEmailForResetPw(email, user.pwToken!);
 
   return res.status(200).json({ ok: true, message: '인증 이메일을 발송하였습니다.' });
 };
 
-export const resetPw = async (
-  req: Request<{}, ResetPwInput['query'], ResetPwInput['body']>,
-  res: Response
-): Promise<any> => {
+export const resetPw = async (req: Request, res: Response): Promise<any> => {
   const { updatedPw } = req.body;
   const { pwToken } = req.query;
 
@@ -133,7 +116,7 @@ export const resetPw = async (
   return res.status(200).json({ ok: true, message: '비밀번호가 재설정 되었습니다.' });
 };
 
-export const getUser = async (req: Request<GetUserInput['params']>, res: Response): Promise<any> => {
+export const getUser = async (req: Request, res: Response): Promise<any> => {
   const { userId } = req.params;
 
   const user = await getRepository(User).findOne({ id: Number(userId) });
@@ -146,17 +129,17 @@ export const getUser = async (req: Request<GetUserInput['params']>, res: Respons
   return res.status(200).json({ ok: true, message: '유저정보를 가져왔습니다.', user });
 };
 
-export const verifyEmail = async (req: Request<{}, {}, verifyEmailInput['body']>, res: Response): Promise<any> => {
+export const verifyEmail = async (req: Request, res: Response): Promise<any> => {
   const id = req.session.user?.id!;
   const { updatedEmail } = req.body;
 
   const isExistingUser = await getRepository(User).count({ id: id });
-  if (!isExistingUser) {
+  if (isExistingUser) {
     logger.warn('존재하지 않은 유저가 이메일 변경을 시도합니다.');
     throw ApiError.NotFound('존재하지 않는 유저입니다.');
   }
-  const isExistingEmail = await getRepository(User).findOne({ email: updatedEmail });
-  if (!isExistingEmail) {
+  const isExistingEmail = await getRepository(User).count({ email: updatedEmail });
+  if (isExistingEmail) {
     logger.warn('이미 존재하는 이메일로 이메일 변경을 시도하고 있습니다.');
     throw ApiError.Conflict('이미 존재하는 이메일 입니다.');
   }
@@ -167,10 +150,7 @@ export const verifyEmail = async (req: Request<{}, {}, verifyEmailInput['body']>
   return res.status(200).json({ ok: true, message: '이메일 변경을 위한 인증 메세지를 보냈습니다.' });
 };
 
-export const updateEmail = async (
-  req: Request<updateEmailInput['params'], updateEmailInput['query'], {}>,
-  res: Response
-): Promise<any> => {
+export const updateEmail = async (req: Request, res: Response): Promise<any> => {
   const { userId } = req.params;
   const { updatedEmail } = req.query;
 
@@ -181,10 +161,7 @@ export const updateEmail = async (
   return res.status(200).redirect(process.env.CLIENT_ADDR as string);
 };
 
-export const updateNickname = async (
-  req: Request<{}, {}, updateNicknameInput['body']>,
-  res: Response
-): Promise<any> => {
+export const updateNickname = async (req: Request, res: Response): Promise<any> => {
   const id = req.session.user?.id!;
   const { updatedNickname } = req.body;
 
@@ -194,7 +171,7 @@ export const updateNickname = async (
     throw ApiError.NotFound('존재하지 않는 유저입니다.');
   }
   const isExistingNickname = await getRepository(User).findOne({ nickname: updatedNickname });
-  if (!isExistingNickname) {
+  if (isExistingNickname) {
     logger.warn('이미 존재하는 닉네임으로 닉네임 변경을 시도하고 있습니다.');
     throw ApiError.Conflict('이미 존재하는 닉네임 입니다.');
   }
@@ -206,7 +183,7 @@ export const updateNickname = async (
   return res.status(200).json({ ok: true, message: '닉네임 변경 완료되었습니다.', updatedNickname });
 };
 
-export const updatePw = async (req: Request<{}, {}, updatePwInput['body']>, res: Response): Promise<any> => {
+export const updatePw = async (req: Request, res: Response): Promise<any> => {
   const userRepo = getCustomRepository(UserRepository);
 
   const id = req.session.user?.id!;
@@ -233,7 +210,7 @@ export const updatePw = async (req: Request<{}, {}, updatePwInput['body']>, res:
   return res.status(200).json({ ok: true, message: '비밀번호 변경 완료되었습니다.\n 다시 로그인 해주세요.' });
 };
 
-export const updateDesc = async (req: Request<{}, {}, updateDescInput['body']>, res: Response): Promise<any> => {
+export const updateDesc = async (req: Request, res: Response): Promise<any> => {
   const id = req.session.user?.id!;
   const { updatedDesc } = req.body;
 
@@ -250,7 +227,7 @@ export const updateDesc = async (req: Request<{}, {}, updateDescInput['body']>, 
   return res.status(200).json({ ok: true, message: '자기소개 변경 완료되었습니다.', updatedDesc });
 };
 
-export const updateAvatar = async (req: Request<updateAvatarInput['body']>, res: Response): Promise<any> => {
+export const updateAvatar = async (req: Request, res: Response): Promise<any> => {
   const id = req.session.user?.id!;
   const updatedAvatar = (req.file as Express.MulterS3.File).location;
   const updatedAvatarKey = (req.file as Express.MulterS3.File).key;
@@ -313,7 +290,7 @@ export const updateDefaultAvatar = async (req: Request, res: Response): Promise<
   });
 };
 
-export const updateCover = async (req: Request<updateCoverInput['body']>, res: Response): Promise<any> => {
+export const updateCover = async (req: Request, res: Response): Promise<any> => {
   const id = req.session.user?.id!;
   const updatedCover = (req.file as Express.MulterS3.File).location;
   const updatedCoverKey = (req.file as Express.MulterS3.File).key;

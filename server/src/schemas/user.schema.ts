@@ -26,12 +26,6 @@ export const signUpSchema = object({
   }),
 });
 
-export const verifyUserSchema = object({
-  query: object({
-    emailToken: string(),
-  }),
-});
-
 export const forgotPwSchema = object({
   body: object({
     email: string({
@@ -41,12 +35,6 @@ export const forgotPwSchema = object({
 });
 
 export const resetPwSchema = object({
-  query: object({
-    pwToken: string({
-      required_error: '비밀번호 토큰이 존재하지 않습니다.',
-    }),
-  }),
-
   body: object({
     updatedPw: string({
       required_error: '비밀번호를 입력해주세요.',
@@ -63,26 +51,11 @@ export const resetPwSchema = object({
   }),
 });
 
-export const getUserSchema = object({
-  params: object({
-    userId: string(),
-  }),
-});
-
 export const verifyEmailSchema = object({
   body: object({
     updatedEmail: string({
       required_error: '이메일을 입력해주세요.',
     }).email('이메일 형식이 아닙니다.'),
-  }),
-});
-
-export const updateEmailSchema = object({
-  params: object({
-    userId: string(),
-  }),
-  query: object({
-    updatedEmail: string(),
   }),
 });
 
@@ -127,45 +100,3 @@ export const updateDescSchema = object({
     }).max(5000, '자기소개 글자를 초과하였습니다.'),
   }),
 });
-
-export const updateAvatarSchema = object({
-  body: object({
-    updatedAvatar: string({
-      required_error: '변경할 프로필사진을 업로드 하지 않았습니다.',
-    }),
-  }),
-});
-
-export const updateDefaultAvatarSchema = object({});
-
-export const updateCoverSchema = object({
-  body: object({
-    updatedCover: string({
-      required_error: '변경할 커버사진을 업로드 하지 않았습니다.',
-    }),
-  }),
-});
-
-export const updateDefaultCoverSchema = object({});
-
-export const deleteAccountSchema = object({});
-
-export type SignUpInput = z.infer<typeof signUpSchema>;
-export type VerifyUserInput = z.infer<typeof verifyUserSchema>;
-export type ForgotPwInput = z.infer<typeof forgotPwSchema>;
-export type ResetPwInput = z.infer<typeof resetPwSchema>;
-
-export type GetUserInput = z.infer<typeof getUserSchema>;
-
-export type verifyEmailInput = z.infer<typeof verifyEmailSchema>;
-export type updateEmailInput = z.infer<typeof updateEmailSchema>;
-export type updateNicknameInput = z.infer<typeof updateNicknameSchema>;
-export type updatePwInput = z.infer<typeof updatePwSchema>;
-export type updateDescInput = z.infer<typeof updateDescSchema>;
-
-export type updateAvatarInput = z.infer<typeof updateAvatarSchema>;
-export type updateDefaultAvatarInput = z.infer<typeof updateDefaultAvatarSchema>;
-export type updateCoverInput = z.infer<typeof updateCoverSchema>;
-export type updateDefaultCoverInput = z.infer<typeof updateDefaultCoverSchema>;
-
-export type deleteAccountInput = z.infer<typeof deleteAccountSchema>;

@@ -62,7 +62,7 @@ function Account() {
   };
 
   const handleEditNickname = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    await dispatch(openModal({ mode: 'editNickname' }));
+    await dispatch(openModal({ mode: 'changeNickname' }));
   };
   const handleEditPw = async (e: React.MouseEvent<HTMLButtonElement>) => {
     await dispatch(openModal({ mode: 'editPw' }));

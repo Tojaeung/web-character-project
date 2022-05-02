@@ -9,8 +9,8 @@ export class DrawingRepository extends AbstractRepository<Drawing> {
   getDrawingsById(userId: number, limit: number) {
     return this.createQueryBuilder('drawing')
       .leftJoinAndSelect('drawing.user', 'drawingUser')
-      .leftJoinAndSelect('drawing.drawingComments', 'drawingComment')
-      .leftJoinAndSelect('drawingComment.user', 'drawingCommentUser')
+      .leftJoinAndSelect('drawing.comments', 'comment')
+      .leftJoinAndSelect('comment.user', 'commentUser')
       .leftJoinAndSelect('drawing.likes', 'like')
       .leftJoinAndSelect('drawing.dislikes', 'dislike')
       .where('drawing.user_id = :userId', { userId })
@@ -20,8 +20,9 @@ export class DrawingRepository extends AbstractRepository<Drawing> {
   }
   getDrawingsByCursor(userId: number, cursor: number, limit: number) {
     return this.createQueryBuilder('drawing')
-      .leftJoinAndSelect('drawing.drawingComments', 'drawingComment')
-      .leftJoinAndSelect('drawingComment.user', 'user')
+      .leftJoinAndSelect('drawing.user', 'drawingUser')
+      .leftJoinAndSelect('drawing.comments', 'comment')
+      .leftJoinAndSelect('comment.user', 'commentUser')
       .leftJoinAndSelect('drawing.likes', 'like')
       .leftJoinAndSelect('drawing.dislikes', 'dislike')
       .where('drawing.user_id = :userId', { userId })
@@ -31,25 +32,85 @@ export class DrawingRepository extends AbstractRepository<Drawing> {
       .getMany();
   }
 
+  // 그림생성시, 그림정보와 유저정보를 같이 보내주어야한다.
   joinUser(drawingId: number) {
     return this.createQueryBuilder('drawing')
       .leftJoinAndSelect('drawing.user', 'user')
       .where('drawing.id = :drawingId', { drawingId })
       .getOne();
   }
+
+  delete = async (drawingId: number) => {
+    const result = await this.createQueryBuilder('drawing')
+      .delete()
+      .from(Drawing)
+      .where('id = :id', { id: drawingId })
+      .returning('*')
+      .execute();
+    return result.raw[0];
+  };
 }
 
 @EntityRepository(Comment)
 export class DrawingCommentRepository extends AbstractRepository<Comment> {
   joinUser(commentId: number) {
-    return this.createQueryBuilder('drawingComment')
-      .leftJoinAndSelect('drawingComment.user', 'user')
-      .where('drawingComment.id = :commentId', { commentId })
+    return this.createQueryBuilder('comment')
+      .leftJoinAndSelect('comment.user', 'user')
+      .where('comment.id = :commentId', { commentId })
       .getOne();
   }
+  create = async (id: number, drawingId: number, content: string): Promise<Comment> => {
+    const result = await this.createQueryBuilder('comment')
+      .insert()
+      .into(Comment)
+      .values({ user_id: id, drawing_id: drawingId, content })
+      .returning('*')
+      .execute();
+    return result.raw[0];
+  };
+
+  update = async (commentId: number, updatedContent: string): Promise<Comment> => {
+    const result = await this.createQueryBuilder('comment')
+      .update(Comment)
+      .set({ content: updatedContent })
+      .where('id = :id', { id: commentId })
+      .returning('*')
+      .execute();
+    return result.raw[0];
+  };
+
+  delete = async (commentId: number): Promise<Comment> => {
+    const result = await this.createQueryBuilder('comment')
+      .delete()
+      .from(Comment)
+      .where('id = :id', { id: commentId })
+      .returning('*')
+      .execute();
+    return result.raw[0];
+  };
 }
 
 @EntityRepository(Like)
-export class LikeRepository extends AbstractRepository<Like> {}
+export class LikeRepository extends AbstractRepository<Like> {
+  create = async (id: number, drawingId: number): Promise<Like> => {
+    const result = await this.createQueryBuilder('like')
+      .insert()
+      .into(Like)
+      .values({ valuerId: id, drawing_id: drawingId })
+      .returning('*')
+      .execute();
+    return result.raw[0];
+  };
+}
 @EntityRepository(DisLike)
-export class DisLikeRepository extends AbstractRepository<DisLike> {}
+export class DisLikeRepository extends AbstractRepository<DisLike> {
+  create = async (id: number, drawingId: number): Promise<DisLike> => {
+    const result = await this.createQueryBuilder('like')
+      .insert()
+      .into(DisLike)
+      .values({ valuerId: id, drawing_id: drawingId })
+      .returning('*')
+      .execute();
+    return result.raw[0];
+  };
+}

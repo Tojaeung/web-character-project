@@ -2,46 +2,35 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import BoardPreview from '@src/components/BoardPreview';
 import { useAppDispatch } from '@src/store/app/hook';
-import { getBoards } from '@src/store/requests/board.request';
-import { Link } from 'react-router-dom';
+import { getAllBoards } from '@src/store/requests/board.request';
 import { PostType } from '@src/types';
 
 function Home() {
   const dispatch = useAppDispatch();
 
-  const [free, setFree] = useState<PostType[] | undefined>();
-  const [drawingCommission, setDrawingCommission] = useState<PostType[] | undefined>();
-  const [drawingRequest, setDrawingRequest] = useState<PostType[] | undefined>();
-  const [drawingSale, setDrawingSale] = useState<PostType[] | undefined>();
+  const [free, setFree] = useState<PostType[]>([]);
+  const [commission, setCommission] = useState<PostType[]>([]);
+  const [reque, setReque] = useState<PostType[]>([]);
+  const [sale, setSale] = useState<PostType[]>([]);
 
   useEffect(() => {
-    dispatch(getBoards())
+    dispatch(getAllBoards())
       .unwrap()
       .then((res) => {
-        const { free, drawingCommission, drawingRequest, drawingSale } = res;
+        const { free, commission, reque, sale } = res;
         setFree(free);
-        setDrawingCommission(drawingCommission);
-        setDrawingRequest(drawingRequest);
-        setDrawingSale(drawingSale);
+        setCommission(commission);
+        setReque(reque);
+        setSale(sale);
       });
   }, []);
 
   return (
     <Container>
       <BoardPreview posts={free} board="free" />
-      <BoardPreview posts={drawingCommission} board="drawingCommission" />
-      <BoardPreview posts={drawingRequest} board="drawingRequest" />
-      <BoardPreview posts={drawingSale} board="drawingSale" />
-
-      <Link to="/create/postForm/drawingCommission">
-        <h1>커미션폼</h1>
-      </Link>
-      <Link to="/create/postForm/drawingRequest">
-        <h1>리퀘폼</h1>
-      </Link>
-      <Link to="/create/postForm/drawingSale">
-        <h1>분양폼</h1>
-      </Link>
+      <BoardPreview posts={commission} board="commission" />
+      <BoardPreview posts={reque} board="reque" />
+      <BoardPreview posts={sale} board="sale" />
     </Container>
   );
 }

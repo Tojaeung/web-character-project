@@ -5,8 +5,8 @@ import Drawing from '@src/pages/profile/Drawing';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import { useAppDispatch } from '@src/store/app/hook';
-import { ProfileType } from '@src/types';
-import { getProfile } from '@src/store/requests/profile.request';
+import { UserType } from '@src/types';
+import { getUser } from '@src/store/requests/user.request';
 import NotFound from '@src/components/NotFound';
 
 function Profile() {
@@ -14,15 +14,15 @@ function Profile() {
 
   const { profileId } = useParams();
 
-  const [profile, setProfile] = useState<ProfileType>();
+  const [profile, setProfile] = useState<UserType>();
 
   useEffect(() => {
     try {
-      dispatch(getProfile({ profileId: Number(profileId) }))
+      dispatch(getUser({ userId: Number(profileId) }))
         .unwrap()
         .then((res) => {
-          const { profile } = res;
-          setProfile(profile);
+          const { user } = res;
+          setProfile(user);
         });
     } catch (err: any) {
       alert(err.message);

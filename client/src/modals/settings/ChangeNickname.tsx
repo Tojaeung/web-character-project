@@ -10,11 +10,11 @@ import { updateNickname } from '@src/store/requests/user.request';
 function ChangeNickname() {
   const dispatch = useAppDispatch();
 
-  const [updatedNickname, setUpdatedNickname] = useState('');
+  const [nickname, setNickname] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      const res = await dispatch(updateNickname({ updatedNickname })).unwrap();
+      const res = await dispatch(updateNickname({ updatedNickname: nickname })).unwrap();
       alert(res.message);
       await dispatch(closeModal());
     } catch (err: any) {
@@ -32,8 +32,8 @@ function ChangeNickname() {
           type="text"
           placeholder="닉네임"
           autoComplete="off"
-          value={updatedNickname}
-          onChange={(e) => setUpdatedNickname(e.target.value)}
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
         />
         <UserIcon />
       </InputBox>

@@ -1,6 +1,6 @@
 import { getCustomRepository, getRepository } from 'typeorm';
 import moment from 'moment';
-import { User } from '@src/entities/user/user.entity';
+import User from '@src/entities/user/user.entity';
 import { UserRepository } from '@src/repositorys/user.repository';
 import cluster from '@src/helpers/redis.helper';
 import parseMessages from '@src/socketio/parseMessages';

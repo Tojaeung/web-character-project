@@ -2,12 +2,18 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { v4 } from 'uuid';
 import CommentList from '@src/components/comment/CommentList';
-import { DrawingCommentType, PostCommentType } from '@src/types';
+import {
+  DrawingCommentType,
+  FreeCommentType,
+  CommissionCommentType,
+  SaleCommentType,
+  RequeCommentType,
+} from '@src/types';
 import Pagination from './Pagination';
 
 interface IProp {
-  comments: DrawingCommentType[] | PostCommentType[];
   type: 'drawing' | 'board';
+  comments: DrawingCommentType[] | FreeCommentType[] | CommissionCommentType[] | RequeCommentType[] | SaleCommentType[];
 }
 
 function Comment({ comments, type }: IProp) {

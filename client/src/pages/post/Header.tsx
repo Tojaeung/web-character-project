@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
@@ -7,14 +7,15 @@ import Button from '@src/components/Button';
 import { selectUserUser } from '@src/store/slices/user.slice';
 import { selectPostPost } from '@src/store/slices/post.slice';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
-import { removePost } from '@src/store/requests/post.request';
+import { deletePost } from '@src/store/requests/board.request';
 import ReportModal from '@src/modals/Report';
-import { useReportModal } from '@src/hook/useModal';
+import { useReportModal } from '@src/hooks/useModal';
 import MoreButton from '@src/components/MoreButton';
 
 function Header() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { board, postId } = useParams();
 
   const user = useAppSelector(selectUserUser);
   const post = useAppSelector(selectPostPost);
@@ -25,9 +26,9 @@ function Header() {
   // 게시글 삭제
   const handleRemovePost = async (e: any) => {
     try {
-      const res = await dispatch(removePost({ postId: Number(post?.id) })).unwrap();
+      const res = await dispatch(deletePost({ board: board as string, postId: Number(postId) })).unwrap();
       alert(res.message);
-      navigate(`/board/${post?.board}`);
+      navigate(`/board/${board}`);
     } catch (err: any) {
       alert(err.message);
     }
@@ -37,23 +38,23 @@ function Header() {
     <>
       <Container>
         <ProfileBox>
-          <Avatar src={post?.user.avatar} size="medium" />
+          <Avatar src={post?.user?.avatar} size="medium" />
           <Nickname
-            exp={post?.user.exp!}
-            userId={post?.user.id!}
-            chatId={post?.user.chatId!}
-            desc={post?.user.desc!}
-            nickname={post?.user.nickname!}
+            exp={post?.user?.exp!}
+            userId={post?.user?.id!}
+            chatId={post?.user?.chatId!}
+            desc={post?.user?.desc!}
+            nickname={post?.user?.nickname!}
             dropDown={true}
             size="medium"
           />
         </ProfileBox>
 
         <ButtonBox>
-          <BackBoard color="black" size="small" inverse={true} onClick={(e) => navigate(`/board/${post?.board}`)}>
+          <BackBoard color="black" size="small" inverse={true} onClick={(e) => navigate(`/board/${board}`)}>
             목록
           </BackBoard>
-          {(user?.id === post?.user.id || user?.role === 'admin') && (
+          {(user?.id === post?.user?.id || user?.role === 'admin') && (
             <>
               <EditPost
                 color="green"
@@ -74,12 +75,12 @@ function Header() {
           </ReportPost>
         </ButtonBox>
         {showReportModal && (
-          <ReportModal isOpen={showReportModal} closeModal={closeReportModal} suspectId={post?.user.id!} />
+          <ReportModal isOpen={showReportModal} closeModal={closeReportModal} suspectId={post?.user?.id!} />
         )}
 
         <ResponsiveButtonBox>
-          <BackBoardIcon onClick={(e) => navigate(`/board/${post?.board}`)} />
-          <MoreButton type="board" entityId={post?.id!} userId={post?.user.id!} handleRemove={handleRemovePost} />
+          <BackBoardIcon onClick={(e) => navigate(`/board/${board}`)} />
+          <MoreButton type="board" entityId={post?.id!} userId={post?.user?.id!} handleRemove={handleRemovePost} />
         </ResponsiveButtonBox>
       </Container>
     </>

@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { v4 } from 'uuid';
 import { BsPencilSquare } from 'react-icons/bs';
 import { HiOutlineChevronDoubleUp } from 'react-icons/hi';
@@ -8,7 +8,7 @@ import { useAppDispatch } from '@src/store/app/hook';
 import Nickname from '@src/components/Nickname';
 import { getBoard } from '@src/store/requests/board.request';
 import Pagination from './Pagination';
-import boardTitle from '@src/utils/boardTitle.util';
+import boardName from '@src/utils/boardName.util';
 import LimitSelector from './LimitSelector';
 import CreatedTime from '@src/components/CreatedTime';
 import Button from '@src/components/Button';
@@ -17,6 +17,7 @@ import { PostType } from '@src/types';
 function Board() {
   const dispatch = useAppDispatch();
 
+  const location = useLocation();
   const navigate = useNavigate();
   const { board } = useParams();
 
@@ -30,8 +31,7 @@ function Board() {
     dispatch(
       getBoard({
         board: board as string,
-        page,
-        limit,
+        queryString: location.search,
       })
     )
       .unwrap()
@@ -40,15 +40,7 @@ function Board() {
         setPosts(posts);
         setTotalPostsNum(totalPostsNum);
       });
-  }, [page, limit, board]);
-
-  const reloadBoard = (postId: number) => async (e: React.MouseEvent<any>) => {
-    const res = await dispatch(getBoard({ board: board as string, page, limit })).unwrap();
-    const { posts, totalPostsNum } = res;
-    setPosts(posts);
-    setTotalPostsNum(totalPostsNum);
-    navigate(`/board/${board}/post/${postId}`);
-  };
+  }, [location.search, board]);
 
   // 스크롤 맨위로
   const goTop = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -59,7 +51,7 @@ function Board() {
     <>
       <Container>
         <Header>
-          <BoardName>{boardTitle(board as string)}</BoardName>
+          <BoardName>{boardName(board as string)}</BoardName>
           <LimitSelector setPage={setPage} limit={limit} setLimit={setLimit} />
         </Header>
 
@@ -78,11 +70,11 @@ function Board() {
             {posts.map((post) => (
               <tr key={v4()}>
                 <td>{post.id}</td>
-                <td className="post-title" onClick={reloadBoard(post.id)}>
+                <td className="post-title" onClick={(e) => navigate(`/board/${board}/post/${post.id}`)}>
                   {post.title}
                 </td>
                 <td>
-                  <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />
+                  <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} size="small" />
                 </td>
                 <td>{post.views}</td>
                 <td>
@@ -106,16 +98,16 @@ function Board() {
 
       <Responsive>
         <Header>
-          <BoardName>{boardTitle(board as string)}</BoardName>
+          <BoardName>{boardName(board as string)}</BoardName>
           <LimitSelector setPage={setPage} limit={limit} setLimit={setLimit} />
         </Header>
 
         {posts.map((post) => (
           <ListBox key={v4()}>
-            <Title onClick={reloadBoard(post.id)}>{post.title}</Title>
+            <Title onClick={(e) => navigate(`/board/${board}/post/${post.id}`)}>{post.title}</Title>
 
             <DetailBox>
-              <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />|
+              <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} size="small" />|
               <Views>조회수: {post.views}</Views>
               |
               <CreatedTime createdTime={post.created_at} size="small" />

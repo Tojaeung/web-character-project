@@ -6,8 +6,8 @@ const validator = (schema: AnyZodObject) => (req: Request, res: Response, next: 
   try {
     schema.parse({
       body: req.body,
-      query: req.query,
       params: req.params,
+      query: req.query,
     });
     next();
   } catch (err: any) {

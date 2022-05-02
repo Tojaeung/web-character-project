@@ -7,9 +7,6 @@ import {
   getUserInfoErrorType,
   getUserInfoDataType,
   getUserInfoReturnType,
-  calcExpErrorType,
-  calcExpReturnType,
-  calcExpDataType,
   penaltyByAdminReturnType,
   penaltyByAdminDataType,
   penaltyByAdminErrorType,
@@ -38,21 +35,6 @@ export const getUserInfo = createAsyncThunk<
 >('GET_USER_INFO', async (data, thunkApi) => {
   try {
     const res = await axios.post('/api/etc/getUserInfo', data, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
-  }
-});
-
-export const calcExp = createAsyncThunk<
-  calcExpReturnType,
-  calcExpDataType,
-  { state: RootState; rejectValue: calcExpErrorType }
->('CALC_EXP', async (data, thunkApi) => {
-  try {
-    const res = await axios.post(`/api/etc/calcExp`, data, {
       withCredentials: true,
     });
     return res.data;

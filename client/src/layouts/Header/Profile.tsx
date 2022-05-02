@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectUserUser } from '@src/store/slices/user.slice';
 import { signOut } from '@src/store/requests/session.request';
 import Avatar from '@src/components/Avatar';
-import useDropDown from '@src/hook/useDropDown';
+import useDropDown from '@src/hooks/useDropDown';
 import Chat from './Chat';
 
 function Profile() {

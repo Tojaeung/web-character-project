@@ -6,14 +6,8 @@ import penalty from '@src/middlewares/penalty.middleware';
 import { boardUpload } from '@src/helpers/s3.helper';
 import {
   createCommentSchema,
-  createDisLikeSchema,
-  createImageKeySchema,
-  createLikeSchema,
   createPostSchema,
-  deleteCommentSchema,
-  deleteImageKeySchema,
-  getBoardSchema,
-  getPostSchema,
+  removeImageKeySchema,
   updateCommentSchema,
   updatePostSchema,
 } from '@src/schemas/board.schema';
@@ -30,35 +24,23 @@ import {
   updateComment,
   deleteComment,
   createLike,
-  createDisLike,
+  createDislike,
 } from '@src/controllers/board.controller';
 
 const router = Router();
 
 router.get('/boards', asyncHandler(getAllBoards));
-router.get('/boards/:board', validator(getBoardSchema), asyncHandler(getBoard));
+router.get('/boards/:board', asyncHandler(getBoard));
 
 // 조회수 같이
-router.get('/boards/:board/posts/:postId', validator(getPostSchema), asyncHandler(getPost));
-
-// 게시글 이미지 업로드 할시
-router.post(
-  '/boards/:board/posts/image',
-  auth,
-  penalty,
-  validator(createImageKeySchema),
-  boardUpload.single('newImage'),
-  asyncHandler(addImageKey)
-);
-// 게시글 이미지 업로드 안할시
-router.post('/boards/:board/posts/image', auth, penalty, validator(deleteImageKeySchema), asyncHandler(removeImageKey));
+router.get('/boards/:board/posts/:postId', asyncHandler(getPost));
 
 // 게시물 생성
 router.post('/boards/:board/posts', auth, penalty, validator(createPostSchema), asyncHandler(createPost));
 // 게시물 변경
 router.patch('/boards/:board/posts/:postId', auth, validator(updatePostSchema), asyncHandler(updatePost));
 // 게시물 삭제
-router.delete('/boards/:board/posts/:postId', auth, validator(deleteImageKeySchema), asyncHandler(deletePost));
+router.delete('/boards/:board/posts/:postId', auth, asyncHandler(deletePost));
 
 // 게시물 댓글 생성
 router.post(
@@ -71,17 +53,23 @@ router.post(
 // 게시물 댓글 변경
 router.patch('/boards/:board/comments/:commentId', auth, validator(updateCommentSchema), asyncHandler(updateComment));
 // 게시물 댓글 삭제
-router.delete('/boards/:board/comments/:commentId', auth, validator(deleteCommentSchema), asyncHandler(deleteComment));
+router.delete('/boards/:board/comments/:commentId', auth, asyncHandler(deleteComment));
 
 // 게시물 좋아요 생성
-router.post('/boards/:board/posts/:id/like', auth, penalty, validator(createLikeSchema), asyncHandler(createLike));
+router.post('/boards/:board/posts/:postId/like', auth, penalty, asyncHandler(createLike));
 // 게시물 싫어요 생성
+router.post('/boards/:board/posts/:postId/dislike', auth, penalty, asyncHandler(createDislike));
+
+// 게시글 이미지 업로드 할시
 router.post(
-  '/boards/:board/posts/:id/dislike',
+  '/posts/add-imagekey',
   auth,
   penalty,
-  validator(createDisLikeSchema),
-  asyncHandler(createDisLike)
+
+  boardUpload.single('newImage'),
+  asyncHandler(addImageKey)
 );
+// 게시글 이미지 업로드 안할시
+router.post('/posts/remove-imagekey', auth, penalty, validator(removeImageKeySchema), asyncHandler(removeImageKey));
 
 export default router;

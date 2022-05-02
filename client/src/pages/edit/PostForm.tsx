@@ -3,30 +3,30 @@ import styled from 'styled-components';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 import Button from '@src/components/Button';
-import boardTitle from '@src/utils/boardTitle.util';
-import { useImageUploadConfig } from '@src/hook/useReactQuillConfig';
+import boarName from '@src/utils/boardName.util';
+import { useImageUploadConfig } from '@src/hooks/useReactQuillConfig';
 import LengthCountInput from '@src/components/LengthCountInput';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectPostPost } from '@src/store/slices/post.slice';
-import { imageRemove } from '@src/store/requests/post.request';
-import { editPost, getPost } from '@src/store/requests/post.request';
+import { updatePost, getPost } from '@src/store/requests/board.request';
 
 function EditForm() {
   const dispatch = useAppDispatch();
 
-  const { postId } = useParams();
+  const { board, postId } = useParams();
   const navigate = useNavigate();
 
   const post = useAppSelector(selectPostPost);
 
   useEffect(() => {
-    dispatch(getPost({ postId: Number(postId) }))
+    dispatch(getPost({ board: board as string, postId: Number(postId) }))
       .unwrap()
       .then((res) => {
-        const post = res.post;
-        setTitle(post?.title!);
-        setContent(post?.content!);
+        const { postJoinAll } = res;
+        setTitle(postJoinAll?.title!);
+        setContent(postJoinAll?.content!);
       });
   }, []);
 
@@ -37,23 +37,11 @@ function EditForm() {
   const [content, setContent] = useState('');
 
   const handleModify = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (title.length > 50) {
-      return alert('제목 글자 수를 초과하였습니다.');
-    } else if (!title.length) {
-      return alert('제목을 입력해주세요.');
-    } else if (content.length > 10000) {
-      return alert('내용 글자 수를 초과하였습니다.');
-    } else if (!content.length) {
-      return alert('내용을 입력해주세요.');
-    } else if (content.length > 10000) {
-      return alert('내용 글자 수를 초과하였습니다.');
-    } else {
-      try {
-        await dispatch(editPost({ postId: Number(postId), title, content, imageKeys }));
-        navigate(-1);
-      } catch (err: any) {
-        alert(err.message);
-      }
+    try {
+      await dispatch(updatePost({ board: board as string, postId: Number(postId), title, content, imageKeys }));
+      navigate(-1);
+    } catch (err: any) {
+      alert(err.message);
     }
   };
 
@@ -64,17 +52,17 @@ function EditForm() {
     if (!(imageKeys as string[]).length) {
     } else {
       try {
-        await dispatch(imageRemove({ imageKeys })).unwrap();
+        await axios.post('/api/posts/remove-imagekey', imageKeys, { withCredentials: true });
       } catch (err: any) {
         alert(err.message);
       }
     }
-    navigate(`/board/${post?.board}/post/${post?.id}`);
+    navigate(`/board/${board}/post/${post?.id}`);
   };
 
   return (
     <Container>
-      <Title>{boardTitle(post?.board as string)} 수정하기</Title>
+      <Title>{boarName} 수정하기</Title>
       <LengthCountInput
         limit={50}
         placeholder="제목"

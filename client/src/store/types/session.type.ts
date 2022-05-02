@@ -9,10 +9,6 @@ export type signInDataType = {
   email: string;
   pw: string;
 };
-export type signInErrorType = {
-  ok: boolean;
-  message: string;
-};
 
 export type refreshLoginReturnType = {
   ok: boolean;
@@ -20,16 +16,7 @@ export type refreshLoginReturnType = {
   user: UserType;
 };
 
-export type refreshLoginErrorType = {
-  ok: boolean;
-  message: string;
-};
-
 export type signOutReturnType = {
-  ok: boolean;
-  message: string;
-};
-export type signOutErrorType = {
   ok: boolean;
   message: string;
 };

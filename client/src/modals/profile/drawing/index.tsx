@@ -30,7 +30,7 @@ function DrawingModal({ isOpen, closeModal }: IProp) {
         <Info />
 
         <CommentForm entityId={drawings[index!]?.id!} type="drawing" />
-        <Comment comments={drawings[index!]?.drawingComments!} type="drawing" />
+        <Comment comments={drawings[index!]?.comments!} type="drawing" />
       </InfoSide>
     </Container>,
     document.getElementById('modalPortal') as HTMLElement

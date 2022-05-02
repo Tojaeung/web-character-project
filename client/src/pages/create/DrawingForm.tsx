@@ -6,11 +6,10 @@ import { GrAddCircle } from 'react-icons/gr';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import Button from '@src/components/Button';
-import { useDefaultConfig } from '@src/hook/useReactQuillConfig';
+import { useDefaultConfig } from '@src/hooks/useReactQuillConfig';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { selectUserUser } from '@src/store/slices/user.slice';
-import { addDrawing } from '@src/store/requests/drawing.request';
-import { calcExp } from '@src/store/requests/etc.request';
+import { createDrawing } from '@src/store/requests/drawing.request';
 
 function DrawingForm() {
   const dispatch = useAppDispatch();
@@ -36,13 +35,11 @@ function DrawingForm() {
     if (!drawing) return alert('그림파일을 업로드 하지 않았습니다.');
 
     const formData = new FormData();
-    formData.append('drawing', drawing as File);
+    formData.append('newDrawing', drawing as File);
     formData.append('content', content);
-
     try {
-      const res = await dispatch(addDrawing(formData)).unwrap();
+      const res = await dispatch(createDrawing(formData)).unwrap();
       alert(res.message);
-      await dispatch(calcExp({ value: 1 }));
       window.location.href = `/profile/${user?.id}`;
     } catch (err: any) {
       alert(err.message);

@@ -8,119 +8,79 @@ export type getDrawingsReturnType = {
 };
 
 export type getDrawingsDataType = {
-  profileId: number;
+  userId: number;
   cursor: number;
 };
 
-export type getDrawingsErrorType = {
+export type incrementViewReturnType = {
   ok: boolean;
   message: string;
 };
-
-export type addDrawingReturnType = {
-  ok: boolean;
-  message: string;
-  newDrawing: DrawingType;
-};
-export type addDrawingDataType = {};
-export type addDrawingErrorType = {
-  ok: boolean;
-  message: string;
-};
-
-export type removeDrawingReturnType = {
-  ok: boolean;
-  message: string;
-  removedDrawingId: number;
-};
-export type removeDrawingDataType = {
+export type incrementViewDataType = {
   drawingId: number;
 };
-export type removeDrawingErrorType = {
-  ok: boolean;
-  message: string;
-};
 
-export type addViewReturnType = {
+export type createDrawingReturnType = {
   ok: boolean;
   message: string;
-  views: number;
+  newDrawingJoinUser: DrawingType;
 };
-export type addViewDataType = {
+export type createDrawingDataType = {};
+
+export type deleteDrawingReturnType = {
+  ok: boolean;
+  message: string;
+  deletedDrawing: DrawingType;
+};
+export type deleteDrawingDataType = {
   drawingId: number;
 };
-export type addViewErrorType = {
-  ok: boolean;
-  message: string;
-};
 
-export type addCommentReturnType = {
+export type createCommentReturnType = {
   ok: boolean;
   message: string;
-  addedComment: DrawingCommentType;
+  newCommentJoinUser: DrawingCommentType;
 };
-export type addCommentDataType = {
+export type createCommentDataType = {
+  drawingId: number;
   content: string;
-  userId: number;
+};
+
+export type updateCommentReturnType = {
+  ok: boolean;
+  message: string;
+  udpatedCommentJoinUser: DrawingCommentType;
+};
+export type updateCommentDataType = {
+  commentId: number;
+  updatedContent: string;
+};
+
+export type deleteCommentReturnType = {
+  ok: boolean;
+  message: string;
+  deletedComment: DrawingCommentType;
+};
+export type deleteCommentDataType = {
+  commentId: number;
+};
+
+export type createLikeReturnType = {
+  ok: boolean;
+  message: string;
+  newLike: DrawingLikeType;
+};
+export type createLikeDataType = {
   drawingId: number;
-};
-export type addCommentErrorType = {
-  ok: boolean;
-  message: string;
+  userId: number; // 그림 게시자 id
 };
 
-export type addLikeReturnType = {
+export type createDisLikeReturnType = {
   ok: boolean;
   message: string;
-  addedLike: DrawingLikeType;
+  newDisLike: DrawingDisLikeType;
 };
-export type addLikeDataType = {
-  userId: number;
+export type createDisLikeDataType = {
   drawingId: number;
-};
-export type addLikeErrorType = {
-  ok: boolean;
-  message: string;
-};
-
-export type addDisLikeReturnType = {
-  ok: boolean;
-  message: string;
-  addedDislike: DrawingDisLikeType;
-};
-export type addDisLikeDataType = {
-  userId: number;
-  drawingId: number;
-};
-export type addDisLikeErrorType = {
-  ok: boolean;
-  message: string;
-};
-
-export type removeCommentReturnType = {
-  ok: boolean;
-  message: string;
-  removedCommentId: number;
-};
-export type removeCommentDataType = {
-  drawingCommentId: number;
-};
-export type removeCommentErrorType = {
-  ok: boolean;
-  message: string;
-};
-
-export type editCommentReturnType = {
-  ok: boolean;
-  message: string;
-  drawingCommentId: number;
-  editedContent: string;
-};
-export type editCommentDataType = {
-  drawingCommentId: number;
-  editedContent: string;
-};
-export type editCommentErrorType = {
-  ok: boolean;
-  message: string;
+  userId: number; // 그림 게시자 id
 };

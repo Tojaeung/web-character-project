@@ -1,16 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import _ from 'lodash';
 import type { RootState } from '../app/store';
 import { DrawingType } from '@src/types';
 import {
   getDrawings,
-  addDrawing,
-  removeDrawing,
-  addDrawingView,
-  addDrawingComment,
-  addDrawingLike,
-  addDrawingDisLike,
-  removeDrawingComment,
-  editDrawingComment,
+  createDrawing,
+  deleteDrawing,
+  incrementView,
+  createDrawingComment,
+  updateDrawingComment,
+  deleteDrawingComment,
+  createDrawingLike,
+  createDrawingDisLike,
 } from '../requests/drawing.request';
 
 interface DrawingSliceType {
@@ -38,113 +39,121 @@ export const drawingSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getDrawings.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(getDrawings.fulfilled, (state, { payload }) => {
-      state.isLoading = false;
-      state.ok = payload.ok;
-      state.message = payload.message;
-      payload.drawings!.forEach((drawing) => {
-        state.drawings.push(drawing);
+    builder
+      .addCase(getDrawings.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getDrawings.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.drawings = state.drawings.concat(payload.drawings);
+      })
+      .addCase(getDrawings.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+        state.drawings = [];
       });
-    });
-    builder.addCase(getDrawings.rejected, (state, { payload }) => {
-      state.isLoading = false;
-      state.ok = payload!.ok;
-      state.message = payload!.message;
-      state.drawings = [];
-    });
 
-    builder.addCase(addDrawing.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      state.drawings.unshift(payload.newDrawing);
-    });
-    builder.addCase(addDrawing.rejected, (state, { payload }) => {
-      state.ok = payload!.ok;
-      state.message = payload!.message;
-    });
+    builder
+      .addCase(incrementView.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        const index = state.index;
+        state.drawings[index!]!.views += 1;
+      })
+      .addCase(incrementView.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
 
-    builder.addCase(removeDrawing.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      const filteredDrawings = state.drawings.filter((drawing) => drawing.id !== payload.removedDrawingId);
-      state.drawings = filteredDrawings;
-    });
-    builder.addCase(removeDrawing.rejected, (state, { payload }) => {
-      state.ok = payload!.ok;
-      state.message = payload!.message;
-    });
+    builder
+      .addCase(createDrawing.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.drawings.unshift(payload.newDrawingJoinUser);
+      })
+      .addCase(createDrawing.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
 
-    builder.addCase(addDrawingView.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      const index = state.index;
-      state.drawings[index!]!.views += 1;
-    });
-    builder.addCase(addDrawingView.rejected, (state, { payload }) => {
-      state.ok = payload!.ok;
-      state.message = payload!.message;
-    });
+    builder
+      .addCase(deleteDrawing.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.drawings = _.remove(state.drawings, (drawing) => {
+          return drawing.id === payload.deletedDrawing.id;
+        });
+      })
+      .addCase(deleteDrawing.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
 
-    builder.addCase(addDrawingComment.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      const index = state.index;
-      state.drawings[index!]!.drawingComments?.push(payload.addedComment);
-    });
-    builder.addCase(addDrawingComment.rejected, (state, { payload }) => {
-      state.ok = payload!.ok;
-      state.message = payload!.message;
-    });
-    builder.addCase(addDrawingLike.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      const index = state.index;
-      state.drawings[index!]!.likes?.push(payload.addedLike);
-    });
-    builder.addCase(addDrawingLike.rejected, (state, { payload }) => {
-      state.ok = payload!.ok;
-      state.message = payload!.message;
-    });
-    builder.addCase(addDrawingDisLike.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      const index = state.index;
-      state.drawings[index!]!.dislikes?.push(payload.addedDislike);
-    });
-    builder.addCase(addDrawingDisLike.rejected, (state, { payload }) => {
-      state.ok = payload!.ok;
-      state.message = payload!.message;
-    });
+    builder
+      .addCase(createDrawingComment.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        const index = state.index;
+        state.drawings[index!]!.comments?.unshift(payload.newCommentJoinUser);
+      })
+      .addCase(createDrawingComment.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
 
-    builder.addCase(removeDrawingComment.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      const index = state.index;
-      const filteredDrawingComment = state.drawings[index!]?.drawingComments?.filter(
-        (drawingComment) => drawingComment.id !== payload.removedCommentId
-      );
-      state.drawings[index!]!.drawingComments = filteredDrawingComment!;
-    });
-    builder.addCase(removeDrawingComment.rejected, (state, { payload }) => {
-      state.ok = payload!.ok;
-      state.message = payload!.message;
-    });
-    builder.addCase(editDrawingComment.fulfilled, (state, { payload }) => {
-      state.ok = payload.ok;
-      state.message = payload.message;
-      const index = state.index;
-      const commentIndex = state.drawings[index!]?.drawingComments?.findIndex(
-        (drawingComment) => drawingComment.id === payload.drawingCommentId
-      );
-      state.drawings[index!]!.drawingComments![commentIndex!].content! = payload.editedContent;
-    });
-    builder.addCase(editDrawingComment.rejected, (state, { payload }) => {
-      state.ok = payload!.ok;
-      state.message = payload!.message;
-    });
+    builder
+      .addCase(updateDrawingComment.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        const index = state.index;
+        state.drawings = _.map(state.drawings[index!].comments, (comment) => {
+          return comment.id === payload.udpatedCommentJoinUser.id ? payload.udpatedCommentJoinUser : comment;
+        });
+      })
+      .addCase(updateDrawingComment.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
+
+    builder
+      .addCase(deleteDrawingComment.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        const index = state.index;
+        state.drawings = _.remove(state.drawings[index!].comments, (comment) => {
+          return comment.id === payload.deletedComment.id;
+        });
+      })
+      .addCase(deleteDrawingComment.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
+
+    builder
+      .addCase(createDrawingLike.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        const index = state.index;
+        state.drawings[index!]!.likes?.push(payload.newLike);
+      })
+      .addCase(createDrawingLike.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
+    builder
+      .addCase(createDrawingDisLike.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        const index = state.index;
+        state.drawings[index!]!.dislikes?.push(payload.newDisLike);
+      })
+      .addCase(createDrawingDisLike.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
   },
 });
 

@@ -1,19 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
 import Avatar from '@src/components/Avatar';
+import { useParams } from 'react-router-dom';
 import Nickname from '@src/components/Nickname';
 import CreatedTime from '@src/components/CreatedTime';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectUserUser } from '@src/store/slices/user.slice';
-import { removeDrawingComment } from '@src/store/requests/drawing.request';
-import { removePostComment } from '@src/store/requests/post.request';
-import { DrawingCommentType, PostCommentType } from '@src/types';
+import { deleteDrawingComment } from '@src/store/requests/drawing.request';
+import { deletePostComment } from '@src/store/requests/board.request';
+import {
+  DrawingCommentType,
+  FreeCommentType,
+  CommissionCommentType,
+  RequeCommentType,
+  SaleCommentType,
+} from '@src/types';
 import EditCommentForm from '@src/components/comment/EditCommentForm';
 import Button from '@src/components/Button';
 
 interface IProps {
   type: 'drawing' | 'board';
-  comment: DrawingCommentType | PostCommentType;
+  comment: DrawingCommentType | FreeCommentType | CommissionCommentType | RequeCommentType | SaleCommentType;
   index: number;
   setCommentIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
   isSelected: boolean;
@@ -21,6 +28,8 @@ interface IProps {
 
 function CommentList({ type, comment, index, setCommentIndex, isSelected }: IProps) {
   const dispatch = useAppDispatch();
+  const { board } = useParams();
+
   const user = useAppSelector(selectUserUser);
 
   // 댓글 수정폼 나타내기
@@ -32,13 +41,14 @@ function CommentList({ type, comment, index, setCommentIndex, isSelected }: IPro
   const handleRemoveComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (type === 'drawing') {
       try {
-        await dispatch(removeDrawingComment({ drawingCommentId: comment.id })).unwrap();
+        await dispatch(deleteDrawingComment({ commentId: comment.id })).unwrap();
       } catch (err: any) {
         alert(err.message);
       }
-    } else if (type === 'board') {
+    }
+    if (type === 'board') {
       try {
-        await dispatch(removePostComment({ postCommentId: comment.id })).unwrap();
+        await dispatch(deletePostComment({ board: board as string, commentId: comment.id })).unwrap();
       } catch (err: any) {
         alert(err.message);
       }
@@ -49,13 +59,13 @@ function CommentList({ type, comment, index, setCommentIndex, isSelected }: IPro
     <Container>
       <UserBox>
         <UserInfoBox>
-          <Avatar src={comment.user.avatar} size="small" />
+          <Avatar src={comment.user?.avatar} size="small" />
           <Nickname
-            exp={comment.user.exp}
-            userId={comment.user.id}
-            chatId={comment.user.chatId}
-            desc={comment.user.desc}
-            nickname={comment.user.nickname}
+            exp={comment.user?.exp!}
+            userId={comment.user?.id}
+            chatId={comment.user?.chatId}
+            desc={comment.user?.desc}
+            nickname={comment.user?.nickname!}
             dropDown={true}
             size="small"
           />
@@ -65,7 +75,7 @@ function CommentList({ type, comment, index, setCommentIndex, isSelected }: IPro
 
       <ContentBox>
         <Content>{comment.content}</Content>
-        {(user?.id === comment.user.id || user?.role === 'admin') && (
+        {(user?.id === comment.user?.id || user?.role === 'admin') && (
           <ButtonBox>
             <EditButton color="green" size="small" inverse={true} onClick={openEditCommemtForm}>
               수정

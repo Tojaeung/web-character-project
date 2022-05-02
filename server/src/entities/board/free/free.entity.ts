@@ -33,8 +33,8 @@ class Relation {
   imageKeys: ImageKey[];
 }
 
-@Entity({ schema: 'free' })
-class Commission extends Relation {
+@Entity('free', { schema: 'free' })
+class Free extends Relation {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -58,4 +58,4 @@ class Commission extends Relation {
   updated_at: Date;
 }
 
-export default Commission;
+export default Free;

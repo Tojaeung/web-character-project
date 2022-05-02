@@ -13,12 +13,14 @@ function ChangePw() {
   const navigate = useNavigate();
 
   const [currentPw, setCurrentPw] = useState('');
-  const [updatedPw, setUpdatedPw] = useState('');
-  const [updatedPwConfirmation, setUpdatedPwConfirmation] = useState('');
+  const [pw, setPw] = useState('');
+  const [pwConfirmation, setPwConfirmation] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      const res = await dispatch(updatePw({ currentPw, updatedPw, updatedPwConfirmation })).unwrap();
+      const res = await dispatch(
+        updatePw({ currentPw, updatedPw: pw, updatedPwConfirmation: pwConfirmation })
+      ).unwrap();
       alert(res.message);
       await dispatch(closeModal());
       await dispatch(signOut());
@@ -47,13 +49,7 @@ function ChangePw() {
 
       <InputBox>
         <Label htmlFor="pw">변경할 비밀번호</Label>
-        <Input
-          color="green"
-          autoComplete="off"
-          type="password"
-          value={updatedPw}
-          onChange={(e) => setUpdatedPw(e.target.value)}
-        />
+        <Input color="green" autoComplete="off" type="password" value={pw} onChange={(e) => setPw(e.target.value)} />
       </InputBox>
 
       <InputBox>
@@ -62,8 +58,8 @@ function ChangePw() {
           color="green"
           autoComplete="off"
           type="password"
-          value={updatedPwConfirmation}
-          onChange={(e) => setUpdatedPwConfirmation(e.target.value)}
+          value={pwConfirmation}
+          onChange={(e) => setPwConfirmation(e.target.value)}
         />
       </InputBox>
 

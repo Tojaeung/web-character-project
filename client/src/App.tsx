@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 
-import useRefreshLogin from '@src/hook/useRefreshLogin';
-import useSocketSetup from '@src/hook/useSocketSetup';
+import useRefreshLogin from '@src/hooks/useRefreshLogin';
+import useSocketSetup from '@src/hooks/useSocketSetup';
 
 import PublicRouter from '@src/routes/PublicRouter';
 import PrivateRouter from '@src/routes/PrivateRouter';
@@ -57,7 +57,7 @@ function App() {
               </Route>
 
               <Route path="edit">
-                <Route path="postForm/:postId" element={<EditPostForm />} />
+                <Route path="postForm/:board/:postId" element={<EditPostForm />} />
               </Route>
             </Route>
 

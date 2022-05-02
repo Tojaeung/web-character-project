@@ -2,12 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { getDrawings, addDrawingView } from '@src/store/requests/drawing.request';
+import { getDrawings, incrementView } from '@src/store/requests/drawing.request';
 import { selectDrawing, selectDrawingDrawings, selectDrawingIsLoading } from '@src/store/slices/drawing.slice';
 import loading from '@src/assets/images/loading.gif';
-import { useObserver } from '@src/hook/useObserver';
+import { useObserver } from '@src/hooks/useObserver';
 import DrawingModal from '@src/modals/profile/drawing';
-import { useDrawingModal } from '@src/hook/useModal';
+import { useDrawingModal } from '@src/hooks/useModal';
 
 function Drawing() {
   const { profileId } = useParams();
@@ -26,10 +26,8 @@ function Drawing() {
 
   useEffect(() => {
     // cursor가 0 일때는 더이상 drawing 데이터가 없기 때문이다.
-    if (!isVisible || cursor === null) {
-      return;
-    }
-    dispatch(getDrawings({ profileId: Number(profileId), cursor: cursor }))
+    if (!isVisible || cursor === null) return;
+    dispatch(getDrawings({ userId: Number(profileId), cursor: cursor }))
       .unwrap()
       .then((res) => {
         const { newCursor } = res;
@@ -39,7 +37,7 @@ function Drawing() {
 
   const openDrawing = (index: number) => async (e: React.MouseEvent<HTMLLIElement>) => {
     await dispatch(selectDrawing({ selectedIndex: index }));
-    await dispatch(addDrawingView({ drawingId: drawings[index].id }));
+    await dispatch(incrementView({ drawingId: drawings[index].id }));
     openDrawingModal();
   };
 
@@ -54,7 +52,7 @@ function Drawing() {
           ))}
           {isLoading ? <Image src={loading} alt="로딩중..." /> : null}
 
-          <div className="observer" ref={targetRef} />
+          <Observer ref={targetRef} />
         </DrawingBox>
       </Container>
       {showDrawingModal && <DrawingModal isOpen={showDrawingModal} closeModal={closeDrawingModal} />}
@@ -79,6 +77,10 @@ const DrawingBox = styled.ul`
     gap: 1rem;
   }
 `;
+const Observer = styled.div`
+  border: 1px solid ${({ theme }) => theme.palette.white};
+`;
+
 const DrawingList = styled.li`
   cursor: pointer;
 `;

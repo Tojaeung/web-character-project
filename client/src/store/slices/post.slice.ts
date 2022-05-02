@@ -1,17 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
+import _ from 'lodash';
 import type { RootState } from '../app/store';
 import { PostType } from '@src/types';
 import {
-  addView,
+  createPost,
   getPost,
-  addPostComment,
-  removePostComment,
-  editPostComment,
-  addPostLike,
-  addPostDisLike,
-  editPost,
-  removePost,
-} from '@src/store/requests/post.request';
+  updatePost,
+  deletePost,
+  createPostComment,
+  updatePostComment,
+  deletePostComment,
+  createPostLike,
+  createPostDisLike,
+} from '@src/store/requests/board.request';
 
 interface PostSliceType {
   ok: boolean;
@@ -31,12 +32,12 @@ export const postSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(addView.fulfilled, (state, { payload }) => {
+      .addCase(createPost.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-        state.post!.views += 1;
+        state.post = payload.newPostJoinAll;
       })
-      .addCase(addView.rejected, (state, { payload }) => {
+      .addCase(createPost.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
         state.message = payload!.message;
       });
@@ -44,88 +45,85 @@ export const postSlice = createSlice({
       .addCase(getPost.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-        state.post = payload.post;
+        state.post = payload.postJoinAll;
       })
       .addCase(getPost.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
         state.message = payload!.message;
       });
-    builder
-      .addCase(addPostComment.fulfilled, (state, { payload }) => {
-        state.ok = payload.ok;
-        state.message = payload.message;
-        state.post?.postComments.push(payload.newPostComment!);
-      })
-      .addCase(addPostComment.rejected, (state, { payload }) => {
-        state.ok = payload!.ok;
-        state.message = payload!.message;
-      });
-    builder
-      .addCase(removePostComment.fulfilled, (state, { payload }) => {
-        state.ok = payload.ok;
-        state.message = payload.message;
-
-        const filteredComments = state.post?.postComments.filter((comment) => comment.id !== payload.removedCommentId);
-
-        state.post!.postComments = filteredComments!;
-      })
-      .addCase(removePostComment.rejected, (state, { payload }) => {
-        state.ok = payload!.ok;
-        state.message = payload!.message;
-      });
-    builder
-      .addCase(addPostLike.fulfilled, (state, { payload }) => {
-        state.ok = payload.ok;
-        state.message = payload.message;
-        state.post?.likes.push(payload.addedLike!);
-      })
-      .addCase(addPostLike.rejected, (state, { payload }) => {
-        state.ok = payload!.ok;
-        state.message = payload!.message;
-      });
-    builder
-      .addCase(addPostDisLike.fulfilled, (state, { payload }) => {
-        state.ok = payload.ok;
-        state.message = payload.message;
-        state.post?.dislikes.push(payload.addedDisLike!);
-      })
-      .addCase(addPostDisLike.rejected, (state, { payload }) => {
-        state.ok = payload!.ok;
-        state.message = payload!.message;
-      });
 
     builder
-      .addCase(editPostComment.fulfilled, (state, { payload }) => {
+      .addCase(updatePost.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-        state.post?.postComments.map((comment) => {
-          if (comment.id === payload.editedCommentId) {
-            comment.content = payload.editedContent;
-          }
-        });
+        state.post = payload.updatedPostJoinAll;
       })
-      .addCase(editPostComment.rejected, (state, { payload }) => {
-        state.ok = payload!.ok;
-        state.message = payload!.message;
-      });
-
-    builder
-      .addCase(editPost.fulfilled, (state, { payload }) => {
-        state.ok = payload.ok;
-        state.message = payload.message;
-        state.post = payload.editedPost;
-      })
-      .addCase(editPost.rejected, (state, { payload }) => {
+      .addCase(updatePost.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
         state.message = payload!.message;
       });
     builder
-      .addCase(removePost.fulfilled, (state, { payload }) => {
+      .addCase(deletePost.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
         state.post = null;
       })
-      .addCase(removePost.rejected, (state, { payload }) => {
+      .addCase(deletePost.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
+
+    builder
+      .addCase(createPostComment.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.post?.comments?.push(payload.newCommentJoinUser);
+      })
+      .addCase(createPostComment.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
+    builder
+      .addCase(updatePostComment.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.post!.comments = _.map(state.post?.comments, (comment) => {
+          return comment.id === payload.udpatedCommentJoinUser.id ? payload.udpatedCommentJoinUser : comment;
+        });
+      })
+      .addCase(updatePostComment.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
+    builder
+      .addCase(deletePostComment.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.post = _.remove(state.post?.comments, (comment) => {
+          return comment.id === payload.deletedComment.id;
+        });
+      })
+      .addCase(deletePostComment.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
+    builder
+      .addCase(createPostLike.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.post?.likes?.push(payload.newLike);
+      })
+      .addCase(createPostLike.rejected, (state, { payload }) => {
+        state.ok = payload!.ok;
+        state.message = payload!.message;
+      });
+    builder
+      .addCase(createPostDisLike.fulfilled, (state, { payload }) => {
+        state.ok = payload.ok;
+        state.message = payload.message;
+        state.post?.dislikes?.push(payload.newDisLike);
+      })
+      .addCase(createPostDisLike.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
         state.message = payload!.message;
       });

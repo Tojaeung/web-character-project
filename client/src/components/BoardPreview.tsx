@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom';
 import CreatedTime from '@src/components/CreatedTime';
 import Nickname from './Nickname';
 import { PostType } from '@src/types';
-import boardTitle from '@src/utils/boardTitle.util';
+import boardName from '@src/utils/boardName.util';
 
 interface IProps {
-  posts: PostType[] | undefined;
-  board: 'free' | 'drawingCommission' | 'drawingRequest' | 'drawingSale';
+  posts: PostType[];
+  board: 'free' | 'commission' | 'reque' | 'sale';
 }
 
 function BoardPreview({ posts, board }: IProps) {
@@ -18,7 +18,7 @@ function BoardPreview({ posts, board }: IProps) {
       <thead>
         <tr>
           <th>
-            {boardTitle(board)}
+            {boardName(board)}
             <Link to={`/board/${board}`}>
               <ChevronRightIcon />
             </Link>
@@ -32,7 +32,7 @@ function BoardPreview({ posts, board }: IProps) {
               <td>
                 <PostTitle to={`/board/${board}/post/${post.id}`}>{post.title}</PostTitle>
                 <PostUser>
-                  <Nickname exp={post.user.exp} nickname={post.user.nickname} size="small" />
+                  <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} size="small" />
                   <CreatedTime createdTime={post.created_at} size="small" />
                 </PostUser>
               </td>

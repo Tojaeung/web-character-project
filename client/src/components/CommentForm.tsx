@@ -1,37 +1,34 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
-import { selectUserUser } from '@src/store/slices/user.slice';
-import { addDrawingComment } from '@src/store/requests/drawing.request';
-import { addPostComment } from '@src/store/requests/post.request';
+import { useParams } from 'react-router-dom';
+import { useAppDispatch } from '@src/store/app/hook';
+import { createDrawingComment } from '@src/store/requests/drawing.request';
+import { createPostComment } from '@src/store/requests/board.request';
 import Button from '@src/components/Button';
-import { calcExp } from '@src/store/requests/etc.request';
 
 interface IProp {
   type: 'drawing' | 'board';
   entityId: number;
 }
 
-function CommentForm({ entityId, type }: IProp) {
+function CommentForm({ type, entityId }: IProp) {
   const dispatch = useAppDispatch();
-
-  const user = useAppSelector(selectUserUser);
+  const { board } = useParams();
 
   const [content, setContent] = useState('');
 
   const handleAddComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (type === 'drawing') {
       try {
-        await dispatch(addDrawingComment({ userId: user?.id!, drawingId: entityId, content })).unwrap();
-        await dispatch(calcExp({ value: 1 }));
+        await dispatch(createDrawingComment({ drawingId: entityId, content })).unwrap();
         setContent('');
       } catch (err: any) {
         alert(err.message);
       }
-    } else {
+    }
+    if (type === 'board') {
       try {
-        await dispatch(addPostComment({ userId: user?.id!, postId: entityId, content })).unwrap();
-        await dispatch(calcExp({ value: 1 }));
+        await dispatch(createPostComment({ board: board as string, postId: entityId, content })).unwrap();
         setContent('');
       } catch (err: any) {
         alert(err.message);
