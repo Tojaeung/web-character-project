@@ -58,18 +58,18 @@ function Account() {
   };
 
   const handleEditEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    await dispatch(openModal({ mode: 'editEmail' }));
+    await dispatch(openModal({ modal: 'changeEmail' }));
   };
 
   const handleEditNickname = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    await dispatch(openModal({ mode: 'changeNickname' }));
+    await dispatch(openModal({ modal: 'changeNickname' }));
   };
   const handleEditPw = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    await dispatch(openModal({ mode: 'editPw' }));
+    await dispatch(openModal({ modal: 'changePw' }));
   };
 
   const handleDelAccount = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    await dispatch(openModal({ mode: 'delAccount' }));
+    await dispatch(openModal({ modal: 'deleteAccount' }));
   };
 
   return (

@@ -3,12 +3,14 @@ import type { RootState } from '../app/store';
 
 interface ModalType {
   isOpen: boolean;
-  mode: string | undefined;
+  modal: string | null;
+  props: any | null;
 }
 
 const initialState: ModalType = {
   isOpen: false,
-  mode: undefined,
+  modal: null,
+  props: null,
 };
 
 export const modalSlice = createSlice({
@@ -17,12 +19,14 @@ export const modalSlice = createSlice({
   reducers: {
     openModal: (state, action) => {
       state.isOpen = true;
-      state.mode = action.payload.mode;
+      state.modal = action.payload.modal;
+      state.props = action.payload.props;
       document.body.style.overflow = 'hidden'; // 모달 뒤에 화면 고정
     },
     closeModal: (state) => {
       state.isOpen = false;
-      state.mode = undefined;
+      state.modal = null;
+      state.props = null;
       document.body.style.overflow = 'unset'; // 모달 뒤에 화면 고정 해제
     },
   },
@@ -30,6 +34,7 @@ export const modalSlice = createSlice({
 
 export const { openModal, closeModal } = modalSlice.actions;
 export const selectModalIsOpen = (state: RootState) => state.modal.isOpen;
-export const selectModalMode = (state: RootState) => state.modal.mode;
+export const selectModalModal = (state: RootState) => state.modal.modal;
+export const selectModalProps = (state: RootState) => state.modal.props;
 
 export default modalSlice.reducer;

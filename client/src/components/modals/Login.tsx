@@ -30,7 +30,7 @@ function Login() {
 
   const openForgotPw = async (e: React.MouseEvent<HTMLSpanElement>) => {
     await dispatch(closeModal());
-    await dispatch(openModal({ mode: 'findPw' }));
+    await dispatch(openModal({ modal: 'forgotPw' }));
   };
 
   const goSignUp = async (e: React.MouseEvent<HTMLSpanElement>) => {

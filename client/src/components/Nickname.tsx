@@ -4,12 +4,9 @@ import { Link } from 'react-router-dom';
 import getLevel from '@src/utils/exp.util';
 import ChatButton from '@src/components/ChatButton';
 import useDropDown from '@src/hooks/useDropDown';
-import { useUserInfoModal, useDescModal, usePenaltyModal } from '@src/hooks/useModal';
-import Desc from '@src/modals/Desc';
-import UserInfoModal from '@src/modals/UserInfo';
-import { useAppSelector } from '@src/store/app/hook';
+import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { selectUserUser } from '@src/store/slices/user.slice';
-import Penalty from '@src/modals/Penalty';
+import { openModal } from '@src/store/slices/modal.slice';
 
 interface IProps {
   exp: number;
@@ -22,16 +19,25 @@ interface IProps {
 }
 
 function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, size }: IProps) {
+  const dispatch = useAppDispatch();
   const user = useAppSelector(selectUserUser);
-
-  const { showUserInfoModal, openUserInfoModal, closeUserInfoModal } = useUserInfoModal();
-  const { showDescModal, openDescModal, closeDescModal } = useDescModal();
-  const { showPenaltyModal, openPenaltyModal, closePenaltyModal } = usePenaltyModal();
 
   // 드롭다운 메뉴 커스텀 훅
   const [openDropDown, setOpenDropDown] = useState(false);
   const targetRef = useRef<HTMLUListElement>(null);
   useDropDown({ openDropDown, setOpenDropDown, targetRef });
+
+  const openDescModal = async (e: React.MouseEvent<HTMLLIElement>) => {
+    await dispatch(openModal({ modal: 'desc', props: { userId, desc } }));
+  };
+
+  const openPenaltyModal = async (e: React.MouseEvent<HTMLLIElement>) => {
+    await dispatch(openModal({ modal: 'penalty', props: { userId } }));
+  };
+
+  const openUserInfoModal = async (e: React.MouseEvent<HTMLLIElement>) => {
+    await dispatch(openModal({ modal: 'userInfo', props: { userId } }));
+  };
 
   return (
     <>
@@ -61,11 +67,6 @@ function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, size 
           </Dropdown>
         )}
       </Container>
-      {showUserInfoModal && (
-        <UserInfoModal isOpen={showUserInfoModal} closeModal={closeUserInfoModal} userId={userId!} />
-      )}
-      {showDescModal && <Desc isOpen={showDescModal} closeModal={closeDescModal} userId={userId!} desc={desc!} />}
-      {showPenaltyModal && <Penalty isOpen={showPenaltyModal} closeModal={closePenaltyModal} userId={userId!} />}
     </>
   );
 }

@@ -8,8 +8,7 @@ import { selectUserUser } from '@src/store/slices/user.slice';
 import { selectPostPost } from '@src/store/slices/post.slice';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { deletePost } from '@src/store/requests/board.request';
-import ReportModal from '@src/modals/Report';
-import { useReportModal } from '@src/hooks/useModal';
+import { openModal } from '@src/store/slices/modal.slice';
 import MoreButton from '@src/components/MoreButton';
 
 function Header() {
@@ -20,9 +19,6 @@ function Header() {
   const user = useAppSelector(selectUserUser);
   const post = useAppSelector(selectPostPost);
 
-  // 신고하기 모달 커스텀 훅
-  const { showReportModal, openReportModal, closeReportModal } = useReportModal();
-
   // 게시글 삭제
   const handleRemovePost = async (e: any) => {
     try {
@@ -32,6 +28,10 @@ function Header() {
     } catch (err: any) {
       alert(err.message);
     }
+  };
+
+  const openReportModal = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    await dispatch(openModal({ modal: 'report', props: { suspectId: post?.user?.id } }));
   };
 
   return (
@@ -74,9 +74,6 @@ function Header() {
             신고
           </ReportPost>
         </ButtonBox>
-        {showReportModal && (
-          <ReportModal isOpen={showReportModal} closeModal={closeReportModal} suspectId={post?.user?.id!} />
-        )}
 
         <ResponsiveButtonBox>
           <BackBoardIcon onClick={(e) => navigate(`/board/${board}`)} />

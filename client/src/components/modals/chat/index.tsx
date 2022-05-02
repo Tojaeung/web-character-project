@@ -2,8 +2,8 @@ import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { selectChatIsChatUser, selectChatOk } from '@src/store/slices/chat.slice';
 import { useAppSelector } from '@src/store/app/hook';
-import Chatting from '@src/modals/chat/chatting';
-import ChatList from '@src/modals/chat/ChatList';
+import Chatting from '@src/components/modals/chat/chatting';
+import ChatList from '@src/components/modals/chat/ChatList';
 
 function Chat() {
   const chatOk = useAppSelector(selectChatOk);

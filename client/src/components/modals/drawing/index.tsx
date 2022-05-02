@@ -1,26 +1,19 @@
-import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { AiOutlineClose } from 'react-icons/ai';
-import ImageSide from '@src/modals/profile/drawing/ImageSide';
-import Info from '@src/modals/profile/drawing/Info';
+import ImageSide from '@src/components/modals/drawing/ImageSide';
+import Info from '@src/components/modals/drawing/Info';
 import Comment from '@src/components/comment';
 import CommentForm from '@src/components/CommentForm';
 import { useAppSelector } from '@src/store/app/hook';
 import { selectDrawingDrawings, selectDrawingIndex } from '@src/store/slices/drawing.slice';
+import { closeModal } from '@src/store/slices/modal.slice';
 
-interface IProp {
-  isOpen: boolean;
-  closeModal: () => void;
-}
-
-function DrawingModal({ isOpen, closeModal }: IProp) {
+function DrawingModal() {
   const drawings = useAppSelector(selectDrawingDrawings);
   const index = useAppSelector(selectDrawingIndex);
 
-  if (!isOpen) return null;
-  return createPortal(
+  return (
     <Container>
-      <Background onClick={closeModal} />
       <ImageSide />
       <InfoSide>
         <IconBox onClick={closeModal}>
@@ -32,8 +25,7 @@ function DrawingModal({ isOpen, closeModal }: IProp) {
         <CommentForm entityId={drawings[index!]?.id!} type="drawing" />
         <Comment comments={drawings[index!]?.comments!} type="drawing" />
       </InfoSide>
-    </Container>,
-    document.getElementById('modalPortal') as HTMLElement
+    </Container>
   );
 }
 const Container = styled.div`
@@ -50,14 +42,6 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
   }
-`;
-const Background = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
 `;
 const InfoSide = styled.div`
   width: 50rem;

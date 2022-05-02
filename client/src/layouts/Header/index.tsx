@@ -17,7 +17,7 @@ function Header() {
   const user = useAppSelector(selectUserUser);
 
   const openLoginModal = async (e: any) => {
-    await dispatch(openModal({ mode: 'login' }));
+    await dispatch(openModal({ modal: 'login' }));
   };
 
   const [openMobileNav, setOpenMobileNav] = useState(false);

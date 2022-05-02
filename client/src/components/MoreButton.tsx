@@ -3,10 +3,8 @@ import styled from 'styled-components';
 import { AiOutlineMore } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import useDropDown from '@src/hooks/useDropDown';
-import ReportModal from '@src/modals/Report';
-import { useReportModal } from '@src/hooks/useModal';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { closeModal } from '@src/store/slices/modal.slice';
+import { openModal, closeModal } from '@src/store/slices/modal.slice';
 import { selectUserUser } from '@src/store/slices/user.slice';
 
 interface IProps {
@@ -22,9 +20,6 @@ function MoreButton({ type, entityId, userId, handleRemove }: IProps) {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUserUser);
 
-  // 신고하기 모달 커스텀 훅
-  const { showReportModal, openReportModal, closeReportModal } = useReportModal();
-
   // 드롭다운 메뉴 커스텀 훅
   const [openDropDown, setOpenDropDown] = useState(false);
   const targetRef = useRef<HTMLUListElement>(null);
@@ -35,25 +30,25 @@ function MoreButton({ type, entityId, userId, handleRemove }: IProps) {
     await dispatch(closeModal());
     navigate(`/edit/postForm/${entityId}`);
   };
-  return (
-    <>
-      <Container>
-        <MoreIcon onClick={(e) => setOpenDropDown(!openDropDown)} />
-        {openDropDown && (
-          <Dropdown ref={targetRef} onClick={(e) => setOpenDropDown(!openDropDown)}>
-            {(user?.id === userId || user?.role === 'admin') && (
-              <>
-                {type === 'board' && <List onClick={goEdit}>수정</List>}
-                <List onClick={handleRemove}>삭제</List>
-              </>
-            )}
 
-            <List onClick={openReportModal}>신고</List>
-          </Dropdown>
-        )}
-      </Container>
-      {showReportModal && <ReportModal isOpen={showReportModal} closeModal={closeReportModal} suspectId={userId} />}
-    </>
+  const openReportModal = async (e: React.MouseEvent<HTMLLIElement>) => {
+    await dispatch(openModal({ modal: 'report', props: { suspectId: userId } }));
+  };
+  return (
+    <Container>
+      <MoreIcon onClick={(e) => setOpenDropDown(!openDropDown)} />
+      {openDropDown && (
+        <Dropdown ref={targetRef} onClick={(e) => setOpenDropDown(!openDropDown)}>
+          {(user?.id === userId || user?.role === 'admin') && (
+            <>
+              {type === 'board' && <List onClick={goEdit}>수정</List>}
+              <List onClick={handleRemove}>삭제</List>
+            </>
+          )}
+          <List onClick={openReportModal}>신고</List>
+        </Dropdown>
+      )}
+    </Container>
   );
 }
 

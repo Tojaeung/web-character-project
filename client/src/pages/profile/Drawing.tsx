@@ -6,8 +6,7 @@ import { getDrawings, incrementView } from '@src/store/requests/drawing.request'
 import { selectDrawing, selectDrawingDrawings, selectDrawingIsLoading } from '@src/store/slices/drawing.slice';
 import loading from '@src/assets/images/loading.gif';
 import { useObserver } from '@src/hooks/useObserver';
-import DrawingModal from '@src/modals/profile/drawing';
-import { useDrawingModal } from '@src/hooks/useModal';
+import { openModal } from '@src/store/slices/modal.slice';
 
 function Drawing() {
   const { profileId } = useParams();
@@ -15,8 +14,6 @@ function Drawing() {
 
   const isLoading = useAppSelector(selectDrawingIsLoading);
   const drawings = useAppSelector(selectDrawingDrawings);
-
-  const { showDrawingModal, openDrawingModal, closeDrawingModal } = useDrawingModal();
 
   const [cursor, setCursor] = useState<number | null>(0);
 
@@ -38,7 +35,7 @@ function Drawing() {
   const openDrawing = (index: number) => async (e: React.MouseEvent<HTMLLIElement>) => {
     await dispatch(selectDrawing({ selectedIndex: index }));
     await dispatch(incrementView({ drawingId: drawings[index].id }));
-    openDrawingModal();
+    await dispatch(openModal({ modal: 'drawing' }));
   };
 
   return (
@@ -55,7 +52,6 @@ function Drawing() {
           <Observer ref={targetRef} />
         </DrawingBox>
       </Container>
-      {showDrawingModal && <DrawingModal isOpen={showDrawingModal} closeModal={closeDrawingModal} />}
     </>
   );
 }

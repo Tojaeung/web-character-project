@@ -27,7 +27,7 @@ function SignUp() {
   ) => {
     try {
       await dispatch(signUp(data)).unwrap();
-      await dispatch(openModal({ mode: 'signUpGuideModal' }));
+      await dispatch(openModal({ modal: 'signUpGuide' }));
       navigate('/');
     } catch (err: any) {
       alert(err.message);

@@ -7,8 +7,8 @@ import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectChatIsChatUser, selectChatUser, closeChatModal } from '@src/store/slices/chat.slice';
 import { openModal } from '@src/store/slices/modal.slice';
 import Avatar from '@src/components/Avatar';
-import ChatBody from '@src/modals/chat/chatting/ChatBody';
-import ChatForm from '@src/modals/chat/chatting/ChatForm';
+import ChatBody from '@src/components/modals/chat/chatting/ChatBody';
+import ChatForm from '@src/components/modals/chat/chatting/ChatForm';
 
 function Chatting() {
   const dispatch = useAppDispatch();
@@ -21,7 +21,7 @@ function Chatting() {
 
   const exitChat = async (e: React.MouseEvent<SVGElement>) => {
     if (!isChatUser) return alert('나가고 싶은 채팅방을 선택해주세요.');
-    await dispatch(openModal({ mode: 'exitChat' }));
+    await dispatch(openModal({ modal: 'exitChat' }));
   };
 
   const closeChat = async (e: React.MouseEvent<SVGElement>) => {

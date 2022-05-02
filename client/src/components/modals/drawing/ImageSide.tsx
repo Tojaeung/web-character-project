@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
