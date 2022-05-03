@@ -99,7 +99,7 @@ export const updateEmail = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_EMAIL', async (data, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/users/verify-email`, data, {
+    const res = await axios.patch(`/api/me/verify-email`, data, {
       withCredentials: true,
     });
     return res.data;
@@ -114,7 +114,7 @@ export const updateNickname = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_NICKNAME', async (data, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/users/nickname`, data, {
+    const res = await axios.patch(`/api/me/nickname`, data, {
       withCredentials: true,
     });
     return res.data;
@@ -129,7 +129,7 @@ export const updatePw = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_PW', async (data, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/users/nickname`, data, {
+    const res = await axios.patch(`/api/me/nickname`, data, {
       withCredentials: true,
     });
     return res.data;
@@ -144,7 +144,7 @@ export const updateDesc = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_DESC', async (data, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/users/desc`, data, {
+    const res = await axios.patch(`/api/me/desc`, data, {
       withCredentials: true,
     });
     return res.data;
@@ -159,7 +159,7 @@ export const updateAvatar = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_AVATAR', async (data, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/users/avatar`, data, {
+    const res = await axios.patch(`/api/me/avatar`, data, {
       withCredentials: true,
     });
     return res.data;
@@ -174,7 +174,7 @@ export const updateDefaultAvatar = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_DEFAULT_AVATAR', async (_, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/users/default-avatar`, {
+    const res = await axios.patch(`/api/me/default-avatar`, {
       withCredentials: true,
     });
     return res.data;
@@ -189,7 +189,7 @@ export const updateCover = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_COVER', async (data, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/users/cover`, data, {
+    const res = await axios.patch(`/api/me/cover`, data, {
       withCredentials: true,
     });
     return res.data;
@@ -204,7 +204,7 @@ export const updateDefaultCover = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_DEFAULT_COVER', async (_, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/users/default-cover`, {
+    const res = await axios.patch(`/api/me/default-cover`, {
       withCredentials: true,
     });
     return res.data;
@@ -219,7 +219,7 @@ export const deleteAccount = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('DELETE_ACCOUNT', async (_, thunkApi) => {
   try {
-    const res = await axios.delete(`/api/users`, {
+    const res = await axios.delete(`/api/me`, {
       withCredentials: true,
     });
     return res.data;
