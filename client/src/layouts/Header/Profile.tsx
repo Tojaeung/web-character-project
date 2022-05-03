@@ -86,7 +86,7 @@ const AvatarBox = styled.div`
 
 const DropDown = styled.ul`
   position: absolute;
-  width: 20rem;
+  width: 17rem;
   top: 5rem;
   right: 0.5rem;
   font-size: 1.7rem;
@@ -95,8 +95,9 @@ const DropDown = styled.ul`
   background: ${({ theme }) => theme.palette.bgColor};
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
   @media ${({ theme }) => theme.device.mobile} {
-    top: -30rem;
-    right: -1rem;
+    width: 13rem;
+    font-size: 1.5rem;
+    top: 4.5rem;
   }
 `;
 
@@ -123,17 +124,29 @@ const List = styled.li`
 
 const ProfileIcon = styled(CgProfile)`
   font-size: 2.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 2rem;
+  }
 `;
 const BellIcon = styled(BsBell)`
   font-size: 2.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 2rem;
+  }
 `;
 
 const SettingsIcon = styled(FiSettings)`
   font-size: 2.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 2rem;
+  }
 `;
 
 const LogOutIcon = styled(FiLogOut)`
   font-size: 2.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 2rem;
+  }
 `;
 
 const GoProfile = styled.a`
