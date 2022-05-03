@@ -57,16 +57,36 @@ export const getBoard = async (req: Request, res: Response): Promise<any> => {
   let totalPostsNum;
 
   if (board === 'free') {
-    posts = await getRepository(Free).find({ order: { id: 'DESC' }, skip: offset, take: Number(limit), relations: ['user'] });
+    posts = await getRepository(Free).find({
+      order: { id: 'DESC' },
+      skip: offset,
+      take: Number(limit),
+      relations: ['user'],
+    });
     totalPostsNum = await getRepository(Free).count();
   } else if (board === 'commission') {
-    posts = await getRepository(Commission).find({ order: { id: 'DESC' }, skip: offset, take: Number(limit), relations: ['user'] });
+    posts = await getRepository(Commission).find({
+      order: { id: 'DESC' },
+      skip: offset,
+      take: Number(limit),
+      relations: ['user'],
+    });
     totalPostsNum = await getRepository(Commission).count();
   } else if (board === 'reque') {
-    posts = await getRepository(Reque).find({ order: { id: 'DESC' }, skip: offset, take: Number(limit), relations: ['user'] });
+    posts = await getRepository(Reque).find({
+      order: { id: 'DESC' },
+      skip: offset,
+      take: Number(limit),
+      relations: ['user'],
+    });
     totalPostsNum = await getRepository(Reque).count();
   } else if (board === 'sale') {
-    posts = await getRepository(Sale).find({ order: { id: 'DESC' }, skip: offset, take: Number(limit), relations: ['user'] });
+    posts = await getRepository(Sale).find({
+      order: { id: 'DESC' },
+      skip: offset,
+      take: Number(limit),
+      relations: ['user'],
+    });
     totalPostsNum = await getRepository(Sale).count();
   } else {
     logger.warn('존재하지 않는 게시판을 가져오려는 시도가 있습니다.');
@@ -245,6 +265,8 @@ export const createComment = async (req: Request, res: Response): Promise<any> =
   const id = req.session.user?.id!;
   const { board, postId } = req.params;
   const { content } = req.body;
+
+  console.log(typeof content);
 
   let newCommentJoinUser;
   if (board === 'free') {

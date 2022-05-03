@@ -20,18 +20,22 @@ function CommentForm({ type, entityId }: IProp) {
   const handleAddComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (type === 'drawing') {
       try {
-        await dispatch(createDrawingComment({ drawingId: entityId, content })).unwrap();
+        const res = await dispatch(createDrawingComment({ drawingId: entityId, content })).unwrap();
+        alert(res.message);
         setContent('');
       } catch (err: any) {
         alert(err.message);
+        setContent('');
       }
     }
     if (type === 'board') {
       try {
-        await dispatch(createPostComment({ board: board as string, postId: entityId, content })).unwrap();
+        const res = await dispatch(createPostComment({ board: board as string, postId: entityId, content })).unwrap();
+        alert(res.message);
         setContent('');
       } catch (err: any) {
         alert(err.message);
+        setContent('');
       }
     }
   };
