@@ -8,7 +8,7 @@ import socket from '@src/utils/socket';
 import { selectUserUser } from '@src/store/slices/user.slice';
 import { selectChatIsChatUser, selectMessages } from '@src/store/slices/chat.slice';
 import { useAppSelector } from '@src/store/app/hook';
-import Input from '@src/components/Input';
+import { greenInputStyle } from '@src/styles/input.style';
 import { greenButtonStyle } from '@src/styles/button.style';
 
 function ChatForm() {
@@ -113,6 +113,11 @@ const CameraIcon = styled(AiOutlineCamera)`
   font-size: 4rem;
   cursor: pointer;
 `;
+
+const Input = styled.input`
+  ${greenInputStyle};
+`;
+
 const SendButton = styled.button`
   ${greenButtonStyle};
   display: flex;

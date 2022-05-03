@@ -5,7 +5,7 @@ import socket from '@src/utils/socket';
 import { signOut } from '@src/store/requests/session.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
-import Input from '@src/components/Input';
+import { greenInputStyle } from '@src/styles/input.style';
 import { deleteAccount } from '@src/store/requests/user.request';
 
 function DeleteAccount() {
@@ -48,20 +48,29 @@ function DeleteAccount() {
 }
 
 const Container = styled.div`
-  width: 40rem;
+  width: 35rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 2rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 25rem;
+    gap: 1rem;
+  }
 `;
 const Title = styled.h2`
   align-self: flex-start;
+  font-size: 2rem;
+  font-weight: 700;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.5rem;
+  }
 `;
 const WarningBox = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   border-top: 1px dotted;
   border-bottom: 1px dotted;
@@ -72,12 +81,28 @@ const WarnIcon = styled(AiOutlineWarning)`
   font-size: 4rem;
   color: red;
 `;
-const WarningText = styled.p``;
-const GuideText = styled.p``;
+const WarningText = styled.p`
+  font-size: 1.3rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
+`;
+const GuideText = styled.p`
+  font-size: 1.3rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
+`;
+
+const Input = styled.input`
+  ${greenInputStyle};
+`;
+
 const SubmitButton = styled.button`
+  width: 50%;
   border: 0;
   outline: 0;
-  padding: 1rem 2rem;
+  padding: 1rem 0rem;
   border-radius: 5px;
   color: ${({ theme }) => theme.palette.white};
   font-weight: bold;
@@ -88,6 +113,10 @@ const SubmitButton = styled.button`
     padding: 1rem 2rem;
     border-radius: 5px;
     background-color: ${({ theme }) => theme.palette.gray};
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.7rem 1rem;
+    font-size: 1.2rem;
   }
 `;
 

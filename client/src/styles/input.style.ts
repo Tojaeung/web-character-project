@@ -13,6 +13,13 @@ export const greenInputStyle = css`
   &::placeholder {
     font-size: 1.4rem;
   }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+    &::placeholder {
+      font-size: 1.2rem;
+    }
+  }
 `;
 export const defaultInputStyle = css`
   border-radius: 5px;
@@ -23,5 +30,12 @@ export const defaultInputStyle = css`
   border: 2px solid ${({ theme }) => theme.palette.gray};
   &::placeholder {
     font-size: 1.4rem;
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+    &::placeholder {
+      font-size: 1.2rem;
+    }
   }
 `;

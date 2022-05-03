@@ -111,7 +111,7 @@ function Account() {
 
         <EditBox>
           <Title>계정탈퇴</Title>
-          <EditButton onClick={handleDelAccount}>탈퇴하기</EditButton>
+          <DeleteAccountButton onClick={handleDelAccount}>탈퇴하기</DeleteAccountButton>
         </EditBox>
       </Container>
     </>
@@ -146,6 +146,14 @@ const ButtonBox = styled.div`
 `;
 const EditButton = styled.button`
   ${greenButtonStyle};
+  padding: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.5rem;
+    font-size: 1.2rem;
+  }
+`;
+const DeleteAccountButton = styled.button`
+  ${redButtonStyle};
   padding: 1rem;
   @media ${({ theme }) => theme.device.mobile} {
     padding: 0.5rem;

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AiOutlineMail } from 'react-icons/ai';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
-import Input from '@src/components/Input';
+import { greenInputStyle } from '@src/styles/input.style';
 import { greenButtonStyle } from '@src/styles/button.style';
 import { forgotPw } from '@src/store/requests/user.request';
 
@@ -33,9 +33,7 @@ function ForgotPw() {
         기업이름에 가입한 이메일을 정확히 입력해 주세요.🌙 이메일을 통해 비밀번호 수정 링크가 전송됩니다.🌤
       </Content>
       <InputBox>
-        <Label htmlFor="email">이메일</Label>
         <Input
-          color="green"
           type="text"
           placeholder="이메일 (email@xxxxx.com)"
           autoComplete="off"
@@ -57,6 +55,7 @@ const Form = styled.form`
   gap: 2rem;
   @media ${({ theme }) => theme.device.mobile} {
     width: 25rem;
+    gap: 1rem;
   }
 `;
 const Title = styled.h2`
@@ -80,27 +79,25 @@ const InputBox = styled.div`
   align-items: center;
   gap: 1rem;
 `;
-const Label = styled.label`
-  font-size: 1.5rem;
-  align-self: flex-start;
-  white-space: nowrap;
-  @media ${({ theme }) => theme.device.mobile} {
-    font-size: 1.2rem;
-  }
+
+const Input = styled.input`
+  ${greenInputStyle};
 `;
 
 const MailIcon = styled(AiOutlineMail)`
   position: absolute;
   font-size: 2rem;
-  top: 3.5rem;
+  top: 1rem;
   right: 1.5rem;
 `;
 const SubmitButton = styled.button`
+  align-self: center;
   ${greenButtonStyle};
-  width: 100%;
+  width: 50%;
   padding: 1rem 0;
   @media ${({ theme }) => theme.device.mobile} {
-    padding: 0.5rem 0;
+    font-size: 1.2rem;
+    padding: 0.7rem 1rem;
   }
 `;
 

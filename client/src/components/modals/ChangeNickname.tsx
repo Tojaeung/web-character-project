@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { AiOutlineUser } from 'react-icons/ai';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
-import Input from '@src/components/Input';
+import { greenInputStyle } from '@src/styles/input.style';
 import { greenButtonStyle } from '@src/styles/button.style';
 import { updateNickname } from '@src/store/requests/user.request';
 
@@ -28,7 +28,6 @@ function ChangeNickname() {
       <Content>변경할 닉네임을 입력해주세요.😮😮</Content>
       <InputBox>
         <Input
-          color="green"
           type="text"
           placeholder="닉네임"
           autoComplete="off"
@@ -44,20 +43,31 @@ function ChangeNickname() {
 }
 
 const Form = styled.form`
-  width: 32rem;
+  width: 35rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 2rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 25rem;
+    gap: 1rem;
+  }
 `;
 const Title = styled.h1`
   align-self: flex-start;
   font-size: 2rem;
   font-weight: 700;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.5rem;
+  }
 `;
 const Content = styled.p`
   font-size: 1.5rem;
+  align-self: flex-start;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
 `;
 const InputBox = styled.div`
   position: relative;
@@ -67,7 +77,9 @@ const InputBox = styled.div`
   align-items: center;
   gap: 1rem;
 `;
-
+const Input = styled.input`
+  ${greenInputStyle};
+`;
 const UserIcon = styled(AiOutlineUser)`
   position: absolute;
   font-size: 2rem;
@@ -77,8 +89,12 @@ const UserIcon = styled(AiOutlineUser)`
 
 const SubmitButton = styled.button`
   ${greenButtonStyle};
-  width: 100%;
+  width: 50%;
   padding: 1rem 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+    padding: 0.7rem 1rem;
+  }
 `;
 
 export default ChangeNickname;

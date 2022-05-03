@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import styled from 'styled-components';
 import { AiOutlineUser, AiOutlineEye, AiOutlineMail, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { greenInputStyle } from '@src/styles/input.style';
 import { greenButtonStyle } from '@src/styles/button.style';
 import { useNavigate } from 'react-router-dom';
 import { openModal } from '@src/store/slices/modal.slice';
@@ -42,7 +43,7 @@ function SignUp() {
         <Label htmlFor="email">이메일</Label>
         <Input
           type="text"
-          placeholder="이메일 (email@xxxxx.com)"
+          placeholder="이메일 (홍길동@xxxxx.com)"
           autoComplete="off"
           style={{ borderColor: errors.email && 'red' }}
           {...register('email', {
@@ -154,20 +155,7 @@ const Label = styled.label`
   white-space: nowrap;
 `;
 const Input = styled.input`
-  padding: 0 4rem 0 1rem;
-  border-radius: 5px;
-  width: 100%;
-  min-height: 4rem;
-  font-size: 1.4rem;
-  letter-spacing: 0.15rem;
-  outline: none;
-  border: 1px solid ${({ theme }) => theme.palette.borderColor};
-  &:focus {
-    border: 1px solid ${({ theme }) => theme.palette.green};
-  }
-  &::placeholder {
-    font-size: 1.4rem;
-  }
+  ${greenInputStyle};
 `;
 const ErrorMessage = styled.p`
   font-size: 1.2rem;
@@ -179,11 +167,11 @@ const ErrorMessage = styled.p`
 const MailIcon = styled(AiOutlineMail)`
   position: absolute;
   font-size: 2rem;
-  top: 3.5rem;
+  top: 3.7rem;
   right: 1.5rem;
 `;
 const UserIcon = styled(AiOutlineUser)`
-  top: 3.5rem;
+  top: 3.7rem;
   right: 1.5rem;
   font-size: 2rem;
   position: absolute;
@@ -191,21 +179,20 @@ const UserIcon = styled(AiOutlineUser)`
 const ShowPwIcon = styled(AiOutlineEye)`
   position: absolute;
   font-size: 2rem;
-  top: 3.5rem;
+  top: 3.7rem;
   right: 1.5rem;
 `;
 const HidePwIcon = styled(AiOutlineEyeInvisible)`
   position: absolute;
   font-size: 2rem;
-  top: 3.5rem;
+  top: 3.7rem;
   right: 1.5rem;
 `;
 
 const SubmitButton = styled.button`
   width: 100%;
-  padding: 1.2rem 0rem;
-  font-size: 1.4rem;
-  ${greenButtonStyle}
+  padding: 1rem 0rem;
+  ${greenButtonStyle};
 `;
 
 export default SignUp;

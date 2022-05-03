@@ -6,7 +6,7 @@ import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
 import { signOut } from '@src/store/requests/session.request';
 import { updateEmail } from '@src/store/requests/user.request';
-import Input from '@src/components/Input';
+import { greenInputStyle } from '@src/styles/input.style';
 import { greenButtonStyle } from '@src/styles/button.style';
 
 function ChangeEmail() {
@@ -37,7 +37,6 @@ function ChangeEmail() {
       </Content>
       <InputBox>
         <Input
-          color="green"
           type="text"
           placeholder="이메일 (email@xxxxx.com)"
           autoComplete="off"
@@ -52,21 +51,32 @@ function ChangeEmail() {
   );
 }
 const Form = styled.form`
-  width: 32rem;
+  width: 35rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 2rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 25rem;
+    gap: 1rem;
+  }
 `;
 
 const Title = styled.h1`
   align-self: flex-start;
   font-size: 2rem;
   font-weight: 700;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.5rem;
+  }
 `;
 const Content = styled.p`
   font-size: 1.5rem;
+  align-self: flex-start;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
 `;
 const InputBox = styled.div`
   position: relative;
@@ -75,6 +85,10 @@ const InputBox = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+`;
+
+const Input = styled.input`
+  ${greenInputStyle};
 `;
 
 const MailIcon = styled(AiOutlineMail)`
@@ -86,8 +100,12 @@ const MailIcon = styled(AiOutlineMail)`
 
 const SubmitButton = styled.button`
   ${greenButtonStyle};
-  width: 100%;
+  width: 50%;
   padding: 1rem 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.7rem 1rem;
+    font-size: 1.2rem;
+  }
 `;
 
 export default ChangeEmail;

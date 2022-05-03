@@ -5,7 +5,7 @@ import { AiOutlineEye, AiOutlineMail, AiOutlineEyeInvisible } from 'react-icons/
 import { signIn } from '@src/store/requests/session.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { openModal, closeModal } from '@src/store/slices/modal.slice';
-import Input from '@src/components/Input';
+import { greenInputStyle } from '@src/styles/input.style';
 import { greenButtonStyle } from '@src/styles/button.style';
 import socket from '@src/utils/socket';
 
@@ -47,7 +47,7 @@ function Login() {
         <Input
           color="green"
           type="text"
-          placeholder="이메일 (email@xxxxx.com)"
+          placeholder="홍길동@xxxxx.com"
           autoComplete="off"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -60,7 +60,7 @@ function Login() {
         <Input
           color="green"
           type={hidePw ? 'password' : 'text'}
-          placeholder="영문,숫자.특수문자 조합하여 8자리 이상"
+          placeholder="영문,숫자.특수문자 조합 8자리 이상"
           autoComplete="off"
           value={pw}
           onChange={(e) => setPw(e.target.value)}
@@ -80,12 +80,15 @@ function Login() {
 }
 
 const Form = styled.form`
-  width: 28rem;
+  width: 25rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 2.5rem;
+  gap: 1.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    gap: 1rem;
+  }
 `;
 const Logo = styled.h1``;
 
@@ -98,27 +101,37 @@ const InputBox = styled.div`
   gap: 1rem;
 `;
 const Label = styled.label`
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   align-self: flex-start;
   white-space: nowrap;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
+`;
+
+const Input = styled.input`
+  ${greenInputStyle};
+  &::placeholder {
+    font-size: 1.2rem;
+  }
 `;
 
 const MailIcon = styled(AiOutlineMail)`
   position: absolute;
   font-size: 2rem;
-  top: 3.5rem;
+  top: 3.7rem;
   right: 1.5rem;
 `;
 const ShowPwIcon = styled(AiOutlineEye)`
   position: absolute;
   font-size: 2rem;
-  top: 3.5rem;
+  top: 3.7rem;
   right: 1.5rem;
 `;
 const HidePwIcon = styled(AiOutlineEyeInvisible)`
   position: absolute;
   font-size: 2rem;
-  top: 3.5rem;
+  top: 3.7rem;
   right: 1.5rem;
 `;
 
@@ -127,6 +140,9 @@ const SubmitButton = styled.button`
   width: 100%;
   padding: 1rem 0;
   font-size: 1.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
 `;
 
 const GuideBox = styled.div`
@@ -140,6 +156,9 @@ const FindPw = styled.span`
   &:hover {
     text-decoration: underline;
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
 `;
 
 const Boundary = styled.span``;
@@ -148,6 +167,9 @@ const SignUp = styled.span`
   cursor: pointer;
   &:hover {
     text-decoration: underline;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
   }
 `;
 

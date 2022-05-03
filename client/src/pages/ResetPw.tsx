@@ -5,7 +5,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { greenButtonStyle } from '@src/styles/button.style';
 import { useAppDispatch } from '@src/store/app/hook';
 import { resetPw } from '@src/store/requests/user.request';
-import Input from '@src/components/Input';
+import { greenInputStyle } from '@src/styles/input.style';
 
 function ResetPw() {
   const navigate = useNavigate();
@@ -37,9 +37,7 @@ function ResetPw() {
       <Content>변경할 비밀번호를 입력해주세요. 🔐</Content>
 
       <InputBox>
-        <Label htmlFor="pw">새 비밀번호</Label>
         <Input
-          color="green"
           type={hidePw ? 'password' : 'text'}
           placeholder="새 비밀번호"
           autoComplete="off"
@@ -50,9 +48,7 @@ function ResetPw() {
       </InputBox>
 
       <InputBox>
-        <Label htmlFor="pwConfirmation">비밀번호 확인</Label>
         <Input
-          color="green"
           type={hidePwConfirmation ? 'password' : 'text'}
           placeholder="새 비밀번호 확인"
           autoComplete="off"
@@ -87,9 +83,9 @@ const Logo = styled.span`
 `;
 const Content = styled.p`
   align-self: flex-start;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 `;
 const InputBox = styled.div`
@@ -100,24 +96,21 @@ const InputBox = styled.div`
   align-items: center;
   gap: 1rem;
 `;
-const Label = styled.label`
-  font-size: 1.5rem;
-  align-self: flex-start;
-  white-space: nowrap;
-  @media ${({ theme }) => theme.device.mobile} {
-    font-size: 1.2rem;
-  }
+
+const Input = styled.input`
+  ${greenInputStyle};
 `;
+
 const ShowPwIcon = styled(AiOutlineEye)`
   position: absolute;
   font-size: 2rem;
-  top: 3.5rem;
+  top: 1rem;
   right: 1.5rem;
 `;
 const HidePwIcon = styled(AiOutlineEyeInvisible)`
   position: absolute;
   font-size: 2rem;
-  top: 3.5rem;
+  top: 1rem;
   right: 1.5rem;
 `;
 
@@ -126,9 +119,7 @@ const SubmitButton = styled.button`
   width: 100%;
   padding: 1rem 0;
   @media ${({ theme }) => theme.device.mobile} {
-    width: 50%;
     font-size: 1.2rem;
-    padding: 0.7rem 0;
   }
 `;
 
