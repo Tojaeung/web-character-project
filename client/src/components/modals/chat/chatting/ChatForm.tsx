@@ -86,6 +86,7 @@ function ChatForm() {
 
       <Input
         type="text"
+        placeholder="메세지를 입력하세요..."
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         onKeyPress={(e) => e.key === 'Enter' && onSendTextMsg(e)}
@@ -105,6 +106,8 @@ const Container = styled.div`
   gap: 1rem;
   background-color: ${({ theme }) => theme.palette.bgColor};
   border-top: 1px solid ${({ theme }) => theme.palette.gray};
+  min-height: 5rem;
+  max-height: 5rem;
 `;
 const FileInput = styled.input`
   display: none;

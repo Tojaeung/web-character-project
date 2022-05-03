@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { AiOutlineClose } from 'react-icons/ai';
 import { IoIosArrowBack } from 'react-icons/io';
@@ -53,6 +53,9 @@ const Container = styled.div`
   flex-direction: column;
   min-height: 70rem;
   justify-content: space-between;
+  @media ${({ theme }) => theme.device.mobile} {
+    min-height: 50rem;
+  }
 `;
 const Header = styled.div`
   display: flex;
@@ -67,7 +70,11 @@ const FlexBox = styled.div`
   align-items: center;
 `;
 const Nickname = styled.span`
+  font-size: 1.5rem;
   font-weight: bold;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.3rem;
+  }
 `;
 const CloseIcon = styled(AiOutlineClose)`
   font-size: 2rem;

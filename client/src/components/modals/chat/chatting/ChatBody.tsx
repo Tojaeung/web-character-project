@@ -54,6 +54,10 @@ const Container = styled.div`
   min-height: 60rem;
   max-height: 60rem;
   overflow-y: scroll;
+  @media ${({ theme }) => theme.device.mobile} {
+    min-height: 40rem;
+    max-height: 40rem;
+  }
 `;
 const MessageBox = styled.div<{ who: string; isEndMessage: boolean }>`
   border: 1px solid;
@@ -86,7 +90,7 @@ const MessageBox = styled.div<{ who: string; isEndMessage: boolean }>`
   }}
 `;
 const Message = styled.div<{ who: string; isEndMessage: boolean }>`
-  padding: 1rem;
+  padding: 0.8rem;
   display: flex;
   border-radius: 10px;
   ${({ who }) => {
@@ -111,11 +115,17 @@ const Message = styled.div<{ who: string; isEndMessage: boolean }>`
       `;
     }
   }}
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.6rem;
+  }
 `;
 const TextMessage = styled.div`
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   white-space: pre-wrap;
   word-break: break-all;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
 `;
 const Image = styled.img``;
 

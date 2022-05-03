@@ -79,7 +79,11 @@ const Header = styled.div`
   background-color: ${({ theme }) => theme.palette.bgColor};
 `;
 const Topic = styled.span`
+  font-size: 1.5rem;
   font-weight: bold;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.3rem;
+  }
 `;
 
 const CloseIcon = styled(AiOutlineClose)`
@@ -97,7 +101,6 @@ const ListBox = styled.li`
   gap: 1rem;
   padding: 1rem;
   cursor: pointer;
-  border-radius: 5px;
   text-overflow: ellipsis;
   &:hover {
     background-color: ${({ theme }) => theme.palette.gray};
@@ -107,6 +110,10 @@ const ListBox = styled.li`
 const GuideText = styled.p`
   text-align: center;
   margin-top: 5rem;
+  font-size: 1.4rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
 `;
 const ChatUser = styled.div`
   display: flex;
@@ -115,11 +122,14 @@ const ChatUser = styled.div`
 const FlexBox = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
   max-width: 12rem;
 `;
 const Nickname = styled.span`
+  font-size: 1.4rem;
   font-weight: bold;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.3rem;
+  }
 `;
 const LastMessage = styled.span`
   overflow: hidden;

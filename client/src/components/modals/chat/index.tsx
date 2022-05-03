@@ -25,10 +25,10 @@ const Container = styled.div`
   border-radius: 10px;
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
   background-color: ${({ theme }) => theme.palette.bgColor};
-  z-index: 999;
+  z-index: 1020;
   @media ${({ theme }) => theme.device.mobile} {
-    bottom: 5rem;
     right: 0;
+    width: 100%;
     height: 50rem;
   }
 `;

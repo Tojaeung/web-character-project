@@ -54,6 +54,9 @@ const NotiBox = styled.div`
 `;
 const ChatIcon = styled(BsChatLeftText)`
   font-size: 2.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 2rem;
+  }
 `;
 
 export default Chat;
