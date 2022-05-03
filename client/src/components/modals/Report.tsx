@@ -26,7 +26,7 @@ function Report({ props }: IProp) {
       alert(res.message);
       setReportType('');
       setReport('');
-      closeModal();
+      await dispatch(closeModal());
     } catch (err: any) {
       alert(err.message);
     }

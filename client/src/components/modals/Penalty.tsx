@@ -15,7 +15,7 @@ function Penalty({ props }: IProp) {
   const [penaltyPeriod, setPenaltyPeriod] = useState('');
 
   const handelPanelty = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    closeModal();
+    await dispatch(closeModal());
     setPenaltyPeriod('');
     try {
       const res = await dispatch(
