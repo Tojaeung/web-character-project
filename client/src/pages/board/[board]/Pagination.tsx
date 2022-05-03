@@ -15,7 +15,7 @@ function Pagination({ total, page, setPage, limit }: IProps) {
   const { board } = useParams();
 
   // 페이지 수 범위
-  const pageRange = 10;
+  const pageRange = 5;
   // 전체 페이지 수
   const pageNum = Math.ceil(total / limit);
 
@@ -31,6 +31,7 @@ function Pagination({ total, page, setPage, limit }: IProps) {
     }
 
     setPage(page - 1);
+    navigate(`/board/${board}?page=${page - 1}&limit=${limit}`);
   };
 
   const handleNext = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -39,6 +40,7 @@ function Pagination({ total, page, setPage, limit }: IProps) {
       setMaxPageLimit(maxPageLimit + pageRange);
     }
     setPage(page + 1);
+    navigate(`/board/${board}?page=${page + 1}&limit=${limit}`);
   };
 
   const goPage = (index: number) => (e: React.MouseEvent<HTMLButtonElement>) => {

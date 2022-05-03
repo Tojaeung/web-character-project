@@ -16,7 +16,6 @@ import { PostType } from '@src/types';
 
 function Board() {
   const dispatch = useAppDispatch();
-
   const location = useLocation();
   const navigate = useNavigate();
   const { board } = useParams();
@@ -40,7 +39,7 @@ function Board() {
         setPosts(posts);
         setTotalPostsNum(totalPostsNum);
       });
-  }, [location.search, board]);
+  }, [dispatch, location.search, board]);
 
   // 스크롤 맨위로
   const goTop = (e: React.MouseEvent<HTMLButtonElement>) => {

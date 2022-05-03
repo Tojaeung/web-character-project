@@ -9,10 +9,10 @@ interface IProps {
 }
 
 function Pagination({ total, page, setPage }: IProps) {
+  // 댓글표시 제한 수
+  const limit = 20;
   // 페이지 수 범위
   const pageRange = 5;
-  // 보여지는 게시물 수
-  const limit = 20;
   // 전체 페이지 수
   const pageNum = Math.ceil(total / limit);
   // 페이지 수 범위에서 가장 작은 수
@@ -51,7 +51,9 @@ function Pagination({ total, page, setPage }: IProps) {
               <PageButton
                 key={v4()}
                 isSelected={page === index + minPageLimit + 1 ? true : false}
-                onClick={(e) => setPage(index + minPageLimit + 1)}
+                onClick={(e) => {
+                  setPage(index + minPageLimit + 1);
+                }}
               >
                 {index + minPageLimit + 1}
               </PageButton>

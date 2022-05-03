@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface IProp {
   setPage: React.Dispatch<React.SetStateAction<number>>;
@@ -8,16 +9,20 @@ interface IProp {
 }
 
 function LimitSelector({ setPage, limit, setLimit }: IProp) {
+  const navigate = useNavigate();
+  const { board } = useParams();
+
   const selectPostNum = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLimit(Number(e.target.value));
     setPage(1);
+    navigate(`/board/${board}?page=${1}&limit=${Number(e.target.value)}`);
   };
 
   return (
     <Container>
       <Label htmlFor="postNum">게시물 수</Label>
       <Select name="postNum" value={limit} onChange={selectPostNum}>
-        <Option defaultValue={10}>10개</Option>
+        <Option value={10}>10개</Option>
         <Option value={20}>20개</Option>
         <Option value={30}>30개</Option>
       </Select>
