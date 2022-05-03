@@ -29,7 +29,7 @@ function DrawingForm() {
     setPreview(fileUrl);
   };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     // submit 페이지 초기화 방지
     e.preventDefault();
     if (!drawing) return alert('그림파일을 업로드 하지 않았습니다.');
@@ -72,7 +72,7 @@ function DrawingForm() {
         )}
       </Drawing>
 
-      <Form onSubmit={onSubmit}>
+      <Form onSubmit={handleSubmit}>
         <ReactQuill
           className="ql-editor"
           value={content}

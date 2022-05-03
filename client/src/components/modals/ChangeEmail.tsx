@@ -16,6 +16,7 @@ function ChangeEmail() {
   const [email, setEmail] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       const res = await dispatch(updateEmail({ updatedEmail: email })).unwrap();
       alert(res.message);

@@ -13,6 +13,7 @@ function ChangeNickname() {
   const [nickname, setNickname] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       const res = await dispatch(updateNickname({ updatedNickname: nickname })).unwrap();
       alert(res.message);

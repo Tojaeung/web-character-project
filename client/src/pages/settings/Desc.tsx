@@ -15,7 +15,8 @@ function Desc() {
   const [defaultModules] = useDefaultConfig();
   const [updatedDesc, setUpdatedDesc] = useState('');
 
-  const onSubmitDesc = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     try {
       const res = await dispatch(updateDesc({ updatedDesc })).unwrap();
       alert(res.message);
@@ -42,7 +43,7 @@ function Desc() {
         placeholder="내용을 입력하세요....(최대 1000글자)"
       />
       <ButtonBox>
-        <SubmitButton onClick={onSubmitDesc}>확인</SubmitButton>
+        <SubmitButton onClick={handleSubmit}>확인</SubmitButton>
         <CancelButton onClick={onCancel}>취소</CancelButton>
       </ButtonBox>
     </Container>

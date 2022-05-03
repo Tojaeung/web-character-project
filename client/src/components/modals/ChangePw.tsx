@@ -17,6 +17,7 @@ function ChangePw() {
   const [pwConfirmation, setPwConfirmation] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       const res = await dispatch(
         updatePw({ currentPw, updatedPw: pw, updatedPwConfirmation: pwConfirmation })
