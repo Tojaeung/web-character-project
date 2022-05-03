@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import 'react-quill/dist/quill.snow.css';
 import { useDefaultConfig } from '@src/hooks/useReactQuillConfig';
 import TabMenu from './TabMenu';
-import Button from '@src/components/Button';
+import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
 import { useAppDispatch } from '@src/store/app/hook';
 import { updateDesc } from '@src/store/requests/user.request';
 
@@ -42,12 +42,8 @@ function Desc() {
         placeholder="내용을 입력하세요....(최대 1000글자)"
       />
       <ButtonBox>
-        <SubmitButton color="green" size="medium" onClick={onSubmitDesc}>
-          확인
-        </SubmitButton>
-        <CancelButton color="green" size="medium" inverse={true} onClick={onCancel}>
-          취소
-        </CancelButton>
+        <SubmitButton onClick={onSubmitDesc}>확인</SubmitButton>
+        <CancelButton onClick={onCancel}>취소</CancelButton>
       </ButtonBox>
     </Container>
   );
@@ -55,10 +51,14 @@ function Desc() {
 const Container = styled.div`
   width: 100%;
   background-color: ${({ theme }) => theme.palette.bgColor};
+  box-shadow: ${({ theme }) => theme.palette.shadowColor};
   display: flex;
   flex-direction: column;
   .ql-editor {
     min-height: 20rem;
+  }
+  @media ${({ theme }) => theme.device.tablet} {
+    box-shadow: none;
   }
 `;
 const ButtonBox = styled.div`
@@ -68,7 +68,21 @@ const ButtonBox = styled.div`
   justify-content: flex-end;
   margin-right: 1.5rem;
 `;
-const SubmitButton = styled(Button)``;
-const CancelButton = styled(Button)``;
+const SubmitButton = styled.button`
+  ${greenButtonStyle};
+  padding: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.7rem 1rem;
+    font-size: 1.2rem;
+  }
+`;
+const CancelButton = styled.button`
+  ${inverseGreenButtonStyle};
+  padding: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.7rem 1rem;
+    font-size: 1.2rem;
+  }
+`;
 
 export default Desc;

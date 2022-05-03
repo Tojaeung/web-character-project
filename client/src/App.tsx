@@ -67,7 +67,6 @@ function App() {
           <Chat />
         </AppScreen>
       </FullScreen>
-      )
     </BrowserRouter>
   );
 }

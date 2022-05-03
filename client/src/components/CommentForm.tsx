@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '@src/store/app/hook';
 import { createDrawingComment } from '@src/store/requests/drawing.request';
 import { createPostComment } from '@src/store/requests/board.request';
-import Button from '@src/components/Button';
+import { greenButtonStyle } from '@src/styles/button.style';
 
 interface IProp {
   type: 'drawing' | 'board';
@@ -47,9 +47,7 @@ function CommentForm({ type, entityId }: IProp) {
         onChange={(e) => setContent(e.target.value)}
       />
 
-      <AddCommentButton color="green" size="small" onClick={handleAddComment}>
-        등록
-      </AddCommentButton>
+      <AddCommentButton onClick={handleAddComment}>등록</AddCommentButton>
     </Container>
   );
 }
@@ -67,11 +65,11 @@ const TextArea = styled.textarea`
   border: 0;
 `;
 
-const AddCommentButton = styled(Button)`
+const AddCommentButton = styled.button`
   position: absolute;
   bottom: 0.3rem;
   right: 0.5rem;
-
+  ${greenButtonStyle};
   padding: 0.5rem;
 `;
 

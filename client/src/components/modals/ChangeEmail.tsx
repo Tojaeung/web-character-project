@@ -5,9 +5,9 @@ import { AiOutlineMail } from 'react-icons/ai';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
 import { signOut } from '@src/store/requests/session.request';
-import Input from '@src/components/Input';
-import Button from '@src/components/Button';
 import { updateEmail } from '@src/store/requests/user.request';
+import Input from '@src/components/Input';
+import { greenButtonStyle } from '@src/styles/button.style';
 
 function ChangeEmail() {
   const navigate = useNavigate();
@@ -47,9 +47,7 @@ function ChangeEmail() {
         <MailIcon />
       </InputBox>
 
-      <SubmitButton type="submit" color="green" size="medium">
-        인증메일 보내기
-      </SubmitButton>
+      <SubmitButton type="submit">인증메일 보내기</SubmitButton>
     </Form>
   );
 }
@@ -64,6 +62,8 @@ const Form = styled.form`
 
 const Title = styled.h1`
   align-self: flex-start;
+  font-size: 2rem;
+  font-weight: 700;
 `;
 const Content = styled.p`
   font-size: 1.5rem;
@@ -80,10 +80,14 @@ const InputBox = styled.div`
 const MailIcon = styled(AiOutlineMail)`
   position: absolute;
   font-size: 2rem;
-  top: 3.5rem;
+  top: 1rem;
   right: 1.5rem;
 `;
 
-const SubmitButton = styled(Button)``;
+const SubmitButton = styled.button`
+  ${greenButtonStyle};
+  width: 100%;
+  padding: 1rem 0;
+`;
 
 export default ChangeEmail;

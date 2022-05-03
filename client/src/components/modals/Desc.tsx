@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import Button from '@src/components/Button';
-import { useAppSelector } from '@src/store/app/hook';
+import { greenButtonStyle } from '@src/styles/button.style';
+import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectUserUser } from '@src/store/slices/user.slice';
 import { closeModal } from '@src/store/slices/modal.slice';
 
@@ -10,6 +10,7 @@ interface IProp {
 }
 
 function Desc({ props }: IProp) {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const user = useAppSelector(selectUserUser);
@@ -21,11 +22,9 @@ function Desc({ props }: IProp) {
 
       {user?.id === props.userId && (
         <ModifyButton
-          color="green"
-          size="medium"
           onClick={(e) => {
+            dispatch(closeModal());
             navigate('/settings/desc');
-            closeModal();
           }}
         >
           수정
@@ -35,17 +34,43 @@ function Desc({ props }: IProp) {
   );
 }
 
-const Container = styled.div``;
+const Container = styled.div`
+  width: 50rem;
+  display: flex;
+  flex-direction: column;
+  @media ${({ theme }) => theme.device.tablet} {
+    width: 35rem;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 25rem;
+  }
+`;
 
 const Title = styled.h1`
   align-self: flex-start;
   font-size: 2rem;
   font-weight: bold;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.5rem;
+  }
 `;
 
 const Content = styled.p`
   align-self: flex-start;
   padding: 1rem;
+  font-size: 1.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
 `;
-const ModifyButton = styled(Button)``;
+const ModifyButton = styled.button`
+  ${greenButtonStyle};
+  align-self: center;
+  width: 5rem;
+  padding: 1rem 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.8rem 0;
+    font-size: 1.2rem;
+  }
+`;
 export default Desc;

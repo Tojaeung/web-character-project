@@ -37,7 +37,7 @@ const useSocketSetup = () => {
     socket.on('addChat', async (result) => {
       const { ok, message, newChat } = result;
       if (!ok) return alert(message);
-      message && alert(message);
+      alert(message);
       await dispatch(addChat({ newChat }));
       await dispatch(openChatModal());
     });

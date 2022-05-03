@@ -5,7 +5,7 @@ import 'react-quill/dist/quill.snow.css';
 import { GrAddCircle } from 'react-icons/gr';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
-import Button from '@src/components/Button';
+import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
 import { useDefaultConfig } from '@src/hooks/useReactQuillConfig';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import { selectUserUser } from '@src/store/slices/user.slice';
@@ -82,14 +82,9 @@ function DrawingForm() {
           placeholder="내용을 입력하세요....(최대 3000글자)"
         />
         <ButtonWrapper>
-          <SubmitButton type="submit" color="green" size="medium">
-            추가
-          </SubmitButton>
+          <SubmitButton type="submit">추가</SubmitButton>
           <CancelButton
             type="button"
-            color="green"
-            size="medium"
-            inverse={true}
             onClick={(e) => {
               window.location.href = `/profile/${user?.id}`;
             }}
@@ -102,24 +97,40 @@ function DrawingForm() {
   );
 }
 const Container = styled.div`
-  width: 60rem;
+  width: 70rem;
   padding: 2rem;
   background-color: ${({ theme }) => theme.palette.white};
   border-radius: 10px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   margin: 0 auto;
   gap: 2rem;
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
-
+  .ql-editor {
+    width: 100%;
+    min-height: 30rem;
+    font-size: 1.5rem;
+  }
   @media ${({ theme }) => theme.device.tablet} {
     width: 100%;
     box-shadow: none;
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    .ql-editor {
+      min-height: 10rem;
+      font-size: 1.2rem;
+    }
+  }
 `;
 const Title = styled.h1`
   align-self: flex-start;
+  font-size: 2rem;
+  font-weight: 700;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.5rem;
+  }
 `;
 
 const Hr = styled.hr`
@@ -147,7 +158,6 @@ const Drawing = styled.div`
     opacity: 0.5;
     background-color: ${({ theme }) => theme.palette.gray};
   }
-
   @media ${({ theme }) => theme.device.mobile} {
     min-height: 10rem;
   }
@@ -169,10 +179,6 @@ const Form = styled.form`
   flex-direction: column;
   align-self: flex-start;
   gap: 1rem;
-  .ql-editor {
-    width: 100%;
-    min-height: 10rem;
-  }
 `;
 
 const Input = styled.input`
@@ -191,7 +197,19 @@ const AddIcon = styled(GrAddCircle)`
   }
 `;
 
-const SubmitButton = styled(Button)``;
-const CancelButton = styled(Button)``;
+const SubmitButton = styled.button`
+  ${greenButtonStyle};
+  padding: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.7rem 1rem;
+  }
+`;
+const CancelButton = styled.button`
+  ${inverseGreenButtonStyle};
+  padding: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.7rem 1rem;
+  }
+`;
 
 export default DrawingForm;

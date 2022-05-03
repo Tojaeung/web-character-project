@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import Button from '@src/components/Button';
+import { greenButtonStyle } from '@src/styles/button.style';
 import { useAppDispatch } from '@src/store/app/hook';
 import { resetPw } from '@src/store/requests/user.request';
 import Input from '@src/components/Input';
@@ -66,9 +66,7 @@ function ResetPw() {
         )}
       </InputBox>
 
-      <SubmitButton type="submit" color="green" size="medium">
-        비밀번호 변경
-      </SubmitButton>
+      <SubmitButton type="submit">비밀번호 변경</SubmitButton>
     </Form>
   );
 }
@@ -90,7 +88,9 @@ const Logo = styled.span`
 const Content = styled.p`
   align-self: flex-start;
   font-size: 1.8rem;
-  line-height: 2rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.5rem;
+  }
 `;
 const InputBox = styled.div`
   position: relative;
@@ -104,6 +104,9 @@ const Label = styled.label`
   font-size: 1.5rem;
   align-self: flex-start;
   white-space: nowrap;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
 `;
 const ShowPwIcon = styled(AiOutlineEye)`
   position: absolute;
@@ -118,8 +121,15 @@ const HidePwIcon = styled(AiOutlineEyeInvisible)`
   right: 1.5rem;
 `;
 
-const SubmitButton = styled(Button)`
+const SubmitButton = styled.button`
+  ${greenButtonStyle};
   width: 100%;
+  padding: 1rem 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 50%;
+    font-size: 1.2rem;
+    padding: 0.7rem 0;
+  }
 `;
 
 export default ResetPw;

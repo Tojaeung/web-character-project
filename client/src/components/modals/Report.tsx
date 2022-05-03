@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
-import Button from '@src/components/Button';
+import { redButtonStyle } from '@src/styles/button.style';
 import { useAppDispatch } from '@src/store/app/hook';
 import { sendReport } from '@src/store/requests/etc.request';
 import { closeModal } from '@src/store/slices/modal.slice';
@@ -50,22 +50,23 @@ function Report({ props }: IProp) {
         value={report}
         onChange={(e) => setReport(e.target.value)}
       />
-      <ReportButton color="red" size="small" onClick={handleSubmit}>
-        신고하기
-      </ReportButton>
+      <ReportButton onClick={handleSubmit}>신고하기</ReportButton>
     </Container>
   );
 }
 
-const Container = styled.div``;
+const Container = styled.div`
+  width: 25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
 
 const Title = styled.h1`
-  align-self: flex-start;
   font-size: 2rem;
   font-weight: bold;
 `;
 const Select = styled.select`
-  align-self: flex-start;
   border: 1px solid ${({ theme }) => theme.palette.gray};
   padding: 0.5rem;
   &:focus {
@@ -86,7 +87,8 @@ const TextArea = styled.textarea`
     border: 1px solid ${({ theme }) => theme.palette.black};
   }
 `;
-const ReportButton = styled(Button)`
+const ReportButton = styled.button`
+  ${redButtonStyle};
   padding: 1rem;
 `;
 

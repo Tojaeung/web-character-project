@@ -6,7 +6,7 @@ import { signIn } from '@src/store/requests/session.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { openModal, closeModal } from '@src/store/slices/modal.slice';
 import Input from '@src/components/Input';
-import Button from '@src/components/Button';
+import { greenButtonStyle } from '@src/styles/button.style';
 import socket from '@src/utils/socket';
 
 function Login() {
@@ -68,9 +68,7 @@ function Login() {
         {hidePw ? <ShowPwIcon onClick={(e) => setHidePw(false)} /> : <HidePwIcon onClick={(e) => setHidePw(true)} />}
       </InputBox>
 
-      <SubmitButton type="submit" color="green" size="medium">
-        로그인
-      </SubmitButton>
+      <SubmitButton type="submit">로그인</SubmitButton>
 
       <GuideBox>
         <FindPw onClick={openForgotPw}>비밀번호찾기</FindPw>
@@ -82,7 +80,7 @@ function Login() {
 }
 
 const Form = styled.form`
-  width: 32rem;
+  width: 28rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -124,8 +122,11 @@ const HidePwIcon = styled(AiOutlineEyeInvisible)`
   right: 1.5rem;
 `;
 
-const SubmitButton = styled(Button)`
+const SubmitButton = styled.button`
+  ${greenButtonStyle};
   width: 100%;
+  padding: 1rem 0;
+  font-size: 1.5rem;
 `;
 
 const GuideBox = styled.div`

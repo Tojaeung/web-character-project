@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import styled from 'styled-components';
 import { AiOutlineUser, AiOutlineEye, AiOutlineMail, AiOutlineEyeInvisible } from 'react-icons/ai';
-import Button from '@src/components/Button';
+import { greenButtonStyle } from '@src/styles/button.style';
 import { useNavigate } from 'react-router-dom';
 import { openModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
@@ -122,9 +122,7 @@ function SignUp() {
         )}
       </InputBox>
 
-      <SubmitButton type="submit" color="green" size="medium">
-        회원가입
-      </SubmitButton>
+      <SubmitButton type="submit">회원가입</SubmitButton>
     </Form>
   );
 }
@@ -203,8 +201,11 @@ const HidePwIcon = styled(AiOutlineEyeInvisible)`
   right: 1.5rem;
 `;
 
-const SubmitButton = styled(Button)`
-  width: 80%;
+const SubmitButton = styled.button`
+  width: 100%;
+  padding: 1.2rem 0rem;
+  font-size: 1.4rem;
+  ${greenButtonStyle}
 `;
 
 export default SignUp;

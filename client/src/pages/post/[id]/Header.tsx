@@ -3,7 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
-import Button from '@src/components/Button';
+import {
+  inverseBlackButtonStyle,
+  inverseGreenButtonStyle,
+  redButtonStyle,
+  inverseRedButtonStyle,
+} from '@src/styles/button.style';
 import { selectUserUser } from '@src/store/slices/user.slice';
 import { selectPostPost } from '@src/store/slices/post.slice';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
@@ -51,28 +56,15 @@ function Header() {
         </ProfileBox>
 
         <ButtonBox>
-          <BackBoard color="black" size="small" inverse={true} onClick={(e) => navigate(`/board/${board}`)}>
-            목록
-          </BackBoard>
+          <BackBoard onClick={(e) => navigate(`/board/${board}`)}>목록</BackBoard>
           {(user?.id === post?.user?.id || user?.role === 'admin') && (
             <>
-              <EditPost
-                color="green"
-                size="small"
-                inverse={true}
-                onClick={(e) => navigate(`/edit/postForm/${post?.id}`)}
-              >
-                수정
-              </EditPost>
-              <RemovePost color="red" size="small" inverse={true} onClick={handleRemovePost}>
-                삭제
-              </RemovePost>
+              <EditPost onClick={(e) => navigate(`/edit/postForm/${board}/${post?.id}`)}>수정</EditPost>
+              <RemovePost onClick={handleRemovePost}>삭제</RemovePost>
             </>
           )}
 
-          <ReportPost color="red" size="small" onClick={openReportModal}>
-            신고
-          </ReportPost>
+          <ReportPost onClick={openReportModal}>신고</ReportPost>
         </ButtonBox>
 
         <ResponsiveButtonBox>
@@ -105,19 +97,23 @@ const ButtonBox = styled.div`
   }
 `;
 
-const BackBoard = styled(Button)`
+const BackBoard = styled.button`
+  ${inverseBlackButtonStyle};
   padding: 0.5rem;
   font-size: 1.2rem;
 `;
-const EditPost = styled(Button)`
+const EditPost = styled.button`
+  ${inverseGreenButtonStyle};
   padding: 0.5rem;
   font-size: 1.2rem;
 `;
-const RemovePost = styled(Button)`
+const RemovePost = styled.button`
+  ${inverseRedButtonStyle};
   padding: 0.5rem;
   font-size: 1.2rem;
 `;
-const ReportPost = styled(Button)`
+const ReportPost = styled.button`
+  ${redButtonStyle};
   padding: 0.5rem;
   font-size: 1.2rem;
 `;

@@ -5,7 +5,7 @@ import { AiOutlineMail } from 'react-icons/ai';
 import { closeModal } from '@src/store/slices/modal.slice';
 import { useAppDispatch } from '@src/store/app/hook';
 import Input from '@src/components/Input';
-import Button from '@src/components/Button';
+import { greenButtonStyle } from '@src/styles/button.style';
 import { forgotPw } from '@src/store/requests/user.request';
 
 function ForgotPw() {
@@ -45,22 +45,32 @@ function ForgotPw() {
         <MailIcon />
       </InputBox>
 
-      <SubmitButton type="submit" color="green" size="medium">
-        인증메일 보내기
-      </SubmitButton>
+      <SubmitButton type="submit">인증메일 보내기</SubmitButton>
     </Form>
   );
 }
 
 const Form = styled.form`
-  width: 40rem;
+  width: 35rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 25rem;
+  }
 `;
-const Title = styled.h2``;
+const Title = styled.h2`
+  font-size: 2rem;
+  font-weight: 700;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.5rem;
+  }
+`;
 const Content = styled.p`
   font-size: 1.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
 `;
 const InputBox = styled.div`
   position: relative;
@@ -74,6 +84,9 @@ const Label = styled.label`
   font-size: 1.5rem;
   align-self: flex-start;
   white-space: nowrap;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
 `;
 
 const MailIcon = styled(AiOutlineMail)`
@@ -82,8 +95,13 @@ const MailIcon = styled(AiOutlineMail)`
   top: 3.5rem;
   right: 1.5rem;
 `;
-const SubmitButton = styled(Button)`
+const SubmitButton = styled.button`
+  ${greenButtonStyle};
   width: 100%;
+  padding: 1rem 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.5rem 0;
+  }
 `;
 
 export default ForgotPw;

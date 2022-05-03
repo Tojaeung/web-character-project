@@ -4,7 +4,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import Button from '@src/components/Button';
+import { inverseGreenButtonStyle, greenButtonStyle } from '@src/styles/button.style';
 import boarName from '@src/utils/boardName.util';
 import { useImageUploadConfig } from '@src/hooks/useReactQuillConfig';
 import LengthCountInput from '@src/components/LengthCountInput';
@@ -80,19 +80,15 @@ function EditForm() {
         placeholder="내용을 입력하세요....(최대 3000글자)"
       />
       <ButtonBox>
-        <RegisterButton color="green" size="medium" onClick={handleModify}>
-          수정
-        </RegisterButton>
-        <BackButton color="green" size="medium" inverse={true} onClick={handleBack}>
-          돌아가기
-        </BackButton>
+        <SubmitButton onClick={handleModify}>수정</SubmitButton>
+        <GoBackButton onClick={handleBack}>돌아가기</GoBackButton>
       </ButtonBox>
     </Container>
   );
 }
 
 const Container = styled.div`
-  width: 60rem;
+  width: 70rem;
   margin: 0 auto;
   background-color: ${({ theme }) => theme.palette.white};
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
@@ -102,16 +98,26 @@ const Container = styled.div`
   gap: 1rem;
   .ql-editor {
     width: 100%;
+    font-size: 1.5rem;
     min-height: 30rem;
   }
   @media ${({ theme }) => theme.device.tablet} {
     width: 100%;
     box-shadow: none;
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    .ql-editor {
+      min-height: 10rem;
+      font-size: 1.2rem;
+    }
+  }
 `;
 const Title = styled.h1`
   font-size: 2rem;
-  font-weight: bold;
+  font-weight: 700;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.5rem;
+  }
 `;
 const ButtonBox = styled.div`
   display: flex;
@@ -119,7 +125,21 @@ const ButtonBox = styled.div`
   margin-right: 2rem;
   gap: 1rem;
 `;
-const RegisterButton = styled(Button)``;
-const BackButton = styled(Button)``;
+const SubmitButton = styled.button`
+  ${greenButtonStyle};
+  padding: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+    padding: 0.7rem 1rem;
+  }
+`;
+const GoBackButton = styled.button`
+  ${inverseGreenButtonStyle};
+  padding: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+    padding: 0.7rem 1rem;
+  }
+`;
 
 export default EditForm;

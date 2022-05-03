@@ -13,7 +13,7 @@ const parseChats = async (chatId: string, chats: string[]) => {
   const newChats = [];
   for (const chat of chats) {
     // 대화상대의 정보를 가져온다.
-    const chatUser = await getRepository(User).findOne(chat);
+    const chatUser = await getRepository(User).findOne({ chatId: chat });
 
     // 대화상대와의 메세지 정보를 가져온다.
     const messages = await cluster.lrange(`messages:${chatId}`, 0, -1);

@@ -25,11 +25,8 @@ function ChatButton({ chatUserId }: IProps) {
 
   // 채팅목록에 상대를 추가합니다.
   const handleAddChat = async (e: React.MouseEvent<HTMLSpanElement>) => {
-    if (!user) {
-      return alert('로그인 후 이용 가능합니다.');
-    } else {
-      return socket.emit('addChat', chatUserId);
-    }
+    if (!user) return alert('로그인 후 이용 가능합니다.');
+    socket.emit('addChat', chatUserId);
   };
 
   return (
@@ -37,7 +34,7 @@ function ChatButton({ chatUserId }: IProps) {
       {!isChatting ? (
         <StartChat onClick={handleAddChat}>채팅하기</StartChat>
       ) : (
-        <Chatting onClick={(e) => alert('이미 채팅중인')}>채팅중...</Chatting>
+        <Chatting onClick={(e) => alert('이미 채팅중 입니다.')}>채팅중...</Chatting>
       )}
     </Container>
   );

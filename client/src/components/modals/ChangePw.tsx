@@ -5,7 +5,7 @@ import { signOut } from '@src/store/requests/session.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
 import Input from '@src/components/Input';
-import Button from '@src/components/Button';
+import { greenButtonStyle } from '@src/styles/button.style';
 import { updatePw } from '@src/store/requests/user.request';
 
 function ChangePw() {
@@ -63,9 +63,7 @@ function ChangePw() {
         />
       </InputBox>
 
-      <SubmitButton type="submit" color="green" size="medium">
-        비밀번호 변경하기
-      </SubmitButton>
+      <SubmitButton type="submit">비밀번호 변경하기</SubmitButton>
     </Form>
   );
 }
@@ -79,6 +77,8 @@ const Form = styled.form`
 `;
 const Title = styled.h1`
   align-self: flex-start;
+  font-size: 2rem;
+  font-weight: 700;
 `;
 const Content = styled.p`
   font-size: 1.5rem;
@@ -97,6 +97,10 @@ const Label = styled.label`
   align-self: flex-start;
   white-space: nowrap;
 `;
-const SubmitButton = styled(Button)``;
+const SubmitButton = styled.button`
+  ${greenButtonStyle};
+  width: 100%;
+  padding: 1rem 0;
+`;
 
 export default ChangePw;

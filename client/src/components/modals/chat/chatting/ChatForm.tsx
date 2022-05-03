@@ -9,7 +9,7 @@ import { selectUserUser } from '@src/store/slices/user.slice';
 import { selectChatIsChatUser, selectMessages } from '@src/store/slices/chat.slice';
 import { useAppSelector } from '@src/store/app/hook';
 import Input from '@src/components/Input';
-import Button from '@src/components/Button';
+import { greenButtonStyle } from '@src/styles/button.style';
 
 function ChatForm() {
   const user = useAppSelector(selectUserUser);
@@ -90,12 +90,7 @@ function ChatForm() {
         onChange={(e) => setMessage(e.target.value)}
         onKeyPress={(e) => e.key === 'Enter' && onSendTextMsg(e)}
       />
-      <SendButton
-        color="green"
-        size="small"
-        disabled={(!message && true) || (isEndChat && true)}
-        onClick={onSendTextMsg}
-      >
+      <SendButton disabled={(!message && true) || (isEndChat && true)} onClick={onSendTextMsg}>
         <SendIcon />
       </SendButton>
     </Container>
@@ -118,7 +113,8 @@ const CameraIcon = styled(AiOutlineCamera)`
   font-size: 4rem;
   cursor: pointer;
 `;
-const SendButton = styled(Button)`
+const SendButton = styled.button`
+  ${greenButtonStyle};
   display: flex;
   justify-content: center;
   align-items: center;

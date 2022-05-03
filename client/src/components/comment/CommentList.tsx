@@ -8,6 +8,8 @@ import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectUserUser } from '@src/store/slices/user.slice';
 import { deleteDrawingComment } from '@src/store/requests/drawing.request';
 import { deletePostComment } from '@src/store/requests/board.request';
+import EditCommentForm from '@src/components/comment/EditCommentForm';
+import { inverseGreenButtonStyle, redButtonStyle } from '@src/styles/button.style';
 import {
   DrawingCommentType,
   FreeCommentType,
@@ -15,8 +17,6 @@ import {
   RequeCommentType,
   SaleCommentType,
 } from '@src/types';
-import EditCommentForm from '@src/components/comment/EditCommentForm';
-import Button from '@src/components/Button';
 
 interface IProps {
   type: 'drawing' | 'board';
@@ -77,12 +77,8 @@ function CommentList({ type, comment, index, setCommentIndex, isSelected }: IPro
         <Content>{comment.content}</Content>
         {(user?.id === comment.user?.id || user?.role === 'admin') && (
           <ButtonBox>
-            <EditButton color="green" size="small" inverse={true} onClick={openEditCommemtForm}>
-              수정
-            </EditButton>
-            <RemoveButton color="red" size="small" onClick={handleRemoveComment}>
-              삭제
-            </RemoveButton>
+            <EditButton onClick={openEditCommemtForm}>수정</EditButton>
+            <RemoveButton onClick={handleRemoveComment}>삭제</RemoveButton>
           </ButtonBox>
         )}
       </ContentBox>
@@ -127,13 +123,15 @@ const ButtonBox = styled.div`
   align-items: center;
   gap: 1rem;
 `;
-const EditButton = styled(Button)`
+const EditButton = styled.button`
   padding: 0.5rem;
   font-size: 1.2rem;
+  ${inverseGreenButtonStyle};
 `;
-const RemoveButton = styled(Button)`
+const RemoveButton = styled.button`
   padding: 0.5rem;
   font-size: 1.2rem;
+  ${redButtonStyle};
 `;
 
 export default CommentList;

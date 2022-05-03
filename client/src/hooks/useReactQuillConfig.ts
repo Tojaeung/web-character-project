@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import axios from 'axios';
 import ReactQuill, { Quill } from 'react-quill';
-import { useAppDispatch } from '@src/store/app/hook';
 import imageResize from 'quill-image-resize';
 Quill.register('modules/imageResize', imageResize);
 

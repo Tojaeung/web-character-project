@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '@src/store/app/hook';
 import { updateDrawingComment } from '@src/store/requests/drawing.request';
 import { updatePostComment } from '@src/store/requests/board.request';
-import Button from '@src/components/Button';
+import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
 
 interface IProp {
   type: 'drawing' | 'board';
@@ -58,12 +58,8 @@ function EditCommentForm({ type, commentId, setCommentIndex }: IProp) {
           onChange={(e) => setContent(e.target.value)}
         />
         <ButtonBox>
-          <EditButton color="green" size="small" onClick={handleEditComment}>
-            수정
-          </EditButton>
-          <CancelButton color="green" size="small" inverse={true} onClick={closeEditCommentForm}>
-            취소
-          </CancelButton>
+          <EditButton onClick={handleEditComment}>수정</EditButton>
+          <CancelButton onClick={closeEditCommentForm}>취소</CancelButton>
         </ButtonBox>
       </Background>
     </Container>
@@ -93,11 +89,13 @@ const ButtonBox = styled.div`
   gap: 0.5rem;
   padding: 0.5rem 0;
 `;
-const EditButton = styled(Button)`
+const EditButton = styled.button`
   padding: 0.5rem;
+  ${greenButtonStyle};
 `;
-const CancelButton = styled(Button)`
+const CancelButton = styled.button`
   padding: 0.5rem;
+  ${inverseGreenButtonStyle}
 `;
 
 export default EditCommentForm;

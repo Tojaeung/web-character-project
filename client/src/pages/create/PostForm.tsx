@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import Button from '@src/components/Button';
+import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
 import NotFound from '@src/components/NotFound';
 import boardCategory from '@src/utils/boardCategory.util';
 import boardName from '@src/utils/boardName.util';
@@ -70,19 +70,15 @@ function PostForm() {
         placeholder="내용을 입력하세요....(최대 3000글자)"
       />
       <ButtonBox>
-        <RegisterButton color="green" size="medium" onClick={handleAddPost}>
-          등록
-        </RegisterButton>
-        <BackToListButton color="green" size="medium" inverse={true} onClick={handleBackBoard}>
-          목록으로
-        </BackToListButton>
+        <SubmitButton onClick={handleAddPost}>등록</SubmitButton>
+        <GoListButton onClick={handleBackBoard}>목록으로</GoListButton>
       </ButtonBox>
     </Container>
   );
 }
 
 const Container = styled.div`
-  width: 60rem;
+  width: 70rem;
   margin: 0 auto;
   background-color: ${({ theme }) => theme.palette.white};
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
@@ -92,21 +88,48 @@ const Container = styled.div`
   gap: 1rem;
   .ql-editor {
     width: 100%;
+    font-size: 1.5rem;
     min-height: 30rem;
   }
   @media ${({ theme }) => theme.device.tablet} {
     width: 100%;
     box-shadow: none;
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    .ql-editor {
+      min-height: 10rem;
+      font-size: 1.2rem;
+    }
+  }
 `;
-const Title = styled.h1``;
+const Title = styled.h1`
+  font-size: 2rem;
+  font-weight: 700;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.5rem;
+  }
+`;
 const ButtonBox = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-right: 2rem;
   gap: 1rem;
 `;
-const RegisterButton = styled(Button)``;
-const BackToListButton = styled(Button)``;
+const SubmitButton = styled.button`
+  ${greenButtonStyle};
+  padding: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+    padding: 0.7rem 1rem;
+  }
+`;
+const GoListButton = styled.button`
+  ${inverseGreenButtonStyle};
+  padding: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+    padding: 0.7rem 1rem;
+  }
+`;
 
 export default PostForm;

@@ -36,33 +36,28 @@ function Modal() {
   return createPortal(
     <Container>
       <Background onClick={(e) => dispatch(closeModal())} />
-      {!isOpen && !modal ? null : (
-        <ModalBox>
-          <CloseIcon onClick={(e) => dispatch(closeModal())} />
-          {isOpen && modal === 'login' && <Login />}
-          {isOpen && modal === 'deleteAccount' && <DeleteAccount />}
-          {isOpen && modal === 'exitChat' && <ExitChat />}
-          {isOpen && modal === 'signUpGuide' && <SignUpGuide />}
-          {isOpen && modal === 'forgotPw' && <ForgotPw />}
-          {isOpen && modal === 'changeEmail' && <ChangeEmail />}
-          {isOpen && modal === 'changeNickname' && <ChangeNickname />}
-          {isOpen && modal === 'changePw' && <ChangePw />}
-          {isOpen && modal === 'drawing' && <Drawing />}
+      <ModalBox>
+        <CloseIcon onClick={(e) => dispatch(closeModal())} />
+        {isOpen && modal === 'login' && <Login />}
+        {isOpen && modal === 'deleteAccount' && <DeleteAccount />}
+        {isOpen && modal === 'exitChat' && <ExitChat />}
+        {isOpen && modal === 'signUpGuide' && <SignUpGuide />}
+        {isOpen && modal === 'forgotPw' && <ForgotPw />}
+        {isOpen && modal === 'changeEmail' && <ChangeEmail />}
+        {isOpen && modal === 'changeNickname' && <ChangeNickname />}
+        {isOpen && modal === 'changePw' && <ChangePw />}
+        {isOpen && modal === 'drawing' && <Drawing />}
 
-          {isOpen && modal === 'desc' && <Desc props={props} />}
-          {isOpen && modal === 'penalty' && <Penalty props={props} />}
-          {isOpen && modal === 'report' && <Report props={props} />}
-          {isOpen && modal === 'userInfo' && <UserInfo props={props} />}
-        </ModalBox>
-      )}
-      ))
+        {isOpen && modal === 'desc' && <Desc props={props} />}
+        {isOpen && modal === 'penalty' && <Penalty props={props} />}
+        {isOpen && modal === 'report' && <Report props={props} />}
+        {isOpen && modal === 'userInfo' && <UserInfo props={props} />}
+      </ModalBox>
     </Container>,
     document.getElementById('modalPortal') as HTMLElement
   );
 }
-const Container = styled.div`
-  /* z-index: 1030; */
-`;
+const Container = styled.div``;
 const Background = styled.div`
   position: fixed;
   top: 0;
@@ -73,22 +68,21 @@ const Background = styled.div`
   z-index: 2;
 `;
 const ModalBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   position: fixed;
   top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 5px;
-  padding: 2rem;
-  background-color: ${({ theme }) => theme.palette.white};
+  padding: 4rem 1.5rem 1.5rem 1.5rem;
+  background-color: ${({ theme }) => theme.palette.bgColor};
+  box-shadow: ${({ theme }) => theme.palette.shadowColor};
   z-index: 1031;
 `;
 const CloseIcon = styled(AiOutlineClose)`
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
   font-size: 2.5rem;
-  align-self: flex-end;
   cursor: pointer;
 `;
 

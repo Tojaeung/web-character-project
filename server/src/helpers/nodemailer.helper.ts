@@ -46,7 +46,7 @@ export const sendEmailForResetPw = async (email: string, pwToken: string) => {
   const info = await transporter.sendMail({
     from: process.env.MY_MAIL,
     to: email,
-    subject: '<i>그림러들</i> 비밀번호 찾기 인증메일 입니다.',
+    subject: '그림러들 비밀번호 찾기 인증메일 입니다.',
     html: `<h2>비밀번호를 잊어버리셨군요?</h2>
     <p>아래 링크를 클릭하면, 비밀번호 재설정 페이지로 이동합니다.</p>
     <a href='${process.env.CLIENT_ADDR}/resetPw?pwToken=${pwToken}'>비밀번호 재설정하기</a>,`,
@@ -74,7 +74,7 @@ export const sendEmailForUpdateEmail = async (userId: number, updatedEmail: stri
   const info = await transporter.sendMail({
     from: process.env.MY_MAIL,
     to: updatedEmail,
-    subject: '<i>그림러들</i> 이메일변경을 위한 인증메일 입니다.',
+    subject: '그림러들 이메일변경을 위한 인증메일 입니다.',
     html: `<h2>이메일 변경하기</h2>
     <p>아래 링크를 클릭하면, 그림러들 홈페이지로 이동합니다.</p>
     <p>그 다음, 새로운 이메일로 로그인을 시도해주세요.</p>

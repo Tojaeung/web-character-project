@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useAppDispatch } from '@src/store/app/hook';
 import { openModal } from '@src/store/slices/modal.slice';
 import TabMenu from './TabMenu';
-import Button from '@src/components/Button';
+import { greenButtonStyle, redButtonStyle } from '@src/styles/button.style';
 import { updateAvatar, updateCover, updateDefaultAvatar, updateDefaultCover } from '@src/store/requests/user.request';
 
 function Account() {
@@ -77,57 +77,41 @@ function Account() {
       <TabMenu />
       <Container>
         <EditBox>
-          <Title>프로필 사진</Title>
+          <Title>프로필</Title>
           <ButtonBox>
-            <DefaultButton color="red" size="small" inverse={true} onClick={handleDefaultAvatar}>
-              기본 프로필 사진
-            </DefaultButton>
-            <EditButton color="green" size="small" onClick={(e) => avatarRef.current?.click()}>
-              변경
-            </EditButton>
+            <DefaultButton onClick={handleDefaultAvatar}>기본 프로필</DefaultButton>
+            <EditButton onClick={(e) => avatarRef.current?.click()}>변경</EditButton>
           </ButtonBox>
           <Input type="file" accept="image/png, image/jpeg,image/jpg" ref={avatarRef} onChange={handleEditAvatar} />
         </EditBox>
 
         <EditBox>
-          <Title>커버 사진</Title>
+          <Title>커버</Title>
           <ButtonBox>
-            <DefaultButton color="red" size="small" inverse={true} onClick={handleDefaultCover}>
-              기본 커버 사진
-            </DefaultButton>
-            <EditButton color="green" size="small" onClick={(e) => coverRef.current?.click()}>
-              변경
-            </EditButton>
+            <DefaultButton onClick={handleDefaultCover}>기본 커버</DefaultButton>
+            <EditButton onClick={(e) => coverRef.current?.click()}>변경</EditButton>
           </ButtonBox>
           <Input type="file" accept="image/png, image/jpeg,image/jpg" ref={coverRef} onChange={handleEditCover} />
         </EditBox>
 
         <EditBox>
           <Title>이메일</Title>
-          <EditButton color="green" size="small" onClick={handleEditEmail}>
-            변경
-          </EditButton>
+          <EditButton onClick={handleEditEmail}>변경</EditButton>
         </EditBox>
 
         <EditBox>
           <Title>닉네임</Title>
-          <EditButton color="green" size="small" onClick={handleEditNickname}>
-            변경
-          </EditButton>
+          <EditButton onClick={handleEditNickname}>변경</EditButton>
         </EditBox>
 
         <EditBox>
-          <Title>이메일</Title>
-          <EditButton color="green" size="small" onClick={handleEditPw}>
-            변경
-          </EditButton>
+          <Title>비밀번호</Title>
+          <EditButton onClick={handleEditPw}>변경</EditButton>
         </EditBox>
 
         <EditBox>
           <Title>계정탈퇴</Title>
-          <EditButton color="red" size="small" onClick={handleDelAccount}>
-            탈퇴하기
-          </EditButton>
+          <EditButton onClick={handleDelAccount}>탈퇴하기</EditButton>
         </EditBox>
       </Container>
     </>
@@ -160,8 +144,22 @@ const ButtonBox = styled.div`
     gap: 1rem;
   }
 `;
-const EditButton = styled(Button)``;
-const DefaultButton = styled(Button)``;
+const EditButton = styled.button`
+  ${greenButtonStyle};
+  padding: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.5rem;
+    font-size: 1.2rem;
+  }
+`;
+const DefaultButton = styled.button`
+  ${redButtonStyle};
+  padding: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.5rem;
+    font-size: 1.2rem;
+  }
+`;
 const Input = styled.input`
   display: none;
 `;

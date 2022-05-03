@@ -78,7 +78,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
+  padding: 1rem 0;
 `;
 const PrevButton = styled.button`
   padding: 0.5rem;

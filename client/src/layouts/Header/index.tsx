@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineMenu, AiOutlineUser, AiOutlineKey, AiOutlineClose } from 'react-icons/ai';
@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectUserUser } from '@src/store/slices/user.slice';
 import { openModal } from '@src/store/slices/modal.slice';
 import logo from '@src/assets/images/logo.jpg';
-import Button from '@src/components/Button';
+import { greenButtonStyle } from '@src/styles/button.style';
 
 function Header() {
   const navigate = useNavigate();
@@ -41,11 +41,11 @@ function Header() {
             <Profile />
           ) : (
             <AuthBox>
-              <LoginButton color="green" size="small" onClick={openLoginModal}>
+              <LoginButton onClick={openLoginModal}>
                 <UserIcon />
                 로그인
               </LoginButton>
-              <SignUpButton color="green" size="small" onClick={(e) => navigate('/signUp')}>
+              <SignUpButton onClick={(e) => navigate('/signUp')}>
                 <AddIcon />
                 회원가입
               </SignUpButton>
@@ -140,11 +140,17 @@ const AuthBox = styled.div`
   align-items: center;
   gap: 0.5rem;
 `;
-const LoginButton = styled(Button)`
+const LoginButton = styled.button`
+  display: flex;
+  align-items: center;
+  ${greenButtonStyle};
   font-size: 1.2rem;
   padding: 0.5rem;
 `;
-const SignUpButton = styled(Button)`
+const SignUpButton = styled.button`
+  display: flex;
+  align-items: center;
+  ${greenButtonStyle};
   font-size: 1.2rem;
   padding: 0.5rem;
 `;

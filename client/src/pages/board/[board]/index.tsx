@@ -11,7 +11,7 @@ import Pagination from './Pagination';
 import boardName from '@src/utils/boardName.util';
 import LimitSelector from './LimitSelector';
 import CreatedTime from '@src/components/CreatedTime';
-import Button from '@src/components/Button';
+import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
 import { PostType } from '@src/types';
 
 function Board() {
@@ -87,12 +87,8 @@ function Board() {
 
         <Footer>
           <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
-          <ScrollUpButton color="green" size="small" inverse={true} onClick={goTop}>
-            상단으로
-          </ScrollUpButton>
-          <CreatePostButton color="green" size="small" onClick={(e) => navigate(`/create/postForm/${board}`)}>
-            글쓰기
-          </CreatePostButton>
+          <ScrollUpButton onClick={goTop}>상단으로</ScrollUpButton>
+          <CreatePostButton onClick={(e) => navigate(`/create/postForm/${board}`)}>글쓰기</CreatePostButton>
         </Footer>
       </Container>
 
@@ -117,10 +113,10 @@ function Board() {
 
         <Footer>
           <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
-          <ScrollUpButton color="green" size="small" onClick={goTop}>
+          <ScrollUpButton onClick={goTop}>
             <ScrollUpIcon />
           </ScrollUpButton>
-          <CreatePostButton color="green" size="small" onClick={(e) => navigate(`/create/postForm/${board}`)}>
+          <CreatePostButton onClick={(e) => navigate(`/create/postForm/${board}`)}>
             <CreatePostIcon />
           </CreatePostButton>
         </Footer>
@@ -181,7 +177,8 @@ const Footer = styled.div`
   justify-content: center;
 `;
 
-const ScrollUpButton = styled(Button)`
+const ScrollUpButton = styled.button`
+  ${greenButtonStyle};
   position: absolute;
   bottom: 0.7rem;
   right: 7rem;
@@ -194,12 +191,14 @@ const ScrollUpButton = styled(Button)`
   }
 `;
 
-const CreatePostButton = styled(Button)`
+const CreatePostButton = styled.button`
+  ${inverseGreenButtonStyle};
   position: absolute;
   bottom: 0.7rem;
   right: 1rem;
   padding: 0.7rem;
   @media ${({ theme }) => theme.device.tablet} {
+    ${greenButtonStyle};
     position: fixed;
     bottom: 6rem;
     right: 2rem;
