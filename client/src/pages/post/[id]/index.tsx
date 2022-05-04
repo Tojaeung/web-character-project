@@ -83,7 +83,10 @@ const TitleBox = styled.div`
   gap: 1rem;
   border-top: 1px solid ${({ theme }) => theme.palette.borderColor};
   border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
-  padding: 2rem 0;
+  padding: 1.5rem 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 1rem 0;
+  }
 `;
 const PostTitle = styled.p`
   font-weight: bold;
@@ -91,12 +94,12 @@ const PostTitle = styled.p`
   word-break: break-all;
   font-size: 1.7rem;
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 `;
 const Content = styled.div`
   width: 100%;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   line-height: 2rem;
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;

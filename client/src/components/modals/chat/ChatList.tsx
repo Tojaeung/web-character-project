@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectChats, selectChatUser, selectMsgNotis, closeChatModal } from '@src/store/slices/chat.slice';
 import { ChatUserType } from '@src/types';
 import Avatar from '@src/components/Avatar';
-import NotiCount from '@src/components/NotiCount';
 
 function ChatList() {
   const dispatch = useAppDispatch();
@@ -45,7 +44,7 @@ function ChatList() {
               <ListBox key={v4()} onClick={handleSelectChatUser(chat)}>
                 {msgNotiNum === 0 ? null : (
                   <NotiBox>
-                    <NotiCount notiNum={msgNotiNum} />
+                    <NotiNum>{msgNotiNum}</NotiNum>
                   </NotiBox>
                 )}
                 <ChatUser>
@@ -143,9 +142,21 @@ const LastDate = styled.span`
 `;
 
 const NotiBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: red;
+  border-radius: 100%;
   position: absolute;
-  top: 3.5rem;
-  left: 3.5rem;
+  top: 3.2rem;
+  left: 3.2rem;
+`;
+
+const NotiNum = styled.span`
+  font-size: 1.2rem;
+  color: white;
 `;
 
 export default ChatList;

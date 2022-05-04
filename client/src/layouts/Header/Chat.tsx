@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectMsgNotis } from '@src/store/slices/chat.slice';
 import { openChatModal, closeChatModal, selectChatOk } from '@src/store/slices/chat.slice';
-import NotiCount from '@src/components/NotiCount';
 
 interface IProp {
   chatRef: React.MutableRefObject<HTMLDivElement | null>;
@@ -14,18 +13,14 @@ function Chat({ chatRef }: IProp) {
   const dispatch = useAppDispatch();
   const chatOk = useAppSelector(selectChatOk);
   const msgNotis = useAppSelector(selectMsgNotis);
-  const [totalMsgNotiNum, setTotalMsgNotiNum] = useState<number>();
+  const [totalMsgNotiNum, setTotalMsgNotiNum] = useState<number>(0);
 
   useEffect(() => {
-    const totalMsgNotiNum = msgNotis.length;
-    setTotalMsgNotiNum(totalMsgNotiNum);
+    setTotalMsgNotiNum(msgNotis.length);
   }, [msgNotis]);
 
   const onChatModal = async (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!chatOk) {
-      await dispatch(openChatModal());
-      return;
-    }
+    if (!chatOk) return await dispatch(openChatModal());
     await dispatch(closeChatModal());
   };
 
@@ -33,7 +28,7 @@ function Chat({ chatRef }: IProp) {
     <Container ref={chatRef} chatOk={chatOk} onClick={onChatModal}>
       {totalMsgNotiNum === 0 ? null : (
         <NotiBox>
-          <NotiCount notiNum={totalMsgNotiNum!} />
+          <NotiNum>{totalMsgNotiNum}</NotiNum>
         </NotiBox>
       )}
 
@@ -47,16 +42,29 @@ const Container = styled.div<{ chatOk: boolean }>`
   cursor: pointer;
 `;
 
-const NotiBox = styled.div`
-  position: absolute;
-  top: 2rem;
-  left: 2rem;
-`;
 const ChatIcon = styled(BsChatLeftText)`
   font-size: 2.5rem;
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 2rem;
   }
+`;
+
+const NotiBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: red;
+  border-radius: 100%;
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+`;
+
+const NotiNum = styled.span`
+  font-size: 1.2rem;
+  color: white;
 `;
 
 export default Chat;
