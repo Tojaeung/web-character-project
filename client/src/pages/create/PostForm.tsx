@@ -54,12 +54,7 @@ function PostForm() {
   ) : (
     <Container>
       <Title>{boardName(board as string)}</Title>
-      <LengthCountInput
-        limit={50}
-        placeholder="제목"
-        valueLength={title.length}
-        onChange={(e) => setTitle(e.target.value)}
-      />
+      <LengthCountInput placeholder="제목" length={title.length} onChange={(e) => setTitle(e.target.value)} />
       <ReactQuill
         ref={quillRef}
         className="ql-editor"

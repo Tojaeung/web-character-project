@@ -2,18 +2,18 @@ import { InputHTMLAttributes } from 'react';
 import styled, { css } from 'styled-components';
 
 interface IProp extends InputHTMLAttributes<HTMLInputElement> {
-  limit: number;
-  valueLength: number;
+  length: number;
 }
 
-function LengthCountInput({ limit, valueLength, ...props }: IProp) {
+function LengthCountInput({ length, ...props }: IProp) {
+  const limit = 50;
   return (
     <Container>
-      <Input {...props} valueLength={valueLength} limit={limit} />
-      <LengthCount valueLength={valueLength} limit={limit}>
-        {valueLength} / {limit}
+      <Input {...props} length={length} limit={limit} />
+      <LengthCount length={length} limit={limit}>
+        {length} / {limit}
       </LengthCount>
-      {valueLength > limit && <ErrorMessage>정해진 글자 수를 초과하였습니다.</ErrorMessage>}
+      {length > limit && <ErrorMessage>정해진 글자 수를 초과하였습니다.</ErrorMessage>}
     </Container>
   );
 }
@@ -21,15 +21,15 @@ function LengthCountInput({ limit, valueLength, ...props }: IProp) {
 const Container = styled.div`
   position: relative;
 `;
-const Input = styled.input<{ limit: number; valueLength: number }>`
+const Input = styled.input<{ limit: number; length: number }>`
   outline: 0;
   padding: 0 4rem 0 1rem;
   border-radius: 5px;
   width: 100%;
   min-height: 4rem;
   font-size: 1.4rem;
-  ${({ theme, limit, valueLength }) => {
-    if (valueLength > limit) {
+  ${({ theme, limit, length }) => {
+    if (length > limit) {
       return css`
         border: 1px solid ${theme.palette.red};
       `;
@@ -41,12 +41,12 @@ const Input = styled.input<{ limit: number; valueLength: number }>`
   }}
 `;
 
-const LengthCount = styled.span<{ limit: number; valueLength: number }>`
+const LengthCount = styled.span<{ limit: number; length: number }>`
   position: absolute;
   top: 1.3rem;
   right: 1rem;
-  ${({ theme, limit, valueLength }) => {
-    if (valueLength > limit) {
+  ${({ theme, limit, length }) => {
+    if (length > limit) {
       return css`
         color: ${theme.palette.red};
       `;

@@ -64,9 +64,8 @@ function EditForm() {
     <Container>
       <Title>{boarName} 수정하기</Title>
       <LengthCountInput
-        limit={50}
         placeholder="제목"
-        valueLength={title.length}
+        length={title.length}
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
