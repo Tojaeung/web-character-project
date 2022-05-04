@@ -51,8 +51,8 @@ function DrawingForm() {
       <Title>그림추가 🎨</Title>
       <Hr />
       <User>
-        <Avatar src={user?.avatar} size="small" />
-        <Nickname exp={user?.exp!} nickname={user?.nickname!} size="medium" />
+        <Avatar src={user?.avatar} diameter={3.5} />
+        <Nickname exp={user?.exp!} nickname={user?.nickname!} fontSize={1.3} />
       </User>
 
       <Drawing onClick={(e) => drawingInputRef.current?.click()}>

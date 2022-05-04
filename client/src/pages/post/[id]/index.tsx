@@ -29,7 +29,7 @@ function Post() {
       <BoardName>{boardName(board as string)}</BoardName>
       <TitleBox>
         <PostTitle>{post?.title}</PostTitle>
-        <CreatedTime createdTime={post?.created_at!} size="small" />
+        <CreatedTime createdTime={post?.created_at!} fontSize={1.2} />
       </TitleBox>
 
       <Header />

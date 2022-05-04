@@ -35,7 +35,7 @@ function Profile() {
   return (
     <Container>
       <AvatarBox onClick={(e) => setOpenDropDown(!openDropDown)}>
-        <Avatar src={user?.avatar} size="small" />
+        <Avatar src={user?.avatar} diameter={4} />
       </AvatarBox>
       {openDropDown && (
         <DropDown ref={targetRef} onClick={(e) => setOpenDropDown(!openDropDown)}>
@@ -73,15 +73,7 @@ const Container = styled.div`
   position: relative;
 `;
 const AvatarBox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border-radius: 5px;
   cursor: pointer;
-  @media ${({ theme }) => theme.device.mobile} {
-    width: 3.5rem;
-    height: 3.5rem;
-  }
 `;
 
 const DropDown = styled.ul`

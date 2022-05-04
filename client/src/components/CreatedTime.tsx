@@ -3,24 +3,16 @@ import styled from 'styled-components';
 
 interface IProp {
   createdTime: Date;
-  size: string;
+  fontSize: number;
 }
 
-function CreatedTime({ createdTime, size }: IProp) {
-  return <Date size={size}>{relativeTime(createdTime)}</Date>;
+function CreatedTime({ createdTime, fontSize }: IProp) {
+  return <Date fontSize={fontSize}>{relativeTime(createdTime)}</Date>;
 }
 
-const Date = styled.span<{ size: string }>`
+const Date = styled.span<{ fontSize: number }>`
   white-space: nowrap;
-  font-size: ${(prop) => {
-    if (prop.size === 'small') {
-      return '1.1rem';
-    } else if (prop.size === 'medium') {
-      return '1.3rem';
-    } else if (prop.size === 'large') {
-      return '1.5rem';
-    }
-  }};
+  font-size: ${({ fontSize }) => `${fontSize}rem`};
 `;
 
 export default CreatedTime;

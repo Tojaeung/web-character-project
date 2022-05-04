@@ -59,7 +59,7 @@ function CommentList({ type, comment, index, setCommentIndex, isSelected }: IPro
     <Container>
       <UserBox>
         <UserInfoBox>
-          <Avatar src={comment.user?.avatar} size="small" />
+          <Avatar src={comment.user?.avatar} diameter={3} />
           <Nickname
             exp={comment.user?.exp!}
             userId={comment.user?.id}
@@ -67,10 +67,10 @@ function CommentList({ type, comment, index, setCommentIndex, isSelected }: IPro
             desc={comment.user?.desc}
             nickname={comment.user?.nickname!}
             dropDown={true}
-            size="small"
+            fontSize={1.3}
           />
         </UserInfoBox>
-        <CreatedTime createdTime={comment.created_at} size="small" />
+        <CreatedTime createdTime={comment.created_at} fontSize={1.2} />
       </UserBox>
 
       <ContentBox>

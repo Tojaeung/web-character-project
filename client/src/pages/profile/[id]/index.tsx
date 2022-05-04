@@ -38,7 +38,7 @@ function Profile() {
         </CoverBox>
 
         <AvatarBox>
-          <Avatar src={profile?.avatar} size="large" />
+          <Avatar src={profile?.avatar} diameter={10} />
         </AvatarBox>
 
         <UserInfoBox>
@@ -49,7 +49,7 @@ function Profile() {
             desc={profile?.desc!}
             nickname={profile?.nickname!}
             dropDown={true}
-            size="large"
+            fontSize={1.7}
           />
         </UserInfoBox>
       </ProfileBox>

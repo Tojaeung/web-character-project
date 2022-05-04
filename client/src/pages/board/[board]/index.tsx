@@ -69,15 +69,15 @@ function Board() {
             {posts.map((post) => (
               <tr key={v4()}>
                 <td>{post.id}</td>
-                <td className="post-title" onClick={(e) => navigate(`/board/${board}/post/${post.id}`)}>
-                  {post.title}
+                <td className="post-title">
+                  <TitleText onClick={(e) => navigate(`/board/${board}/post/${post.id}`)}>{post.title}</TitleText>
                 </td>
                 <td>
-                  <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} size="small" />
+                  <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} fontSize={1.3} />
                 </td>
                 <td>{post.views}</td>
                 <td>
-                  <CreatedTime createdTime={post.created_at} size="small" />
+                  <CreatedTime createdTime={post.created_at} fontSize={1.2} />
                 </td>
               </tr>
             ))}
@@ -101,13 +101,15 @@ function Board() {
 
         {posts.map((post) => (
           <ListBox key={v4()}>
-            <Title onClick={(e) => navigate(`/board/${board}/post/${post.id}`)}>{post.title}</Title>
+            <Title>
+              <TitleText onClick={(e) => navigate(`/board/${board}/post/${post.id}`)}>{post.title}</TitleText>
+            </Title>
 
             <DetailBox>
-              <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} size="small" />|
+              <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} fontSize={1.3} />|
               <Views>조회수: {post.views}</Views>
               |
-              <CreatedTime createdTime={post.created_at} size="small" />
+              <CreatedTime createdTime={post.created_at} fontSize={1.2} />
             </DetailBox>
           </ListBox>
         ))}
@@ -226,7 +228,7 @@ const ListBox = styled.div`
   border-bottom: 1px dotted;
 `;
 
-const Title = styled.p`
+const Title = styled.div`
   text-align: left;
   align-self: flex-start;
   font-size: 1.3rem;
@@ -235,6 +237,13 @@ const Title = styled.p`
     font-size: 1.2rem;
   }
 `;
+const TitleText = styled.span`
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 const Views = styled.span``;
 const DetailBox = styled.div`
   display: flex;

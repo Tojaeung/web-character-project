@@ -32,8 +32,8 @@ function BoardPreview({ posts, board }: IProps) {
               <td>
                 <PostTitle to={`/board/${board}/post/${post.id}`}>{post.title}</PostTitle>
                 <PostUser>
-                  <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} size="small" />
-                  <CreatedTime createdTime={post.created_at} size="small" />
+                  <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} fontSize={1.3} />
+                  <CreatedTime createdTime={post.created_at} fontSize={1.2} />
                 </PostUser>
               </td>
             </tr>
@@ -81,6 +81,9 @@ const PostTitle = styled(Link)`
   padding: 0.5rem;
   word-break: break-all;
   font-size: 1.2rem;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 const PostUser = styled.span`
   display: flex;

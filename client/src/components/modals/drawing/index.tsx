@@ -4,11 +4,13 @@ import ImageSide from '@src/components/modals/drawing/ImageSide';
 import Info from '@src/components/modals/drawing/Info';
 import Comment from '@src/components/comment';
 import CommentForm from '@src/components/CommentForm';
-import { useAppSelector } from '@src/store/app/hook';
+import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectDrawingDrawings, selectDrawingIndex } from '@src/store/slices/drawing.slice';
 import { closeModal } from '@src/store/slices/modal.slice';
 
 function DrawingModal() {
+  const dispatch = useAppDispatch();
+
   const drawings = useAppSelector(selectDrawingDrawings);
   const index = useAppSelector(selectDrawingIndex);
 
@@ -16,7 +18,7 @@ function DrawingModal() {
     <Container>
       <ImageSide />
       <InfoSide>
-        <IconBox onClick={closeModal}>
+        <IconBox onClick={(e) => dispatch(closeModal())}>
           <CloseIcon />
         </IconBox>
 
@@ -58,14 +60,21 @@ const InfoSide = styled.div`
   }
 `;
 const IconBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: ${({ theme }) => theme.palette.gray};
   padding: 0.5rem;
-  border-radius: 50%;
+  border-radius: 70%;
   position: absolute;
   top: 1rem;
   left: 1rem;
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 const CloseIcon = styled(AiOutlineClose)`
+  background-color: ${({ theme }) => theme.palette.gray};
   color: black;
   font-size: 2.5rem;
   cursor: pointer;

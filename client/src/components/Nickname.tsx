@@ -15,10 +15,10 @@ interface IProps {
   desc?: string;
   nickname: string;
   dropDown?: boolean;
-  size: 'small' | 'medium' | 'large';
+  fontSize: number;
 }
 
-function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, size }: IProps) {
+function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, fontSize }: IProps) {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUserUser);
 
@@ -42,10 +42,10 @@ function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, size 
   return (
     <>
       <Container>
-        <Level>[Lv.{getLevel(exp)}]</Level>
-        <NickNameTag size={size} dropDown={dropDown} onClick={(e) => setOpenDropDown(!openDropDown)}>
-          {nickname}
-        </NickNameTag>
+        <NicknameBox fontSize={fontSize} dropDown={dropDown} onClick={(e) => setOpenDropDown(!openDropDown)}>
+          <Level>[Lv.{getLevel(exp)}]</Level>
+          <NickName>{nickname}</NickName>
+        </NicknameBox>
         {openDropDown && dropDown && (
           <Dropdown ref={targetRef} onClick={(e) => setOpenDropDown(!openDropDown)}>
             <List>
@@ -72,17 +72,33 @@ function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, size 
 }
 
 const Container = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  justify-content: center;
   position: relative;
 `;
 
-const Level = styled.span`
-  font-size: 1.2rem;
-  font-weight: 500;
+const NicknameBox = styled.div<{ fontSize: number; dropDown: boolean }>`
+  ${({ fontSize }) => {
+    return css`
+      font-size: ${fontSize}rem;
+    `;
+  }};
+  ${({ dropDown }) => {
+    if (dropDown) {
+      return css`
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
+      `;
+    } else {
+      return css`
+        cursor: default;
+        text-decoration: none;
+      `;
+    }
+  }}
 `;
+
+const Level = styled.span``;
 
 const Dropdown = styled.ul`
   position: absolute;
@@ -105,40 +121,7 @@ const List = styled.li`
   }
 `;
 
-const NickNameTag = styled.span<{ size: string; dropDown: boolean }>`
-  ${({ dropDown }) => {
-    if (dropDown) {
-      return css`
-        cursor: pointer;
-        &:hover {
-          text-decoration: underline;
-        }
-      `;
-    } else {
-      return css`
-        cursor: default;
-        text-decoration: none;
-      `;
-    }
-  }}
-
-  ${({ size }) => {
-    if (size === 'small') {
-      return css`
-        font-size: 1.2rem;
-      `;
-    } else if (size === 'medium') {
-      return css`
-        font-size: 1.4rem;
-      `;
-    } else if (size === 'large') {
-      return css`
-        font-size: 1.6rem;
-        font-weight: bold;
-      `;
-    }
-  }};
-`;
+const NickName = styled.span``;
 
 const GoProfile = styled.a``;
 export default Nickname;

@@ -36,23 +36,26 @@ function Modal() {
   return createPortal(
     <Container>
       <Background onClick={(e) => dispatch(closeModal())} />
-      <ModalBox>
-        <CloseIcon onClick={(e) => dispatch(closeModal())} />
-        {isOpen && modal === 'login' && <Login />}
-        {isOpen && modal === 'deleteAccount' && <DeleteAccount />}
-        {isOpen && modal === 'exitChat' && <ExitChat />}
-        {isOpen && modal === 'signUpGuide' && <SignUpGuide />}
-        {isOpen && modal === 'forgotPw' && <ForgotPw />}
-        {isOpen && modal === 'changeEmail' && <ChangeEmail />}
-        {isOpen && modal === 'changeNickname' && <ChangeNickname />}
-        {isOpen && modal === 'changePw' && <ChangePw />}
-        {isOpen && modal === 'drawing' && <Drawing />}
+      {/* drawing 모달은 그 자체로 모달 컴포넌트 특징을 가지고 있기 때문에 예외처리한다. */}
+      {modal === 'drawing' && <Drawing />}
+      {modal !== 'drawing' && (
+        <ModalBox>
+          <CloseIcon onClick={(e) => dispatch(closeModal())} />
+          {modal === 'login' && <Login />}
+          {modal === 'deleteAccount' && <DeleteAccount />}
+          {modal === 'exitChat' && <ExitChat />}
+          {modal === 'signUpGuide' && <SignUpGuide />}
+          {modal === 'forgotPw' && <ForgotPw />}
+          {modal === 'changeEmail' && <ChangeEmail />}
+          {modal === 'changeNickname' && <ChangeNickname />}
+          {modal === 'changePw' && <ChangePw />}
 
-        {isOpen && modal === 'desc' && <Desc props={props} />}
-        {isOpen && modal === 'penalty' && <Penalty props={props} />}
-        {isOpen && modal === 'report' && <Report props={props} />}
-        {isOpen && modal === 'userInfo' && <UserInfo props={props} />}
-      </ModalBox>
+          {modal === 'desc' && <Desc props={props} />}
+          {modal === 'penalty' && <Penalty props={props} />}
+          {modal === 'report' && <Report props={props} />}
+          {modal === 'userInfo' && <UserInfo props={props} />}
+        </ModalBox>
+      )}
     </Container>,
     document.getElementById('modalPortal') as HTMLElement
   );

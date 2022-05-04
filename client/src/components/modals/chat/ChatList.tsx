@@ -48,7 +48,7 @@ function ChatList() {
                   </NotiBox>
                 )}
                 <ChatUser>
-                  <Avatar src={chat.avatar} size="small" />
+                  <Avatar src={chat.avatar} diameter={4} />
 
                   <FlexBox>
                     <Nickname>{chat.nickname}</Nickname>

@@ -33,7 +33,7 @@ function Chatting() {
       <Header>
         <FlexBox>
           <BackIcon onClick={backToChatList} />
-          <Avatar src={isChatUser?.avatar} size="small" />
+          <Avatar src={isChatUser?.avatar} diameter={3.5} />
           <Nickname>{isChatUser?.nickname}</Nickname>
         </FlexBox>
         <FlexBox>

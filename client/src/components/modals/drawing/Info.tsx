@@ -31,7 +31,7 @@ function Info() {
     <Container>
       <Header>
         <UserBox>
-          <Avatar src={drawings[index!].user?.avatar} size="small" />
+          <Avatar src={drawings[index!].user?.avatar} diameter={3.5} />
           <FlexBox>
             <Nickname
               exp={drawings[index!].user?.exp!}
@@ -40,9 +40,9 @@ function Info() {
               desc={drawings[index!].user?.desc}
               nickname={drawings[index!].user?.nickname!}
               dropDown={true}
-              size="small"
+              fontSize={1.3}
             />
-            <CreatedTime createdTime={drawings[index!]?.created_at!} size="small" />
+            <CreatedTime createdTime={drawings[index!]?.created_at!} fontSize={1.2} />
           </FlexBox>
         </UserBox>
         <MoreButton

@@ -43,7 +43,7 @@ function Header() {
     <>
       <Container>
         <ProfileBox>
-          <Avatar src={post?.user?.avatar} size="medium" />
+          <Avatar src={post?.user?.avatar} diameter={3.5} />
           <Nickname
             exp={post?.user?.exp!}
             userId={post?.user?.id!}
@@ -51,7 +51,7 @@ function Header() {
             desc={post?.user?.desc!}
             nickname={post?.user?.nickname!}
             dropDown={true}
-            size="medium"
+            fontSize={1.3}
           />
         </ProfileBox>
 
