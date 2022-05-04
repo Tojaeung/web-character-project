@@ -80,7 +80,7 @@ function Login() {
 }
 
 const Form = styled.form`
-  width: 25rem;
+  width: 29rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

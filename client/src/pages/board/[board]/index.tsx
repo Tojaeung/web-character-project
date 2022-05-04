@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, NavLink } from 'react-router-dom';
 import { v4 } from 'uuid';
 import { BsPencilSquare } from 'react-icons/bs';
 import { HiOutlineChevronDoubleUp } from 'react-icons/hi';
@@ -70,7 +70,7 @@ function Board() {
               <tr key={v4()}>
                 <td>{post.id}</td>
                 <td className="post-title">
-                  <TitleText onClick={(e) => navigate(`/board/${board}/post/${post.id}`)}>{post.title}</TitleText>
+                  <TitleText to={`/board/${board}/post/${post.id}`}>{post.title}</TitleText>
                 </td>
                 <td>
                   <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} fontSize={1.3} />
@@ -102,7 +102,7 @@ function Board() {
         {posts.map((post) => (
           <ListBox key={v4()}>
             <Title>
-              <TitleText onClick={(e) => navigate(`/board/${board}/post/${post.id}`)}>{post.title}</TitleText>
+              <TitleText to={`/board/${board}/post/${post.id}`}>{post.title}</TitleText>
             </Title>
 
             <DetailBox>
@@ -237,10 +237,15 @@ const Title = styled.div`
     font-size: 1.2rem;
   }
 `;
-const TitleText = styled.span`
-  cursor: pointer;
+const TitleText = styled(NavLink)`
   &:hover {
     text-decoration: underline;
+  }
+  &:link {
+    color: black;
+  }
+  &:visited {
+    color: blue;
   }
 `;
 

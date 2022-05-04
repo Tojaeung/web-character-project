@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { v4 } from 'uuid';
 import { FiChevronRight } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import CreatedTime from '@src/components/CreatedTime';
 import Nickname from './Nickname';
 import { PostType } from '@src/types';
@@ -77,12 +77,18 @@ const Table = styled.table`
 const ChevronRightIcon = styled(FiChevronRight)`
   font-size: 2.5rem;
 `;
-const PostTitle = styled(Link)`
+const PostTitle = styled(NavLink)`
   padding: 0.5rem;
   word-break: break-all;
   font-size: 1.2rem;
   &:hover {
     text-decoration: underline;
+  }
+  &:link {
+    color: black;
+  }
+  &:visited {
+    color: blue;
   }
 `;
 const PostUser = styled.span`
