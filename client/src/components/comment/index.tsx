@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { v4 } from 'uuid';
+import { useNavigate, useParams } from 'react-router-dom';
+import { BsPencilSquare } from 'react-icons/bs';
+import { HiOutlineChevronDoubleUp } from 'react-icons/hi';
 import CommentList from '@src/components/comment/CommentList';
+import Pagination from './Pagination';
+import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
 import {
   DrawingCommentType,
   FreeCommentType,
@@ -9,7 +14,6 @@ import {
   SaleCommentType,
   RequeCommentType,
 } from '@src/types';
-import Pagination from './Pagination';
 
 interface IProp {
   type: 'drawing' | 'board';
@@ -17,11 +21,19 @@ interface IProp {
 }
 
 function Comment({ comments, type }: IProp) {
+  const navigate = useNavigate();
+  const { board } = useParams();
+
   const [page, setPage] = useState(1);
   const offset = (page - 1) * 20;
 
   // 댓글 수정하기 위한 선택된 댓글 인덱스
   const [commentIndex, setCommentIndex] = useState<number>();
+
+  // 스크롤 맨위로
+  const goTop = (e: React.MouseEvent<HTMLButtonElement>) => {
+    document.documentElement.scrollTop = 0;
+  };
 
   return (
     <>
@@ -41,7 +53,21 @@ function Comment({ comments, type }: IProp) {
               isSelected={commentIndex === index ? true : false}
             />
           ))}
-          <Pagination total={comments!.length} page={page} setPage={setPage} />
+          <Footer>
+            <Pagination total={comments!.length} page={page} setPage={setPage} />
+            <ScrollUpButton onClick={goTop}>상단으로</ScrollUpButton>
+            <CreatePostButton onClick={(e) => navigate(`/create/postForm/${board}`)}>글쓰기</CreatePostButton>
+          </Footer>
+
+          <ResponsiveFooter>
+            <Pagination total={comments!.length} page={page} setPage={setPage} />
+            <ScrollUpButton onClick={goTop}>
+              <ScrollUpIcon />
+            </ScrollUpButton>
+            <CreatePostButton onClick={(e) => navigate(`/create/postForm/${board}`)}>
+              <CreatePostIcon />
+            </CreatePostButton>
+          </ResponsiveFooter>
         </Container>
       )}
     </>
@@ -67,5 +93,56 @@ const Header = styled.div`
 
 const Topic = styled.span``;
 const CommentNum = styled.span``;
+
+const Footer = styled.div`
+  display: flex;
+  justify-content: center;
+  @media ${({ theme }) => theme.device.mobile} {
+    display: none;
+  }
+`;
+const ResponsiveFooter = styled.div`
+  display: none;
+  @media ${({ theme }) => theme.device.mobile} {
+    display: flex;
+    justify-content: center;
+  }
+`;
+const ScrollUpButton = styled.button`
+  ${greenButtonStyle};
+  position: absolute;
+  bottom: 0.7rem;
+  right: 7rem;
+  padding: 0.7rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    position: fixed;
+    bottom: 10rem;
+    right: 2rem;
+    padding: 0.7rem;
+  }
+`;
+
+const CreatePostButton = styled.button`
+  ${inverseGreenButtonStyle};
+  position: absolute;
+  bottom: 0.7rem;
+  right: 1rem;
+  padding: 0.7rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    ${greenButtonStyle};
+    position: fixed;
+    bottom: 6rem;
+    right: 2rem;
+  }
+`;
+
+const ScrollUpIcon = styled(HiOutlineChevronDoubleUp)`
+  font-size: 2rem;
+`;
+
+const CreatePostIcon = styled(BsPencilSquare)`
+  font-size: 2rem;
+  color: ${({ theme }) => theme.palette.white};
+`;
 
 export default Comment;

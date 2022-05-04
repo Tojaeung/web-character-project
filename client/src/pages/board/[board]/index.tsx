@@ -84,11 +84,13 @@ function Board() {
           </tbody>
         </table>
 
-        <Footer>
-          <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
-          <ScrollUpButton onClick={goTop}>상단으로</ScrollUpButton>
-          <CreatePostButton onClick={(e) => navigate(`/create/postForm/${board}`)}>글쓰기</CreatePostButton>
-        </Footer>
+        {posts.length && (
+          <Footer>
+            <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
+            <ScrollUpButton onClick={goTop}>상단으로</ScrollUpButton>
+            <CreatePostButton onClick={(e) => navigate(`/create/postForm/${board}`)}>글쓰기</CreatePostButton>
+          </Footer>
+        )}
       </Container>
 
       <Responsive>
@@ -110,15 +112,17 @@ function Board() {
           </ListBox>
         ))}
 
-        <Footer>
-          <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
-          <ScrollUpButton onClick={goTop}>
-            <ScrollUpIcon />
-          </ScrollUpButton>
-          <CreatePostButton onClick={(e) => navigate(`/create/postForm/${board}`)}>
-            <CreatePostIcon />
-          </CreatePostButton>
-        </Footer>
+        {posts.length && (
+          <Footer>
+            <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
+            <ScrollUpButton onClick={goTop}>
+              <ScrollUpIcon />
+            </ScrollUpButton>
+            <CreatePostButton onClick={(e) => navigate(`/create/postForm/${board}`)}>
+              <CreatePostIcon />
+            </CreatePostButton>
+          </Footer>
+        )}
       </Responsive>
     </>
   );
