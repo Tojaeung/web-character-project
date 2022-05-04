@@ -34,7 +34,12 @@ const Container = styled.div`
   align-items: center;
   gap: 1rem;
 `;
-const Label = styled.label``;
+const Label = styled.label`
+  font-size: 1.4rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
+`;
 const Select = styled.select``;
 const Option = styled.option``;
 

@@ -140,15 +140,17 @@ const Container = styled.div`
     tr {
       text-align: center;
       th {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
         font-weight: bold;
         padding: 1rem;
+        border: 1px solid ${({ theme }) => theme.palette.black};
         background-color: ${({ theme }) => theme.palette.gray};
         white-space: nowrap;
       }
       td {
         border: 1px solid ${({ theme }) => theme.palette.gray};
         padding: 1rem;
+        font-size: 1.3rem;
       }
       .title {
         width: 70%;

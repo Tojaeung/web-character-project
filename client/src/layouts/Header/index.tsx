@@ -69,17 +69,17 @@ function Header() {
               </NavLink>
             </List>
             <List>
-              <NavLink to={'/board/drawingCommission'} onClick={(e) => setOpenMobileNav(false)}>
+              <NavLink to={'/board/commission'} onClick={(e) => setOpenMobileNav(false)}>
                 커미션
               </NavLink>
             </List>
             <List>
-              <NavLink to={'/board/drawingRequest'} onClick={(e) => setOpenMobileNav(false)}>
+              <NavLink to={'/board/reque'} onClick={(e) => setOpenMobileNav(false)}>
                 리퀘스트
               </NavLink>
             </List>
             <List>
-              <NavLink to={'/board/drawingSale'} onClick={(e) => setOpenMobileNav(false)}>
+              <NavLink to={'/board/sale'} onClick={(e) => setOpenMobileNav(false)}>
                 분양
               </NavLink>
             </List>
