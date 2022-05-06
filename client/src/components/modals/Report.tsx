@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import { redButtonStyle } from '@src/styles/button.style';
 import { useAppDispatch } from '@src/store/app/hook';
-import { sendReport } from '@src/store/requests/etc.request';
+import { sendReport } from '@src/store/requests/user.request';
 import { closeModal } from '@src/store/slices/modal.slice';
 
 interface IProp {

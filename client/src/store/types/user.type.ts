@@ -113,6 +113,41 @@ export type updateDefaultCoverReturnType = {
   updatedCoverKey: string;
 };
 
+export type sendReportReturnType = {
+  ok: boolean;
+  message: string;
+};
+
+export type sendReportDataType = {
+  reportType: string;
+  report: string;
+  url: string;
+  suspectId: number;
+};
+
+export type getUserInfoReturnType = {
+  ok: boolean;
+  message: string;
+  user: UserType;
+  drawingsNum: number;
+  totalPostsNum: number;
+  totalCommentsNum: number;
+};
+
+export type getUserInfoDataType = {
+  userId: number;
+};
+
+export type givePenaltyReturnType = {
+  ok: boolean;
+  message: string;
+};
+
+export type givePenaltyDataType = {
+  userId: number;
+  penaltyPeriod: number;
+};
+
 export type deleteAccountReturnType = {
   ok: boolean;
   message: string;

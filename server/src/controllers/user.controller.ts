@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import { getCustomRepository, getRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
 import _ from 'lodash';
+import moment from 'moment';
+import schedule from 'node-schedule';
+import { IncomingWebhook } from '@slack/webhook';
 import User from '@src/entities/user/user.entity';
 import Drawing from '@src/entities/drawing/drawing.entity';
 import { UserRepository } from '@src/repositorys/user.repository';
@@ -16,13 +19,25 @@ import RequeImageKey from '@src/entities/board/reque/imageKey.entity';
 import SaleImageKey from '@src/entities/board/sale/imageKey.entity';
 import {
   ForgotPwDTO,
+  GetUserInfoDTO,
+  GivePenaltyDTO,
   ResetPwDTO,
+  SendReportDTO,
   SignUpDTO,
   UpdateDescDTO,
   UpdateNicknameDTO,
   UpdatePwDTO,
   VerifyEmailDTO,
 } from '@src/schemas/user.schema';
+import DrawingComment from '@src/entities/drawing/comment.entity';
+import Free from '@src/entities/board/free/free.entity';
+import Commission from '@src/entities/board/commission/commission.entity';
+import Reque from '@src/entities/board/reque/reque.entity';
+import Sale from '@src/entities/board/sale/sale.entity';
+import FreeComment from '@src/entities/board/free/comment.entity';
+import CommissionComment from '@src/entities/board/reque/comment.entity';
+import RequeComment from '@src/entities/board/commission/comment.entity';
+import SaleComment from '@src/entities/board/sale/comment.entity';
 
 export const signUp = async (req: Request<{}, {}, SignUpDTO>, res: Response): Promise<any> => {
   const { email, nickname, pw } = req.body;
@@ -361,6 +376,131 @@ export const updateDefaultCover = async (req: Request, res: Response): Promise<a
     updatedCover: defaultCover,
     updatedCoverKey: defaultCoverKey,
   });
+};
+
+export const sendReport = async (
+  req: Request<SendReportDTO['params'], {}, SendReportDTO['body']>,
+  res: Response
+): Promise<any> => {
+  const id = req.session.user?.id;
+  const suspectId = Number(req.params.userId); // 용의자 id
+  const { reportType, report, url } = req.body;
+
+  const isExistingUser = await getRepository(User).count({ id: suspectId });
+  if (!isExistingUser) {
+    logger.warn('존재하지 않는 유저를 신고하려고 시도합니다.');
+    throw ApiError.NotFound('존재하지 않는 유저를 신고할 수 없습니다.');
+  }
+
+  const webHookUrl = process.env.SLACK_WEBHOOK_URL as string;
+  const webHook = new IncomingWebhook(webHookUrl);
+
+  const result = await webHook.send({
+    blocks: [
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `"${reportType}"신고 들어왔습니다. 🚨🚨`,
+        },
+      },
+      {
+        type: 'divider',
+      },
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `*<http://localhost:3000${url}|확인하러가기>*`,
+        },
+      },
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `신고자ID: ${id}\n신고서: ${report}`,
+        },
+      },
+      {
+        type: 'divider',
+      },
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `
+                용의자ID: ${suspectId}
+              `,
+        },
+      },
+    ],
+  });
+
+  if (result.text !== 'ok') {
+    logger.error('신고하기 실패하였습니다.');
+    throw ApiError.InternalServerError('내부적인 문제로 신고하기 실패하였습니다.');
+  }
+  logger.info('신고하기 성공하였습니다.');
+  return res.status(200).json({ ok: true, message: '신고 성공하였습니다.' });
+};
+export const getUserInfo = async (req: Request<GetUserInfoDTO>, res: Response): Promise<any> => {
+  const userId = Number(req.params.userId);
+
+  const user = await getRepository(User).findOne(userId);
+  const drawingsNum = await getRepository(Drawing).count({ user_id: userId });
+  const drawingCommentsNum = await getRepository(DrawingComment).count({ user_id: userId });
+
+  const freePostsNum = await getRepository(Free).count({ user_id: userId });
+  const commissionPostsNum = await getRepository(Commission).count({ user_id: userId });
+  const requePostsNum = await getRepository(Reque).count({ user_id: userId });
+  const salePostsNum = await getRepository(Sale).count({ user_id: userId });
+
+  const freeCommentsNum = await getRepository(FreeComment).count({ user_id: userId });
+  const commissionCommentsNum = await getRepository(CommissionComment).count({ user_id: userId });
+  const requeCommentsNum = await getRepository(RequeComment).count({ user_id: userId });
+  const saleCommentsNum = await getRepository(SaleComment).count({ user_id: userId });
+
+  const totalPostsNum = freePostsNum + commissionPostsNum + requePostsNum + salePostsNum;
+  const totalCommentsNum =
+    drawingCommentsNum + freeCommentsNum + commissionCommentsNum + requeCommentsNum + saleCommentsNum;
+
+  logger.info('유저정보 가져오기 성공하였습니다.');
+  return res.status(200).json({
+    ok: true,
+    message: '유저정보 가져오기 성공하였습니다.',
+    user,
+    drawingsNum, // 이 유저가 프로필에 업로드한 사진 갯수
+    totalPostsNum, // 이 유저가 올린 모든 게시판에 걸쳐 올린 게시글 수
+    totalCommentsNum, // 이 유저가 작성한 모든 댓글 갯수
+  });
+};
+
+export const givePenalty = async (
+  req: Request<GivePenaltyDTO['params'], {}, GivePenaltyDTO['body']>,
+  res: Response
+): Promise<any> => {
+  const userId = Number(req.params.userId);
+  const { penaltyPeriod } = req.body;
+
+  // exp에 null 값을 주어서 패널티를 받고 있는 유저라는것을 나타낸다.
+  const result = await getRepository(User).update(userId, { exp: null });
+  if (!result.affected) {
+    logger.error('관리자 권한으로 불량유저를 제제하지 못했습니다.');
+    throw ApiError.InternalServerError('관리자 권한으로 불량유저를 제제하지 못했습니다.');
+  }
+
+  // 1주일 후에 다시 exp가 0으로 돌아오면서 서비스를 이용할 수 있게된다.
+  const expiredData = moment().add(penaltyPeriod, 'days').format();
+  schedule.scheduleJob(expiredData, async () => {
+    const result = await getRepository(User).update(userId, { exp: 0 });
+    if (!result.affected) {
+      logger.error(`id:${userId}) 불량유저를 정상유저로 돌려놓지 못했습니다.`);
+      throw ApiError.InternalServerError('불량유저를 정상유저로 돌려놓지 못했습니다.');
+    }
+  });
+
+  logger.info(`id:${userId}) 관리자 권한으로 유저에게 패널티를 주었습니다.`);
+  return res.status(200).json({ ok: true, message: '관리자 권한으로 불량유저가 되었습니다.' });
 };
 
 export const deleteAccount = async (req: Request, res: Response): Promise<any> => {

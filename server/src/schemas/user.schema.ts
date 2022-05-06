@@ -90,6 +90,38 @@ export const updateDescSchema = object({
   }),
 });
 
+export const sendReportSchema = object({
+  params: object({
+    userId: z.string(),
+  }),
+  body: object({
+    reportType: z.string().nonempty('신고유형을 선택해주세요.'),
+    report: z.string().nonempty('신고내용을 작성해주세요.').max(1000, '자기소개 글자를 초과하였습니다.'),
+    url: z
+      .string()
+      .nonempty('신고위치를 확인할 수 없습니다.')
+      .url({ message: '신고위치의 url형식이 유효하지 않습니다.' }),
+  }),
+});
+
+export const getUserInfoSchema = object({
+  params: object({
+    userId: z.string(),
+  }),
+});
+
+export const givePenaltySchema = object({
+  params: object({
+    userId: z.string(),
+  }),
+  body: object({
+    penaltyPeriod: z.number({
+      required_error: '제재기한을 입력해주세요.',
+      invalid_type_error: '오직 숫자만 입력 가능합니다.',
+    }),
+  }),
+});
+
 export type SignUpDTO = z.infer<typeof signUpSchema>['body'];
 export type ForgotPwDTO = z.infer<typeof forgotPwSchema>['body'];
 export type ResetPwDTO = z.infer<typeof resetPwSchema>['body'];
@@ -97,3 +129,6 @@ export type VerifyEmailDTO = z.infer<typeof verifyEmailSchema>['body'];
 export type UpdateNicknameDTO = z.infer<typeof updateNicknameSchema>['body'];
 export type UpdatePwDTO = z.infer<typeof updatePwSchema>['body'];
 export type UpdateDescDTO = z.infer<typeof updateDescSchema>['body'];
+export type SendReportDTO = z.infer<typeof sendReportSchema>;
+export type GetUserInfoDTO = z.infer<typeof getUserInfoSchema>['params'];
+export type GivePenaltyDTO = z.infer<typeof givePenaltySchema>;

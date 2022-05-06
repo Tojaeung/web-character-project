@@ -19,6 +19,9 @@ import {
   updateDefaultCover,
   deleteAccount,
   getUser,
+  sendReport,
+  getUserInfo,
+  givePenalty,
 } from '@src/controllers/user.controller';
 import {
   signUpSchema,
@@ -57,6 +60,15 @@ router.patch('/me/avatar', auth, avatarUpload.single('updatedAvatar'), asyncHand
 router.patch('/me/default-avatar', auth, asyncHandler(updateDefaultAvatar));
 router.patch('/me/cover', auth, coverUpload.single('updatedCover'), asyncHandler(updateCover));
 router.patch('/me/default-cover', auth, asyncHandler(updateDefaultCover));
+
+// 유저 신고하기
+router.post('/users/:userId/report', auth, asyncHandler(sendReport));
+
+// 유저정보 가져오기
+router.get('/users/:userId/info', auth, asyncHandler(getUserInfo));
+
+// 유저 제재하기
+router.patch('/users/:userId/exp', auth, asyncHandler(givePenalty));
 
 // 계정삭제
 router.delete('/me', auth, asyncHandler(deleteAccount));

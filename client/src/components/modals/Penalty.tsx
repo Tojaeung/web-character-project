@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { defaultInputStyle } from '@src/styles/input.style';
 import { redButtonStyle } from '@src/styles/button.style';
 import { useAppDispatch } from '@src/store/app/hook';
-import { penaltyByAdmin } from '@src/store/requests/etc.request';
+import { givePenalty } from '@src/store/requests/user.request';
 import { closeModal } from '@src/store/slices/modal.slice';
 
 interface IProp {
@@ -19,7 +19,7 @@ function Penalty({ props }: IProp) {
     setPenaltyPeriod('');
     try {
       const res = await dispatch(
-        penaltyByAdmin({ userId: props.userId as number, penaltyPeriod: Number(penaltyPeriod) })
+        givePenalty({ userId: props.userId as number, penaltyPeriod: Number(penaltyPeriod) })
       ).unwrap();
       alert(res.message);
     } catch (err: any) {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch } from '@src/store/app/hook';
-import { getUserInfo } from '@src/store/requests/etc.request';
+import { getUserInfo } from '@src/store/requests/user.request';
 import getLevel from '@src/utils/exp.util';
 import relativeTime from '@src/utils/date.util';
 import { UserType } from '@src/types';
@@ -19,18 +19,18 @@ function UserInfo({ props }: IProp) {
 
   const [userInfo, setUserInfo] = useState<UserType | null>(null);
   const [drawingsNum, setDrawingsNum] = useState<number | null>(null);
-  const [postsNum, setPostsNum] = useState<number | null>(null);
-  const [commentsNum, setCommentsNum] = useState<number | null>(null);
+  const [totalPostsNum, setTotalPostsNum] = useState<number | null>(null);
+  const [totalCommentsNum, setTotalCommentsNum] = useState<number | null>(null);
 
   useEffect(() => {
     dispatch(getUserInfo({ userId: props.userId }))
       .unwrap()
       .then((res) => {
-        const { userInfo, drawingsNum, drawingCommentsNum, postsNum, postCommentsNum } = res;
-        setUserInfo(userInfo);
+        const { user, drawingsNum, totalPostsNum, totalCommentsNum } = res;
+        setUserInfo(user);
         setDrawingsNum(drawingsNum);
-        setPostsNum(postsNum);
-        setCommentsNum(drawingCommentsNum + postCommentsNum);
+        setTotalPostsNum(totalPostsNum);
+        setTotalCommentsNum(totalCommentsNum);
       })
       .catch((err: any) => {
         alert(err.message);
@@ -53,12 +53,12 @@ function UserInfo({ props }: IProp) {
           </tr>
           <tr>
             <td>게시글 수</td>
-            <td>{postsNum}</td>
+            <td>{totalPostsNum}</td>
           </tr>
 
           <tr>
             <td>댓글 수</td>
-            <td>{commentsNum}</td>
+            <td>{totalCommentsNum}</td>
           </tr>
 
           <tr>

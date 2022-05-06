@@ -24,6 +24,12 @@ import {
   updateCoverReturnType,
   updateCoverDataType,
   updateDefaultCoverReturnType,
+  sendReportDataType,
+  sendReportReturnType,
+  getUserInfoDataType,
+  getUserInfoReturnType,
+  givePenaltyDataType,
+  givePenaltyReturnType,
   deleteAccountReturnType,
 } from '@src/store/types/user.type';
 
@@ -207,6 +213,62 @@ export const updateDefaultCover = createAsyncThunk<
     const res = await axios.patch(`/api/me/default-cover`, {
       withCredentials: true,
     });
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+
+export const sendReport = createAsyncThunk<
+  sendReportReturnType,
+  sendReportDataType,
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
+>('SEND_REPORT', async (data, thunkApi) => {
+  const { reportType, report, url, suspectId } = data;
+  try {
+    const res = await axios.post(
+      `/api/users/${suspectId}/sendReport`,
+      { reportType, report, url },
+      {
+        withCredentials: true,
+      }
+    );
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+
+export const getUserInfo = createAsyncThunk<
+  getUserInfoReturnType,
+  getUserInfoDataType,
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
+>('GET_USERINFO', async (data, thunkApi) => {
+  const { userId } = data;
+  try {
+    const res = await axios.get(`/api/users/${userId}/info`, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err: any) {
+    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+  }
+});
+
+export const givePenalty = createAsyncThunk<
+  givePenaltyReturnType,
+  givePenaltyDataType,
+  { state: RootState; rejectValue: { ok: boolean; message: string } }
+>('GIVE_PENALTY', async (data, thunkApi) => {
+  const { userId, penaltyPeriod } = data;
+  try {
+    const res = await axios.patch(
+      `/api/users/${userId}/exp`,
+      { penaltyPeriod },
+      {
+        withCredentials: true,
+      }
+    );
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
