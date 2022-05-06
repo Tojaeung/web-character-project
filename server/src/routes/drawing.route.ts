@@ -4,7 +4,13 @@ import auth from '@src/middlewares/auth.middleware';
 import penalty from '@src/middlewares/penalty.middleware';
 import { drawingUpload } from '@src/helpers/s3.helper';
 import validator from '@src/middlewares/validator.middleware';
-import { createCommentSchema, updateCommentSchema } from '@src/schemas/drawing.schema';
+import {
+  createDrawingSchema,
+  createCommentSchema,
+  updateCommentSchema,
+  createLikeSchema,
+  createDisLikeSchema,
+} from '@src/schemas/drawing.schema';
 import {
   createComment,
   createDisLike,
@@ -19,7 +25,14 @@ import {
 
 const router = Router();
 
-router.post('/drawings', auth, penalty, drawingUpload.single('newDrawing'), asyncHandler(createDrawing));
+router.post(
+  '/drawings',
+  auth,
+  penalty,
+  drawingUpload.single('newDrawing'),
+  validator(createDrawingSchema),
+  asyncHandler(createDrawing)
+);
 router.get('/drawings/users/:userId', asyncHandler(getDrawings));
 
 router.delete('/drawings/:drawingId', auth, asyncHandler(deleteDrawing));
@@ -36,7 +49,7 @@ router.post(
 router.patch('/drawings/comments/:commentId', auth, validator(updateCommentSchema), asyncHandler(updateComment));
 router.delete('/drawings/comments/:commentId', auth, asyncHandler(deleteComment));
 
-router.post('/drawings/:drawingId/like', auth, penalty, asyncHandler(createLike));
-router.post('/drawings/:drawingId/dislike', auth, penalty, asyncHandler(createDisLike));
+router.post('/drawings/:drawingId/like', auth, penalty, validator(createLikeSchema), asyncHandler(createLike));
+router.post('/drawings/:drawingId/dislike', auth, penalty, validator(createDisLikeSchema), asyncHandler(createDisLike));
 
 export default router;

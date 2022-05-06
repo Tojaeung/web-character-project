@@ -39,7 +39,6 @@ export const userSlice = createSlice({
       .addCase(signIn.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
-        state.user = null;
       });
 
     builder
@@ -51,7 +50,6 @@ export const userSlice = createSlice({
       .addCase(refreshLogin.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
-        state.user = null;
       });
 
     // 로그아웃
@@ -65,8 +63,6 @@ export const userSlice = createSlice({
       .addCase(signOut.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
-        state.user = null;
-        socket.disconnect();
       });
 
     builder
@@ -78,7 +74,6 @@ export const userSlice = createSlice({
       .addCase(updateNickname.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
-        state.user = null;
       });
 
     builder
@@ -92,7 +87,6 @@ export const userSlice = createSlice({
       .addCase(updateAvatar.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
-        state.user = null;
       });
 
     builder
@@ -106,7 +100,6 @@ export const userSlice = createSlice({
       .addCase(updateDefaultAvatar.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
-        state.user = null;
       });
 
     builder
@@ -120,7 +113,6 @@ export const userSlice = createSlice({
       .addCase(updateCover.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
-        state.user = null;
       });
 
     builder
@@ -134,7 +126,6 @@ export const userSlice = createSlice({
       .addCase(updateDefaultCover.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
-        state.user = null;
       });
 
     builder
@@ -147,7 +138,6 @@ export const userSlice = createSlice({
       .addCase(updateDesc.rejected, (state, { payload }) => {
         state.ok = payload?.ok!;
         state.message = payload?.message!;
-        state.user = null;
       });
   },
 });

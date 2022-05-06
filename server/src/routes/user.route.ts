@@ -44,11 +44,11 @@ router.patch('/users/reset-pw', validator(resetPwSchema), asyncHandler(resetPw))
 router.get('/users/:userId', asyncHandler(getUser));
 
 // 이메일 변경, 그에따른 이메일 인증
-router.post('/me/verify-email', auth, validator(verifyEmailSchema), asyncHandler(verifyEmail));
+router.patch('/me/verify-email', auth, validator(verifyEmailSchema), asyncHandler(verifyEmail));
 router.patch('/users/:userId/email', asyncHandler(updateEmail));
 
 // 유저정보 변경
-router.patch('/me/nickname', auth, validator(updateNicknameSchema), asyncHandler(updateNickname));
+router.patch('/me/nickname', validator(updateNicknameSchema), asyncHandler(updateNickname));
 router.patch('/me/pw', auth, validator(updatePwSchema), asyncHandler(updatePw));
 router.patch('/me/desc', auth, validator(updateDescSchema), asyncHandler(updateDesc));
 

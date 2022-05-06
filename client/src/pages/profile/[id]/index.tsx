@@ -27,7 +27,7 @@ function Profile() {
     } catch (err: any) {
       alert(err.message);
     }
-  }, [dispatch, profileId]);
+  }, []);
 
   if (!profile) return <NotFound />;
   return (

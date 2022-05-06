@@ -129,7 +129,7 @@ export const updatePw = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_PW', async (data, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/me/nickname`, data, {
+    const res = await axios.patch(`/api/me/pw`, data, {
       withCredentials: true,
     });
     return res.data;

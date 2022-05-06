@@ -6,6 +6,8 @@ import penalty from '@src/middlewares/penalty.middleware';
 import { boardUpload } from '@src/helpers/s3.helper';
 import {
   createCommentSchema,
+  createDisLikeSchema,
+  createLikeSchema,
   createPostSchema,
   removeImageKeySchema,
   updateCommentSchema,
@@ -56,19 +58,18 @@ router.patch('/boards/:board/comments/:commentId', auth, validator(updateComment
 router.delete('/boards/:board/comments/:commentId', auth, asyncHandler(deleteComment));
 
 // 게시물 좋아요 생성
-router.post('/boards/:board/posts/:postId/like', auth, penalty, asyncHandler(createLike));
+router.post('/boards/:board/posts/:postId/like', auth, penalty, validator(createLikeSchema), asyncHandler(createLike));
 // 게시물 싫어요 생성
-router.post('/boards/:board/posts/:postId/dislike', auth, penalty, asyncHandler(createDislike));
-
-// 게시글 이미지 업로드 할시
 router.post(
-  '/posts/add-imagekey',
+  '/boards/:board/posts/:postId/dislike',
   auth,
   penalty,
-
-  boardUpload.single('newImage'),
-  asyncHandler(addImageKey)
+  validator(createDisLikeSchema),
+  asyncHandler(createDislike)
 );
+
+// 게시글 이미지 업로드 할시
+router.post('/posts/add-imagekey', auth, penalty, boardUpload.single('newImage'), asyncHandler(addImageKey));
 // 게시글 이미지 업로드 안할시
 router.post('/posts/remove-imagekey', auth, penalty, validator(removeImageKeySchema), asyncHandler(removeImageKey));
 

@@ -16,10 +16,11 @@ function ChangeNickname() {
     e.preventDefault();
     try {
       const res = await dispatch(updateNickname({ updatedNickname: nickname })).unwrap();
-      alert(res.message);
       await dispatch(closeModal());
+      alert(res.message);
     } catch (err: any) {
       alert(err.message);
+      await dispatch(closeModal());
     }
   };
 

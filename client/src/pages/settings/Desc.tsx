@@ -13,12 +13,12 @@ function Desc() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [defaultModules] = useDefaultConfig();
-  const [updatedDesc, setUpdatedDesc] = useState('');
+  const [desc, setDesc] = useState('');
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      const res = await dispatch(updateDesc({ updatedDesc })).unwrap();
+      const res = await dispatch(updateDesc({ updatedDesc: desc })).unwrap();
       alert(res.message);
       navigate(0);
     } catch (err: any) {
@@ -27,7 +27,7 @@ function Desc() {
   };
 
   const onCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setUpdatedDesc('');
+    setDesc('');
     navigate(-1);
   };
   return (
@@ -36,11 +36,11 @@ function Desc() {
 
       <ReactQuill
         className="ql-editor"
-        value={updatedDesc}
-        onChange={setUpdatedDesc}
+        value={desc}
+        onChange={setDesc}
         modules={defaultModules}
         theme="snow"
-        placeholder="내용을 입력하세요....(최대 1000글자)"
+        placeholder="내용을 입력하세요....(최대 500글자)"
       />
       <ButtonBox>
         <SubmitButton onClick={handleSubmit}>확인</SubmitButton>

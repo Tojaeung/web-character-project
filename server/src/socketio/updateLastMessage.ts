@@ -1,5 +1,4 @@
 import cluster from '@src/helpers/redis.helper';
-import socket from '@src/socket';
 import parseChats from '@src/socketio/parseChats';
 import { SessionSocket } from '@src/types';
 

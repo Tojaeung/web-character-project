@@ -39,9 +39,9 @@ function PostForm() {
     setTitle('');
     setContent('');
 
-    if ((imageKeys as string[]).length !== 0) {
+    if (imageKeys.length > 0) {
       try {
-        await axios.post('/api/posts/remove-imagekey', imageKeys, { withCredentials: true });
+        await axios.post('/api/posts/remove-imagekey', { imageKeys }, { withCredentials: true });
       } catch (err: any) {
         alert(err.message);
       }
@@ -62,7 +62,7 @@ function PostForm() {
         onChange={setContent}
         modules={imageUploadModules}
         theme="snow"
-        placeholder="내용을 입력하세요....(최대 3000글자)"
+        placeholder="내용을 입력하세요....(최대 1000글자)"
       />
       <ButtonBox>
         <SubmitButton onClick={handleAddPost}>등록</SubmitButton>

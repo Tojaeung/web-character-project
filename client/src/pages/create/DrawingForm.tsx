@@ -79,7 +79,7 @@ function DrawingForm() {
           onChange={setContent}
           modules={defaultModules}
           theme="snow"
-          placeholder="내용을 입력하세요....(최대 3000글자)"
+          placeholder="내용을 입력하세요....(최대 500글자)"
         />
         <ButtonWrapper>
           <SubmitButton type="submit">추가</SubmitButton>

@@ -27,6 +27,16 @@ import {
   RequeDislikeRepository,
   SaleDislikeRepository,
 } from '@src/repositorys/board.repository';
+import {
+  CreateCommentDTO,
+  CreateDisLikeDTO,
+  CreateLikeDTO,
+  CreatePostDTO,
+  RemoveImageKeyDTO,
+  UpdateCommentDTO,
+  UpdatePostDTO,
+} from '@src/schemas/board.schema';
+// import { RemoveImageKeyDTO } from '@src/schemas/board.schema';
 
 export const getAllBoards = async (req: Request, res: Response): Promise<any> => {
   const free = await getRepository(Free).find({ order: { id: 'DESC' }, take: 10, relations: ['user'] });
@@ -47,10 +57,11 @@ export const getAllBoards = async (req: Request, res: Response): Promise<any> =>
 
 export const getBoard = async (req: Request, res: Response): Promise<any> => {
   const { board } = req.params;
-  const { page, limit } = req.query;
+  const page = Number(req.query.page as string);
+  const limit = Number(req.query.limit as string);
 
   // 게시판 불러오기 시작점
-  const offset = (Number(page) - 1) * Number(limit);
+  const offset = (page - 1) * limit;
   // 가져온 게시물들
   let posts;
   // 게시판의 전체 게시물 수
@@ -60,7 +71,7 @@ export const getBoard = async (req: Request, res: Response): Promise<any> => {
     posts = await getRepository(Free).find({
       order: { id: 'DESC' },
       skip: offset,
-      take: Number(limit),
+      take: limit,
       relations: ['user'],
     });
     totalPostsNum = await getRepository(Free).count();
@@ -68,7 +79,7 @@ export const getBoard = async (req: Request, res: Response): Promise<any> => {
     posts = await getRepository(Commission).find({
       order: { id: 'DESC' },
       skip: offset,
-      take: Number(limit),
+      take: limit,
       relations: ['user'],
     });
     totalPostsNum = await getRepository(Commission).count();
@@ -76,7 +87,7 @@ export const getBoard = async (req: Request, res: Response): Promise<any> => {
     posts = await getRepository(Reque).find({
       order: { id: 'DESC' },
       skip: offset,
-      take: Number(limit),
+      take: limit,
       relations: ['user'],
     });
     totalPostsNum = await getRepository(Reque).count();
@@ -84,7 +95,7 @@ export const getBoard = async (req: Request, res: Response): Promise<any> => {
     posts = await getRepository(Sale).find({
       order: { id: 'DESC' },
       skip: offset,
-      take: Number(limit),
+      take: limit,
       relations: ['user'],
     });
     totalPostsNum = await getRepository(Sale).count();
@@ -103,25 +114,26 @@ export const getPost = async (req: Request, res: Response): Promise<any> => {
   const requeRepo = getCustomRepository(RequeRepository);
   const saleRepo = getCustomRepository(SaleRepository);
 
-  const { board, postId } = req.params;
+  const board = req.params.board;
+  const postId = Number(req.params.postId);
 
   let postJoinAll;
   if (board === 'free') {
-    postJoinAll = await freeRepo.joinAll(Number(postId));
+    postJoinAll = await freeRepo.joinAll(postId);
     // 조회수 증가
-    await getRepository(Free).increment({ id: Number(postId) }, 'views', 1);
+    await getRepository(Free).increment({ id: postId }, 'views', 1);
   } else if (board === 'commission') {
-    postJoinAll = await commissionRepo.joinAll(Number(postId));
+    postJoinAll = await commissionRepo.joinAll(postId);
     // 조회수 증가
-    await getRepository(Commission).increment({ id: Number(postId) }, 'views', 1);
+    await getRepository(Commission).increment({ id: postId }, 'views', 1);
   } else if (board === 'reque') {
-    postJoinAll = await requeRepo.joinAll(Number(postId));
+    postJoinAll = await requeRepo.joinAll(postId);
     // 조회수 증가
-    await getRepository(Reque).increment({ id: Number(postId) }, 'views', 1);
+    await getRepository(Reque).increment({ id: postId }, 'views', 1);
   } else if (board === 'sale') {
-    postJoinAll = await saleRepo.joinAll(Number(postId));
+    postJoinAll = await saleRepo.joinAll(postId);
     // 조회수 증가
-    await getRepository(Sale).increment({ id: Number(postId) }, 'views', 1);
+    await getRepository(Sale).increment({ id: postId }, 'views', 1);
   } else {
     logger.warn('존재하지 않는 게시글을 가져오려는 시도가 있습니다.');
     throw ApiError.NotFound('존재하지 않는 게시글입니다.');
@@ -144,7 +156,7 @@ export const addImageKey = async (req: Request, res: Response): Promise<any> => 
   return res.status(200).json({ ok: true, message: '게시글 이미지 url 가져오기 성공하였습니다.', imageUrl, imageKey });
 };
 
-export const removeImageKey = async (req: Request, res: Response): Promise<any> => {
+export const removeImageKey = async (req: Request<{}, {}, RemoveImageKeyDTO['body']>, res: Response): Promise<any> => {
   const { imageKeys } = req.body;
 
   imageKeys.forEach((imageKey: string) => s3Delete(imageKey as string));
@@ -153,14 +165,17 @@ export const removeImageKey = async (req: Request, res: Response): Promise<any> 
   return res.status(200).json({ ok: true, message: '게시글 이미지 s3 board 객체 삭제 성공하였습니다.' });
 };
 
-export const createPost = async (req: Request, res: Response): Promise<any> => {
+export const createPost = async (
+  req: Request<CreatePostDTO['params'], {}, CreatePostDTO['body']>,
+  res: Response
+): Promise<any> => {
   const freeRepo = getCustomRepository(FreeRepository);
   const commissionRepo = getCustomRepository(CommissionRepository);
   const requeRepo = getCustomRepository(RequeRepository);
   const saleRepo = getCustomRepository(SaleRepository);
 
   const id = req.session.user?.id!;
-  const { board } = req.params;
+  const board = req.params.board;
   const { title, content, imageKeys } = req.body;
 
   let newPostJoinAll;
@@ -188,29 +203,33 @@ export const createPost = async (req: Request, res: Response): Promise<any> => {
   return res.status(200).json({ ok: true, message: '게시판 글쓰기 성공하였습니다.', newPostJoinAll });
 };
 
-export const updatePost = async (req: Request, res: Response): Promise<any> => {
+export const updatePost = async (
+  req: Request<UpdatePostDTO['params'], {}, UpdatePostDTO['body']>,
+  res: Response
+): Promise<any> => {
   const freeRepo = getCustomRepository(FreeRepository);
   const commissionRepo = getCustomRepository(CommissionRepository);
   const requeRepo = getCustomRepository(RequeRepository);
   const saleRepo = getCustomRepository(SaleRepository);
 
   const id = req.session.user?.id!;
-  const { board, postId } = req.params;
+  const board = req.params.board;
+  const postId = Number(req.params.postId);
   const { title, content, imageKeys } = req.body;
 
   let updatedPostJoinAll;
   if (board === 'free') {
-    const updatedPost = await freeRepo.update(Number(postId), title, content);
-    updatedPostJoinAll = await freeRepo.joinAll(Number(updatedPost.id));
+    const updatedPost = await freeRepo.update(postId, title, content);
+    updatedPostJoinAll = await freeRepo.joinAll(updatedPost.id);
   } else if (board === 'commission') {
-    const updatedPost = await commissionRepo.update(Number(postId), title, content);
-    updatedPostJoinAll = await commissionRepo.joinAll(Number(updatedPost.id));
+    const updatedPost = await commissionRepo.update(postId, title, content);
+    updatedPostJoinAll = await commissionRepo.joinAll(updatedPost.id);
   } else if (board === 'reque') {
-    const updatedPost = await requeRepo.update(Number(postId), title, content);
-    updatedPostJoinAll = await requeRepo.joinAll(Number(updatedPost.id));
+    const updatedPost = await requeRepo.update(postId, title, content);
+    updatedPostJoinAll = await requeRepo.joinAll(updatedPost.id);
   } else if (board === 'sale') {
-    const updatedPost = await saleRepo.update(Number(postId), title, content);
-    updatedPostJoinAll = await saleRepo.joinAll(Number(updatedPost.id));
+    const updatedPost = await saleRepo.update(postId, title, content);
+    updatedPostJoinAll = await saleRepo.joinAll(updatedPost.id);
   } else {
     logger.warn('존재하지 않는 게시판에서 게시글을 수정하려는 시도가 있습니다.');
     throw ApiError.NotFound('존재하지 않는 게시판입니다.');
@@ -218,8 +237,8 @@ export const updatePost = async (req: Request, res: Response): Promise<any> => {
 
   // s3 이미지 저장(새로운) 및 삭제(기존)
   if (imageKeys.length) {
-    deleteImageKey(board, id, Number(postId));
-    createImageKey(board, imageKeys, id, Number(postId));
+    deleteImageKey(board, id, postId);
+    createImageKey(board, imageKeys, id, postId);
   }
 
   logger.info('게시글 수정 성공하였습니다.');
@@ -233,53 +252,56 @@ export const deletePost = async (req: Request, res: Response): Promise<any> => {
   const saleRepo = getCustomRepository(SaleRepository);
 
   const id = req.session.user?.id!;
-  const { board, postId } = req.params;
+  const board = req.params.board;
+  const postId = Number(req.params.postId);
 
   let deletedPost;
   if (board === 'free') {
-    deletedPost = await freeRepo.delete(Number(postId));
+    deletedPost = await freeRepo.delete(postId);
   } else if (board === 'commission') {
-    deletedPost = await commissionRepo.delete(Number(postId));
+    deletedPost = await commissionRepo.delete(postId);
   } else if (board === 'reque') {
-    deletedPost = await requeRepo.delete(Number(postId));
+    deletedPost = await requeRepo.delete(postId);
   } else if (board === 'sale') {
-    deletedPost = await saleRepo.delete(Number(postId));
+    deletedPost = await saleRepo.delete(postId);
   } else {
     logger.warn('존재하지 않는 게시판에서 게시글을 삭제하려는 시도가 있습니다.');
     throw ApiError.NotFound('존재하지 않는 게시판입니다.');
   }
 
   // s3 이미지 삭제
-  deleteImageKey(board, id, Number(postId));
+  deleteImageKey(board, id, postId);
 
   logger.info('게시글 제거 성공하였습니다.');
   return res.status(200).json({ ok: true, message: '게시글 제거 성공하였습니다.', deletedPost });
 };
 
-export const createComment = async (req: Request, res: Response): Promise<any> => {
+export const createComment = async (
+  req: Request<CreateCommentDTO['params'], {}, CreateCommentDTO['body']>,
+  res: Response
+): Promise<any> => {
   const freeCommentRepo = getCustomRepository(FreeCommentRepository);
   const commissionCommentRepo = getCustomRepository(CommissionCommentRepository);
   const requeCommentRepo = getCustomRepository(RequeCommentRepository);
   const saleCommentRepo = getCustomRepository(SaleCommentRepository);
 
   const id = req.session.user?.id!;
-  const { board, postId } = req.params;
+  const board = req.params.board;
+  const postId = Number(req.params.postId);
   const { content } = req.body;
-
-  console.log(typeof content);
 
   let newCommentJoinUser;
   if (board === 'free') {
-    const newComment = await freeCommentRepo.create(content, Number(postId), id);
+    const newComment = await freeCommentRepo.create(content, postId, id);
     newCommentJoinUser = await freeCommentRepo.joinUser(newComment.id);
   } else if (board === 'commission') {
-    const newComment = await commissionCommentRepo.create(content, Number(postId), id);
+    const newComment = await commissionCommentRepo.create(content, postId, id);
     newCommentJoinUser = await commissionCommentRepo.joinUser(newComment.id);
   } else if (board === 'reque') {
-    const newComment = await requeCommentRepo.create(content, Number(postId), id);
+    const newComment = await requeCommentRepo.create(content, postId, id);
     newCommentJoinUser = await requeCommentRepo.joinUser(newComment.id);
   } else if (board === 'sale') {
-    const newComment = await saleCommentRepo.create(content, Number(postId), id);
+    const newComment = await saleCommentRepo.create(content, postId, id);
     newCommentJoinUser = await saleCommentRepo.joinUser(newComment.id);
   } else {
     logger.warn('존재하지 않는 게시판에서 댓글을 생성하려는 시도가 있습니다.');
@@ -290,27 +312,31 @@ export const createComment = async (req: Request, res: Response): Promise<any> =
   return res.status(200).json({ ok: true, message: '게시글 댓글 생성 성공하였습니다.', newCommentJoinUser });
 };
 
-export const updateComment = async (req: Request, res: Response): Promise<any> => {
+export const updateComment = async (
+  req: Request<UpdateCommentDTO['params'], {}, UpdateCommentDTO['body']>,
+  res: Response
+): Promise<any> => {
   const freeCommentRepo = getCustomRepository(FreeCommentRepository);
   const commissionCommentRepo = getCustomRepository(CommissionCommentRepository);
   const requeCommentRepo = getCustomRepository(RequeCommentRepository);
   const saleCommentRepo = getCustomRepository(SaleCommentRepository);
 
-  const { board, commentId } = req.params;
+  const board = req.params.board;
+  const commentId = Number(req.params.commentId);
   const { updatedContent } = req.body;
 
   let updatedCommentJoinUser;
   if (board === 'free') {
-    const updatedComment = await freeCommentRepo.update(updatedContent, Number(commentId));
+    const updatedComment = await freeCommentRepo.update(updatedContent, commentId);
     updatedCommentJoinUser = await freeCommentRepo.joinUser(updatedComment.id);
   } else if (board === 'commission') {
-    const updatedComment = await commissionCommentRepo.update(updatedContent, Number(commentId));
+    const updatedComment = await commissionCommentRepo.update(updatedContent, commentId);
     updatedCommentJoinUser = await commissionCommentRepo.joinUser(updatedComment.id);
   } else if (board === 'reque') {
-    const updatedComment = await requeCommentRepo.update(updatedContent, Number(commentId));
+    const updatedComment = await requeCommentRepo.update(updatedContent, commentId);
     updatedCommentJoinUser = await requeCommentRepo.joinUser(updatedComment.id);
   } else if (board === 'sale') {
-    const updatedComment = await saleCommentRepo.update(updatedContent, Number(commentId));
+    const updatedComment = await saleCommentRepo.update(updatedContent, commentId);
     updatedCommentJoinUser = await saleCommentRepo.joinUser(updatedComment.id);
   } else {
     logger.warn('존재하지 않는 게시판에서 댓글을 수정하려는 시도가 있습니다.');
@@ -327,17 +353,18 @@ export const deleteComment = async (req: Request, res: Response): Promise<any> =
   const requeCommentRepo = getCustomRepository(RequeCommentRepository);
   const saleCommentRepo = getCustomRepository(SaleCommentRepository);
 
-  const { board, commentId } = req.params;
+  const board = req.params.board;
+  const commentId = Number(req.params.commentId);
 
   let deletedComment;
   if (board === 'free') {
-    deletedComment = await freeCommentRepo.delete(Number(commentId));
+    deletedComment = await freeCommentRepo.delete(commentId);
   } else if (board === 'commission') {
-    deletedComment = await commissionCommentRepo.delete(Number(commentId));
+    deletedComment = await commissionCommentRepo.delete(commentId);
   } else if (board === 'reque') {
-    deletedComment = await requeCommentRepo.delete(Number(commentId));
+    deletedComment = await requeCommentRepo.delete(commentId);
   } else if (board === 'sale') {
-    deletedComment = await saleCommentRepo.delete(Number(commentId));
+    deletedComment = await saleCommentRepo.delete(commentId);
   } else {
     logger.warn('존재하지 않는 게시판에서 댓글을 제거하려는 시도가 있습니다.');
     throw ApiError.NotFound('존재하지 않는 게시판입니다.');
@@ -347,25 +374,29 @@ export const deleteComment = async (req: Request, res: Response): Promise<any> =
   return res.status(200).json({ ok: true, message: '게시글 댓글 제거 성공하였습니다.', deletedComment });
 };
 
-export const createLike = async (req: Request, res: Response): Promise<any> => {
+export const createLike = async (
+  req: Request<CreateLikeDTO['params'], {}, CreateLikeDTO['body']>,
+  res: Response
+): Promise<any> => {
   const freeLikeRepo = getCustomRepository(FreeLikeRepository);
   const commissionLikeRepo = getCustomRepository(CommissionLikeRepository);
   const requeLikeRepo = getCustomRepository(RequeLikeRepository);
   const saleLikeRepo = getCustomRepository(SaleLikeRepository);
 
   const id = req.session.user?.id!;
-  const { board, postId } = req.params;
+  const board = req.params.board;
+  const postId = Number(req.params.postId);
   const { userId } = req.body; // 게시글 작성자 id
 
   let newLike;
   if (board === 'free') {
-    newLike = await freeLikeRepo.create(id, Number(postId));
+    newLike = await freeLikeRepo.create(id, postId);
   } else if (board === 'commission') {
-    newLike = await commissionLikeRepo.create(id, Number(postId));
+    newLike = await commissionLikeRepo.create(id, postId);
   } else if (board === 'reque') {
-    newLike = await requeLikeRepo.create(id, Number(postId));
+    newLike = await requeLikeRepo.create(id, postId);
   } else if (board === 'sale') {
-    newLike = await saleLikeRepo.create(id, Number(postId));
+    newLike = await saleLikeRepo.create(id, postId);
   } else {
     logger.warn('존재하지 않는 게시판에서 게시글에 좋아요를 생성하려는 시도가 있습니다.');
     throw ApiError.NotFound('존재하지 않는 게시판입니다.');
@@ -378,25 +409,29 @@ export const createLike = async (req: Request, res: Response): Promise<any> => {
   return res.status(200).json({ ok: true, message: '게시글 좋아요 생성 성공하였습니다.', newLike });
 };
 
-export const createDislike = async (req: Request, res: Response): Promise<any> => {
+export const createDislike = async (
+  req: Request<CreateDisLikeDTO['params'], {}, CreateDisLikeDTO['body']>,
+  res: Response
+): Promise<any> => {
   const freeDislikeRepo = getCustomRepository(FreeDislikeRepository);
   const commissionDislikeRepo = getCustomRepository(CommissionDislikeRepository);
   const requeDislikeRepo = getCustomRepository(RequeDislikeRepository);
   const saleDislikeRepo = getCustomRepository(SaleDislikeRepository);
 
   const id = req.session.user?.id!;
-  const { board, postId } = req.params;
+  const board = req.params.board;
+  const postId = Number(req.params.postId);
   const { userId } = req.body; // 게시글 작성자 id
 
   let newDisLike;
   if (board === 'free') {
-    newDisLike = await freeDislikeRepo.create(id, Number(postId));
+    newDisLike = await freeDislikeRepo.create(id, postId);
   } else if (board === 'commission') {
-    newDisLike = await commissionDislikeRepo.create(id, Number(postId));
+    newDisLike = await commissionDislikeRepo.create(id, postId);
   } else if (board === 'reque') {
-    newDisLike = await requeDislikeRepo.create(id, Number(postId));
+    newDisLike = await requeDislikeRepo.create(id, postId);
   } else if (board === 'sale') {
-    newDisLike = await saleDislikeRepo.create(id, Number(postId));
+    newDisLike = await saleDislikeRepo.create(id, postId);
   } else {
     logger.warn('존재하지 않는 게시판에서 게시글에 좋아요를 생성하려는 시도가 있습니다.');
     throw ApiError.NotFound('존재하지 않는 게시판입니다.');

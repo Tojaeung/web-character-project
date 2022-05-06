@@ -40,6 +40,16 @@ export class DrawingRepository extends AbstractRepository<Drawing> {
       .getOne();
   }
 
+  create = async (content: string, url: string, key: string, id: number): Promise<Comment> => {
+    const result = await this.createQueryBuilder('drawing')
+      .insert()
+      .into(Drawing)
+      .values({ content, url, key, user_id: id })
+      .returning('*')
+      .execute();
+    return result.raw[0];
+  };
+
   delete = async (drawingId: number) => {
     const result = await this.createQueryBuilder('drawing')
       .delete()

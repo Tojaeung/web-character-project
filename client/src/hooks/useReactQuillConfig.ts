@@ -36,7 +36,7 @@ export const useImageUploadConfig = (quillRef: React.RefObject<ReactQuill>) => {
       const file = input.files;
       if (file !== null) {
         const formData = new FormData();
-        formData.append('image', file[0]);
+        formData.append('newImage', file[0]);
         try {
           const { data } = await axios.post('/api/posts/add-imagekey', formData, { withCredentials: true });
 

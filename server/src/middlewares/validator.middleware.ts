@@ -5,9 +5,9 @@ import logger from '@src/helpers/winston.helper';
 const validator = (schema: AnyZodObject) => (req: Request, res: Response, next: NextFunction) => {
   try {
     schema.parse({
-      body: req.body,
       params: req.params,
       query: req.query,
+      body: req.body,
     });
     next();
   } catch (err: any) {

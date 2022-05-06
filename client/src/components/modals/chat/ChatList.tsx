@@ -150,8 +150,8 @@ const NotiBox = styled.div`
   background-color: red;
   border-radius: 100%;
   position: absolute;
-  top: 3.2rem;
-  left: 3.2rem;
+  top: 3.8rem;
+  left: 3.8rem;
 `;
 
 const NotiNum = styled.span`

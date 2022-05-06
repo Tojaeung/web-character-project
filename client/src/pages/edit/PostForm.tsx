@@ -76,7 +76,7 @@ function EditForm() {
         onChange={setContent}
         modules={imageUploadModules}
         theme="snow"
-        placeholder="내용을 입력하세요....(최대 3000글자)"
+        placeholder="내용을 입력하세요....(최대 1000글자)"
       />
       <ButtonBox>
         <SubmitButton onClick={handleModify}>수정</SubmitButton>
