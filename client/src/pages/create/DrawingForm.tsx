@@ -24,6 +24,15 @@ function DrawingForm() {
   const [preview, setPreview] = useState('');
   const setPreviewDrawing = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target?.files) return;
+    const file = e.target.files[0];
+    const allowedExtension = ['image/png', 'image/jpeg', 'image/jpg'];
+    const sizeLimit = 1024 * 1024 * 10;
+
+    // 파일 확장자 검사
+    if (!allowedExtension.includes(file.type)) return alert('(.png, .jpeg, .jpg) 파일만 업로드 가능합니다.');
+    // 파일 사이즈 검사
+    if (file.size > sizeLimit) return alert('파일용량은 최대 10MB 입니다.');
+
     setDrawing(e.target?.files[0]);
     const fileUrl = URL.createObjectURL(e.target?.files[0]);
     setPreview(fileUrl);
@@ -56,12 +65,7 @@ function DrawingForm() {
       </User>
 
       <Drawing onClick={(e) => drawingInputRef.current?.click()}>
-        <Input
-          type="file"
-          accept="image/png, image/jpeg, image/jpg"
-          ref={drawingInputRef}
-          onChange={setPreviewDrawing}
-        />
+        <Input type="file" accept=".png, .jpeg, .jpg" ref={drawingInputRef} onChange={setPreviewDrawing} />
         {preview ? (
           <Image src={preview} alt="그림미리보기" />
         ) : (

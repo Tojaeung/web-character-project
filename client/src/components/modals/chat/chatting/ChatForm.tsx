@@ -53,11 +53,17 @@ function ChatForm() {
 
   // 이미지 메세지
   const onSendImgMsg = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isChatUser) return alert('대화상대를 찾을 수 없습니다.');
     if (!e.target?.files) return;
-    if (!isChatUser) {
-      alert('대화상대를 찾을 수 없습니다.');
-      return;
-    }
+
+    const file = e.target.files[0];
+    const allowedExtension = ['image/png', 'image/jpeg', 'image/jpg'];
+    const sizeLimit = 1024 * 1024 * 10;
+
+    // 파일 확장자 검사
+    if (!allowedExtension.includes(file.type)) return alert('(.png, .jpeg, .jpg) 파일만 업로드 가능합니다.');
+    // 파일 사이즈 검사
+    if (file.size > sizeLimit) return alert('파일용량은 최대 10MB 입니다.');
 
     const formData = new FormData();
     formData.append('imgMessage', e.target?.files[0]);
@@ -75,9 +81,8 @@ function ChatForm() {
   return (
     <Container>
       <FileInput
-        className="file-input"
         type="file"
-        accept="image/png, image/jpeg.image/jpg"
+        accept=".png, .jpeg, .jpg"
         disabled={isEndChat && true}
         ref={targetRef}
         onChange={onSendImgMsg}

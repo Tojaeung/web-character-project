@@ -13,6 +13,15 @@ function Account() {
   const avatarRef = useRef<HTMLInputElement>(null);
   const handleEditAvatar = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target?.files) return;
+    const file = e.target.files[0];
+    const allowedExtension = ['image/png', 'image/jpeg', 'image/jpg'];
+    const sizeLimit = 1024 * 1024 * 10;
+
+    // 파일 확장자 검사
+    if (!allowedExtension.includes(file.type)) return alert('(.png, .jpeg, .jpg) 파일만 업로드 가능합니다.');
+    // 파일 사이즈 검사
+    if (file.size > sizeLimit) return alert('파일용량은 최대 10MB 입니다.');
+
     const formData = new FormData();
     formData.append('updatedAvatar', e.target?.files[0]);
 
@@ -37,6 +46,15 @@ function Account() {
   const coverRef = useRef<HTMLInputElement>(null);
   const handleEditCover = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target?.files) return;
+    const file = e.target.files[0];
+    const allowedExtension = ['image/png', 'image/jpeg', 'image/jpg'];
+    const sizeLimit = 1024 * 1024 * 10;
+
+    // 파일 확장자 검사
+    if (!allowedExtension.includes(file.type)) return alert('(.png, .jpeg, .jpg) 파일만 업로드 가능합니다.');
+    // 파일 사이즈 검사
+    if (file.size > sizeLimit) return alert('파일용량은 최대 10MB 입니다.');
+
     const formData = new FormData();
     formData.append('updatedCover', e.target?.files[0]);
 
@@ -82,7 +100,7 @@ function Account() {
             <DefaultButton onClick={handleDefaultAvatar}>기본 프로필</DefaultButton>
             <EditButton onClick={(e) => avatarRef.current?.click()}>변경</EditButton>
           </ButtonBox>
-          <Input type="file" accept="image/png, image/jpeg,image/jpg" ref={avatarRef} onChange={handleEditAvatar} />
+          <Input type="file" accept=".png, .jpeg, .jpg" ref={avatarRef} onChange={handleEditAvatar} />
         </EditBox>
 
         <EditBox>
@@ -91,7 +109,7 @@ function Account() {
             <DefaultButton onClick={handleDefaultCover}>기본 커버</DefaultButton>
             <EditButton onClick={(e) => coverRef.current?.click()}>변경</EditButton>
           </ButtonBox>
-          <Input type="file" accept="image/png, image/jpeg,image/jpg" ref={coverRef} onChange={handleEditCover} />
+          <Input type="file" accept=".png, .jpeg, .jpg" ref={coverRef} onChange={handleEditCover} />
         </EditBox>
 
         <EditBox>
