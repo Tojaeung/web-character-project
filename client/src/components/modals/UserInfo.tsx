@@ -82,6 +82,10 @@ function UserInfo({ props }: IProp) {
 }
 
 const Container = styled.div`
+  width: 25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   table {
     width: 100%;
     tr {
@@ -106,7 +110,7 @@ const Container = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 1.8rem;
+  font-size: 2rem;
   align-self: flex-start;
 `;
 
