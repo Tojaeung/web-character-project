@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import instance from '@src/utils/axios.util';
 import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
 import NotFound from '@src/components/NotFound';
 import boardCategory from '@src/utils/boardCategory.util';
@@ -41,7 +41,7 @@ function PostForm() {
 
     if (imageKeys.length > 0) {
       try {
-        await axios.post('/api/posts/remove-imagekey', { imageKeys }, { withCredentials: true });
+        await instance.post('/posts/remove-imagekey', { imageKeys });
       } catch (err: any) {
         alert(err.message);
       }
@@ -49,9 +49,8 @@ function PostForm() {
     navigate(-1);
   };
 
-  return !boardCategory.includes(board as string) ? (
-    <NotFound />
-  ) : (
+  if (!boardCategory.includes(board as string)) return <NotFound />;
+  return (
     <Container>
       <Title>{boardName(board as string)}</Title>
       <LengthCountInput placeholder="제목" length={title.length} onChange={(e) => setTitle(e.target.value)} />

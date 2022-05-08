@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import instance from '@src/utils/axios.util';
+import { RootState } from '../app/store';
 import {
   getDrawingsReturnType,
   getDrawingsDataType,
@@ -20,7 +21,6 @@ import {
   createDisLikeReturnType,
   createDisLikeDataType,
 } from '@src/store/types/drawing.type';
-import { RootState } from '../app/store';
 
 export const getDrawings = createAsyncThunk<
   getDrawingsReturnType,
@@ -29,16 +29,10 @@ export const getDrawings = createAsyncThunk<
 >('GET_DRAWINGS', async (data, thunkApi) => {
   const { userId, cursor } = data;
   try {
-    const res = await axios.get(
-      `/api/drawings/users/${userId}?cursor=${cursor}`,
-
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await instance.get(`/drawings/users/${userId}?cursor=${cursor}`);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -49,12 +43,10 @@ export const incrementView = createAsyncThunk<
 >('INCREMENT_VIEW', async (data, thunkApi) => {
   try {
     const { drawingId } = data;
-    const res = await axios.patch(`/api/drawings/${drawingId}/view`, {
-      withCredentials: true,
-    });
+    const res = await instance.patch(`/drawings/${drawingId}/view`);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -64,12 +56,10 @@ export const createDrawing = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('CREATE_DRAWING', async (data, thunkApi) => {
   try {
-    const res = await axios.post('/api/drawings', data, {
-      withCredentials: true,
-    });
+    const res = await instance.post('/drawings', data);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -80,12 +70,10 @@ export const deleteDrawing = createAsyncThunk<
 >('DELETE_DRAWING', async (data, thunkApi) => {
   try {
     const { drawingId } = data;
-    const res = await axios.delete(`/api/drawings/${drawingId}`, {
-      withCredentials: true,
-    });
+    const res = await instance.delete(`/drawings/${drawingId}`);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -96,16 +84,10 @@ export const createDrawingComment = createAsyncThunk<
 >('CREATE_DRAWING_COMMENT', async (data, thunkApi) => {
   try {
     const { content, drawingId } = data;
-    const res = await axios.post(
-      `/api/drawings/${drawingId}`,
-      { content },
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await instance.post(`/drawings/${drawingId}/comments`, { content });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -116,16 +98,10 @@ export const updateDrawingComment = createAsyncThunk<
 >('UPDATE_DRAWING_COMMENT', async (data, thunkApi) => {
   try {
     const { commentId, updatedContent } = data;
-    const res = await axios.patch(
-      `/api/drawings/comments/${commentId}`,
-      { updatedContent },
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await instance.patch(`/drawings/comments/${commentId}`, { updatedContent });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -136,12 +112,10 @@ export const deleteDrawingComment = createAsyncThunk<
 >('DELETE_DRAWING_COMMENT', async (data, thunkApi) => {
   try {
     const { commentId } = data;
-    const res = await axios.delete(`/api/drawings/comments/${commentId}`, {
-      withCredentials: true,
-    });
+    const res = await instance.delete(`/drawings/comments/${commentId}`);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -152,16 +126,10 @@ export const createDrawingLike = createAsyncThunk<
 >('CREATE_DRAWING_LIKE', async (data, thunkApi) => {
   try {
     const { userId, drawingId } = data;
-    const res = await axios.post(
-      `/api/drawings/${drawingId}/like`,
-      { userId },
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await instance.post(`/drawings/${drawingId}/like`, { userId });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -172,15 +140,9 @@ export const createDrawingDisLike = createAsyncThunk<
 >('CREATE_DRAWING_DISLIKE', async (data, thunkApi) => {
   try {
     const { userId, drawingId } = data;
-    const res = await axios.post(
-      `/api/drawings/${drawingId}/dislike`,
-      { userId },
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await instance.post(`/drawings/${drawingId}/dislike`, { userId });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });

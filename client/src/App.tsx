@@ -61,6 +61,7 @@ function App() {
               </Route>
             </Route>
 
+            <Route path="/not-found" element={<NotFound />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Modal />

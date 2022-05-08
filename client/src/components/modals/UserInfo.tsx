@@ -13,17 +13,19 @@ interface IProp {
 }
 
 function UserInfo({ props }: IProp) {
+  const { userId } = props;
+
   const dispatch = useAppDispatch();
 
   const user = useAppSelector(selectUserUser);
 
-  const [userInfo, setUserInfo] = useState<UserType | null>(null);
-  const [drawingsNum, setDrawingsNum] = useState<number | null>(null);
-  const [totalPostsNum, setTotalPostsNum] = useState<number | null>(null);
-  const [totalCommentsNum, setTotalCommentsNum] = useState<number | null>(null);
+  const [userInfo, setUserInfo] = useState<UserType>();
+  const [drawingsNum, setDrawingsNum] = useState<number>();
+  const [totalPostsNum, setTotalPostsNum] = useState<number>();
+  const [totalCommentsNum, setTotalCommentsNum] = useState<number>();
 
   useEffect(() => {
-    dispatch(getUserInfo({ userId: props.userId }))
+    dispatch(getUserInfo({ userId }))
       .unwrap()
       .then((res) => {
         const { user, drawingsNum, totalPostsNum, totalCommentsNum } = res;
@@ -39,7 +41,7 @@ function UserInfo({ props }: IProp) {
 
   return (
     <Container>
-      <Title>{user?.id === props.userId ? '내 정보' : '유저정보'}</Title>
+      <Title>{user?.id === userId ? '내 정보' : '유저정보'}</Title>
       <table>
         <thead></thead>
         <tbody>

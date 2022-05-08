@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { RootState } from '../app/store';
+import instance from '@src/utils/axios.util';
 import {
   signUpReturnType,
   signUpDataType,
@@ -39,12 +39,10 @@ export const signUp = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('SIGN_UP', async (data, thunkApi) => {
   try {
-    const res = await axios.post('/api/users', data, {
-      withCredentials: true,
-    });
+    const res = await instance.post('/users', data);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -54,12 +52,10 @@ export const forgotPw = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('FORGOT_PW', async (data, thunkApi) => {
   try {
-    const res = await axios.post('/api/users/forgot-pw', data, {
-      withCredentials: true,
-    });
+    const res = await instance.post('/users/forgot-pw', data);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -70,16 +66,10 @@ export const resetPw = createAsyncThunk<
 >('RESET_PW', async (data, thunkApi) => {
   try {
     const { pwToken, updatedPw, updatedPwConfirmation } = data;
-    const res = await axios.patch(
-      `/api/users/reset-pw?pwToken=${pwToken}`,
-      { updatedPw, updatedPwConfirmation },
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await instance.patch(`/users/reset-pw?pwToken=${pwToken}`, { updatedPw, updatedPwConfirmation });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -90,12 +80,10 @@ export const getUser = createAsyncThunk<
 >('GET_USER', async (data, thunkApi) => {
   try {
     const { userId } = data;
-    const res = await axios.get(`/api/users/${userId}`, {
-      withCredentials: true,
-    });
+    const res = await instance.get(`/users/${userId}`);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -105,12 +93,10 @@ export const updateEmail = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_EMAIL', async (data, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/me/verify-email`, data, {
-      withCredentials: true,
-    });
+    const res = await instance.patch(`/me/verify-email`, data);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -120,12 +106,10 @@ export const updateNickname = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_NICKNAME', async (data, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/me/nickname`, data, {
-      withCredentials: true,
-    });
+    const res = await instance.patch(`/me/nickname`, data);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -135,12 +119,10 @@ export const updatePw = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_PW', async (data, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/me/pw`, data, {
-      withCredentials: true,
-    });
+    const res = await instance.patch(`/me/pw`, data);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -150,12 +132,10 @@ export const updateDesc = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_DESC', async (data, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/me/desc`, data, {
-      withCredentials: true,
-    });
+    const res = await instance.patch(`/me/desc`, data);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -165,12 +145,10 @@ export const updateAvatar = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_AVATAR', async (data, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/me/avatar`, data, {
-      withCredentials: true,
-    });
+    const res = await instance.patch(`/me/avatar`, data);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -180,12 +158,10 @@ export const updateDefaultAvatar = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_DEFAULT_AVATAR', async (_, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/me/default-avatar`, {
-      withCredentials: true,
-    });
+    const res = await instance.patch(`/me/default-avatar`);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -195,12 +171,10 @@ export const updateCover = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_COVER', async (data, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/me/cover`, data, {
-      withCredentials: true,
-    });
+    const res = await instance.patch(`/me/cover`, data);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -210,12 +184,10 @@ export const updateDefaultCover = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_DEFAULT_COVER', async (_, thunkApi) => {
   try {
-    const res = await axios.patch(`/api/me/default-cover`, {
-      withCredentials: true,
-    });
+    const res = await instance.patch(`/me/default-cover`);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -226,16 +198,10 @@ export const sendReport = createAsyncThunk<
 >('SEND_REPORT', async (data, thunkApi) => {
   const { reportType, report, url, suspectId } = data;
   try {
-    const res = await axios.post(
-      `/api/users/${suspectId}/sendReport`,
-      { reportType, report, url },
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await instance.post(`/users/${suspectId}/sendReport`, { reportType, report, url });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -246,12 +212,10 @@ export const getUserInfo = createAsyncThunk<
 >('GET_USERINFO', async (data, thunkApi) => {
   const { userId } = data;
   try {
-    const res = await axios.get(`/api/users/${userId}/info`, {
-      withCredentials: true,
-    });
+    const res = await instance.get(`/users/${userId}/info`);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -262,16 +226,10 @@ export const givePenalty = createAsyncThunk<
 >('GIVE_PENALTY', async (data, thunkApi) => {
   const { userId, penaltyPeriod } = data;
   try {
-    const res = await axios.patch(
-      `/api/users/${userId}/exp`,
-      { penaltyPeriod },
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await instance.patch(`/users/${userId}/exp`, { penaltyPeriod });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -281,11 +239,9 @@ export const deleteAccount = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('DELETE_ACCOUNT', async (_, thunkApi) => {
   try {
-    const res = await axios.delete(`/api/me`, {
-      withCredentials: true,
-    });
+    const res = await instance.delete(`/me`);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });

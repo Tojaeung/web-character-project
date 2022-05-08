@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import axios from 'axios';
 import ReactQuill, { Quill } from 'react-quill';
 import imageResize from 'quill-image-resize';
+import instance from '@src/utils/axios.util';
 Quill.register('modules/imageResize', imageResize);
 
 export const useDefaultConfig = () => {
@@ -38,7 +38,7 @@ export const useImageUploadConfig = (quillRef: React.RefObject<ReactQuill>) => {
         const formData = new FormData();
         formData.append('newImage', file[0]);
         try {
-          const { data } = await axios.post('/api/posts/add-imagekey', formData, { withCredentials: true });
+          const { data } = await instance.post('/posts/add-imagekey', formData);
 
           const { imageKey, imageUrl } = data;
 

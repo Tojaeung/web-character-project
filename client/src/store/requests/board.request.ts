@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import instance from '@src/utils/axios.util';
 import { RootState } from '../app/store';
 import {
   getAllBoardsReturnType,
@@ -31,12 +31,10 @@ export const getAllBoards = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('GET_BOARDS', async (_, thunkApi) => {
   try {
-    const res = await axios.get('/api/boards', {
-      withCredentials: true,
-    });
+    const res = await instance.get('/boards');
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -47,12 +45,10 @@ export const getBoard = createAsyncThunk<
 >('GET_BOARD', async (data, thunkApi) => {
   try {
     const { board, queryString } = data;
-    const res = await axios.get(`/api/boards/${board}${queryString}`, {
-      withCredentials: true,
-    });
+    const res = await instance.get(`/boards/${board}${queryString}`);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -63,12 +59,10 @@ export const getPost = createAsyncThunk<
 >('GET_POST', async (data, thunkApi) => {
   try {
     const { board, postId } = data;
-    const res = await axios.get(`/api/boards/${board}/posts/${postId}`, {
-      withCredentials: true,
-    });
+    const res = await instance.get(`/boards/${board}/posts/${postId}`);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -79,16 +73,10 @@ export const createPost = createAsyncThunk<
 >('CREATE_POST', async (data, thunkApi) => {
   try {
     const { board, content, imageKeys, title } = data;
-    const res = await axios.post(
-      `/api/boards/${board}/posts`,
-      { title, content, imageKeys },
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await instance.post(`/boards/${board}/posts`, { title, content, imageKeys });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -99,16 +87,10 @@ export const updatePost = createAsyncThunk<
 >('UPDATE_POST', async (data, thunkApi) => {
   try {
     const { board, postId, title, content, imageKeys } = data;
-    const res = await axios.patch(
-      `/api/board/${board}/posts/${postId}`,
-      { title, content, imageKeys },
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await instance.patch(`/board/${board}/posts/${postId}`, { title, content, imageKeys });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -119,12 +101,10 @@ export const deletePost = createAsyncThunk<
 >('DELETE_POST', async (data, thunkApi) => {
   try {
     const { board, postId } = data;
-    const res = await axios.delete(`/api/boards/${board}/posts/${postId}`, {
-      withCredentials: true,
-    });
+    const res = await instance.delete(`/boards/${board}/posts/${postId}`);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -135,16 +115,10 @@ export const createPostComment = createAsyncThunk<
 >('CREATE_POST_COMMENT', async (data, thunkApi) => {
   try {
     const { board, postId, content } = data;
-    const res = await axios.post(
-      `/api/boards/${board}/posts/${postId}/comments`,
-      { content },
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await instance.post(`/boards/${board}/posts/${postId}/comments`, { content });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -155,16 +129,10 @@ export const updatePostComment = createAsyncThunk<
 >('UPDATE_POST_COMMENT', async (data, thunkApi) => {
   try {
     const { board, commentId, updatedContent } = data;
-    const res = await axios.patch(
-      `/api/boards/${board}/comments/${commentId}`,
-      { updatedContent },
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await instance.patch(`/boards/${board}/comments/${commentId}`, { updatedContent });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -175,12 +143,10 @@ export const deletePostComment = createAsyncThunk<
 >('DELETE_POST_COMMENT', async (data, thunkApi) => {
   try {
     const { board, commentId } = data;
-    const res = await axios.delete(`/api/boards/${board}/comments/${commentId}`, {
-      withCredentials: true,
-    });
+    const res = await instance.delete(`/boards/${board}/comments/${commentId}`);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -191,16 +157,10 @@ export const createPostLike = createAsyncThunk<
 >('CREATE_POST_LIKE', async (data, thunkApi) => {
   try {
     const { postId, board, userId } = data;
-    const res = await axios.post(
-      `/api/boards/${board}/posts/${postId}`,
-      { userId },
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await instance.post(`/boards/${board}/posts/${postId}`, { userId });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -211,15 +171,9 @@ export const createPostDisLike = createAsyncThunk<
 >('CREATE_POST_DISLIKE', async (data, thunkApi) => {
   try {
     const { postId, board, userId } = data;
-    const res = await axios.post(
-      `/api/boards/${board}/posts/${postId}`,
-      { userId },
-      {
-        withCredentials: true,
-      }
-    );
+    const res = await instance.post(`/boards/${board}/posts/${postId}`, { userId });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });

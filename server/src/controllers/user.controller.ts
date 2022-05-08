@@ -81,7 +81,7 @@ export const verifyUser = async (req: Request, res: Response): Promise<any> => {
   const user = await getRepository(User).findOne({ emailToken });
   if (!user) {
     logger.warn('존재하지 않는 이메일로 인증을 시도하고 있습니다.');
-    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+    throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
 
   //  auth 테이블에 emailToken과 isVerified 정보를 수정해서 이메일 인증을 완료합니다.
@@ -108,7 +108,7 @@ export const forgotPw = async (req: Request<{}, {}, ForgotPwDTO>, res: Response)
   const user = await userRepo.findWithPwTokenByEmail(email);
   if (!user) {
     logger.warn('존재하지 않는 이메일로 비밀번호 찾기를 시도하고 있습니다.');
-    throw ApiError.NotFound('이메일이 존재하지 않습니다.');
+    throw ApiError.BadRequest('이메일이 존재하지 않습니다.');
   }
 
   // 유저가 존재한다면 비밀번호 찾기 인증 메일을 발송합니다.
@@ -125,7 +125,7 @@ export const resetPw = async (req: Request<{}, {}, ResetPwDTO>, res: Response): 
   const user = await getRepository(User).findOne({ pwToken });
   if (!user) {
     logger.warn('잘못된 비밀번호 토큰으로 유저찾기를 시도하고 있습니다.');
-    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+    throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
 
   // 클라이언트에서 받아온 비밀번호를 헤싱하여 데이터베이스에 저장 합니다.
@@ -160,7 +160,7 @@ export const verifyEmail = async (req: Request<{}, {}, VerifyEmailDTO>, res: Res
   const isExistingUser = await getRepository(User).count({ id });
   if (isExistingUser) {
     logger.warn('존재하지 않은 유저가 이메일 변경을 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+    throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
   const isExistingEmail = await getRepository(User).count({ email: updatedEmail });
   if (isExistingEmail) {
@@ -192,7 +192,7 @@ export const updateNickname = async (req: Request<{}, {}, UpdateNicknameDTO>, re
   const isExistingUser = await getRepository(User).count({ id });
   if (!isExistingUser) {
     logger.warn('존재하지 않은 유저가 닉네임 변경을 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+    throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
   const isExistingNickname = await getRepository(User).findOne({ nickname: updatedNickname });
   if (isExistingNickname) {
@@ -217,7 +217,7 @@ export const updatePw = async (req: Request<{}, {}, UpdatePwDTO>, res: Response)
   const user = await userRepo.findWithPwById(id);
   if (!user) {
     logger.warn('존재하지 않은 유저가 닉네임 변경을 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+    throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
 
   const decryptedPw = await bcrypt.compare(currentPw, user?.pw!);
@@ -241,7 +241,7 @@ export const updateDesc = async (req: Request<{}, {}, UpdateDescDTO>, res: Respo
   const isExistingUser = await getRepository(User).count({ id });
   if (!isExistingUser) {
     logger.warn('존재하지 않은 유저가 자기소개 변경을 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+    throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
 
   // 자기소개를 변경해줍니다.
@@ -265,7 +265,7 @@ export const updateAvatar = async (req: Request, res: Response): Promise<any> =>
   const user = await getRepository(User).findOne({ id });
   if (!user) {
     logger.warn('존재하지 않은 유저가 프로필사진 변경을 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+    throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
   const currentAvatarKey = user?.avatarKey;
   const defaultAvatarKey = process.env.DEFAULT_AVATAR_KEY as string;
@@ -290,7 +290,7 @@ export const updateDefaultAvatar = async (req: Request, res: Response): Promise<
   const user = await getRepository(User).findOne({ id });
   if (!user) {
     logger.warn('존재하지 않은 유저가 프로필사진 변경을 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+    throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
 
   const currentAvatarKey = user?.avatarKey;
@@ -328,7 +328,7 @@ export const updateCover = async (req: Request, res: Response): Promise<any> => 
   const user = await getRepository(User).findOne({ id: Number(id) });
   if (!user) {
     logger.warn('존재하지 않은 유저가 프로필사진 변경을 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+    throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
   const currentCoverKey = user?.coverKey;
   const defaultCoverKey = process.env.DEFAULT_Cover_KEY as string;
@@ -354,7 +354,7 @@ export const updateDefaultCover = async (req: Request, res: Response): Promise<a
   const user = await getRepository(User).findOne({ id });
   if (!user) {
     logger.warn('존재하지 않은 유저가 프로필사진 변경을 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+    throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
 
   const currentCoverKey = user?.coverKey;
@@ -389,7 +389,7 @@ export const sendReport = async (
   const isExistingUser = await getRepository(User).count({ id: suspectId });
   if (!isExistingUser) {
     logger.warn('존재하지 않는 유저를 신고하려고 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 유저를 신고할 수 없습니다.');
+    throw ApiError.BadRequest('존재하지 않는 유저를 신고할 수 없습니다.');
   }
 
   const webHookUrl = process.env.SLACK_WEBHOOK_URL as string;
@@ -509,7 +509,7 @@ export const deleteAccount = async (req: Request, res: Response): Promise<any> =
   const user = await getRepository(User).findOne({ id });
   if (!user) {
     logger.warn('존재하지 않은 유저가 계정삭제를 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+    throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
   const drawings = await getRepository(Drawing).find({ user_id: id });
 

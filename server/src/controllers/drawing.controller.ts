@@ -84,7 +84,7 @@ export const deleteDrawing = async (req: Request, res: Response): Promise<any> =
   const isExistingDrawing = await getRepository(Drawing).count({ id: drawingId });
   if (!isExistingDrawing) {
     logger.warn('존재하지 않는 그림을 삭제 시도하려고 합니다.');
-    throw ApiError.NotFound('존재하지 않는 그림입니다.');
+    throw ApiError.BadRequest('존재하지 않는 그림입니다.');
   }
 
   const deletedDrawing = await drawingRepo.delete(drawingId);
@@ -135,7 +135,7 @@ export const updateComment = async (
   const isExistingComment = await getRepository(DrawingComment).count({ id: commentId });
   if (!isExistingComment) {
     logger.warn('존재하지 않는 댓글을 삭제하려고 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 댓글입니다.');
+    throw ApiError.BadRequest('존재하지 않는 댓글입니다.');
   }
 
   const updatedComment = await commentRepo.update(commentId, updatedContent);
@@ -157,7 +157,7 @@ export const deleteComment = async (req: Request, res: Response): Promise<any> =
   const isExistingComment = await getRepository(DrawingComment).count({ id: commentId });
   if (!isExistingComment) {
     logger.warn('존재하지 않는 댓글을 삭제하려고 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 댓글입니다.');
+    throw ApiError.BadRequest('존재하지 않는 댓글입니다.');
   }
 
   // 제거하기 때문에 유저정보와 결합해서 클라이언트에 보내주지 않는다.
@@ -180,12 +180,12 @@ export const createLike = async (
   const isExistingUser = await getRepository(User).count({ id });
   if (!isExistingUser) {
     logger.warn('존재하지 않는 유저가 그림 좋아요를 추가하려고 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+    throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
   const drawing = await getRepository(Drawing).count({ id: drawingId });
   if (!drawing) {
     logger.warn('존재하지 않는 그림에 좋아요를 추가하려고 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 그림입니다.');
+    throw ApiError.BadRequest('존재하지 않는 그림입니다.');
   }
 
   const newLike = await likeRepo.create(id, drawingId);
@@ -210,12 +210,12 @@ export const createDisLike = async (
   const isExistingUser = await getRepository(User).count({ id });
   if (!isExistingUser) {
     logger.warn('존재하지 않는 유저가 그림 싫어요를 추가하려고 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+    throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
   const drawing = await getRepository(Drawing).count({ id: drawingId });
   if (!drawing) {
     logger.warn('존재하지 않는 그림에 싫어요를 추가하려고 시도합니다.');
-    throw ApiError.NotFound('존재하지 않는 그림입니다.');
+    throw ApiError.BadRequest('존재하지 않는 그림입니다.');
   }
 
   const newDisLike = await disLikeRepo.create(id, drawingId);

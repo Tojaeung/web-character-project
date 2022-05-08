@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import BoardPreview from '@src/components/BoardPreview';
 import { useAppDispatch } from '@src/store/app/hook';

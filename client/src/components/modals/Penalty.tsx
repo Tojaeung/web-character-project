@@ -11,6 +11,8 @@ interface IProp {
 }
 
 function Penalty({ props }: IProp) {
+  const { userId } = props;
+
   const dispatch = useAppDispatch();
   const [penaltyPeriod, setPenaltyPeriod] = useState('');
 
@@ -18,9 +20,7 @@ function Penalty({ props }: IProp) {
     await dispatch(closeModal());
     setPenaltyPeriod('');
     try {
-      const res = await dispatch(
-        givePenalty({ userId: props.userId as number, penaltyPeriod: Number(penaltyPeriod) })
-      ).unwrap();
+      const res = await dispatch(givePenalty({ userId, penaltyPeriod: Number(penaltyPeriod) })).unwrap();
       alert(res.message);
     } catch (err: any) {
       alert(err.message);

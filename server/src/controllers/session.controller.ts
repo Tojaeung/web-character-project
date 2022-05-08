@@ -18,7 +18,7 @@ export const signIn = async (req: Request<{}, {}, SignInDTO['body']>, res: Respo
   const user = await userRepo.findWithPwByEmail(email);
   if (!user) {
     logger.warn('이메일이 존재하지 않습니다.');
-    throw ApiError.NotFound("'아이디 또는 비밀번호가 올바르지 않습니다.");
+    throw ApiError.BadRequest("'아이디 또는 비밀번호가 올바르지 않습니다.");
   }
 
   // 유효한 이메일이라면 비밀번호가 맞는지 확인합니다.
@@ -61,11 +61,11 @@ export const refreshLogin = async (req: Request, res: Response): Promise<any> =>
         throw ApiError.InternalServerError('로그아웃 실패하였습니다.');
       } else {
         logger.info('로그아웃 성공하였습니다.');
-        return res.status(205).clearCookie('sid').json({ ok: true, message: '로그아웃 성공하였습니다.' });
+        return res.status(200).clearCookie('sid').json({ ok: true, message: '로그아웃 성공하였습니다.' });
       }
     });
     logger.warn('존재하지 않는 유저가 로그인 정보를 새로 가져오려고 합니다.');
-    throw ApiError.NotFound('존재하지 않는 유저입니다.');
+    throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
 
   req.session.user = {

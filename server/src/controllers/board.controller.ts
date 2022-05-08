@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { getCustomRepository, getRepository } from 'typeorm';
+import _ from 'lodash';
 import logger from '@src/helpers/winston.helper';
 import ApiError from '@src/errors/api.error';
 import { s3Delete } from '@src/utils/s3.utils';
@@ -36,7 +37,6 @@ import {
   UpdateCommentDTO,
   UpdatePostDTO,
 } from '@src/schemas/board.schema';
-// import { RemoveImageKeyDTO } from '@src/schemas/board.schema';
 
 export const getAllBoards = async (req: Request, res: Response): Promise<any> => {
   const free = await getRepository(Free).find({ order: { id: 'DESC' }, take: 10, relations: ['user'] });
@@ -116,6 +116,12 @@ export const getPost = async (req: Request, res: Response): Promise<any> => {
 
   const board = req.params.board;
   const postId = Number(req.params.postId);
+
+  const isExistingPost = await getRepository(_.upperFirst(board)).count({ id: postId });
+  if (!isExistingPost) {
+    logger.warn('존재하지 않는 게시글에 접근하려고 시도합니다.');
+    throw ApiError.NotFound('존재하지 않는 게시글 입니다.');
+  }
 
   let postJoinAll;
   if (board === 'free') {
@@ -217,6 +223,12 @@ export const updatePost = async (
   const postId = Number(req.params.postId);
   const { title, content, imageKeys } = req.body;
 
+  const isExistingPost = await getRepository(_.upperFirst(board)).count({ id: postId });
+  if (!isExistingPost) {
+    logger.warn('존재하지 않는 게시글을 수정하려고 시도합니다.');
+    throw ApiError.NotFound('존재하지 않는 게시글을 수정할 수 없습니다..');
+  }
+
   let updatedPostJoinAll;
   if (board === 'free') {
     const updatedPost = await freeRepo.update(postId, title, content);
@@ -255,6 +267,12 @@ export const deletePost = async (req: Request, res: Response): Promise<any> => {
   const board = req.params.board;
   const postId = Number(req.params.postId);
 
+  const isExistingPost = await getRepository(_.upperFirst(board)).count({ id: postId });
+  if (!isExistingPost) {
+    logger.warn('존재하지 않는 게시글을 삭제하려고 시도합니다.');
+    throw ApiError.NotFound('존재하지 않는 게시글을 삭제 할 수 없습니다.');
+  }
+
   let deletedPost;
   if (board === 'free') {
     deletedPost = await freeRepo.delete(postId);
@@ -289,6 +307,12 @@ export const createComment = async (
   const board = req.params.board;
   const postId = Number(req.params.postId);
   const { content } = req.body;
+
+  const isExistingPost = await getRepository(_.upperFirst(board)).count({ id: postId });
+  if (!isExistingPost) {
+    logger.warn('존재하지 않는 게시글에 댓글을 생성하려고 시도합니다.');
+    throw ApiError.NotFound('존재하지 않는 게시글에 댓글을 달 수 없습니다.');
+  }
 
   let newCommentJoinUser;
   if (board === 'free') {
@@ -388,6 +412,12 @@ export const createLike = async (
   const postId = Number(req.params.postId);
   const { userId } = req.body; // 게시글 작성자 id
 
+  const isExistingPost = await getRepository(_.upperFirst(board)).count({ id: postId });
+  if (!isExistingPost) {
+    logger.warn('존재하지 않는 게시글에 좋아요를 생성하려고 시도합니다.');
+    throw ApiError.NotFound('존재하지 않는 게시글에 좋아요를 할 수 없습니다.');
+  }
+
   let newLike;
   if (board === 'free') {
     newLike = await freeLikeRepo.create(id, postId);
@@ -422,6 +452,12 @@ export const createDislike = async (
   const board = req.params.board;
   const postId = Number(req.params.postId);
   const { userId } = req.body; // 게시글 작성자 id
+
+  const isExistingPost = await getRepository(_.upperFirst(board)).count({ id: postId });
+  if (!isExistingPost) {
+    logger.warn('존재하지 않는 게시글에 싫어요를 생성하려고 시도합니다.');
+    throw ApiError.NotFound('존재하지 않는 게시글에 싫어요를 할 수 없습니다.');
+  }
 
   let newDisLike;
   if (board === 'free') {

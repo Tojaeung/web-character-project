@@ -7,7 +7,6 @@ import Nickname from '@src/components/Nickname';
 import { useAppDispatch } from '@src/store/app/hook';
 import { UserType } from '@src/types';
 import { getUser } from '@src/store/requests/user.request';
-import NotFound from '@src/components/NotFound';
 
 function Profile() {
   const dispatch = useAppDispatch();
@@ -29,7 +28,6 @@ function Profile() {
     }
   }, []);
 
-  if (!profile) return <NotFound />;
   return (
     <Container>
       <ProfileBox>

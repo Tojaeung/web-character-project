@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { IoIosSend } from 'react-icons/io';
 import { AiOutlineCamera } from 'react-icons/ai';
-import axios from 'axios';
 import styled from 'styled-components';
 import moment from 'moment';
 import socket from '@src/utils/socket';
+import instance from '@src/utils/axios.util';
 import { selectUserUser } from '@src/store/slices/user.slice';
 import { selectChatIsChatUser, selectMessages } from '@src/store/slices/chat.slice';
 import { useAppSelector } from '@src/store/app/hook';
@@ -65,17 +65,20 @@ function ChatForm() {
     // 파일 사이즈 검사
     if (file.size > sizeLimit) return alert('파일용량은 최대 10MB 입니다.');
 
-    const formData = new FormData();
-    formData.append('imgMessage', e.target?.files[0]);
-    formData.append('chatUserId', isChatUser?.chatId);
-    formData.append('chatId', user?.chatId as string);
-    formData.append('messageDate', moment().format());
-    const response = await axios.post('/api/chat/imgMessage', formData, { withCredentials: true });
-    const { ok, imgMsgObj } = response.data;
-    if (!ok) return;
-    socket.emit('addMessage', imgMsgObj);
-    socket.emit('addMsgNoti', { from: user?.chatId, to: isChatUser?.chatId });
-    socket.emit('deleteMsgNoti', isChatUser?.chatId);
+    try {
+      const formData = new FormData();
+      formData.append('imgMessage', e.target?.files[0]);
+      formData.append('chatUserId', isChatUser?.chatId);
+      formData.append('chatId', user?.chatId as string);
+      formData.append('messageDate', moment().format());
+      const response = await instance.post('/chat/imgMessage', formData);
+      const { imgMsgObj } = response.data;
+      socket.emit('addMessage', imgMsgObj);
+      socket.emit('addMsgNoti', { from: user?.chatId, to: isChatUser?.chatId });
+      socket.emit('deleteMsgNoti', isChatUser?.chatId);
+    } catch (err: any) {
+      alert(err.message);
+    }
   };
 
   return (

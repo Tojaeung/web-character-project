@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import instance from '@src/utils/axios.util';
 import { inverseGreenButtonStyle, greenButtonStyle } from '@src/styles/button.style';
 import boarName from '@src/utils/boardName.util';
 import { useImageUploadConfig } from '@src/hooks/useReactQuillConfig';
@@ -49,10 +49,9 @@ function EditForm() {
     setTitle('');
     setContent('');
 
-    if (!(imageKeys as string[]).length) {
-    } else {
+    if ((imageKeys as string[]).length) {
       try {
-        await axios.post('/api/posts/remove-imagekey', imageKeys, { withCredentials: true });
+        await instance.post('/posts/remove-imagekey', { imageKeys });
       } catch (err: any) {
         alert(err.message);
       }

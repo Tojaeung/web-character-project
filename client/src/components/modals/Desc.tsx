@@ -10,6 +10,7 @@ interface IProp {
 }
 
 function Desc({ props }: IProp) {
+  const { desc, userId } = props;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -18,9 +19,9 @@ function Desc({ props }: IProp) {
   return (
     <Container>
       <Title>자기소개🌟</Title>
-      <Content dangerouslySetInnerHTML={{ __html: props.desc as string }} />
+      <Content dangerouslySetInnerHTML={{ __html: desc as string }} />
 
-      {user?.id === props.userId && (
+      {user?.id === userId && (
         <ModifyButton
           onClick={(e) => {
             dispatch(closeModal());

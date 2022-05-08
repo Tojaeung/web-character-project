@@ -11,8 +11,9 @@ interface IProp {
 }
 
 function Report({ props }: IProp) {
-  const location = useLocation();
+  const { suspectId } = props;
 
+  const location = useLocation();
   const dispatch = useAppDispatch();
 
   const [reportType, setReportType] = useState('');
@@ -20,9 +21,7 @@ function Report({ props }: IProp) {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
-      const res = await dispatch(
-        sendReport({ reportType, report, url: location.pathname, suspectId: props.suspectId })
-      ).unwrap();
+      const res = await dispatch(sendReport({ reportType, report, url: location.pathname, suspectId })).unwrap();
       alert(res.message);
       setReportType('');
       setReport('');

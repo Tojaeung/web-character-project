@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { RootState } from '../app/store';
+import instance from '@src/utils/axios.util';
 import {
   signInDataType,
   signInReturnType,
@@ -14,12 +14,10 @@ export const signIn = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('SIGN_IN', async (data, thunkApi) => {
   try {
-    const res = await axios.post('/api/sessions', data, {
-      withCredentials: true,
-    });
+    const res = await instance.post('/sessions', data);
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -29,12 +27,10 @@ export const refreshLogin = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('REFRESH_LOGIN', async (_, thunkApi) => {
   try {
-    const res = await axios.get('/api/sessions', {
-      withCredentials: true,
-    });
+    const res = await instance.get('/sessions');
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });
 
@@ -44,11 +40,11 @@ export const signOut = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('SIGN_OUT', async (_, thunkApi) => {
   try {
-    const res = await axios.delete('/api/sessions', {
+    const res = await instance.delete('/sessions', {
       withCredentials: true,
     });
     return res.data;
   } catch (err: any) {
-    return thunkApi.rejectWithValue({ ok: err.response.data.ok, message: err.response.data.message });
+    return thunkApi.rejectWithValue(err.response.data);
   }
 });

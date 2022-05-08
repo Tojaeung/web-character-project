@@ -4,7 +4,7 @@ import logger from '@src/helpers/winston.helper';
 
 const apiErrorHandler = (err: ApiError, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof ApiError) {
-    return res.status(err.status).json({ ok: false, message: err.message });
+    return res.status(err.status).json({ ok: false, message: err.message, status: err.status });
   }
 
   logger.error('500 에러 발생', err);
