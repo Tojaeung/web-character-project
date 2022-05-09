@@ -56,7 +56,7 @@ function Header() {
         </ProfileBox>
 
         <ButtonBox>
-          <BackBoard onClick={(e) => navigate(-1)}>목록</BackBoard>
+          <BackBoard onClick={(e) => navigate(`/board/${board}`)}>목록</BackBoard>
           {(user?.id === post?.user?.id || user?.role === 'admin') && (
             <>
               <EditPost onClick={(e) => navigate(`/edit/postForm/${board}/${post?.id}`)}>수정</EditPost>

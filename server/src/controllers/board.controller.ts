@@ -117,22 +117,30 @@ export const getBoard = async (req: Request, res: Response): Promise<any> => {
       where: { content: ILike(`%${keyword}%`) },
     });
   } else if (searchType === 'nickname') {
+    // 작성자 닉네임으로 작성자 정보찾기
+    const author = await getRepository(User).findOne({ nickname: keyword });
+    if (!author) {
+      logger.warn('존재하지 않는 작성자로 검색하려고 시도합니다.');
+      throw ApiError.BadRequest('존재하지 않는 작성자 입니다.');
+    }
+
+    // 닉네임으로 찾은 작성자 정보의 id로 찾는다.
     posts = await getRepository(_.upperFirst(board)).find({
       order: { id: 'DESC' },
       skip: offset,
       take: limit,
-      where: { nickname: ILike(`%${keyword}%`) },
+      where: { user_id: author.id },
       relations: ['user'],
     });
     totalPostsNum = await getRepository(_.upperFirst(board)).count({
-      where: { nickname: ILike(`%${keyword}%`) },
+      where: { user_id: author.id },
     });
   } else {
     logger.warn('존재하지 않는 검색기준으로 정보를 불러오는 시도가 있습니다.');
     throw ApiError.BadRequest('존재하지 않는 검색기준입니다.');
   }
 
-  logger.info(`${board} 게시판에서 "${keyword}"로 검색한 정보를 가져오기 성공하였습니다.`);
+  logger.info(`"${board}" 게시판에서 "${keyword}"로 검색한 정보를 가져오기 성공하였습니다.`);
   return res
     .status(200)
     .json({ ok: true, message: `"${keyword}"로 검색한 게시판 가져오기 성공하였습니다.`, posts, totalPostsNum });

@@ -19,7 +19,13 @@ function SearchBar({ searchType, keyword, setSearchType, setKeyword }: IProps) {
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!searchType || !keyword) return alert('검색어를 입력해주세요.');
     navigate(`/board/${board}?searchType=${searchType}&keyword=${keyword}`);
+  };
+
+  // 엔터클릭시 submit 된다.
+  const handleKeyPress = (e: any) => {
+    if (e.key === 'Enter') handleSubmit(e);
   };
 
   return (
@@ -29,7 +35,12 @@ function SearchBar({ searchType, keyword, setSearchType, setKeyword }: IProps) {
         <Option value={'content'}>내용</Option>
         <Option value={'nickname'}>작성자</Option>
       </Select>
-      <Input placeholder="검색어를 입력하세요." value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+      <Input
+        placeholder="검색어를 입력하세요."
+        value={keyword}
+        onKeyPress={handleKeyPress}
+        onChange={(e) => setKeyword(e.target.value)}
+      />
       <SubmitButton onClick={handleSubmit}>검색</SubmitButton>
     </Container>
   );

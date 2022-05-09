@@ -42,7 +42,8 @@ function Board() {
         const { posts, totalPostsNum } = res;
         setPosts(posts);
         setTotalPostsNum(totalPostsNum);
-      });
+      })
+      .catch((err: any) => alert(err.message));
   }, [dispatch, location.search, board]);
 
   // 스크롤 맨위로
