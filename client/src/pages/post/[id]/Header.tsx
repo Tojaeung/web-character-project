@@ -29,7 +29,7 @@ function Header() {
     try {
       const res = await dispatch(deletePost({ board: board as string, postId: Number(postId) })).unwrap();
       alert(res.message);
-      navigate(`/board/${board}`);
+      navigate(-1);
     } catch (err: any) {
       alert(err.message);
     }
@@ -56,7 +56,7 @@ function Header() {
         </ProfileBox>
 
         <ButtonBox>
-          <BackBoard onClick={(e) => navigate(`/board/${board}`)}>목록</BackBoard>
+          <BackBoard onClick={(e) => navigate(-1)}>목록</BackBoard>
           {(user?.id === post?.user?.id || user?.role === 'admin') && (
             <>
               <EditPost onClick={(e) => navigate(`/edit/postForm/${board}/${post?.id}`)}>수정</EditPost>

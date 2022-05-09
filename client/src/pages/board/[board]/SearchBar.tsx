@@ -1,0 +1,74 @@
+import styled from 'styled-components';
+import { useNavigate, useParams } from 'react-router-dom';
+import { greenInputStyle } from '@src/styles/input.style';
+import { greenButtonStyle } from '@src/styles/button.style';
+
+interface IProps {
+  searchType: string;
+  setSearchType: React.Dispatch<React.SetStateAction<string>>;
+  keyword: string;
+  setKeyword: React.Dispatch<React.SetStateAction<string>>;
+}
+
+function SearchBar({ searchType, keyword, setSearchType, setKeyword }: IProps) {
+  const navigate = useNavigate();
+  const { board } = useParams();
+
+  const selectSearchType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSearchType(e.target.value);
+  };
+
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    navigate(`/board/${board}?searchType=${searchType}&keyword=${keyword}`);
+  };
+
+  return (
+    <Container>
+      <Select name="searchSelector" value={searchType} onChange={selectSearchType}>
+        <Option value={'title'}>제목</Option>
+        <Option value={'content'}>내용</Option>
+        <Option value={'nickname'}>작성자</Option>
+      </Select>
+      <Input placeholder="검색어를 입력하세요." value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+      <SubmitButton onClick={handleSubmit}>검색</SubmitButton>
+    </Container>
+  );
+}
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    gap: 0.5rem;
+  }
+`;
+const Select = styled.select`
+  font-size: 1.4rem;
+  height: 4rem;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 6rem;
+    height: 3rem;
+    font-size: 1.2rem;
+  }
+`;
+const Option = styled.option``;
+const Input = styled.input`
+  ${greenInputStyle};
+  width: 20rem !important;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 50% !important;
+    min-height: 3.5rem !important;
+  }
+`;
+const SubmitButton = styled.button`
+  ${greenButtonStyle};
+  padding: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.7rem;
+  }
+`;
+
+export default SearchBar;

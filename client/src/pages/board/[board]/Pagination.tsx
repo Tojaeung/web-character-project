@@ -8,9 +8,11 @@ interface IProps {
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   limit: number;
+  searchType: string;
+  keyword: string;
 }
 
-function Pagination({ total, page, setPage, limit }: IProps) {
+function Pagination({ total, page, setPage, limit, searchType, keyword }: IProps) {
   const navigate = useNavigate();
   const { board } = useParams();
 
@@ -29,9 +31,12 @@ function Pagination({ total, page, setPage, limit }: IProps) {
       setMinPageLimit(minPageLimit - pageRange);
       setMaxPageLimit(maxPageLimit - pageRange);
     }
-
     setPage(page - 1);
-    navigate(`/board/${board}?page=${page - 1}&limit=${limit}`);
+
+    // 검색기능을 사용하지 않았다면 일반 게시판 정보들을 불러온다.
+    if (!searchType || !keyword) return navigate(`/board/${board}?page=${page - 1}&limit=${limit}`);
+    // 검색기능을 사용했다면 검색결과에 대한 정보들을 불러온다.
+    navigate(`/board/${board}?page=${page - 1}&limit=${limit}&searchType=${searchType}&keyword=${keyword}`);
   };
 
   const handleNext = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -40,12 +45,22 @@ function Pagination({ total, page, setPage, limit }: IProps) {
       setMaxPageLimit(maxPageLimit + pageRange);
     }
     setPage(page + 1);
-    navigate(`/board/${board}?page=${page + 1}&limit=${limit}`);
+
+    // 검색기능을 사용하지 않았다면 일반 게시판 정보들을 불러온다.
+    if (!searchType || !keyword) return navigate(`/board/${board}?page=${page - 1}&limit=${limit}`);
+    // 검색기능을 사용했다면 검색결과에 대한 정보들을 불러온다.
+    navigate(`/board/${board}?page=${page - 1}&limit=${limit}&searchType=${searchType}&keyword=${keyword}`);
   };
 
   const goPage = (index: number) => (e: React.MouseEvent<HTMLButtonElement>) => {
     setPage(index + minPageLimit + 1);
-    navigate(`/board/${board}?page=${index + minPageLimit + 1}&limit=${limit}`);
+
+    // 검색기능을 사용하지 않았다면 일반 게시판 정보들을 불러온다.
+    if (!searchType || !keyword) return navigate(`/board/${board}?page=${index + minPageLimit + 1}&limit=${limit}`);
+    // 검색기능을 사용했다면 검색결과에 대한 정보들을 불러온다.
+    navigate(
+      `/board/${board}?page=${index + minPageLimit + 1}&limit=${limit}&searchType=${searchType}&keyword=${keyword}`
+    );
   };
 
   return (

@@ -8,10 +8,11 @@ import { useAppDispatch } from '@src/store/app/hook';
 import Nickname from '@src/components/Nickname';
 import { getBoard } from '@src/store/requests/board.request';
 import Pagination from './Pagination';
-import boardName from '@src/utils/boardName.util';
 import LimitSelector from './LimitSelector';
+import SearchBar from './SearchBar';
 import CreatedTime from '@src/components/CreatedTime';
 import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
+import boardName from '@src/utils/boardName.util';
 import { PostType } from '@src/types';
 
 function Board() {
@@ -24,6 +25,9 @@ function Board() {
   const [totalPostsNum, setTotalPostsNum] = useState<number>(0);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState<number>(10);
+
+  const [searchType, setSearchType] = useState('title');
+  const [keyword, setKeyword] = useState('');
 
   // 게시글 데이터 가져오기
   useLayoutEffect(() => {
@@ -86,11 +90,20 @@ function Board() {
 
         {posts.length && (
           <Footer>
-            <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
             <ScrollUpButton onClick={goTop}>상단으로</ScrollUpButton>
+            <Pagination
+              total={totalPostsNum}
+              page={page}
+              setPage={setPage}
+              limit={limit}
+              searchType={searchType}
+              keyword={keyword}
+            />
             <CreatePostButton onClick={(e) => navigate(`/create/postForm/${board}`)}>글쓰기</CreatePostButton>
           </Footer>
         )}
+
+        <SearchBar searchType={searchType} setSearchType={setSearchType} keyword={keyword} setKeyword={setKeyword} />
       </Container>
 
       <Responsive>
@@ -116,7 +129,14 @@ function Board() {
 
         {posts.length && (
           <Footer>
-            <Pagination total={totalPostsNum} page={page} setPage={setPage} limit={Number(limit)} />
+            <Pagination
+              total={totalPostsNum}
+              page={page}
+              setPage={setPage}
+              limit={limit}
+              searchType={searchType}
+              keyword={keyword}
+            />
             <ScrollUpButton onClick={goTop}>
               <ScrollUpIcon />
             </ScrollUpButton>
@@ -125,6 +145,7 @@ function Board() {
             </CreatePostButton>
           </Footer>
         )}
+        <SearchBar searchType={searchType} setSearchType={setSearchType} keyword={keyword} setKeyword={setKeyword} />
       </Responsive>
     </>
   );
@@ -132,6 +153,7 @@ function Board() {
 
 const Container = styled.div`
   width: 100%;
+  padding: 0 1rem;
   @media ${({ theme }) => theme.device.tablet} {
     display: none;
   }
@@ -181,14 +203,15 @@ const BoardName = styled.span`
 
 const Footer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
+  @media ${({ theme }) => theme.device.tablet} {
+    justify-content: center;
+  }
 `;
 
 const ScrollUpButton = styled.button`
   ${greenButtonStyle};
-  position: absolute;
-  bottom: 0.7rem;
-  right: 7rem;
   padding: 0.7rem;
   @media ${({ theme }) => theme.device.tablet} {
     position: fixed;
@@ -200,9 +223,6 @@ const ScrollUpButton = styled.button`
 
 const CreatePostButton = styled.button`
   ${inverseGreenButtonStyle};
-  position: absolute;
-  bottom: 0.7rem;
-  right: 1rem;
   padding: 0.7rem;
   @media ${({ theme }) => theme.device.tablet} {
     ${greenButtonStyle};
@@ -217,6 +237,12 @@ const Responsive = styled.div`
   @media ${({ theme }) => theme.device.tablet} {
     width: 100%;
     display: block;
+    padding: 0 1rem;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    display: block;
+    padding: 0 0.5rem;
   }
 `;
 

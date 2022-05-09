@@ -15,7 +15,7 @@ function LimitSelector({ setPage, limit, setLimit }: IProp) {
   const selectPostNum = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLimit(Number(e.target.value));
     setPage(1);
-    navigate(`/board/${board}?page=${1}&limit=${Number(e.target.value)}`);
+    navigate(`/board/${board}?page=${1}&limit=${e.target.value}`);
   };
 
   return (

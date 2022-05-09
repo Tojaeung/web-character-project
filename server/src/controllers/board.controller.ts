@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getCustomRepository, getRepository } from 'typeorm';
+import { getCustomRepository, getRepository, ILike } from 'typeorm';
 import _ from 'lodash';
 import logger from '@src/helpers/winston.helper';
 import ApiError from '@src/errors/api.error';
@@ -57,8 +57,14 @@ export const getAllBoards = async (req: Request, res: Response): Promise<any> =>
 
 export const getBoard = async (req: Request, res: Response): Promise<any> => {
   const { board } = req.params;
-  const page = Number(req.query.page as string);
-  const limit = Number(req.query.limit as string);
+  const page = Number(req.query.page as string) || 1;
+  const limit = Number(req.query.limit as string) || 10;
+
+  const searchType = req.query.searchType as string;
+  const keyword = req.query.keyword as string;
+
+  // 유효한 게시판 종류
+  const boardOptions = ['free', 'commission', 'reque', 'sale'];
 
   // 게시판 불러오기 시작점
   const offset = (page - 1) * limit;
@@ -67,45 +73,69 @@ export const getBoard = async (req: Request, res: Response): Promise<any> => {
   // 게시판의 전체 게시물 수
   let totalPostsNum;
 
-  if (board === 'free') {
-    posts = await getRepository(Free).find({
-      order: { id: 'DESC' },
-      skip: offset,
-      take: limit,
-      relations: ['user'],
-    });
-    totalPostsNum = await getRepository(Free).count();
-  } else if (board === 'commission') {
-    posts = await getRepository(Commission).find({
-      order: { id: 'DESC' },
-      skip: offset,
-      take: limit,
-      relations: ['user'],
-    });
-    totalPostsNum = await getRepository(Commission).count();
-  } else if (board === 'reque') {
-    posts = await getRepository(Reque).find({
-      order: { id: 'DESC' },
-      skip: offset,
-      take: limit,
-      relations: ['user'],
-    });
-    totalPostsNum = await getRepository(Reque).count();
-  } else if (board === 'sale') {
-    posts = await getRepository(Sale).find({
-      order: { id: 'DESC' },
-      skip: offset,
-      take: limit,
-      relations: ['user'],
-    });
-    totalPostsNum = await getRepository(Sale).count();
-  } else {
+  // 유효하지 않는 게시판 예외처리
+  if (!boardOptions.includes(board)) {
     logger.warn('존재하지 않는 게시판을 가져오려는 시도가 있습니다.');
     throw ApiError.NotFound('존재하지 않는 게시판입니다.');
   }
 
-  logger.info(`${board} 게시판 가져오기 성공하였습니다.`);
-  return res.status(200).json({ ok: true, message: '게시판 가져오기 성공하였습니다.', posts, totalPostsNum });
+  // 검색없이 게시판 페이지네이션
+  if (!searchType || !keyword) {
+    posts = await getRepository(_.upperFirst(board)).find({
+      order: { id: 'DESC' },
+      skip: offset,
+      take: limit,
+      relations: ['user'],
+    });
+    totalPostsNum = await getRepository(_.upperFirst(board)).count();
+
+    logger.info(`${board} 게시판 가져오기 성공하였습니다.`);
+    return res.status(200).json({ ok: true, message: '게시판 가져오기 성공하였습니다.', posts, totalPostsNum });
+  }
+
+  // 게시판내, 검색으로 정보 가져오기
+  if (searchType === 'title') {
+    posts = await getRepository(_.upperFirst(board)).find({
+      order: { id: 'DESC' },
+      skip: offset,
+      take: limit,
+      where: { title: ILike(`%${keyword}%`) },
+      relations: ['user'],
+    });
+    totalPostsNum = await getRepository(_.upperFirst(board)).count({
+      where: { title: ILike(`%${keyword}%`) },
+    });
+  } else if (searchType === 'content') {
+    posts = await getRepository(_.upperFirst(board)).find({
+      order: { id: 'DESC' },
+      skip: offset,
+      take: limit,
+      where: { content: ILike(`%${keyword}%`) },
+      relations: ['user'],
+    });
+    totalPostsNum = await getRepository(_.upperFirst(board)).count({
+      where: { content: ILike(`%${keyword}%`) },
+    });
+  } else if (searchType === 'nickname') {
+    posts = await getRepository(_.upperFirst(board)).find({
+      order: { id: 'DESC' },
+      skip: offset,
+      take: limit,
+      where: { nickname: ILike(`%${keyword}%`) },
+      relations: ['user'],
+    });
+    totalPostsNum = await getRepository(_.upperFirst(board)).count({
+      where: { nickname: ILike(`%${keyword}%`) },
+    });
+  } else {
+    logger.warn('존재하지 않는 검색기준으로 정보를 불러오는 시도가 있습니다.');
+    throw ApiError.BadRequest('존재하지 않는 검색기준입니다.');
+  }
+
+  logger.info(`${board} 게시판에서 "${keyword}"로 검색한 정보를 가져오기 성공하였습니다.`);
+  return res
+    .status(200)
+    .json({ ok: true, message: `"${keyword}"로 검색한 게시판 가져오기 성공하였습니다.`, posts, totalPostsNum });
 };
 
 export const getPost = async (req: Request, res: Response): Promise<any> => {
