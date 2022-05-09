@@ -70,38 +70,42 @@ function Board() {
           </thead>
 
           <tbody>
-            {posts.map((post) => (
-              <tr key={v4()}>
-                <td>{post.id}</td>
-                <td className="post-title">
-                  <TitleText to={`/board/${board}/post/${post.id}`}>{post.title}</TitleText>
-                </td>
-                <td>
-                  <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} fontSize={1.3} />
-                </td>
-                <td>{post.views}</td>
-                <td>
-                  <CreatedTime createdTime={post.created_at} fontSize={1.2} />
-                </td>
+            {!posts.length ? (
+              <tr>
+                <td colSpan={5}>결과가 없습니다...</td>
               </tr>
-            ))}
+            ) : (
+              posts.map((post) => (
+                <tr key={v4()}>
+                  <td>{post.id}</td>
+                  <td className="post-title">
+                    <TitleText to={`/board/${board}/post/${post.id}`}>{post.title}</TitleText>
+                  </td>
+                  <td>
+                    <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} fontSize={1.3} />
+                  </td>
+                  <td>{post.views}</td>
+                  <td>
+                    <CreatedTime createdTime={post.created_at} fontSize={1.2} />
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
 
-        {posts.length && (
-          <Footer>
-            <ScrollUpButton onClick={goTop}>상단으로</ScrollUpButton>
-            <Pagination
-              total={totalPostsNum}
-              page={page}
-              setPage={setPage}
-              limit={limit}
-              searchType={searchType}
-              keyword={keyword}
-            />
-            <CreatePostButton onClick={(e) => navigate(`/create/postForm/${board}`)}>글쓰기</CreatePostButton>
-          </Footer>
-        )}
+        <Footer>
+          <ScrollUpButton onClick={goTop}>상단으로</ScrollUpButton>
+          <Pagination
+            total={totalPostsNum}
+            page={page}
+            setPage={setPage}
+            limit={limit}
+            searchType={searchType}
+            keyword={keyword}
+          />
+          <CreatePostButton onClick={(e) => navigate(`/create/postForm/${board}`)}>글쓰기</CreatePostButton>
+        </Footer>
 
         <SearchBar searchType={searchType} setSearchType={setSearchType} keyword={keyword} setKeyword={setKeyword} />
       </Container>
@@ -112,39 +116,42 @@ function Board() {
           <LimitSelector setPage={setPage} limit={limit} setLimit={setLimit} />
         </Header>
 
-        {posts.map((post) => (
-          <ListBox key={v4()}>
-            <Title>
-              <TitleText to={`/board/${board}/post/${post.id}`}>{post.title}</TitleText>
-            </Title>
+        {!posts.length ? (
+          <NoResultText>결과가 없습니다.</NoResultText>
+        ) : (
+          posts.map((post) => (
+            <ListBox key={v4()}>
+              <Title>
+                <TitleText to={`/board/${board}/post/${post.id}`}>{post.title}</TitleText>
+              </Title>
 
-            <DetailBox>
-              <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} fontSize={1.3} />|
-              <Views>조회수: {post.views}</Views>
-              |
-              <CreatedTime createdTime={post.created_at} fontSize={1.2} />
-            </DetailBox>
-          </ListBox>
-        ))}
-
-        {posts.length && (
-          <Footer>
-            <Pagination
-              total={totalPostsNum}
-              page={page}
-              setPage={setPage}
-              limit={limit}
-              searchType={searchType}
-              keyword={keyword}
-            />
-            <ScrollUpButton onClick={goTop}>
-              <ScrollUpIcon />
-            </ScrollUpButton>
-            <CreatePostButton onClick={(e) => navigate(`/create/postForm/${board}`)}>
-              <CreatePostIcon />
-            </CreatePostButton>
-          </Footer>
+              <DetailBox>
+                <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} fontSize={1.3} />|
+                <Views>조회수: {post.views}</Views>
+                |
+                <CreatedTime createdTime={post.created_at} fontSize={1.2} />
+              </DetailBox>
+            </ListBox>
+          ))
         )}
+
+        <Footer>
+          <Pagination
+            total={totalPostsNum}
+            page={page}
+            setPage={setPage}
+            limit={limit}
+            searchType={searchType}
+            keyword={keyword}
+          />
+          <ScrollUpButton onClick={goTop}>
+            <ScrollUpIcon />
+          </ScrollUpButton>
+          <CreatePostButton onClick={(e) => navigate(`/create/postForm/${board}`)}>
+            <CreatePostIcon />
+          </CreatePostButton>
+        </Footer>
+
         <SearchBar searchType={searchType} setSearchType={setSearchType} keyword={keyword} setKeyword={setKeyword} />
       </Responsive>
     </>
@@ -245,7 +252,11 @@ const Responsive = styled.div`
     padding: 0 0.5rem;
   }
 `;
-
+const NoResultText = styled.p`
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 1rem 0;
+`;
 const ListBox = styled.div`
   display: flex;
   flex-direction: column;
