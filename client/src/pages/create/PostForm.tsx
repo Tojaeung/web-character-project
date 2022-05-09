@@ -11,7 +11,7 @@ import boardName from '@src/utils/boardName.util';
 import { useImageUploadConfig } from '@src/hooks/useReactQuillConfig';
 import LengthCountInput from '@src/components/LengthCountInput';
 import { useAppDispatch } from '@src/store/app/hook';
-import { createPost } from '@src/store/requests/board.request';
+import { createPost } from '@src/store/requests/post.request';
 
 function PostForm() {
   const dispatch = useAppDispatch();

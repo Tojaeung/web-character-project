@@ -12,7 +12,7 @@ import {
   deletePostComment,
   createPostLike,
   createPostDisLike,
-} from '@src/store/requests/board.request';
+} from '@src/store/requests/post.request';
 
 interface PostSliceType {
   ok: boolean;

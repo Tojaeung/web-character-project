@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
 import boardName from '@src/utils/boardName.util';
 import { selectPostPost } from '@src/store/slices/post.slice';
-import { getPost } from '@src/store/requests/board.request';
+import { getPost } from '@src/store/requests/post.request';
 import CreatedTime from '@src/components/CreatedTime';
 import Comment from '@src/components/comment';
 import CommentForm from '@src/components/CommentForm';

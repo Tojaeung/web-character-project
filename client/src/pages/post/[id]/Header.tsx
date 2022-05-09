@@ -12,7 +12,7 @@ import {
 import { selectUserUser } from '@src/store/slices/user.slice';
 import { selectPostPost } from '@src/store/slices/post.slice';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
-import { deletePost } from '@src/store/requests/board.request';
+import { deletePost } from '@src/store/requests/post.request';
 import { openModal } from '@src/store/slices/modal.slice';
 import MoreButton from '@src/components/MoreButton';
 

@@ -10,7 +10,7 @@ import { useImageUploadConfig } from '@src/hooks/useReactQuillConfig';
 import LengthCountInput from '@src/components/LengthCountInput';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectPostPost } from '@src/store/slices/post.slice';
-import { updatePost, getPost } from '@src/store/requests/board.request';
+import { updatePost, getPost } from '@src/store/requests/post.request';
 
 function EditForm() {
   const dispatch = useAppDispatch();

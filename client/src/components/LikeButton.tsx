@@ -17,7 +17,7 @@ import {
   SaleDisLikeType,
 } from '@src/types';
 import { createDrawingLike } from '@src/store/requests/drawing.request';
-import { createPostLike } from '@src/store/requests/board.request';
+import { createPostLike } from '@src/store/requests/post.request';
 
 interface IProps {
   type: 'drawing' | 'board';

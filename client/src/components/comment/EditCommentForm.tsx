@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '@src/store/app/hook';
 import { updateDrawingComment } from '@src/store/requests/drawing.request';
-import { updatePostComment } from '@src/store/requests/board.request';
+import { updatePostComment } from '@src/store/requests/post.request';
 import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
 
 interface IProp {

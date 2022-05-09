@@ -7,7 +7,7 @@ import CreatedTime from '@src/components/CreatedTime';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectUserUser } from '@src/store/slices/user.slice';
 import { deleteDrawingComment } from '@src/store/requests/drawing.request';
-import { deletePostComment } from '@src/store/requests/board.request';
+import { deletePostComment } from '@src/store/requests/post.request';
 import EditCommentForm from '@src/components/comment/EditCommentForm';
 import { inverseGreenButtonStyle, redButtonStyle } from '@src/styles/button.style';
 import {
