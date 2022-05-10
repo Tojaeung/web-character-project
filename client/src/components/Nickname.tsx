@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import { Link } from 'react-router-dom';
 import getLevel from '@src/utils/exp.util';
 import ChatButton from '@src/components/ChatButton';
 import useDropDown from '@src/hooks/useDropDown';
@@ -20,6 +19,7 @@ interface IProps {
 
 function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, fontSize }: IProps) {
   const dispatch = useAppDispatch();
+
   const user = useAppSelector(selectUserUser);
 
   // 드롭다운 메뉴 커스텀 훅
@@ -52,18 +52,12 @@ function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, fontS
               <GoProfile href={`/profile/${userId}`}>프로필 보기</GoProfile>
             </List>
 
-            {userId === user?.id && (
-              <List>
-                <Link to="/create/drawingForm">그림추가</Link>
-              </List>
-            )}
-
-            <List>작성글 보기</List>
             <List onClick={openUserInfoModal}>{user?.id === userId ? '내 정보' : '유저정보'}</List>
             <List onClick={openDescModal}>자기소개</List>
-            <ChatButton chatUserId={chatId!} />
 
-            {user?.role === 'admin' && <List onClick={openPenaltyModal}>불량유저</List>}
+            {userId !== user?.id && <ChatButton chatUserId={chatId!} />}
+
+            {user?.role === 'admin' && userId !== user.id && <List onClick={openPenaltyModal}>불량유저</List>}
           </Dropdown>
         )}
       </Container>
@@ -102,8 +96,7 @@ const Level = styled.span``;
 
 const Dropdown = styled.ul`
   position: absolute;
-  top: 2.5rem;
-  left: 3rem;
+  left: 5rem;
   z-index: 1007;
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
   background-color: ${({ theme }) => theme.palette.bgColor};

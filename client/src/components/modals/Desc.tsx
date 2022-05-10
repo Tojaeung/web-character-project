@@ -39,6 +39,7 @@ const Container = styled.div`
   width: 50rem;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
   @media ${({ theme }) => theme.device.tablet} {
     width: 35rem;
   }
@@ -58,7 +59,6 @@ const Title = styled.h1`
 
 const Content = styled.p`
   align-self: flex-start;
-  padding: 1rem;
   font-size: 1.5rem;
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;

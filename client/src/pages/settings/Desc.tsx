@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -6,14 +6,21 @@ import 'react-quill/dist/quill.snow.css';
 import { useDefaultConfig } from '@src/hooks/useReactQuillConfig';
 import TabMenu from './TabMenu';
 import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
-import { useAppDispatch } from '@src/store/app/hook';
+import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
+import { selectUserUser } from '@src/store/slices/user.slice';
 import { updateDesc } from '@src/store/requests/user.request';
 
 function Desc() {
+  const user = useAppSelector(selectUserUser);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [defaultModules] = useDefaultConfig();
   const [desc, setDesc] = useState('');
+
+  useEffect(() => {
+    setDesc(user?.desc!);
+  }, []);
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

@@ -1,8 +1,15 @@
 import React from 'react';
-// import SettingsList from '../../components/settings/SettingsList';
+import styled from 'styled-components';
+import TabMenu from './TabMenu';
 
 function Alert() {
-  return <div>{/* <SettingsList /> */}</div>;
+  return (
+    <Container>
+      <TabMenu />
+    </Container>
+  );
 }
+
+const Container = styled.div``;
 
 export default Alert;

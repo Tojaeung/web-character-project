@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { BiImageAdd } from 'react-icons/bi';
 import Drawing from './Drawing';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import { useAppDispatch } from '@src/store/app/hook';
 import { UserType } from '@src/types';
 import { getUser } from '@src/store/requests/user.request';
+import { greenButtonStyle } from '@src/styles/button.style';
 
 function Profile() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { profileId } = useParams();
 
@@ -39,7 +42,7 @@ function Profile() {
           <Avatar src={profile?.avatar} diameter={10} />
         </AvatarBox>
 
-        <UserInfoBox>
+        <NicknameBox>
           <Nickname
             exp={profile?.exp!}
             userId={profile?.id!}
@@ -49,7 +52,11 @@ function Profile() {
             dropDown={true}
             fontSize={1.7}
           />
-        </UserInfoBox>
+        </NicknameBox>
+        <AddDrawingButton onClick={(e) => navigate('/create/drawingForm')}>
+          <AddDrawingIcon />
+          그림추가
+        </AddDrawingButton>
       </ProfileBox>
       <DrawingBox>
         <Drawing />
@@ -75,6 +82,9 @@ const Container = styled.div`
 const ProfileBox = styled.section`
   width: 100%;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 const CoverBox = styled.div`
   margin: 0 auto;
@@ -90,12 +100,29 @@ const Image = styled.img`
   height: 100%;
   object-fit: cover;
 `;
-const UserInfoBox = styled.div`
+const NicknameBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.7rem;
+  gap: 1rem;
   margin-top: 5.5rem;
+`;
+const AddDrawingButton = styled.button`
+  ${greenButtonStyle};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.5rem;
+  margin-top: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
+`;
+const AddDrawingIcon = styled(BiImageAdd)`
+  font-size: 3rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 2.5rem;
+  }
 `;
 
 const DrawingBox = styled.section``;
