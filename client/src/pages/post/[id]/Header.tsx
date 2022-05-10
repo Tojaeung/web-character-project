@@ -27,7 +27,7 @@ function Header() {
   // 게시글 삭제
   const handleRemovePost = async (e: any) => {
     try {
-      const res = await dispatch(deletePost({ board: board as string, postId: Number(postId) })).unwrap();
+      const res = await dispatch(deletePost({ postId: Number(postId) })).unwrap();
       alert(res.message);
       navigate(-1);
     } catch (err: any) {

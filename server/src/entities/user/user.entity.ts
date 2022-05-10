@@ -9,18 +9,10 @@ import {
 } from 'typeorm';
 import Drawing from '@src/entities/drawing/drawing.entity';
 import DrawingComment from '@src/entities/drawing/comment.entity';
-import Commission from '@src/entities/board/commission/commission.entity';
-import CommissionComment from '@src/entities/board/commission/comment.entity';
-import CommissionImageKey from '@src/entities/board/commission/imageKey.entity';
-import Free from '@src/entities/board/free/free.entity';
-import FreeComment from '@src/entities/board/free/comment.entity';
-import FreeImageKey from '@src/entities/board/free/imageKey.entity';
-import Reque from '@src/entities/board/reque/reque.entity';
-import RequeComment from '@src/entities/board/reque/comment.entity';
-import RequeImageKey from '@src/entities/board/reque/imageKey.entity';
-import Sale from '@src/entities/board/sale/sale.entity';
-import SaleComment from '@src/entities/board/sale/comment.entity';
-import SaleImageKey from '@src/entities/board/sale/imageKey.entity';
+
+import Post from '@src/entities/board/post.entity';
+import PostComment from '@src/entities/board/comment.entity';
+import ImageKey from '@src/entities/board/imageKey.entity';
 
 class Relation {
   @OneToMany(() => Drawing, (drawing) => drawing.user)
@@ -29,41 +21,14 @@ class Relation {
   @OneToMany(() => DrawingComment, (drawingComment) => drawingComment.user)
   drawingComments: DrawingComment[];
 
-  @OneToMany(() => Commission, (commission) => commission.user)
-  commissions: Commission[];
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 
-  @OneToMany(() => CommissionComment, (commissionComment) => commissionComment.user)
-  commissionComments: CommissionComment[];
+  @OneToMany(() => PostComment, (postComment) => postComment.user)
+  postComments: PostComment[];
 
-  @OneToMany(() => CommissionImageKey, (commissionimageKey) => commissionimageKey.user)
-  commissionImageKeys: CommissionImageKey[];
-
-  @OneToMany(() => Free, (free) => free.user)
-  frees: Free[];
-
-  @OneToMany(() => FreeComment, (freeComment) => freeComment.user)
-  freeComments: FreeComment[];
-
-  @OneToMany(() => FreeImageKey, (freeImageKey) => freeImageKey.user)
-  freeImageKeys: FreeImageKey[];
-
-  @OneToMany(() => Reque, (reque) => reque.user)
-  reques: Reque[];
-
-  @OneToMany(() => RequeComment, (requeComment) => requeComment.user)
-  requeComments: RequeComment[];
-
-  @OneToMany(() => RequeImageKey, (requeImageKey) => requeImageKey.user)
-  requeImageKeys: RequeImageKey[];
-
-  @OneToMany(() => Sale, (sale) => sale.user)
-  sales: Sale[];
-
-  @OneToMany(() => SaleComment, (saleComment) => saleComment.user)
-  saleComments: SaleComment[];
-
-  @OneToMany(() => SaleImageKey, (saleimageKey) => saleimageKey.user)
-  saleImageKeys: SaleImageKey[];
+  @OneToMany(() => ImageKey, (imageKey) => imageKey.user)
+  imageKeys: ImageKey[];
 }
 
 @Entity('user', { schema: 'profile' })

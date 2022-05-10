@@ -28,8 +28,8 @@ export const getPost = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('GET_POST', async (data, thunkApi) => {
   try {
-    const { board, postId } = data;
-    const res = await instance.get(`/boards/${board}/posts/${postId}`);
+    const { postId } = data;
+    const res = await instance.get(`/posts/${postId}`);
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue(err.response.data);
@@ -56,8 +56,8 @@ export const updatePost = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_POST', async (data, thunkApi) => {
   try {
-    const { board, postId, title, content, imageKeys } = data;
-    const res = await instance.patch(`/board/${board}/posts/${postId}`, { title, content, imageKeys });
+    const { postId, title, content, imageKeys } = data;
+    const res = await instance.patch(`/posts/${postId}`, { title, content, imageKeys });
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue(err.response.data);
@@ -70,8 +70,8 @@ export const deletePost = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('DELETE_POST', async (data, thunkApi) => {
   try {
-    const { board, postId } = data;
-    const res = await instance.delete(`/boards/${board}/posts/${postId}`);
+    const { postId } = data;
+    const res = await instance.delete(`/posts/${postId}`);
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue(err.response.data);
@@ -98,8 +98,8 @@ export const updatePostComment = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('UPDATE_POST_COMMENT', async (data, thunkApi) => {
   try {
-    const { board, commentId, updatedContent } = data;
-    const res = await instance.patch(`/boards/${board}/comments/${commentId}`, { updatedContent });
+    const { commentId, updatedContent } = data;
+    const res = await instance.patch(`/comments/${commentId}`, { updatedContent });
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue(err.response.data);
@@ -112,8 +112,8 @@ export const deletePostComment = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('DELETE_POST_COMMENT', async (data, thunkApi) => {
   try {
-    const { board, commentId } = data;
-    const res = await instance.delete(`/boards/${board}/comments/${commentId}`);
+    const { commentId } = data;
+    const res = await instance.delete(`/comments/${commentId}`);
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue(err.response.data);
@@ -126,8 +126,8 @@ export const createPostLike = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('CREATE_POST_LIKE', async (data, thunkApi) => {
   try {
-    const { postId, board, userId } = data;
-    const res = await instance.post(`/boards/${board}/posts/${postId}`, { userId });
+    const { postId, userId } = data;
+    const res = await instance.post(`/posts/${postId}/like`, { userId });
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue(err.response.data);
@@ -140,8 +140,8 @@ export const createPostDisLike = createAsyncThunk<
   { state: RootState; rejectValue: { ok: boolean; message: string } }
 >('CREATE_POST_DISLIKE', async (data, thunkApi) => {
   try {
-    const { postId, board, userId } = data;
-    const res = await instance.post(`/boards/${board}/posts/${postId}`, { userId });
+    const { postId, userId } = data;
+    const res = await instance.post(`/posts/${postId}/dislike`, { userId });
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue(err.response.data);

@@ -21,7 +21,7 @@ function EditForm() {
   const post = useAppSelector(selectPostPost);
 
   useEffect(() => {
-    dispatch(getPost({ board: board as string, postId: Number(postId) }))
+    dispatch(getPost({ postId: Number(postId) }))
       .unwrap()
       .then((res) => {
         const { postJoinAll } = res;
@@ -38,7 +38,7 @@ function EditForm() {
 
   const handleModify = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
-      await dispatch(updatePost({ board: board as string, postId: Number(postId), title, content, imageKeys }));
+      await dispatch(updatePost({ postId: Number(postId), title, content, imageKeys }));
       navigate(-1);
     } catch (err: any) {
       alert(err.message);

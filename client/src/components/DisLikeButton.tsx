@@ -4,18 +4,7 @@ import { AiFillDislike, AiOutlineDislike } from 'react-icons/ai';
 import { useParams } from 'react-router-dom';
 import { selectUserUser } from '@src/store/slices/user.slice';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import {
-  DrawingLikeType,
-  DrawingDisLikeType,
-  FreeLikeType,
-  CommissionLikeType,
-  RequeLikeType,
-  SaleLikeType,
-  FreeDisLikeType,
-  CommissionDisLikeType,
-  RequeDisLikeType,
-  SaleDisLikeType,
-} from '@src/types';
+import { DrawingLikeType, DrawingDisLikeType, PostDisLikeType, PostLikeType } from '@src/types';
 import { createDrawingDisLike } from '@src/store/requests/drawing.request';
 import { createPostDisLike } from '@src/store/requests/post.request';
 
@@ -23,8 +12,8 @@ interface IProps {
   type: 'drawing' | 'board';
   entityId: number;
   userId: number;
-  likes: DrawingLikeType[] | FreeLikeType[] | CommissionLikeType[] | RequeLikeType[] | SaleLikeType[];
-  dislikes: DrawingDisLikeType[] | FreeDisLikeType[] | CommissionDisLikeType[] | RequeDisLikeType[] | SaleDisLikeType[];
+  likes: DrawingLikeType[] | PostLikeType[];
+  dislikes: DrawingDisLikeType[] | PostDisLikeType[];
 }
 
 function DisLikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
@@ -47,7 +36,7 @@ function DisLikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
     if (type === 'board') {
       if (existingLike || existingDisLike) return alert('이미 선택하셨습니다.');
       try {
-        await dispatch(createPostDisLike({ board: board as string, postId: entityId, userId })).unwrap();
+        await dispatch(createPostDisLike({ postId: entityId, userId })).unwrap();
       } catch (err: any) {
         alert(err.message);
       }

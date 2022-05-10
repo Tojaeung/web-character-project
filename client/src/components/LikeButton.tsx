@@ -4,18 +4,7 @@ import { useParams } from 'react-router-dom';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { selectUserUser } from '@src/store/slices/user.slice';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import {
-  DrawingLikeType,
-  DrawingDisLikeType,
-  FreeLikeType,
-  CommissionLikeType,
-  RequeLikeType,
-  SaleLikeType,
-  FreeDisLikeType,
-  CommissionDisLikeType,
-  RequeDisLikeType,
-  SaleDisLikeType,
-} from '@src/types';
+import { PostLikeType, PostDisLikeType, DrawingLikeType, DrawingDisLikeType } from '@src/types';
 import { createDrawingLike } from '@src/store/requests/drawing.request';
 import { createPostLike } from '@src/store/requests/post.request';
 
@@ -24,8 +13,8 @@ interface IProps {
 
   entityId: number;
   userId: number;
-  likes: DrawingLikeType[] | FreeLikeType[] | CommissionLikeType[] | RequeLikeType[] | SaleLikeType[];
-  dislikes: DrawingDisLikeType[] | FreeDisLikeType[] | CommissionDisLikeType[] | RequeDisLikeType[] | SaleDisLikeType[];
+  likes: DrawingLikeType[] | PostLikeType[];
+  dislikes: DrawingDisLikeType[] | PostDisLikeType[];
 }
 
 function LikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
@@ -48,7 +37,7 @@ function LikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
     if (type === 'board') {
       if (existingLike || existingDisLike) return alert('이미 선택하셨습니다.');
       try {
-        await dispatch(createPostLike({ board: board as string, postId: entityId, userId })).unwrap();
+        await dispatch(createPostLike({ postId: entityId, userId })).unwrap();
       } catch (err: any) {
         alert(err.message);
       }

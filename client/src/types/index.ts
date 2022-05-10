@@ -14,6 +14,10 @@ export type UserType = {
   exp: number;
   created_at: Date;
   updated_at: Date;
+  drawings?: DrawingType[];
+  drawingComments?: DrawingCommentType[];
+  posts?: PostType[];
+  postComments?: PostCommentType[];
 };
 
 export type DrawingType = {
@@ -30,6 +34,7 @@ export type DrawingType = {
   likes?: DrawingLikeType[];
   dislikes?: DrawingDisLikeType[];
 };
+
 export type DrawingCommentType = {
   id: number;
   content: string;
@@ -37,19 +42,22 @@ export type DrawingCommentType = {
   drawing_id: number;
   created_at: Date;
   updated_at: Date;
-  user?: UserType | null;
+  user?: UserType;
+  drawing?: DrawingType;
 };
 
 export type DrawingLikeType = {
   id: number;
-  valuerId: number;
+  userId: number; // 좋아요 누른 사람 id
   drawing_id: number;
+  drawing?: DrawingType;
 };
 
 export type DrawingDisLikeType = {
   id: number;
-  valuerId: number;
+  userId: number; // 싫어요 누른 사람 id
   drawing_id: number;
+  drawing?: DrawingType;
 };
 
 export type PostType = {
@@ -58,99 +66,51 @@ export type PostType = {
   content: string;
   views: number;
   user_id: number;
+  board_id: number;
   created_at: Date;
   updated_at: Date;
   user?: UserType;
-  comments?: FreeCommentType[] | CommissionCommentType[] | RequeCommentType[] | SaleCommentType[];
-  likes?: FreeLikeType[] | CommissionLikeType[] | RequeLikeType[] | SaleDisLikeType[];
-  dislikes?: FreeDisLikeType[] | CommissionDisLikeType[] | RequeDisLikeType[] | SaleDisLikeType[];
+  board?: BoardType;
+  comments?: PostCommentType[];
+  likes?: PostLikeType[];
+  dislikes?: PostDisLikeType[];
 };
 
-export type FreeCommentType = {
+export type PostCommentType = {
   id: number;
   content: string;
   user_id: number;
-  free_id: number;
+  board_id: number;
+  post_id: number;
   created_at: Date;
   updated_at: Date;
   user?: UserType;
+  board?: BoardType;
+  post?: PostType;
 };
 
-export type CommissionCommentType = {
+export type BoardType = {
   id: number;
-  content: string;
-  user_id: number;
-  commission_id: number;
+  enName: string;
+  krName: string;
   created_at: Date;
   updated_at: Date;
-  user?: UserType;
+  posts?: PostType[];
+  comments?: PostCommentType[];
 };
 
-export type RequeCommentType = {
+export type PostLikeType = {
   id: number;
-  content: string;
-  user_id: number;
-  reque_id: number;
-  created_at: Date;
-  updated_at: Date;
-  user?: UserType;
+  userId: number;
+  post_id: number;
+  post?: PostType;
 };
 
-export type SaleCommentType = {
+export type PostDisLikeType = {
   id: number;
-  content: string;
-  user_id: number;
-  sale_id: number;
-  created_at: Date;
-  updated_at: Date;
-  user?: UserType;
-};
-
-export type FreeLikeType = {
-  id: number;
-  valuerId: number;
-  free_id: number;
-};
-
-export type FreeDisLikeType = {
-  id: number;
-  valuerId: number;
-  free_id: number;
-};
-
-export type CommissionLikeType = {
-  id: number;
-  valuerId: number;
-  commission_id: number;
-};
-
-export type CommissionDisLikeType = {
-  id: number;
-  valuerId: number;
-  commission_id: number;
-};
-
-export type RequeLikeType = {
-  id: number;
-  valuerId: number;
-  reque_id: number;
-};
-
-export type RequeDisLikeType = {
-  id: number;
-  valuerId: number;
-  reque_id: number;
-};
-export type SaleLikeType = {
-  id: number;
-  valuerId: number;
-  sale_id: number;
-};
-
-export type SaleDisLikeType = {
-  id: number;
-  valuerId: number;
-  sale_id: number;
+  userId: number;
+  post_id: number;
+  post?: PostType;
 };
 
 export type ChatUserType = {

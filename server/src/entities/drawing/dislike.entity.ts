@@ -12,8 +12,8 @@ class DisLike extends Relation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'valuer_id' })
-  valuerId: number;
+  @Column({ name: 'user_id' })
+  userId: number;
 
   @Index('drawing_id-dislikeIdx')
   @Column()

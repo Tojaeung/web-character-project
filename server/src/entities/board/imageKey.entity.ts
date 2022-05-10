@@ -1,18 +1,18 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import User from '@src/entities/user/user.entity';
-import Reque from '@src/entities/board/reque/reque.entity';
+import Post from '@src/entities/board/post.entity';
 
 class Relation {
-  @ManyToOne(() => User, (user) => user.requeImageKeys, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.imageKeys, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Reque, (reque) => reque.imageKeys, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
-  @JoinColumn({ name: 'reque_id' })
-  reque: Reque;
+  @ManyToOne(() => Post, (post) => post.imageKeys, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @JoinColumn({ name: 'post_id' })
+  post: Post;
 }
 
-@Entity('image_key', { schema: 'reque' })
+@Entity('imageKey', { schema: 'board' })
 class ImageKey extends Relation {
   @PrimaryGeneratedColumn()
   id: number;
@@ -24,7 +24,7 @@ class ImageKey extends Relation {
   user_id: number;
 
   @Column()
-  reque_id: number;
+  post_id: number;
 }
 
 export default ImageKey;

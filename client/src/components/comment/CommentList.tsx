@@ -10,17 +10,11 @@ import { deleteDrawingComment } from '@src/store/requests/drawing.request';
 import { deletePostComment } from '@src/store/requests/post.request';
 import EditCommentForm from '@src/components/comment/EditCommentForm';
 import { inverseGreenButtonStyle, redButtonStyle } from '@src/styles/button.style';
-import {
-  DrawingCommentType,
-  FreeCommentType,
-  CommissionCommentType,
-  RequeCommentType,
-  SaleCommentType,
-} from '@src/types';
+import { DrawingCommentType, PostCommentType } from '@src/types';
 
 interface IProps {
   type: 'drawing' | 'board';
-  comment: DrawingCommentType | FreeCommentType | CommissionCommentType | RequeCommentType | SaleCommentType;
+  comment: DrawingCommentType | PostCommentType;
   index: number;
   setCommentIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
   isSelected: boolean;
@@ -48,7 +42,7 @@ function CommentList({ type, comment, index, setCommentIndex, isSelected }: IPro
     }
     if (type === 'board') {
       try {
-        await dispatch(deletePostComment({ board: board as string, commentId: comment.id })).unwrap();
+        await dispatch(deletePostComment({ commentId: comment.id })).unwrap();
       } catch (err: any) {
         alert(err.message);
       }

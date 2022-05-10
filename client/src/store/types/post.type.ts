@@ -7,7 +7,6 @@ export type getPostReturnType = {
 };
 
 export type getPostDataType = {
-  board: string;
   postId: number;
 };
 
@@ -31,7 +30,6 @@ export type updatePostReturnType = {
 };
 
 export type updatePostDataType = {
-  board: string;
   postId: number;
   title: string;
   content: string;
@@ -45,7 +43,6 @@ export type deletePostReturnType = {
 };
 
 export type deletePostDataType = {
-  board: string;
   postId: number;
 };
 
@@ -68,7 +65,6 @@ export type updateCommentReturnType = {
 };
 
 export type updateCommentDataType = {
-  board: string;
   commentId: number;
   updatedContent: string;
 };
@@ -80,7 +76,6 @@ export type deleteCommentReturnType = {
 };
 
 export type deleteCommentDataType = {
-  board: string;
   commentId: number;
 };
 
@@ -91,7 +86,6 @@ export type createLikeReturnType = {
 };
 
 export type createLikeDataType = {
-  board: string;
   postId: number;
   userId: number; // 게시글 작성자 id
 };
@@ -103,7 +97,6 @@ export type createDisLikeReturnType = {
 };
 
 export type createDisLikeDataType = {
-  board: string;
   postId: number;
   userId: number; // 게시글 작성자 id
 };

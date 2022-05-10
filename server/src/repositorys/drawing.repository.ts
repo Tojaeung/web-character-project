@@ -106,7 +106,7 @@ export class LikeRepository extends AbstractRepository<Like> {
     const result = await this.createQueryBuilder('like')
       .insert()
       .into(Like)
-      .values({ valuerId: id, drawing_id: drawingId })
+      .values({ userId: id, drawing_id: drawingId })
       .returning('*')
       .execute();
     return result.raw[0];
@@ -118,7 +118,7 @@ export class DisLikeRepository extends AbstractRepository<DisLike> {
     const result = await this.createQueryBuilder('like')
       .insert()
       .into(DisLike)
-      .values({ valuerId: id, drawing_id: drawingId })
+      .values({ userId: id, drawing_id: drawingId })
       .returning('*')
       .execute();
     return result.raw[0];

@@ -29,9 +29,7 @@ function EditCommentForm({ type, commentId, setCommentIndex }: IProp) {
     }
     if (type === 'board') {
       try {
-        await dispatch(
-          updatePostComment({ board: board as string, commentId: commentId, updatedContent: content })
-        ).unwrap();
+        await dispatch(updatePostComment({ commentId: commentId, updatedContent: content })).unwrap();
         setContent('');
       } catch (err: any) {
         alert(err.message);

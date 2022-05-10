@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
-import boardName from '@src/utils/boardName.util';
 import { selectPostPost } from '@src/store/slices/post.slice';
 import { getPost } from '@src/store/requests/post.request';
 import CreatedTime from '@src/components/CreatedTime';
@@ -15,18 +14,18 @@ import Header from './Header';
 function Post() {
   const dispatch = useAppDispatch();
 
-  const { board, postId } = useParams();
+  const { postId } = useParams();
 
   const post = useAppSelector(selectPostPost);
 
   useEffect(() => {
     document.documentElement.scrollTop = 0;
-    dispatch(getPost({ board: board as string, postId: Number(postId) }));
+    dispatch(getPost({ postId: Number(postId) }));
   }, [postId]);
 
   return (
     <Container>
-      <BoardName>{boardName(board as string)}</BoardName>
+      <BoardName>{post?.board?.krName}</BoardName>
       <TitleBox>
         <PostTitle>{post?.title}</PostTitle>
         <CreatedTime createdTime={post?.created_at!} fontSize={1.2} />

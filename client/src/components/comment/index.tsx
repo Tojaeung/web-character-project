@@ -7,17 +7,11 @@ import { HiOutlineChevronDoubleUp } from 'react-icons/hi';
 import CommentList from '@src/components/comment/CommentList';
 import Pagination from './Pagination';
 import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
-import {
-  DrawingCommentType,
-  FreeCommentType,
-  CommissionCommentType,
-  SaleCommentType,
-  RequeCommentType,
-} from '@src/types';
+import { DrawingCommentType, PostCommentType } from '@src/types';
 
 interface IProp {
   type: 'drawing' | 'board';
-  comments: DrawingCommentType[] | FreeCommentType[] | CommissionCommentType[] | RequeCommentType[] | SaleCommentType[];
+  comments: DrawingCommentType[] | PostCommentType[];
 }
 
 function Comment({ comments, type }: IProp) {

@@ -5,18 +5,16 @@ import _ from 'lodash';
 import moment from 'moment';
 import schedule from 'node-schedule';
 import { IncomingWebhook } from '@slack/webhook';
+import cluster from '@src/helpers/redis.helper';
+import logger from '@src/helpers/winston.helper';
+import ApiError from '@src/errors/api.error';
+import s3Delete from '@src/utils/s3.utils';
 import User from '@src/entities/user/user.entity';
 import Drawing from '@src/entities/drawing/drawing.entity';
+import DrawingComment from '@src/entities/drawing/comment.entity';
 import { UserRepository } from '@src/repositorys/user.repository';
-import logger from '@src/helpers/winston.helper';
 import { sendAuthEmail, sendEmailForResetPw, sendEmailForUpdateEmail } from '@src/helpers/nodemailer.helper';
-import ApiError from '@src/errors/api.error';
-import { s3Delete } from '@src/utils/s3.utils';
-import cluster from '@src/helpers/redis.helper';
-import FreeImageKey from '@src/entities/board/commission/imageKey.entity';
-import CommissionImageKey from '@src/entities/board/free/imageKey.entity';
-import RequeImageKey from '@src/entities/board/reque/imageKey.entity';
-import SaleImageKey from '@src/entities/board/sale/imageKey.entity';
+
 import {
   ForgotPwDTO,
   GetUserInfoDTO,
@@ -29,15 +27,10 @@ import {
   UpdatePwDTO,
   VerifyEmailDTO,
 } from '@src/schemas/user.schema';
-import DrawingComment from '@src/entities/drawing/comment.entity';
-import Free from '@src/entities/board/free/free.entity';
-import Commission from '@src/entities/board/commission/commission.entity';
-import Reque from '@src/entities/board/reque/reque.entity';
-import Sale from '@src/entities/board/sale/sale.entity';
-import FreeComment from '@src/entities/board/free/comment.entity';
-import CommissionComment from '@src/entities/board/reque/comment.entity';
-import RequeComment from '@src/entities/board/commission/comment.entity';
-import SaleComment from '@src/entities/board/sale/comment.entity';
+import Post from '@src/entities/board/post.entity';
+import Comment from '@src/entities/board/comment.entity';
+import ImageKey from '@src/entities/board/imageKey.entity';
+import { deleteImageKey } from '@src/utils/imagekey.utils';
 
 export const signUp = async (req: Request<{}, {}, SignUpDTO>, res: Response): Promise<any> => {
   const { email, nickname, pw } = req.body;
@@ -449,20 +442,11 @@ export const getUserInfo = async (req: Request<GetUserInfoDTO>, res: Response): 
   const user = await getRepository(User).findOne(userId);
   const drawingsNum = await getRepository(Drawing).count({ user_id: userId });
   const drawingCommentsNum = await getRepository(DrawingComment).count({ user_id: userId });
+  const postsNum = await getRepository(Post).count({ user_id: userId });
+  const postCommentsNum = await getRepository(Comment).count({ user_id: userId });
 
-  const freePostsNum = await getRepository(Free).count({ user_id: userId });
-  const commissionPostsNum = await getRepository(Commission).count({ user_id: userId });
-  const requePostsNum = await getRepository(Reque).count({ user_id: userId });
-  const salePostsNum = await getRepository(Sale).count({ user_id: userId });
-
-  const freeCommentsNum = await getRepository(FreeComment).count({ user_id: userId });
-  const commissionCommentsNum = await getRepository(CommissionComment).count({ user_id: userId });
-  const requeCommentsNum = await getRepository(RequeComment).count({ user_id: userId });
-  const saleCommentsNum = await getRepository(SaleComment).count({ user_id: userId });
-
-  const totalPostsNum = freePostsNum + commissionPostsNum + requePostsNum + salePostsNum;
-  const totalCommentsNum =
-    drawingCommentsNum + freeCommentsNum + commissionCommentsNum + requeCommentsNum + saleCommentsNum;
+  const totalPostsNum = postsNum;
+  const totalCommentsNum = drawingCommentsNum + postCommentsNum;
 
   logger.info('유저정보 가져오기 성공하였습니다.');
   return res.status(200).json({
@@ -512,11 +496,7 @@ export const deleteAccount = async (req: Request, res: Response): Promise<any> =
     throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
   const drawings = await getRepository(Drawing).find({ user_id: id });
-
-  const freeImageKeys = await getRepository(FreeImageKey).find({ user_id: id });
-  const commissionImageKeys = await getRepository(CommissionImageKey).find({ user_id: id });
-  const requeImageKeys = await getRepository(RequeImageKey).find({ user_id: id });
-  const saleImageKeys = await getRepository(SaleImageKey).find({ user_id: id });
+  const imageKeys = await getRepository(ImageKey).find({ user_id: id });
 
   const currentAvatarKey = user?.avatarKey;
   const currentCoverKey = user?.coverKey;
@@ -530,10 +510,7 @@ export const deleteAccount = async (req: Request, res: Response): Promise<any> =
   // s3에 저장된 유저가 올린 모든 그림을 삭제합니다.
   drawings.forEach(async (drawing) => s3Delete(drawing.key as string));
   // s3에 저장된 유저가 올린 모든 게시물(post) 이미지를 삭제합니다.
-  freeImageKeys.forEach(async (imageKey) => s3Delete(imageKey.key as string));
-  commissionImageKeys.forEach(async (imageKey) => s3Delete(imageKey.key as string));
-  requeImageKeys.forEach(async (imageKey) => s3Delete(imageKey.key as string));
-  saleImageKeys.forEach(async (imageKey) => s3Delete(imageKey.key as string));
+  imageKeys.forEach(async (imageKey) => s3Delete(imageKey.key as string));
 
   await getRepository(User).delete({ id });
 
