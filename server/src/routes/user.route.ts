@@ -2,6 +2,7 @@ import { Router } from 'express';
 import asyncHandler from 'express-async-handler';
 import validator from '@src/middlewares/validator.middleware';
 import auth from '@src/middlewares/auth.middleware';
+import admin from '@src/middlewares/admin.middleware';
 import { avatarUpload, coverUpload } from '@src/helpers/s3.helper';
 import {
   signUp,
@@ -65,10 +66,10 @@ router.patch('/me/default-cover', auth, asyncHandler(updateDefaultCover));
 router.post('/users/:userId/report', auth, asyncHandler(sendReport));
 
 // 유저정보 가져오기
-router.get('/users/:userId/info', auth, asyncHandler(getUserInfo));
+router.get('/users/:userId/info', asyncHandler(getUserInfo));
 
 // 유저 제재하기
-router.patch('/users/:userId/exp', auth, asyncHandler(givePenalty));
+router.patch('/users/:userId/exp', auth, admin, asyncHandler(givePenalty));
 
 // 계정삭제
 router.delete('/me', auth, asyncHandler(deleteAccount));

@@ -5,10 +5,11 @@ import { Link, NavLink } from 'react-router-dom';
 import CreatedTime from '@src/components/CreatedTime';
 import Nickname from './Nickname';
 import { PostType } from '@src/types';
+import boardName from '@src/utils/boardName.util';
 
 interface IProps {
   posts: PostType[];
-  board: '자유게시판' | '커미션' | '리퀘스트' | '분양';
+  board: 'free' | 'commission' | 'reque' | 'sale';
 }
 
 function BoardPreview({ posts, board }: IProps) {
@@ -17,7 +18,7 @@ function BoardPreview({ posts, board }: IProps) {
       <thead>
         <tr>
           <th>
-            {board}
+            {boardName(board)}
             <Link to={`/board/${board}`}>
               <ChevronRightIcon />
             </Link>

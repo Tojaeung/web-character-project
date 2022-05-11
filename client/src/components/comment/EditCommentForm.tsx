@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '@src/store/app/hook';
 import { updateDrawingComment } from '@src/store/requests/drawing.request';
 import { updatePostComment } from '@src/store/requests/post.request';
@@ -14,7 +13,6 @@ interface IProp {
 
 function EditCommentForm({ type, commentId, setCommentIndex }: IProp) {
   const dispatch = useAppDispatch();
-  const { board } = useParams();
 
   const [content, setContent] = useState('');
 
@@ -29,10 +27,15 @@ function EditCommentForm({ type, commentId, setCommentIndex }: IProp) {
     }
     if (type === 'board') {
       try {
-        await dispatch(updatePostComment({ commentId: commentId, updatedContent: content })).unwrap();
+        await dispatch(updatePostComment({ commentId: commentId, updatedContent: content }))
+          .unwrap()
+          .then((res) => {
+            const { message } = res;
+            alert(message);
+          });
         setContent('');
       } catch (err: any) {
-        alert(err.message);
+        // alert(err.message);
       }
     }
 

@@ -1,4 +1,4 @@
-import { PostType } from '@src/types';
+import { PostCommentType, PostDisLikeType, PostLikeType, PostType } from '@src/types';
 
 export type getPostReturnType = {
   ok: boolean;
@@ -49,7 +49,7 @@ export type deletePostDataType = {
 export type createCommentReturnType = {
   ok: boolean;
   message: string;
-  newCommentJoinUser: any;
+  newCommentJoinUser: PostCommentType;
 };
 
 export type createCommentDataType = {
@@ -61,7 +61,7 @@ export type createCommentDataType = {
 export type updateCommentReturnType = {
   ok: boolean;
   message: string;
-  udpatedCommentJoinUser: any;
+  updatedCommentJoinUser: PostCommentType;
 };
 
 export type updateCommentDataType = {
@@ -72,7 +72,7 @@ export type updateCommentDataType = {
 export type deleteCommentReturnType = {
   ok: boolean;
   message: string;
-  deletedComment: any;
+  deletedComment: PostCommentType;
 };
 
 export type deleteCommentDataType = {
@@ -82,7 +82,7 @@ export type deleteCommentDataType = {
 export type createLikeReturnType = {
   ok: boolean;
   message: string;
-  newLike: any;
+  newLike: PostLikeType;
 };
 
 export type createLikeDataType = {
@@ -93,7 +93,7 @@ export type createLikeDataType = {
 export type createDisLikeReturnType = {
   ok: boolean;
   message: string;
-  newDisLike: any;
+  newDisLike: PostDisLikeType;
 };
 
 export type createDisLikeDataType = {

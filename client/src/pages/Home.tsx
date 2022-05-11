@@ -27,10 +27,10 @@ function Home() {
 
   return (
     <Container>
-      <BoardPreview posts={free} board="자유게시판" />
-      <BoardPreview posts={commission} board="커미션" />
-      <BoardPreview posts={reque} board="리퀘스트" />
-      <BoardPreview posts={sale} board="분양" />
+      <BoardPreview posts={free} board="free" />
+      <BoardPreview posts={commission} board="commission" />
+      <BoardPreview posts={reque} board="reque" />
+      <BoardPreview posts={sale} board="sale" />
     </Container>
   );
 }

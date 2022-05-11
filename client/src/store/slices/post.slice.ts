@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import _ from 'lodash';
 import type { RootState } from '../app/store';
 import { PostType } from '@src/types';
 import {
@@ -75,9 +74,10 @@ export const postSlice = createSlice({
 
     builder
       .addCase(createPostComment.fulfilled, (state, { payload }) => {
+        const { newCommentJoinUser } = payload;
         state.ok = payload.ok;
         state.message = payload.message;
-        state.post?.comments?.push(payload.newCommentJoinUser);
+        state.post?.comments?.push(newCommentJoinUser);
       })
       .addCase(createPostComment.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
@@ -87,8 +87,8 @@ export const postSlice = createSlice({
       .addCase(updatePostComment.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-        state.post!.comments = _.map(state.post?.comments, (comment) => {
-          return comment.id === payload.udpatedCommentJoinUser.id ? payload.udpatedCommentJoinUser : comment;
+        state.post!.comments = state.post?.comments?.map((comment) => {
+          return comment.id === payload.updatedCommentJoinUser.id ? payload.updatedCommentJoinUser : comment;
         });
       })
       .addCase(updatePostComment.rejected, (state, { payload }) => {
@@ -99,9 +99,7 @@ export const postSlice = createSlice({
       .addCase(deletePostComment.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-        state.post = _.remove(state.post?.comments, (comment) => {
-          return comment.id === payload.deletedComment.id;
-        });
+        state.post!.comments = state.post?.comments?.filter((comment) => comment.id !== payload.deletedComment.id);
       })
       .addCase(deletePostComment.rejected, (state, { payload }) => {
         state.ok = payload!.ok;

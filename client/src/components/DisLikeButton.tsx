@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { AiFillDislike, AiOutlineDislike } from 'react-icons/ai';
-import { useParams } from 'react-router-dom';
 import { selectUserUser } from '@src/store/slices/user.slice';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { DrawingLikeType, DrawingDisLikeType, PostDisLikeType, PostLikeType } from '@src/types';
@@ -18,13 +17,12 @@ interface IProps {
 
 function DisLikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
   const dispatch = useAppDispatch();
-  const { board } = useParams();
 
   const user = useAppSelector(selectUserUser);
 
   const handleAddDisLike = async (e: React.MouseEvent<HTMLSpanElement>) => {
-    const existingLike = likes?.some((like) => like.user_id === user?.id);
-    const existingDisLike = dislikes?.some((dislike) => dislike.user_id === user?.id);
+    const existingLike = likes?.some((like) => like.userId === user?.id);
+    const existingDisLike = dislikes?.some((dislike) => dislike.userId === user?.id);
     if (type === 'drawing') {
       if (existingLike || existingDisLike) return alert('이미 선택하셨습니다.');
       try {
@@ -45,7 +43,7 @@ function DisLikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
 
   return (
     <Container onClick={handleAddDisLike}>
-      {dislikes?.some((dislike) => dislike.user_id === user?.id) ? <ActiveDisLikeIcon /> : <NotActiveDisLikeIcon />}
+      {dislikes?.some((dislike) => dislike.userId === user?.id) ? <ActiveDisLikeIcon /> : <NotActiveDisLikeIcon />}
       {dislikes?.length}
     </Container>
   );

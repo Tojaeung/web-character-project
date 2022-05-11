@@ -29,13 +29,7 @@ export const createLikeSchema = object({
     drawingId: z.string(),
   }),
   body: object({
-    userId: z
-      .string()
-      .nonempty('그림 게시자를 확인할 수 없습니다.')
-      .transform((val) => {
-        const userId = Number(val);
-        return userId;
-      }),
+    userId: z.number(),
   }),
 });
 
@@ -44,13 +38,7 @@ export const createDisLikeSchema = object({
     drawingId: z.string(),
   }),
   body: object({
-    userId: z
-      .string()
-      .nonempty('그림 게시자를 확인할 수 없습니다.')
-      .transform((val) => {
-        const userId = Number(val);
-        return userId;
-      }),
+    userId: z.number(),
   }),
 });
 

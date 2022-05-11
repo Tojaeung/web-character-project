@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import _ from 'lodash';
 import type { RootState } from '../app/store';
 import { DrawingType } from '@src/types';
 import {
@@ -83,9 +82,7 @@ export const drawingSlice = createSlice({
       .addCase(deleteDrawing.fulfilled, (state, { payload }) => {
         state.ok = payload.ok;
         state.message = payload.message;
-        state.drawings = _.remove(state.drawings, (drawing) => {
-          return drawing.id === payload.deletedDrawing.id;
-        });
+        state.drawings = state.drawings.filter((drawing) => drawing.id !== payload.deletedDrawing.id);
       })
       .addCase(deleteDrawing.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
@@ -109,9 +106,9 @@ export const drawingSlice = createSlice({
         state.ok = payload.ok;
         state.message = payload.message;
         const index = state.index;
-        state.drawings = _.map(state.drawings[index!].comments, (comment) => {
-          return comment.id === payload.udpatedCommentJoinUser.id ? payload.udpatedCommentJoinUser : comment;
-        });
+        state.drawings[index!].comments = state.drawings[index!].comments?.map((comment) =>
+          comment.id === payload.udpatedCommentJoinUser.id ? payload.udpatedCommentJoinUser : comment
+        );
       })
       .addCase(updateDrawingComment.rejected, (state, { payload }) => {
         state.ok = payload!.ok;
@@ -123,9 +120,9 @@ export const drawingSlice = createSlice({
         state.ok = payload.ok;
         state.message = payload.message;
         const index = state.index;
-        state.drawings = _.remove(state.drawings[index!].comments, (comment) => {
-          return comment.id === payload.deletedComment.id;
-        });
+        state.drawings[index!].comments = state.drawings[index!].comments?.filter(
+          (comment) => comment.id !== payload.deletedComment.id
+        );
       })
       .addCase(deleteDrawingComment.rejected, (state, { payload }) => {
         state.ok = payload!.ok;

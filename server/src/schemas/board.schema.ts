@@ -41,7 +41,6 @@ export const createCommentSchema = object({
 
 export const updateCommentSchema = object({
   params: object({
-    board: z.string(),
     commentId: z.string(),
   }),
   body: object({
@@ -51,33 +50,19 @@ export const updateCommentSchema = object({
 
 export const createLikeSchema = object({
   params: object({
-    board: z.string(),
     postId: z.string(),
   }),
   body: object({
-    userId: z
-      .string()
-      .nonempty('그림 게시자를 확인할 수 없습니다.')
-      .transform((val) => {
-        const userId = Number(val);
-        return userId;
-      }),
+    userId: z.number(),
   }),
 });
 
 export const createDisLikeSchema = object({
   params: object({
-    board: z.string(),
     postId: z.string(),
   }),
   body: object({
-    userId: z
-      .string()
-      .nonempty('그림 게시자를 확인할 수 없습니다.')
-      .transform((val) => {
-        const userId = Number(val);
-        return userId;
-      }),
+    userId: z.number(),
   }),
 });
 

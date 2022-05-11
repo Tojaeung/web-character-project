@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { selectUserUser } from '@src/store/slices/user.slice';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
@@ -19,13 +18,15 @@ interface IProps {
 
 function LikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
   const dispatch = useAppDispatch();
-  const { board } = useParams();
 
   const user = useAppSelector(selectUserUser);
 
   const handleAddLike = async (e: React.MouseEvent<HTMLSpanElement>) => {
-    const existingLike = likes.some((like) => like.user_id === user?.id);
-    const existingDisLike = dislikes.some((dislike) => dislike.user_id === user?.id);
+    const existingLike = likes.some((like) => like.userId === user?.id);
+    const existingDisLike = dislikes.some((dislike) => dislike.userId === user?.id);
+    console.log({ existingLike });
+    console.log({ existingDisLike });
+
     if (type === 'drawing') {
       if (existingLike || existingDisLike) return alert('이미 선택하셨습니다.');
       try {
@@ -46,7 +47,7 @@ function LikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
 
   return (
     <Container onClick={handleAddLike}>
-      {likes?.some((like) => like.user_id === user?.id) ? <ActiveLikeIcon /> : <NotActiveLikeIcon />}
+      {likes?.some((like) => like.userId === user?.id) ? <ActiveLikeIcon /> : <NotActiveLikeIcon />}
       {likes?.length}
     </Container>
   );

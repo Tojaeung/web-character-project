@@ -61,3 +61,5 @@ router.post('/posts/:postId/dislike', auth, penalty, validator(createDisLikeSche
 router.post('/posts/add-imagekey', auth, penalty, boardUpload.single('newImage'), asyncHandler(addImageKey));
 // 게시글 이미지 업로드 안할시
 router.post('/posts/remove-imagekey', auth, penalty, validator(removeImageKeySchema), asyncHandler(removeImageKey));
+
+export default router;
