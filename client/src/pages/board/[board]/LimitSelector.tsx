@@ -6,16 +6,22 @@ interface IProp {
   setPage: React.Dispatch<React.SetStateAction<number>>;
   limit: number;
   setLimit: React.Dispatch<React.SetStateAction<number>>;
+  searchType: string;
+  keyword: string;
 }
 
-function LimitSelector({ setPage, limit, setLimit }: IProp) {
+function LimitSelector({ setPage, limit, setLimit, searchType, keyword }: IProp) {
   const navigate = useNavigate();
   const { board } = useParams();
 
   const selectPostNum = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLimit(Number(e.target.value));
     setPage(1);
-    navigate(`/board/${board}?page=${1}&limit=${e.target.value}`);
+
+    if (keyword !== '') {
+      return navigate(`/${board}?page=1&limit=${Number(e.target.value)}&searchType=${searchType}&keyword=${keyword}`);
+    }
+    return navigate(`/${board}?page=1&limit=${Number(e.target.value)}`);
   };
 
   return (

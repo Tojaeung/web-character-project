@@ -24,9 +24,6 @@ function LikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
   const handleAddLike = async (e: React.MouseEvent<HTMLSpanElement>) => {
     const existingLike = likes.some((like) => like.userId === user?.id);
     const existingDisLike = dislikes.some((dislike) => dislike.userId === user?.id);
-    console.log({ existingLike });
-    console.log({ existingDisLike });
-
     if (type === 'drawing') {
       if (existingLike || existingDisLike) return alert('이미 선택하셨습니다.');
       try {

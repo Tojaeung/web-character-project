@@ -4,6 +4,8 @@ export type getPostReturnType = {
   ok: boolean;
   message: string;
   postJoinAll: PostType;
+  board: PostType[]; // 게시글 아래 게시판에 들어가는 post들
+  totalPostsNum: number; // 게시판에 들어가는 전체 post 갯수
 };
 
 export type getPostDataType = {

@@ -19,7 +19,7 @@ function BoardPreview({ posts, board }: IProps) {
         <tr>
           <th>
             {boardName(board)}
-            <Link to={`/board/${board}`}>
+            <Link to={`/${board}`}>
               <ChevronRightIcon />
             </Link>
           </th>
@@ -30,7 +30,7 @@ function BoardPreview({ posts, board }: IProps) {
           posts.map((post) => (
             <tr key={v4()}>
               <td>
-                <PostTitle to={`/board/${board}/post/${post.id}`}>{post.title}</PostTitle>
+                <PostTitle to={`/${board}/${post.id}`}>{post.title}</PostTitle>
                 <PostUser>
                   <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} fontSize={1.3} />
                   <CreatedTime createdTime={post.created_at} fontSize={1.2} />
@@ -88,7 +88,7 @@ const PostTitle = styled(NavLink)`
     color: black;
   }
   &:visited {
-    color: blue;
+    color: blueviolet;
   }
 `;
 const PostUser = styled.span`

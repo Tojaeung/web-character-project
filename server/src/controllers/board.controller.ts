@@ -44,7 +44,16 @@ export const getAllBoards = async (req: Request, res: Response): Promise<any> =>
 };
 
 export const getBoard = async (req: Request, res: Response): Promise<any> => {
-  const { board } = req.params;
+  const board = req.params.board;
+
+  // 유효하지 않는 게시판 예외처리
+  const isExistingBoard = await getRepository(Board).findOne({ enName: board });
+  if (!isExistingBoard) {
+    logger.warn('존재하지 않는 게시판을 가져오려는 시도가 있습니다.');
+    throw ApiError.NotFound('존재하지 않는 게시판입니다.');
+  }
+  const boardId = isExistingBoard.id;
+
   const page = Number(req.query.page as string) || 1;
   const limit = Number(req.query.limit as string) || 10;
 
@@ -56,14 +65,6 @@ export const getBoard = async (req: Request, res: Response): Promise<any> => {
   let posts;
   // 게시판의 전체 게시물 수
   let totalPostsNum;
-
-  // 유효하지 않는 게시판 예외처리
-  const isExistingBoard = await getRepository(Board).findOne({ enName: board });
-  if (!isExistingBoard) {
-    logger.warn('존재하지 않는 게시판을 가져오려는 시도가 있습니다.');
-    throw ApiError.NotFound('존재하지 않는 게시판입니다.');
-  }
-  const boardId = isExistingBoard.id;
 
   // 검색없이 게시판 페이지네이션
   if (!searchType || !keyword) {

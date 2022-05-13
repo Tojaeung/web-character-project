@@ -33,10 +33,11 @@ function Pagination({ total, page, setPage, limit, searchType, keyword }: IProps
     }
     setPage(page - 1);
 
-    // 검색기능을 사용하지 않았다면 일반 게시판 정보들을 불러온다.
-    if (!searchType || !keyword) return navigate(`/board/${board}?page=${page - 1}&limit=${limit}`);
     // 검색기능을 사용했다면 검색결과에 대한 정보들을 불러온다.
-    navigate(`/board/${board}?page=${page - 1}&limit=${limit}&searchType=${searchType}&keyword=${keyword}`);
+    if (keyword !== '') {
+      return navigate(`/${board}?page=${page - 1}&limit=${limit}&searchType=${searchType}&keyword=${keyword}`);
+    }
+    return navigate(`/${board}?page=${page - 1}&limit=${limit}`);
   };
 
   const handleNext = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -45,22 +46,23 @@ function Pagination({ total, page, setPage, limit, searchType, keyword }: IProps
       setMaxPageLimit(maxPageLimit + pageRange);
     }
     setPage(page + 1);
-
-    // 검색기능을 사용하지 않았다면 일반 게시판 정보들을 불러온다.
-    if (!searchType || !keyword) return navigate(`/board/${board}?page=${page + 1}&limit=${limit}`);
     // 검색기능을 사용했다면 검색결과에 대한 정보들을 불러온다.
-    navigate(`/board/${board}?page=${page + 1}&limit=${limit}&searchType=${searchType}&keyword=${keyword}`);
+    if (keyword !== '') {
+      return navigate(`/${board}?page=${page + 1}&limit=${limit}&searchType=${searchType}&keyword=${keyword}`);
+    }
+    return navigate(`/${board}?page=${page + 1}&limit=${limit}`);
   };
 
   const goPage = (index: number) => (e: React.MouseEvent<HTMLButtonElement>) => {
     setPage(index + minPageLimit + 1);
 
-    // 검색기능을 사용하지 않았다면 일반 게시판 정보들을 불러온다.
-    if (!searchType || !keyword) return navigate(`/board/${board}?page=${index + minPageLimit + 1}&limit=${limit}`);
     // 검색기능을 사용했다면 검색결과에 대한 정보들을 불러온다.
-    navigate(
-      `/board/${board}?page=${index + minPageLimit + 1}&limit=${limit}&searchType=${searchType}&keyword=${keyword}`
-    );
+    if (keyword !== '') {
+      return navigate(
+        `/${board}?page=${index + minPageLimit + 1}&limit=${limit}&searchType=${searchType}&keyword=${keyword}`
+      );
+    }
+    return navigate(`/${board}?page=${index + minPageLimit + 1}&limit=${limit}`);
   };
 
   return (

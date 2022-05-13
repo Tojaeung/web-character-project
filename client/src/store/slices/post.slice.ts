@@ -22,7 +22,7 @@ interface PostSliceType {
 const initialState: PostSliceType = {
   ok: false,
   message: null,
-  post: null,
+  post: null, // 게시글
 };
 
 export const postSlice = createSlice({

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
@@ -10,6 +10,7 @@ import CommentForm from '@src/components/CommentForm';
 import LikeButton from '@src/components/LikeButton';
 import DisLikeButton from '@src/components/DisLikeButton';
 import Header from './Header';
+import Board from '@src/pages/board/[board]';
 
 function Post() {
   const dispatch = useAppDispatch();
@@ -18,10 +19,11 @@ function Post() {
 
   const post = useAppSelector(selectPostPost);
 
+  // 게시글 데이터 가져오기
   useEffect(() => {
     document.documentElement.scrollTop = 0;
-    dispatch(getPost({ postId: Number(postId) }));
-  }, [postId]);
+    dispatch(getPost({ postId: Number(postId) })).catch((err) => alert(err.message));
+  }, [dispatch, postId]);
 
   return (
     <Container>
@@ -56,6 +58,7 @@ function Post() {
 
       <CommentForm type="board" entityId={post?.id!} />
       <Comment type="board" comments={post?.comments!} />
+      <Board />
     </Container>
   );
 }

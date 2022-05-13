@@ -1,6 +1,6 @@
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useParams, useNavigate, useLocation, NavLink } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, NavLink, useSearchParams } from 'react-router-dom';
 import { v4 } from 'uuid';
 import { BsPencilSquare } from 'react-icons/bs';
 import { HiOutlineChevronDoubleUp } from 'react-icons/hi';
@@ -19,18 +19,19 @@ function Board() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { board } = useParams();
 
   const [posts, setPosts] = useState<PostType[]>([]);
   const [totalPostsNum, setTotalPostsNum] = useState<number>(0);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState<number>(10);
+  const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
+  const [limit, setLimit] = useState<number>(Number(searchParams.get('limit')) || 10);
 
-  const [searchType, setSearchType] = useState('title');
-  const [keyword, setKeyword] = useState('');
+  const [searchType, setSearchType] = useState(searchParams.get('searchType') || 'title');
+  const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
 
   // 게시글 데이터 가져오기
-  useLayoutEffect(() => {
+  useEffect(() => {
     dispatch(
       getBoard({
         board: board as string,
@@ -56,7 +57,13 @@ function Board() {
       <Container>
         <Header>
           <BoardName>{boardName(board as string)}</BoardName>
-          <LimitSelector setPage={setPage} limit={limit} setLimit={setLimit} />
+          <LimitSelector
+            setPage={setPage}
+            limit={limit}
+            setLimit={setLimit}
+            searchType={searchType}
+            keyword={keyword}
+          />
         </Header>
 
         <table>
@@ -76,11 +83,11 @@ function Board() {
                 <td colSpan={5}>결과가 없습니다...</td>
               </tr>
             ) : (
-              posts.map((post) => (
+              posts.map((post, index) => (
                 <tr key={v4()}>
                   <td>{post.id}</td>
                   <td className="post-title">
-                    <TitleText to={`/board/${board}/post/${post.id}`}>{post.title}</TitleText>
+                    <TitleText to={`/${board}/${post.id}${location.search}`}>{post.title}</TitleText>
                   </td>
                   <td>
                     <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} fontSize={1.3} />
@@ -108,13 +115,26 @@ function Board() {
           <CreatePostButton onClick={(e) => navigate(`/create/postForm/${board}`)}>글쓰기</CreatePostButton>
         </Footer>
 
-        <SearchBar searchType={searchType} setSearchType={setSearchType} keyword={keyword} setKeyword={setKeyword} />
+        <SearchBar
+          limit={limit}
+          setPage={setPage}
+          searchType={searchType}
+          setSearchType={setSearchType}
+          keyword={keyword}
+          setKeyword={setKeyword}
+        />
       </Container>
 
       <Responsive>
         <Header>
           <BoardName>{boardName(board as string)}</BoardName>
-          <LimitSelector setPage={setPage} limit={limit} setLimit={setLimit} />
+          <LimitSelector
+            setPage={setPage}
+            limit={limit}
+            setLimit={setLimit}
+            searchType={searchType}
+            keyword={keyword}
+          />
         </Header>
 
         {!posts.length ? (
@@ -153,7 +173,14 @@ function Board() {
           </CreatePostButton>
         </Footer>
 
-        <SearchBar searchType={searchType} setSearchType={setSearchType} keyword={keyword} setKeyword={setKeyword} />
+        <SearchBar
+          limit={limit}
+          setPage={setPage}
+          searchType={searchType}
+          setSearchType={setSearchType}
+          keyword={keyword}
+          setKeyword={setKeyword}
+        />
       </Responsive>
     </>
   );

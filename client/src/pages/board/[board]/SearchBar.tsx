@@ -4,13 +4,15 @@ import { greenInputStyle } from '@src/styles/input.style';
 import { greenButtonStyle } from '@src/styles/button.style';
 
 interface IProps {
+  limit: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
   searchType: string;
   setSearchType: React.Dispatch<React.SetStateAction<string>>;
   keyword: string;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;
 }
 
-function SearchBar({ searchType, keyword, setSearchType, setKeyword }: IProps) {
+function SearchBar({ limit, setPage, searchType, keyword, setSearchType, setKeyword }: IProps) {
   const navigate = useNavigate();
   const { board } = useParams();
 
@@ -19,8 +21,9 @@ function SearchBar({ searchType, keyword, setSearchType, setKeyword }: IProps) {
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!searchType || !keyword) return alert('검색어를 입력해주세요.');
-    navigate(`/board/${board}?searchType=${searchType}&keyword=${keyword}`);
+    if (keyword === '') return alert('검색어를 입력해주세요.');
+    setPage(1);
+    navigate(`/${board}?page=1&limit=${limit}&searchType=${searchType}&keyword=${keyword}`);
   };
 
   // 엔터클릭시 submit 된다.

@@ -36,8 +36,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/profile/:profileId" element={<Profile />} />
-            <Route path="/board/:board" element={<Board />} />
-            <Route path="/board/:board/post/:postId" element={<Post />} />
+            <Route path="/:board" element={<Board />} />
+            <Route path="/:board/:postId" element={<Post />} />
 
             <Route path="/" element={<PublicRouter />}>
               <Route path="signUp" element={<SignUp />} />
