@@ -7,6 +7,8 @@ import {
   getBoardReturnType,
   getAllMyPostsReturnType,
   getAllMyCommentsReturnType,
+  getAllMyPostsDataType,
+  getAllMyCommentsDataType,
 } from '../types/board.type';
 
 export const getAllBoards = createAsyncThunk<
@@ -38,11 +40,12 @@ export const getBoard = createAsyncThunk<
 
 export const getAllMyPosts = createAsyncThunk<
   getAllMyPostsReturnType,
-  void,
+  getAllMyPostsDataType,
   { state: RootState; rejectValue: { ok: boolean; message: string } }
->('GET_ALL_MY_POSTS', async (_, thunkApi) => {
+>('GET_ALL_MY_POSTS', async (data, thunkApi) => {
   try {
-    const res = await instance.get(`/me/posts`);
+    const { page } = data;
+    const res = await instance.get(`/me/posts?page=${page}`);
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue(err.response.data);
@@ -51,11 +54,12 @@ export const getAllMyPosts = createAsyncThunk<
 
 export const getAllMyComments = createAsyncThunk<
   getAllMyCommentsReturnType,
-  void,
+  getAllMyCommentsDataType,
   { state: RootState; rejectValue: { ok: boolean; message: string } }
->('GET_ALL_MY_COMMENTS', async (_, thunkApi) => {
+>('GET_ALL_MY_COMMENTS', async (data, thunkApi) => {
   try {
-    const res = await instance.get(`/me/comments`);
+    const { page } = data;
+    const res = await instance.get(`/me/comments?page=${page}`);
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue(err.response.data);

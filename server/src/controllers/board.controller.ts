@@ -141,24 +141,46 @@ export const getBoard = async (req: Request, res: Response): Promise<any> => {
 
 export const getAllMyPosts = async (req: Request, res: Response): Promise<any> => {
   const id = req.session.user?.id as number;
+  const page = Number(req.query.page);
+  const limit = 10;
+
+  const offset = (page - 1) * limit;
+
   const allMyPosts = await getRepository(Post).find({
     where: { user_id: id },
+    skip: offset,
+    take: limit,
     relations: ['board'],
     order: { created_at: 'DESC' },
   });
 
+  const totalPostsNum = await getRepository(Post).count({ where: { user_id: id } });
+
   logger.info(`${id}가 작성한 모든 게시물을 가져왔습니다.`);
-  return res.status(200).json({ ok: true, message: '내가 작성한 모든 게시물을 가져왔습니다.', allMyPosts });
+  return res
+    .status(200)
+    .json({ ok: true, message: '내가 작성한 모든 게시물을 가져왔습니다.', allMyPosts, totalPostsNum });
 };
 
 export const getAllMyComments = async (req: Request, res: Response): Promise<any> => {
   const id = req.session.user?.id as number;
+  const page = Number(req.query.page);
+  const limit = 10;
+
+  const offset = (page - 1) * limit;
+
   const allMyComments = await getRepository(Comment).find({
     where: { user_id: id },
+    skip: offset,
+    take: limit,
     relations: ['board'],
     order: { created_at: 'DESC' },
   });
 
+  const totalCommentsNum = await getRepository(Comment).count({ where: { user_id: id } });
+
   logger.info(`${id}가 작성한 모든 댓글을 가져왔습니다.`);
-  return res.status(200).json({ ok: true, message: '내가 작성한 모든 댓글을 가져왔습니다.', allMyComments });
+  return res
+    .status(200)
+    .json({ ok: true, message: '내가 작성한 모든 댓글을 가져왔습니다.', allMyComments, totalCommentsNum });
 };

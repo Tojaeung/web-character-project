@@ -87,7 +87,7 @@ function Board() {
                 <tr key={v4()}>
                   <td>{post.id}</td>
                   <td className="post-title">
-                    <TitleText to={`/${board}/${post.id}${location.search}`}>{post.title}</TitleText>
+                    <PostLink to={`/${board}/${post.id}${location.search}`}>{post.title}</PostLink>
                   </td>
                   <td>
                     <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} fontSize={1.3} />
@@ -143,7 +143,7 @@ function Board() {
           posts.map((post) => (
             <ListBox key={v4()}>
               <Title>
-                <TitleText to={`/board/${board}/post/${post.id}`}>{post.title}</TitleText>
+                <PostLink to={`/board/${board}/post/${post.id}`}>{post.title}</PostLink>
               </Title>
 
               <DetailBox>
@@ -302,7 +302,7 @@ const Title = styled.div`
     font-size: 1.2rem;
   }
 `;
-const TitleText = styled(NavLink)`
+const PostLink = styled(NavLink)`
   &:hover {
     text-decoration: underline;
   }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { v4 } from 'uuid';
 import { inverseRedButtonStyle } from '@src/styles/button.style';
 import CreatedTime from '@src/components/CreatedTime';
@@ -9,20 +9,26 @@ import { getAllMyPosts } from '@src/store/requests/board.request';
 import { deletePost } from '@src/store/requests/post.request';
 import { PostType } from '@src/types';
 import TabMenu from './common/TabMenu';
+import Pagination from './common/Pagination';
 
 function MyPosts() {
   const dispatch = useAppDispatch();
+  const [searchParams] = useSearchParams();
 
   const [allMyPosts, setAllMyPosts] = useState<PostType[]>([]);
+  const [totalPostsNum, setTotalPostsNum] = useState(0);
+
+  const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
 
   useEffect(() => {
-    dispatch(getAllMyPosts())
+    dispatch(getAllMyPosts({ page }))
       .unwrap()
       .then((res) => {
-        const { allMyPosts } = res;
+        const { allMyPosts, totalPostsNum } = res;
         setAllMyPosts(allMyPosts);
+        setTotalPostsNum(totalPostsNum);
       });
-  }, []);
+  }, [dispatch, page]);
 
   const handleDelete = (postId: number) => async (e: React.MouseEvent<HTMLButtonElement>) => {
     await dispatch(deletePost({ postId }))
@@ -59,7 +65,7 @@ function MyPosts() {
                   <PostLink to={`/${post.board?.enName}/${post.id}`}>{post.title}</PostLink>
                 </td>
                 <td>
-                  <CreatedTime createdTime={post.created_at} fontSize={1.3} />
+                  <CreatedTime createdTime={post.created_at} fontSize={1.2} />
                 </td>
                 <td>
                   <DeleteButton onClick={handleDelete(post.id)}>삭제</DeleteButton>
@@ -69,12 +75,16 @@ function MyPosts() {
           )}
         </tbody>
       </table>
+      <Pagination total={totalPostsNum} page={page} setPage={setPage} />
     </Container>
   );
 }
 
 const Container = styled.table`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   table {
     width: 100%;
   }

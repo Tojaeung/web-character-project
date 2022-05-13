@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { getAllMyComments } from '@src/store/requests/board.request';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { v4 } from 'uuid';
 import { inverseRedButtonStyle } from '@src/styles/button.style';
 import CreatedTime from '@src/components/CreatedTime';
@@ -9,20 +9,26 @@ import { useAppDispatch } from '@src/store/app/hook';
 import { deletePostComment } from '@src/store/requests/post.request';
 import { PostCommentType } from '@src/types';
 import TabMenu from './common/TabMenu';
+import Pagination from './common/Pagination';
 
 function MyComments() {
   const dispatch = useAppDispatch();
+  const [searchParams] = useSearchParams();
 
   const [allMyComments, setAllMyComments] = useState<PostCommentType[]>([]);
+  const [totalCommentsNum, setTotalCommentsNum] = useState(0);
+
+  const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
 
   useEffect(() => {
-    dispatch(getAllMyComments())
+    dispatch(getAllMyComments({ page }))
       .unwrap()
       .then((res) => {
-        const { allMyComments } = res;
+        const { allMyComments, totalCommentsNum } = res;
         setAllMyComments(allMyComments);
+        setTotalCommentsNum(totalCommentsNum);
       });
-  }, []);
+  }, [dispatch, page]);
 
   const handleDelete = (commentId: number) => async (e: React.MouseEvent<HTMLButtonElement>) => {
     await dispatch(deletePostComment({ commentId }))
@@ -59,7 +65,7 @@ function MyComments() {
                   <PostLink to={`/${comment.board?.enName}/${comment.post_id}`}>{comment.content}</PostLink>
                 </td>
                 <td>
-                  <CreatedTime createdTime={comment.created_at} fontSize={1.3} />
+                  <CreatedTime createdTime={comment.created_at} fontSize={1.2} />
                 </td>
                 <td>
                   <DeleteButton onClick={handleDelete(comment.id)}>삭제</DeleteButton>
@@ -69,12 +75,16 @@ function MyComments() {
           )}
         </tbody>
       </table>
+      <Pagination total={totalCommentsNum} page={page} setPage={setPage} />
     </Container>
   );
 }
 
 const Container = styled.table`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   table {
     width: 100%;
   }

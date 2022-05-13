@@ -25,10 +25,20 @@ export type getAllMyPostsReturnType = {
   ok: boolean;
   message: string;
   allMyPosts: PostType[];
+  totalPostsNum: number;
+};
+
+export type getAllMyPostsDataType = {
+  page: number;
 };
 
 export type getAllMyCommentsReturnType = {
   ok: boolean;
   message: string;
   allMyComments: PostCommentType[];
+  totalCommentsNum: number;
+};
+
+export type getAllMyCommentsDataType = {
+  page: number;
 };
