@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import 'react-quill/dist/quill.snow.css';
 import { useDefaultConfig } from '@src/hooks/useReactQuillConfig';
-import TabMenu from './TabMenu';
+import TabMenu from './common/TabMenu';
 import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectUserUser } from '@src/store/slices/user.slice';

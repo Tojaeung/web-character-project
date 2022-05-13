@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import TabMenu from './TabMenu';
+import TabMenu from './common/TabMenu';
 
 function Alert() {
   return (

@@ -23,6 +23,8 @@ import Account from './pages/settings/Account';
 import Alert from './pages/settings/Alert';
 import Desc from './pages/settings/Desc';
 import EditPostForm from '@src/pages/edit/PostForm';
+import MyPosts from '@src/pages/settings/MyPosts';
+import MyComments from '@src/pages/settings/MyComments';
 
 function App() {
   useSocketSetup();
@@ -49,6 +51,8 @@ function App() {
                 <Route path="account" element={<Account />} />
                 <Route path="alert" element={<Alert />} />
                 <Route path="desc" element={<Desc />} />
+                <Route path="my-posts" element={<MyPosts />} />
+                <Route path="my-comments" element={<MyComments />} />
               </Route>
 
               <Route path="create">

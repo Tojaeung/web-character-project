@@ -5,6 +5,7 @@ import ApiError from '@src/errors/api.error';
 import User from '@src/entities/user/user.entity';
 import Post from '@src/entities/board/post.entity';
 import Board from '@src/entities/board/board.entity';
+import Comment from '@src/entities/board/comment.entity';
 
 export const getAllBoards = async (req: Request, res: Response): Promise<any> => {
   const free = await getRepository(Post).find({
@@ -136,4 +137,28 @@ export const getBoard = async (req: Request, res: Response): Promise<any> => {
   return res
     .status(200)
     .json({ ok: true, message: `"${keyword}"로 검색한 게시판 가져오기 성공하였습니다.`, posts, totalPostsNum });
+};
+
+export const getAllMyPosts = async (req: Request, res: Response): Promise<any> => {
+  const id = req.session.user?.id as number;
+  const allMyPosts = await getRepository(Post).find({
+    where: { user_id: id },
+    relations: ['board'],
+    order: { created_at: 'DESC' },
+  });
+
+  logger.info(`${id}가 작성한 모든 게시물을 가져왔습니다.`);
+  return res.status(200).json({ ok: true, message: '내가 작성한 모든 게시물을 가져왔습니다.', allMyPosts });
+};
+
+export const getAllMyComments = async (req: Request, res: Response): Promise<any> => {
+  const id = req.session.user?.id as number;
+  const allMyComments = await getRepository(Comment).find({
+    where: { user_id: id },
+    relations: ['board'],
+    order: { created_at: 'DESC' },
+  });
+
+  logger.info(`${id}가 작성한 모든 댓글을 가져왔습니다.`);
+  return res.status(200).json({ ok: true, message: '내가 작성한 모든 댓글을 가져왔습니다.', allMyComments });
 };

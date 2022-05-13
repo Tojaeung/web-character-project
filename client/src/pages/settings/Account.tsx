@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch } from '@src/store/app/hook';
 import { openModal } from '@src/store/slices/modal.slice';
-import TabMenu from './TabMenu';
+import TabMenu from './common/TabMenu';
 import { greenButtonStyle, redButtonStyle } from '@src/styles/button.style';
 import { updateAvatar, updateCover, updateDefaultAvatar, updateDefaultCover } from '@src/store/requests/user.request';
 

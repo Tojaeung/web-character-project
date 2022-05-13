@@ -1,4 +1,4 @@
-import { PostType } from '@src/types';
+import { PostCommentType, PostType } from '@src/types';
 
 export type getAllBoardsReturnType = {
   ok: boolean;
@@ -19,4 +19,16 @@ export type getBoardReturnType = {
 export type getBoardDataType = {
   board: string;
   queryString: string;
+};
+
+export type getAllMyPostsReturnType = {
+  ok: boolean;
+  message: string;
+  allMyPosts: PostType[];
+};
+
+export type getAllMyCommentsReturnType = {
+  ok: boolean;
+  message: string;
+  allMyComments: PostCommentType[];
 };
