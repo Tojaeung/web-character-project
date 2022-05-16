@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch } from '@src/store/app/hook';
+import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
+import { selectUserUser } from '@src/store/slices/user.slice';
 import { createDrawingComment } from '@src/store/requests/drawing.request';
 import { createPostComment } from '@src/store/requests/post.request';
 import { greenButtonStyle } from '@src/styles/button.style';
@@ -16,6 +17,8 @@ interface IProp {
 function CommentForm({ type, entityId, userId }: IProp) {
   const dispatch = useAppDispatch();
   const { board } = useParams();
+
+  const user = useAppSelector(selectUserUser);
 
   const [content, setContent] = useState('');
 
@@ -36,9 +39,12 @@ function CommentForm({ type, entityId, userId }: IProp) {
         alert(res.message);
         setContent('');
 
-        // 게시글 작성자에게 알림 보내기
-        const commentNotiObj = { type: 'comment', userId, postId: entityId };
-        await socket.emit('addCommentNoti', commentNotiObj);
+        // 게시물 작성자에게 댓글이 생성되었음을 알리는 알림을 보낸다.
+        // 유저 자신이 자신이 생성한 게시물에 댓글를 남길때는 제외한다.
+        if (user?.id !== userId) {
+          const commentNotiObj = { type: 'comment', userId, postId: entityId };
+          await socket.emit('addCommentNoti', commentNotiObj);
+        }
       } catch (err: any) {
         alert(err.message);
         setContent('');

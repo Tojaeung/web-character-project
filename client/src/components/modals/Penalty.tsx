@@ -25,7 +25,7 @@ function Penalty({ props }: IProp) {
       alert(res.message);
       setPenaltyPeriod('');
 
-      // 제재조치된 유저에게 경고 알림 보내
+      // 제재조치된 유저에게 경고 알림 보내기
       const penaltyNotiObj = { type: 'penalty', userId, penaltyPeriod };
       await socket.emit('addPenaltyNoti', penaltyNotiObj);
     } catch (err: any) {

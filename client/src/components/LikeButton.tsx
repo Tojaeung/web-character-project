@@ -38,8 +38,12 @@ function LikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
         const res = await dispatch(createPostLike({ postId: entityId, userId })).unwrap();
         alert(res.message);
 
-        const likeNotiObj = { type: 'like', userId, postId: entityId };
-        await socket.emit('addLikeNoti', likeNotiObj);
+        // 게시물 작성자에게 좋아요가 추가되었음을 알리는 알림을 보낸다.
+        // 유저 자신이 자신이 생성한 게시물에 좋아요를 추가할때는 제외한다.
+        if (user?.id !== userId) {
+          const likeNotiObj = { type: 'like', userId, postId: entityId };
+          await socket.emit('addLikeNoti', likeNotiObj);
+        }
       } catch (err: any) {
         alert(err.message);
       }
