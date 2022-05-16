@@ -7,12 +7,13 @@ export class NotificationRepository extends AbstractRepository<Notification> {
     type: 'comment' | 'like' | 'penalty',
     content: string,
     userId: number,
+    boardName?: string,
     postId?: number
   ): Promise<Notification> => {
     const result = await this.createQueryBuilder('notification')
       .insert()
       .into(Notification)
-      .values({ type, content, userId, postId })
+      .values({ type, content, userId, boardName, postId })
       .returning('*')
       .execute();
     return result.raw[0];

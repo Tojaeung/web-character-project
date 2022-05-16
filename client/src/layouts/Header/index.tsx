@@ -64,22 +64,22 @@ function Header() {
         {openMobileNav && (
           <NavBox>
             <List>
-              <NavLink to={'/board/free'} onClick={(e) => setOpenMobileNav(false)}>
+              <NavLink to={'/free'} onClick={(e) => setOpenMobileNav(false)}>
                 자유게시판
               </NavLink>
             </List>
             <List>
-              <NavLink to={'/board/commission'} onClick={(e) => setOpenMobileNav(false)}>
+              <NavLink to={'/commission'} onClick={(e) => setOpenMobileNav(false)}>
                 커미션
               </NavLink>
             </List>
             <List>
-              <NavLink to={'/board/reque'} onClick={(e) => setOpenMobileNav(false)}>
+              <NavLink to={'/reque'} onClick={(e) => setOpenMobileNav(false)}>
                 리퀘스트
               </NavLink>
             </List>
             <List>
-              <NavLink to={'/board/sale'} onClick={(e) => setOpenMobileNav(false)}>
+              <NavLink to={'/sale'} onClick={(e) => setOpenMobileNav(false)}>
                 분양
               </NavLink>
             </List>

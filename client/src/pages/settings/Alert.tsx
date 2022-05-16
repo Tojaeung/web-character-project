@@ -37,7 +37,7 @@ function Alert() {
               <tr key={v4()}>
                 <td>{notificationType(notification.type)}</td>
                 <td className="content">
-                  <PostLink to={`/`}>{notification.content}</PostLink>
+                  <PostLink to={`/${notification.boardName}/${notification.postId}`}>{notification.content}</PostLink>
                 </td>
                 <td>
                   <CreatedTime createdTime={notification.created_at} fontSize={1.2} />

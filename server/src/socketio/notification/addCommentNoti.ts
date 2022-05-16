@@ -7,6 +7,7 @@ import User from '@src/entities/user/user.entity';
 interface CommentNotiType {
   type: 'comment';
   userId: number; // 알림을 받는 유저 id
+  boardName: string;
   postId: number; // 알림이 생성되는 post(게시글)
 }
 
@@ -14,12 +15,12 @@ const addCommentNoti = async (socket: SessionSocket, commentNotiObj: CommentNoti
   const nickname = socket.request.session.user.nickname;
   const notificationRepo = getCustomRepository(NotificationRepository);
 
-  const { type, userId, postId } = commentNotiObj;
+  const { type, userId, boardName, postId } = commentNotiObj;
 
   const user = await getRepository(User).findOne({ id: userId });
   const post = await getRepository(Post).findOne({ id: postId });
   const content = `${nickname}님이 ${post?.title}에 댓글을 남겼습니다.`;
-  const newNotification = await notificationRepo.create(type, content, userId, postId);
+  const newNotification = await notificationRepo.create(type, content, userId, boardName, postId);
 
   const result = { ok: true, message: '게시글 작성자에게 댓글 알림을 보냈습니다.', newNotification };
 

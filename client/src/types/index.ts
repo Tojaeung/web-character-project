@@ -141,6 +141,7 @@ export type NotificationType = {
   type: 'comment' | 'like' | 'warning';
   content: string;
   userId: number;
+  boardName: string;
   postId?: number;
   isConfirmed: boolean;
   created_at: Date;

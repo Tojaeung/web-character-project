@@ -49,6 +49,7 @@ export const getBoard = async (req: Request, res: Response): Promise<any> => {
 
   // 유효하지 않는 게시판 예외처리
   const isExistingBoard = await getRepository(Board).findOne({ enName: board });
+
   if (!isExistingBoard) {
     logger.warn('존재하지 않는 게시판을 가져오려는 시도가 있습니다.');
     throw ApiError.NotFound('존재하지 않는 게시판입니다.');
