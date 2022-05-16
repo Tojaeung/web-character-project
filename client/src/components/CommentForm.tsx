@@ -5,13 +5,15 @@ import { useAppDispatch } from '@src/store/app/hook';
 import { createDrawingComment } from '@src/store/requests/drawing.request';
 import { createPostComment } from '@src/store/requests/post.request';
 import { greenButtonStyle } from '@src/styles/button.style';
+import socket from '@src/utils/socket';
 
 interface IProp {
   type: 'drawing' | 'board';
-  entityId: number;
+  entityId: number; // post(게시글) id 또는 drawing(그림) id
+  userId?: number; // post(게시글) 작성자 id(게시글 작성자에게 댓글이 생성됐다는것을 알리기 위해)
 }
 
-function CommentForm({ type, entityId }: IProp) {
+function CommentForm({ type, entityId, userId }: IProp) {
   const dispatch = useAppDispatch();
   const { board } = useParams();
 
@@ -33,6 +35,10 @@ function CommentForm({ type, entityId }: IProp) {
         const res = await dispatch(createPostComment({ board: board as string, postId: entityId, content })).unwrap();
         alert(res.message);
         setContent('');
+
+        // 게시글 작성자에게 알림 보내기
+        const commentNotiObj = { type: 'comment', userId, postId: entityId };
+        await socket.emit('addCommentNoti', commentNotiObj);
       } catch (err: any) {
         alert(err.message);
         setContent('');

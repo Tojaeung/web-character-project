@@ -6,10 +6,10 @@ import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { PostLikeType, PostDisLikeType, DrawingLikeType, DrawingDisLikeType } from '@src/types';
 import { createDrawingLike } from '@src/store/requests/drawing.request';
 import { createPostLike } from '@src/store/requests/post.request';
+import socket from '@src/utils/socket';
 
 interface IProps {
   type: 'drawing' | 'board';
-
   entityId: number;
   userId: number;
   likes: DrawingLikeType[] | PostLikeType[];
@@ -22,8 +22,8 @@ function LikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
   const user = useAppSelector(selectUserUser);
 
   const handleAddLike = async (e: React.MouseEvent<HTMLSpanElement>) => {
-    const existingLike = likes.some((like) => like.userId === user?.id);
-    const existingDisLike = dislikes.some((dislike) => dislike.userId === user?.id);
+    const existingLike = likes.some((like) => like.user_id === user?.id);
+    const existingDisLike = dislikes.some((dislike) => dislike.user_id === user?.id);
     if (type === 'drawing') {
       if (existingLike || existingDisLike) return alert('이미 선택하셨습니다.');
       try {
@@ -35,7 +35,11 @@ function LikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
     if (type === 'board') {
       if (existingLike || existingDisLike) return alert('이미 선택하셨습니다.');
       try {
-        await dispatch(createPostLike({ postId: entityId, userId })).unwrap();
+        const res = await dispatch(createPostLike({ postId: entityId, userId })).unwrap();
+        alert(res.message);
+
+        const likeNotiObj = { type: 'like', userId, postId: entityId };
+        await socket.emit('addLikeNoti', likeNotiObj);
       } catch (err: any) {
         alert(err.message);
       }
@@ -44,7 +48,7 @@ function LikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
 
   return (
     <Container onClick={handleAddLike}>
-      {likes?.some((like) => like.userId === user?.id) ? <ActiveLikeIcon /> : <NotActiveLikeIcon />}
+      {likes?.some((like) => like.user_id === user?.id) ? <ActiveLikeIcon /> : <NotActiveLikeIcon />}
       {likes?.length}
     </Container>
   );

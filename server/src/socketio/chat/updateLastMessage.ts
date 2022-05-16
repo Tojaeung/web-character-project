@@ -1,5 +1,5 @@
 import cluster from '@src/helpers/redis.helper';
-import parseChats from '@src/socketio/parseChats';
+import parseChats from '@src/socketio/chat/parseChats';
 import { SessionSocket } from '@src/types';
 
 const updateLastMessage = async (socket: SessionSocket) => {

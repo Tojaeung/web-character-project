@@ -1,6 +1,6 @@
 import { SessionSocket } from '@src/types/index';
 import cluster from '@src/helpers/redis.helper';
-import parseMsgNotis from '@src/socketio/parseMsgNotis';
+import parseMsgNotis from '@src/socketio/chat/parseMsgNotis';
 
 const deleteMsgNoti = async (socket: SessionSocket, chatId: string) => {
   const user = socket.request.session.user;

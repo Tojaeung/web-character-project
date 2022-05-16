@@ -5,6 +5,7 @@ import { redButtonStyle } from '@src/styles/button.style';
 import { useAppDispatch } from '@src/store/app/hook';
 import { givePenalty } from '@src/store/requests/user.request';
 import { closeModal } from '@src/store/slices/modal.slice';
+import socket from '@src/utils/socket';
 
 interface IProp {
   props: { userId: number };
@@ -22,6 +23,11 @@ function Penalty({ props }: IProp) {
     try {
       const res = await dispatch(givePenalty({ userId, penaltyPeriod: Number(penaltyPeriod) })).unwrap();
       alert(res.message);
+      setPenaltyPeriod('');
+
+      // 제재조치된 유저에게 경고 알림 보내
+      const penaltyNotiObj = { type: 'penalty', userId, penaltyPeriod };
+      await socket.emit('addPenaltyNoti', penaltyNotiObj);
     } catch (err: any) {
       alert(err.message);
     }

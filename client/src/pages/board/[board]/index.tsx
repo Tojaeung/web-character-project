@@ -83,7 +83,7 @@ function Board() {
                 <td colSpan={5}>결과가 없습니다...</td>
               </tr>
             ) : (
-              posts.map((post, index) => (
+              posts.map((post) => (
                 <tr key={v4()}>
                   <td>{post.id}</td>
                   <td className="post-title">
@@ -143,7 +143,7 @@ function Board() {
           posts.map((post) => (
             <ListBox key={v4()}>
               <Title>
-                <PostLink to={`/board/${board}/post/${post.id}`}>{post.title}</PostLink>
+                <PostLink to={`/${board}/${post.id}`}>{post.title}</PostLink>
               </Title>
 
               <DetailBox>

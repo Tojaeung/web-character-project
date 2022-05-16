@@ -13,8 +13,8 @@ class DisLike extends Relation {
   id: number;
 
   // 싫어요를 누른 사용자
-  @Column({ name: 'user_id' })
-  userId: number;
+  @Column()
+  user_id: number;
 
   @Index('post_id-dislikeIdx')
   @Column()

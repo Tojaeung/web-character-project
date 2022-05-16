@@ -12,6 +12,8 @@ import {
   addMsgNoti,
   openChatModal,
 } from '@src/store/slices/chat.slice';
+import { initNotification, addNotification, getNotification } from '@src/store/slices/notification.slice';
+import { NotificationType } from '@src/types';
 
 const useSocketSetup = () => {
   const dispatch = useAppDispatch();
@@ -22,6 +24,7 @@ const useSocketSetup = () => {
     if (!user) return;
     socket.connect();
 
+    // 채팅
     socket.on('initChats', async (parsedChats) => {
       await dispatch(initChats({ newChats: parsedChats }));
     });
@@ -50,6 +53,28 @@ const useSocketSetup = () => {
       await dispatch(addMsgNoti({ newMsgNoti: newMsgNoti }));
     });
 
+    // 알림
+    socket.on(
+      'initNotification',
+      async (result: { ok: boolean; message: string; notifications: NotificationType[] }) => {
+        await dispatch(initNotification(result));
+      }
+    );
+
+    socket.on(
+      'addNotification',
+      async (result: { ok: boolean; message: string; newNotification: NotificationType }) => {
+        await dispatch(addNotification(result));
+      }
+    );
+
+    socket.on(
+      'getNotification',
+      async (result: { ok: boolean; message: string; notifications: NotificationType[] }) => {
+        await dispatch(getNotification(result));
+      }
+    );
+
     socket.on('connect_error', async () => {
       await dispatch(signOut());
       socket.disconnect();
@@ -63,6 +88,8 @@ const useSocketSetup = () => {
       socket.off('addChat');
       socket.off('addMessage');
       socket.off('addMsgNoti');
+      socket.off('initNotification');
+      socket.off('addNotification');
       socket.off('connect_error');
     };
   }, []);

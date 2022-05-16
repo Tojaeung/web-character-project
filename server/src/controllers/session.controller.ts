@@ -41,6 +41,7 @@ export const signIn = async (req: Request<{}, {}, SignInDTO['body']>, res: Respo
   req.session.user = {
     id: user.id,
     chatId: user.chatId,
+    nickname: user.nickname,
     role: user.role,
     exp: user.exp,
   };
@@ -71,6 +72,7 @@ export const refreshLogin = async (req: Request, res: Response): Promise<any> =>
   req.session.user = {
     id: user.id,
     chatId: user.chatId,
+    nickname: user.nickname,
     role: user.role,
     exp: user.exp,
   };

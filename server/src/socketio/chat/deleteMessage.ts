@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { SessionSocket } from '@src/types/index';
 import cluster from '@src/helpers/redis.helper';
-import parseMessages from '@src/socketio/parseMessages';
+import parseMessages from '@src/socketio/chat/parseMessages';
 import { s3 } from '@src/helpers/s3.helper';
 import logger from '@src/helpers/winston.helper';
 

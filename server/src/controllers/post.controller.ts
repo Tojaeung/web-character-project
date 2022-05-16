@@ -254,6 +254,8 @@ export const createDislike = async (
   // 게시글 작성자는 싫어요를 받음에 따라 경험치(영감력)가 깍인다.
   await getRepository(User).decrement({ id: userId }, 'exp', -2);
 
+  console.log({ newDisLike });
+
   logger.info('게시글 싫어요 생성 성공하였습니다.');
   return res.status(200).json({ ok: true, message: '게시글 싫어요 생성 성공하였습니다.', newDisLike });
 };

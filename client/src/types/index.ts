@@ -135,3 +135,14 @@ export type MsgNotiType = {
   from: string;
   to: string;
 };
+
+export type NotificationType = {
+  id: number;
+  type: 'comment' | 'like' | 'warning';
+  content: string;
+  userId: number;
+  postId?: number;
+  isConfirmed: boolean;
+  created_at: Date;
+  updated_at: Date;
+};

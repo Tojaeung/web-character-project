@@ -13,8 +13,8 @@ class Like extends Relation {
   id: number;
 
   // 좋아요를 누른 사용자
-  @Column({ name: 'user_id' })
-  userId: number;
+  @Column()
+  user_id: number;
 
   @Index('post_id-likeIdx')
   @Column()

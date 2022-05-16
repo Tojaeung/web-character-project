@@ -21,8 +21,8 @@ function DisLikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
   const user = useAppSelector(selectUserUser);
 
   const handleAddDisLike = async (e: React.MouseEvent<HTMLSpanElement>) => {
-    const existingLike = likes?.some((like) => like.userId === user?.id);
-    const existingDisLike = dislikes?.some((dislike) => dislike.userId === user?.id);
+    const existingLike = likes?.some((like) => like.user_id === user?.id);
+    const existingDisLike = dislikes?.some((dislike) => dislike.user_id === user?.id);
     if (type === 'drawing') {
       if (existingLike || existingDisLike) return alert('이미 선택하셨습니다.');
       try {
@@ -43,7 +43,7 @@ function DisLikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
 
   return (
     <Container onClick={handleAddDisLike}>
-      {dislikes?.some((dislike) => dislike.userId === user?.id) ? <ActiveDisLikeIcon /> : <NotActiveDisLikeIcon />}
+      {dislikes?.some((dislike) => dislike.user_id === user?.id) ? <ActiveDisLikeIcon /> : <NotActiveDisLikeIcon />}
       {dislikes?.length}
     </Container>
   );

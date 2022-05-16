@@ -49,7 +49,7 @@ function Profile() {
             메세지
           </List>
 
-          <List>
+          <List onClick={(e) => navigate('/settings/alert')}>
             <BellIcon />
             알림
           </List>

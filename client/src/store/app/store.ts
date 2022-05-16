@@ -7,6 +7,7 @@ import chatSlice from '../slices/chat.slice';
 import modalSlice from '../slices/modal.slice';
 import drawingSlice from '../slices/drawing.slice';
 import postSlice from '../slices/post.slice';
+import notificationSlice from '../slices/notification.slice';
 
 const persistedReducer = persistReducer(
   {
@@ -20,6 +21,7 @@ const persistedReducer = persistReducer(
     modal: modalSlice,
     drawing: drawingSlice,
     post: postSlice,
+    notification: notificationSlice,
   })
 );
 

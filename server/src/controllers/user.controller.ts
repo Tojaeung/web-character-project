@@ -182,8 +182,8 @@ export const updateNickname = async (req: Request<{}, {}, UpdateNicknameDTO>, re
   const id = req.session.user?.id!;
   const { updatedNickname } = req.body;
 
-  const isExistingUser = await getRepository(User).count({ id });
-  if (!isExistingUser) {
+  const user = await getRepository(User).findOne({ id });
+  if (!user) {
     logger.warn('존재하지 않은 유저가 닉네임 변경을 시도합니다.');
     throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
@@ -196,8 +196,17 @@ export const updateNickname = async (req: Request<{}, {}, UpdateNicknameDTO>, re
   // 닉네임을 변경해줍니다.
   await getRepository(User).update(id, { nickname: updatedNickname });
 
-  logger.info(`${id}님의 닉네임 변경이 완료되었습니다.`);
-  return res.status(200).json({ ok: true, message: '닉네임 변경 완료되었습니다.', updatedNickname });
+  req.session.user = {
+    id: user.id,
+    chatId: user.chatId,
+    nickname: user.nickname,
+    role: user.role,
+    exp: user.exp,
+  };
+  req.session.save(() => {
+    logger.info(`${id}님의 닉네임 변경이 완료되었습니다.`);
+    return res.status(200).json({ ok: true, message: '닉네임 변경 완료되었습니다.', updatedNickname });
+  });
 };
 
 export const updatePw = async (req: Request<{}, {}, UpdatePwDTO>, res: Response): Promise<any> => {
@@ -473,7 +482,7 @@ export const givePenalty = async (
     throw ApiError.InternalServerError('관리자 권한으로 불량유저를 제제하지 못했습니다.');
   }
 
-  // 1주일 후에 다시 exp가 0으로 돌아오면서 서비스를 이용할 수 있게된다.
+  // 제재조치기간 후에 다시 exp가 0으로 돌아오면서 서비스를 이용할 수 있게된다.
   const expiredData = moment().add(penaltyPeriod, 'days').format();
   schedule.scheduleJob(expiredData, async () => {
     const result = await getRepository(User).update(userId, { exp: 0 });

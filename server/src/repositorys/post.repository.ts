@@ -91,11 +91,11 @@ export class CommentRepository extends AbstractRepository<Comment> {
 
 @EntityRepository(Like)
 export class LikeRepository extends AbstractRepository<Like> {
-  create = async (userId: number, postId: number): Promise<Like> => {
+  create = async (userId: number, postId: number) => {
     const result = await this.createQueryBuilder('like')
       .insert()
       .into(Like)
-      .values({ userId, post_id: postId })
+      .values({ user_id: userId, post_id: postId })
       .returning('*')
       .execute();
     return result.raw[0];
@@ -108,7 +108,7 @@ export class DisLikeRepository extends AbstractRepository<DisLike> {
     const result = await this.createQueryBuilder('dislike')
       .insert()
       .into(DisLike)
-      .values({ userId, post_id: postId })
+      .values({ user_id: userId, post_id: postId })
       .returning('*')
       .execute();
     return result.raw[0];

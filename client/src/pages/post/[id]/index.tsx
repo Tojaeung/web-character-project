@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
@@ -56,7 +56,7 @@ function Post() {
         싫어요
       </LikeButtonBox>
 
-      <CommentForm type="board" entityId={post?.id!} />
+      <CommentForm type="board" entityId={post?.id!} userId={post?.user_id} />
       <Comment type="board" comments={post?.comments!} />
       <Board />
     </Container>

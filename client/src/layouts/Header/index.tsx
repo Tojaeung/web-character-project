@@ -33,10 +33,10 @@ function Header() {
           }}
         />
         <RightSide>
-          <NavLink to={'/board/free'}>자유게시판</NavLink>
-          <NavLink to={'/board/commission'}>커미션</NavLink>
-          <NavLink to={'/board/reque'}>리퀘스트</NavLink>
-          <NavLink to={'/board/sale'}>분양</NavLink>
+          <NavLink to={'/free'}>자유게시판</NavLink>
+          <NavLink to={'/commission'}>커미션</NavLink>
+          <NavLink to={'/reque'}>리퀘스트</NavLink>
+          <NavLink to={'/sale'}>분양</NavLink>
           {user ? (
             <Profile />
           ) : (
