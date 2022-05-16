@@ -47,10 +47,22 @@ export const notificationSlice = createSlice({
       state.message = action.payload.message;
       state.notifications = action.payload.notifications;
     },
+
+    updateNotification: (
+      state,
+      action: PayloadAction<{ ok: boolean; message: string; updatedNotification: NotificationType }>
+    ) => {
+      state.ok = action.payload.ok;
+      state.message = action.payload.message;
+      const index = state.notifications?.findIndex(
+        (notification) => notification.id === action.payload.updatedNotification.id
+      );
+      state.notifications?.splice(index as number, 1, action.payload.updatedNotification);
+    },
   },
 });
 
-export const { initNotification, addNotification, getNotification } = notificationSlice.actions;
+export const { initNotification, addNotification, getNotification, updateNotification } = notificationSlice.actions;
 export const selectNotificationOk = (state: RootState) => state.notification.ok;
 export const selectNotificationMessage = (state: RootState) => state.notification.message;
 export const selectNotificationNotifications = (state: RootState) => state.notification.notifications;

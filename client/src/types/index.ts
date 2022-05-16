@@ -138,7 +138,7 @@ export type MsgNotiType = {
 
 export type NotificationType = {
   id: number;
-  type: 'comment' | 'like' | 'warning';
+  type: 'comment' | 'like' | 'penalty';
   content: string;
   userId: number;
   boardName: string;

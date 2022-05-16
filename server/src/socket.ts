@@ -13,6 +13,7 @@ import addCommentNoti from '@src/socketio/notification/addCommentNoti';
 import addLikeNoti from '@src/socketio/notification/addLikeNoti';
 import addPenaltyNoti from '@src/socketio/notification/addPenaltyNoti';
 import getNotification from '@src/socketio/notification/getNotification';
+import updateNotification from '@src/socketio/notification/updateNotification';
 
 const socket = ({ io }: { io: Server }) => {
   io.on('connect', async (defaultSocket: Socket) => {
@@ -65,6 +66,10 @@ const socket = ({ io }: { io: Server }) => {
 
     socket.on('getNotification', () => {
       getNotification(socket);
+    });
+
+    socket.on('updateNotification', (notificationId) => {
+      updateNotification(socket, notificationId);
     });
 
     socket.on('disconnect', () => {

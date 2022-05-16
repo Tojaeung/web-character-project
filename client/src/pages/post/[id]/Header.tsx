@@ -56,7 +56,7 @@ function Header() {
         </ProfileBox>
 
         <ButtonBox>
-          <BackBoard onClick={(e) => navigate(`/board/${board}`)}>목록</BackBoard>
+          <BackBoard onClick={(e) => navigate(`/${board}`)}>목록</BackBoard>
           {(user?.id === post?.user?.id || user?.role === 'admin') && (
             <>
               <EditPost onClick={(e) => navigate(`/edit/postForm/${board}/${post?.id}`)}>수정</EditPost>
@@ -68,7 +68,7 @@ function Header() {
         </ButtonBox>
 
         <ResponsiveButtonBox>
-          <BackBoardIcon onClick={(e) => navigate(`/board/${board}`)} />
+          <BackBoardIcon onClick={(e) => navigate(`/${board}`)} />
           <MoreButton type="board" entityId={post?.id!} userId={post?.user?.id!} handleRemove={handleRemovePost} />
         </ResponsiveButtonBox>
       </Container>

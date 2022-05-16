@@ -12,7 +12,12 @@ import {
   addMsgNoti,
   openChatModal,
 } from '@src/store/slices/chat.slice';
-import { initNotification, addNotification, getNotification } from '@src/store/slices/notification.slice';
+import {
+  initNotification,
+  addNotification,
+  getNotification,
+  updateNotification,
+} from '@src/store/slices/notification.slice';
 import { NotificationType } from '@src/types';
 
 const useSocketSetup = () => {
@@ -75,6 +80,15 @@ const useSocketSetup = () => {
       }
     );
 
+    socket.on(
+      'updateNotification',
+      async (result: { ok: boolean; message: string; updatedNotification: NotificationType }) => {
+        console.log(result);
+
+        await dispatch(updateNotification(result));
+      }
+    );
+
     socket.on('connect_error', async () => {
       await dispatch(signOut());
       socket.disconnect();
@@ -90,6 +104,8 @@ const useSocketSetup = () => {
       socket.off('addMsgNoti');
       socket.off('initNotification');
       socket.off('addNotification');
+      socket.off('getNotification');
+      socket.off('updateNotification');
       socket.off('connect_error');
     };
   }, []);

@@ -1,20 +1,33 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import { v4 } from 'uuid';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '@src/store/app/hook';
 import { selectNotificationNotifications } from '@src/store/slices/notification.slice';
 import CreatedTime from '@src/components/CreatedTime';
 import TabMenu from './common/TabMenu';
 import socket from '@src/utils/socket';
 import notificationType from '@src/utils/notificationType.util';
+import { NotificationType } from '@src/types';
 
 function Alert() {
+  const navigate = useNavigate();
+
   const notifications = useAppSelector(selectNotificationNotifications);
 
   useEffect(() => {
     socket.emit('getNotification');
   }, []);
+
+  const handlePenaltyNoti = (notificationId: number) => async (e: React.MouseEvent<HTMLParagraphElement>) => {
+    await socket.emit('updateNotification', notificationId);
+  };
+
+  const handleNoPenaltyNoti = (notification: NotificationType) => async (e: React.MouseEvent<HTMLParagraphElement>) => {
+    const notificationId = notification.id;
+    await socket.emit('updateNotification', notificationId);
+    navigate(`/${notification.boardName}/${notification.postId}`);
+  };
 
   return (
     <Container>
@@ -34,10 +47,14 @@ function Alert() {
             </tr>
           ) : (
             notifications.map((notification) => (
-              <tr key={v4()}>
+              <tr key={v4()} className={notification.isConfirmed ? 'visited' : 'unVisited'}>
                 <td>{notificationType(notification.type)}</td>
                 <td className="content">
-                  <PostLink to={`/${notification.boardName}/${notification.postId}`}>{notification.content}</PostLink>
+                  {notification.type === 'penalty' ? (
+                    <p onClick={handlePenaltyNoti(notification.id)}>{notification.content}</p>
+                  ) : (
+                    <p onClick={handleNoPenaltyNoti(notification)}>{notification.content}</p>
+                  )}
                 </td>
                 <td>
                   <CreatedTime createdTime={notification.created_at} fontSize={1.2} />
@@ -87,11 +104,16 @@ const Container = styled.div`
   }
   .content {
     text-align: left;
-    width: 60%;
+    width: 80%;
     word-break: break-all;
   }
-`;
 
-const PostLink = styled(Link)``;
+  .visited {
+    color: ${({ theme }) => theme.palette.gray};
+  }
+  .unVisited {
+    color: ${({ theme }) => theme.palette.black};
+  }
+`;
 
 export default Alert;

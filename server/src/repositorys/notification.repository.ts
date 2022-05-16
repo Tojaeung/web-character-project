@@ -19,15 +19,15 @@ export class NotificationRepository extends AbstractRepository<Notification> {
     return result.raw[0];
   };
 
-  // update = async (postId: number, title: string, content: string): Promise<Notification> => {
-  //   const result = await this.createQueryBuilder('post')
-  //     .update(Post)
-  //     .set({ title, content })
-  //     .where('id = :id', { id: postId })
-  //     .returning('*')
-  //     .execute();
-  //   return result.raw[0];
-  // };
+  update = async (notificationId: number): Promise<Notification> => {
+    const result = await this.createQueryBuilder('notification')
+      .update(Notification)
+      .set({ isConfirmed: true })
+      .where('id = :id', { id: notificationId })
+      .returning('*')
+      .execute();
+    return result.raw[0];
+  };
 
   // delete = async (postId: number): Promise<Notification> => {
   //   const result = await this.createQueryBuilder('post')
