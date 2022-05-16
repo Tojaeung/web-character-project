@@ -62,7 +62,7 @@ function Info() {
 
         <LikeButton
           type="drawing"
-          entityId={drawings[index!]?.id!}
+          drawingId={drawings[index!]?.id!}
           userId={drawings[index!]?.user?.id!}
           likes={drawings[index!]?.likes!}
           dislikes={drawings[index!]?.dislikes!}
@@ -70,7 +70,7 @@ function Info() {
 
         <DisLikeButton
           type="drawing"
-          entityId={drawings[index!]?.id!}
+          drawingId={drawings[index!]?.id!}
           userId={drawings[index!]?.user?.id!}
           likes={drawings[index!]?.likes!}
           dislikes={drawings[index!]?.dislikes!}

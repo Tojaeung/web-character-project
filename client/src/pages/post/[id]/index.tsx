@@ -38,25 +38,13 @@ function Post() {
 
       <LikeButtonBox>
         좋아요
-        <LikeButton
-          type="board"
-          entityId={post?.id!}
-          userId={post?.user?.id!}
-          likes={post?.likes!}
-          dislikes={post?.dislikes!}
-        />
+        <LikeButton type="board" userId={post?.user?.id!} likes={post?.likes!} dislikes={post?.dislikes!} />
         |
-        <DisLikeButton
-          type="board"
-          entityId={post?.id!}
-          userId={post?.user?.id!}
-          likes={post?.likes!}
-          dislikes={post?.dislikes!}
-        />
+        <DisLikeButton type="board" userId={post?.user?.id!} likes={post?.likes!} dislikes={post?.dislikes!} />
         싫어요
       </LikeButtonBox>
 
-      <CommentForm type="board" entityId={post?.id!} userId={post?.user_id} />
+      <CommentForm type="board" userId={post?.user_id} />
       <Comment type="board" comments={post?.comments!} />
       <Board />
     </Container>

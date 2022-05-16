@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
+import { useParams } from 'react-router-dom';
 import { selectUserUser } from '@src/store/slices/user.slice';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { PostLikeType, PostDisLikeType, DrawingLikeType, DrawingDisLikeType } from '@src/types';
@@ -10,14 +11,15 @@ import socket from '@src/utils/socket';
 
 interface IProps {
   type: 'drawing' | 'board';
-  entityId: number;
+  drawingId?: number;
   userId: number;
   likes: DrawingLikeType[] | PostLikeType[];
   dislikes: DrawingDisLikeType[] | PostDisLikeType[];
 }
 
-function LikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
+function LikeButton({ type, drawingId, userId, likes, dislikes }: IProps) {
   const dispatch = useAppDispatch();
+  const { board, postId } = useParams();
 
   const user = useAppSelector(selectUserUser);
 
@@ -27,7 +29,7 @@ function LikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
     if (type === 'drawing') {
       if (existingLike || existingDisLike) return alert('이미 선택하셨습니다.');
       try {
-        await dispatch(createDrawingLike({ drawingId: entityId, userId })).unwrap();
+        await dispatch(createDrawingLike({ drawingId: drawingId as number, userId })).unwrap();
       } catch (err: any) {
         alert(err.message);
       }
@@ -35,13 +37,13 @@ function LikeButton({ type, entityId, userId, likes, dislikes }: IProps) {
     if (type === 'board') {
       if (existingLike || existingDisLike) return alert('이미 선택하셨습니다.');
       try {
-        const res = await dispatch(createPostLike({ postId: entityId, userId })).unwrap();
+        const res = await dispatch(createPostLike({ postId: Number(postId), userId })).unwrap();
         alert(res.message);
 
         // 게시물 작성자에게 좋아요가 추가되었음을 알리는 알림을 보낸다.
         // 유저 자신이 자신이 생성한 게시물에 좋아요를 추가할때는 제외한다.
         if (user?.id !== userId) {
-          const likeNotiObj = { type: 'like', userId, postId: entityId };
+          const likeNotiObj = { type: 'like', userId, postId: Number(postId) };
           await socket.emit('addLikeNoti', likeNotiObj);
         }
       } catch (err: any) {

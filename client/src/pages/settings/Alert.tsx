@@ -36,7 +36,9 @@ function Alert() {
             notifications.map((notification) => (
               <tr key={v4()}>
                 <td>{notificationType(notification.type)}</td>
-                <td className="content">{notification.content}</td>
+                <td className="content">
+                  <PostLink to={`/`}>{notification.content}</PostLink>
+                </td>
                 <td>
                   <CreatedTime createdTime={notification.created_at} fontSize={1.2} />
                 </td>

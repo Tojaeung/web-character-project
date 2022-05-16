@@ -10,13 +10,13 @@ import socket from '@src/utils/socket';
 
 interface IProp {
   type: 'drawing' | 'board';
-  entityId: number; // post(게시글) id 또는 drawing(그림) id
+  drawingId?: number;
   userId?: number; // post(게시글) 작성자 id(게시글 작성자에게 댓글이 생성됐다는것을 알리기 위해)
 }
 
-function CommentForm({ type, entityId, userId }: IProp) {
+function CommentForm({ type, drawingId, userId }: IProp) {
   const dispatch = useAppDispatch();
-  const { board } = useParams();
+  const { board, postId } = useParams();
 
   const user = useAppSelector(selectUserUser);
 
@@ -25,7 +25,7 @@ function CommentForm({ type, entityId, userId }: IProp) {
   const handleAddComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (type === 'drawing') {
       try {
-        const res = await dispatch(createDrawingComment({ drawingId: entityId, content })).unwrap();
+        const res = await dispatch(createDrawingComment({ drawingId: drawingId as number, content })).unwrap();
         alert(res.message);
         setContent('');
       } catch (err: any) {
@@ -35,14 +35,16 @@ function CommentForm({ type, entityId, userId }: IProp) {
     }
     if (type === 'board') {
       try {
-        const res = await dispatch(createPostComment({ board: board as string, postId: entityId, content })).unwrap();
+        const res = await dispatch(
+          createPostComment({ board: board as string, postId: Number(postId), content })
+        ).unwrap();
         alert(res.message);
         setContent('');
 
         // 게시물 작성자에게 댓글이 생성되었음을 알리는 알림을 보낸다.
         // 유저 자신이 자신이 생성한 게시물에 댓글를 남길때는 제외한다.
         if (user?.id !== userId) {
-          const commentNotiObj = { type: 'comment', userId, postId: entityId };
+          const commentNotiObj = { type: 'comment', userId, postId: Number(postId) };
           await socket.emit('addCommentNoti', commentNotiObj);
         }
       } catch (err: any) {
