@@ -29,7 +29,7 @@ function PostForm() {
       const res = await dispatch(createPost({ title, content, board: board as string, imageKeys })).unwrap();
       const { message, newPostJoinAll } = res;
       alert(message);
-      navigate(`/${board}/post/${newPostJoinAll.id}`);
+      navigate(`/${board}/${newPostJoinAll.id}`);
     } catch (err: any) {
       alert(err.message);
     }

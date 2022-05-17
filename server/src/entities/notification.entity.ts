@@ -22,8 +22,8 @@ class Notification {
   @Column({ name: 'post_id' })
   postId?: number;
 
-  @Column({ name: 'is_confirmed', default: false })
-  isConfirmed: boolean;
+  @Column({ default: false })
+  is_confirmed: boolean;
 
   @CreateDateColumn()
   created_at: Date;

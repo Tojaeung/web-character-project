@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { CgProfile } from 'react-icons/cg';
 import { BsBell } from 'react-icons/bs';
 import { FiSettings, FiLogOut } from 'react-icons/fi';
@@ -18,6 +18,12 @@ function Profile() {
 
   const user = useAppSelector(selectUserUser);
   const notifications = useAppSelector(selectNotificationNotifications);
+  const [totalNotificationNum, setTotalNotificationNum] = useState(0);
+
+  useEffect(() => {
+    const filteredNotification = notifications?.filter((notification) => notification.is_confirmed === false).length;
+    setTotalNotificationNum(filteredNotification);
+  }, [notifications]);
 
   const [openDropDown, setOpenDropDown] = useState(false);
   const targetRef = useRef<HTMLUListElement>(null);
@@ -52,9 +58,9 @@ function Profile() {
           </List>
 
           <List onClick={(e) => navigate('/settings/alert')}>
-            {notifications?.some((notification) => notification.isConfirmed === false) && (
+            {notifications?.some((notification) => notification.is_confirmed === false) && (
               <NotiBox>
-                <NotiNum>{notifications?.filter((notification) => notification.isConfirmed === false).length}</NotiNum>
+                <NotiNum>{totalNotificationNum}</NotiNum>
               </NotiBox>
             )}
             <BellIcon />

@@ -143,7 +143,7 @@ export type NotificationType = {
   userId: number;
   boardName: string;
   postId?: number;
-  isConfirmed: boolean;
+  is_confirmed: boolean;
   created_at: Date;
   updated_at: Date;
 };

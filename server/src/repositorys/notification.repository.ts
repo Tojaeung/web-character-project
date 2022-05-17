@@ -22,7 +22,7 @@ export class NotificationRepository extends AbstractRepository<Notification> {
   update = async (notificationId: number): Promise<Notification> => {
     const result = await this.createQueryBuilder('notification')
       .update(Notification)
-      .set({ isConfirmed: true })
+      .set({ is_confirmed: true })
       .where('id = :id', { id: notificationId })
       .returning('*')
       .execute();

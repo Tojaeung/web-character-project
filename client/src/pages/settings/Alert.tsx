@@ -19,13 +19,18 @@ function Alert() {
     socket.emit('getNotification');
   }, []);
 
-  const handlePenaltyNoti = (notificationId: number) => async (e: React.MouseEvent<HTMLParagraphElement>) => {
-    await socket.emit('updateNotification', notificationId);
+  const handlePenaltyNoti = (notification: NotificationType) => async (e: React.MouseEvent<HTMLParagraphElement>) => {
+    if (!notification.is_confirmed) {
+      const notificationId = notification.id;
+      await socket.emit('updateNotification', notificationId);
+    }
   };
 
   const handleNoPenaltyNoti = (notification: NotificationType) => async (e: React.MouseEvent<HTMLParagraphElement>) => {
-    const notificationId = notification.id;
-    await socket.emit('updateNotification', notificationId);
+    if (!notification.is_confirmed) {
+      const notificationId = notification.id;
+      await socket.emit('updateNotification', notificationId);
+    }
     navigate(`/${notification.boardName}/${notification.postId}`);
   };
 
@@ -47,11 +52,11 @@ function Alert() {
             </tr>
           ) : (
             notifications.map((notification) => (
-              <tr key={v4()} className={notification.isConfirmed ? 'visited' : 'unVisited'}>
+              <tr key={v4()} className={notification.is_confirmed ? 'visited' : 'unVisited'}>
                 <td>{notificationType(notification.type)}</td>
                 <td className="content">
                   {notification.type === 'penalty' ? (
-                    <p onClick={handlePenaltyNoti(notification.id)}>{notification.content}</p>
+                    <p onClick={handlePenaltyNoti(notification)}>{notification.content}</p>
                   ) : (
                     <p onClick={handleNoPenaltyNoti(notification)}>{notification.content}</p>
                   )}
@@ -98,7 +103,9 @@ const Container = styled.div`
       font-size: 1.2rem;
     }
   }
-
+  p {
+    cursor: pointer;
+  }
   .board-name {
     white-space: nowrap;
   }

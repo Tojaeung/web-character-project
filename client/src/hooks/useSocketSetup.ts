@@ -83,8 +83,6 @@ const useSocketSetup = () => {
     socket.on(
       'updateNotification',
       async (result: { ok: boolean; message: string; updatedNotification: NotificationType }) => {
-        console.log(result);
-
         await dispatch(updateNotification(result));
       }
     );

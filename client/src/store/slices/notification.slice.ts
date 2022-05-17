@@ -5,13 +5,13 @@ import { NotificationType } from '@src/types/index';
 interface NotificationSliceType {
   ok: boolean;
   message: string | null;
-  notifications: NotificationType[] | null;
+  notifications: NotificationType[];
 }
 
 const initialState: NotificationSliceType = {
   ok: false,
   message: null,
-  notifications: null,
+  notifications: [],
 };
 
 export const notificationSlice = createSlice({

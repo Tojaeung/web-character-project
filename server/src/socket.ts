@@ -22,6 +22,10 @@ const socket = ({ io }: { io: Server }) => {
 
     initUser(socket);
 
+    // socket.on('initUser', () => {
+    //   initUser(socket);
+    // });
+
     // 채팅
     socket.on('addChat', (chatId) => {
       addChat(socket, chatId);

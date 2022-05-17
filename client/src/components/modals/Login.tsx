@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { AiOutlineEye, AiOutlineMail, AiOutlineEyeInvisible } from 'react-icons/ai';
+import useSocketSetup from '@src/hooks/useSocketSetup';
 import { signIn } from '@src/store/requests/session.request';
 import { useAppDispatch } from '@src/store/app/hook';
 import { openModal, closeModal } from '@src/store/slices/modal.slice';
@@ -10,6 +11,7 @@ import { greenButtonStyle } from '@src/styles/button.style';
 import socket from '@src/utils/socket';
 
 function Login() {
+  useSocketSetup();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -21,8 +23,9 @@ function Login() {
     e.preventDefault();
     try {
       await dispatch(signIn({ email, pw })).unwrap();
-      socket.connect();
+      await socket.connect();
       await dispatch(closeModal());
+      navigate(0);
     } catch (err: any) {
       alert(err.message);
     }
