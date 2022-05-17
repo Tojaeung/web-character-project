@@ -78,10 +78,11 @@ export const createPost = async (
   }
   const boardId = isExistingBoard.id;
 
-  imageKeys.length && createImageKey(imageKeys);
-
   const newPost = await postRepo.create(title, content, boardId, id);
   const newPostJoinAll = await postRepo.joinAll(newPost.id);
+
+  // 이미지key s3에 저장
+  imageKeys.length && (await createImageKey(imageKeys, id, newPost.id));
 
   logger.info('게시판 글쓰기 등록 성공하였습니다.');
   return res.status(200).json({ ok: true, message: '게시판 글쓰기 성공하였습니다.', newPostJoinAll });
@@ -103,14 +104,14 @@ export const updatePost = async (
     throw ApiError.NotFound('존재하지 않는 게시글을 수정할 수 없습니다..');
   }
 
-  const updatedPost = await postRepo.update(postId, title, content);
-  const updatedPostJoinAll = await postRepo.joinAll(updatedPost.id);
-
   // s3 이미지 저장(새로운) 및 삭제(기존)
   if (imageKeys.length) {
-    deleteImageKey(id, postId);
-    createImageKey(imageKeys);
+    await deleteImageKey(id, postId);
+    await createImageKey(imageKeys, id, postId);
   }
+
+  const updatedPost = await postRepo.update(postId, title, content);
+  const updatedPostJoinAll = await postRepo.joinAll(updatedPost.id);
 
   logger.info('게시글 수정 성공하였습니다.');
   return res.status(200).json({ ok: true, message: '게시글 수정 성공하였습니다.', updatedPostJoinAll });
@@ -128,10 +129,10 @@ export const deletePost = async (req: Request, res: Response): Promise<any> => {
     throw ApiError.NotFound('존재하지 않는 게시글을 삭제 할 수 없습니다.');
   }
 
-  const deletedPost = await postRepo.delete(postId);
-
   // s3 이미지 삭제
-  deleteImageKey(id, postId);
+  await deleteImageKey(id, postId);
+
+  const deletedPost = await postRepo.delete(postId);
 
   logger.info('게시글 제거 성공하였습니다.');
   return res.status(200).json({ ok: true, message: '게시글 제거 성공하였습니다.', deletedPost });

@@ -2,7 +2,7 @@ import moment from 'moment';
 import { SessionSocket } from '@src/types/index';
 import cluster from '@src/helpers/redis.helper';
 import parseMessages from '@src/socketio/chat/parseMessages';
-import { s3 } from '@src/helpers/s3.helper';
+import s3Delete from '@src/utils/s3.utils';
 import logger from '@src/helpers/winston.helper';
 
 const deleteMessage = async (socket: SessionSocket, chatId: string) => {
@@ -22,17 +22,8 @@ const deleteMessage = async (socket: SessionSocket, chatId: string) => {
     .filter((parsedMessage) => parsedMessage.from === chatId || parsedMessage.to === chatId)
     .filter((parsedMessage) => parsedMessage.type === 'image');
 
-  if (imageMessages.length > 0) {
-    // s3 객체삭제
-    const bucketName = process.env.AWS_BUCKET_NAME as string;
-    for (const imageMessage of imageMessages) {
-      s3.deleteObject({ Bucket: bucketName, Key: imageMessage.imgKey as string }, (err) => {
-        if (err) {
-          logger.warn('s3 아바타 객체삭제를 실패하였습니다.');
-        }
-      });
-    }
-  }
+  // s3 객체삭제
+  if (imageMessages.length > 0) imageMessages.forEach(async (imageMessage) => await s3Delete(imageMessage.imgKey));
 
   // 상대에게 내가 대화방에 나갔다는것을 알리기 위해 가이드 메세지(type='endChat')를 상대방에게 보낸다.
   // 가이드 메세지를 보내기전에, 내가 대화방을 나갈때 상대방이 먼저 대화방을 나갔는지 확인이 필요하다.

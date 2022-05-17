@@ -40,7 +40,7 @@ export class DrawingRepository extends AbstractRepository<Drawing> {
       .getOne();
   }
 
-  create = async (content: string, url: string, key: string, id: number): Promise<Comment> => {
+  create = async (content: string, url: string, key: string, id: number): Promise<Drawing> => {
     const result = await this.createQueryBuilder('drawing')
       .insert()
       .into(Drawing)
@@ -50,7 +50,7 @@ export class DrawingRepository extends AbstractRepository<Drawing> {
     return result.raw[0];
   };
 
-  delete = async (drawingId: number) => {
+  delete = async (drawingId: number): Promise<Drawing> => {
     const result = await this.createQueryBuilder('drawing')
       .delete()
       .from(Drawing)

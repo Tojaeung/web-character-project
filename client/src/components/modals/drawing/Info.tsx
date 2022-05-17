@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { AiOutlineEye } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@src/components/Avatar';
 import Nickname from '@src/components/Nickname';
 import CreatedTime from '@src/components/CreatedTime';
@@ -19,8 +20,8 @@ function Info() {
 
   const handleDrawingRemove = async (e: any) => {
     try {
-      const res = await dispatch(deleteDrawing({ drawingId: drawings[index!].id })).unwrap();
       await dispatch(closeModal());
+      const res = await dispatch(deleteDrawing({ drawingId: drawings[index!].id })).unwrap();
       alert(res.message);
     } catch (err: any) {
       alert(err.message);

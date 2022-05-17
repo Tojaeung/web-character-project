@@ -29,7 +29,7 @@ function Header() {
     try {
       const res = await dispatch(deletePost({ postId: Number(postId) })).unwrap();
       alert(res.message);
-      navigate(-1);
+      navigate(`/${board}`);
     } catch (err: any) {
       alert(err.message);
     }

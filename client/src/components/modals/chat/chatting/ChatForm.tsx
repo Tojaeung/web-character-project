@@ -38,11 +38,10 @@ function ChatForm() {
       date: moment().format(),
     };
 
-    if (message === '') return;
+    if (message === '') return alert('입력된 글자가 없습니다.');
     if (!textMsgObj.to) {
-      alert('대화상대를 찾을 수 없습니다.');
       setMessage('');
-      return;
+      return alert('대화상대를 찾을 수 없습니다.');
     }
 
     socket.emit('addMessage', textMsgObj);

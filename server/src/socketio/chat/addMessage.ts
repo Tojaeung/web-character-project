@@ -36,7 +36,6 @@ const addMessage = async (socket: SessionSocket, message: MessageType) => {
     };
 
     const result = { ok: true, newChat };
-
     socket.to(message.to).emit('addChat', result);
   }
 

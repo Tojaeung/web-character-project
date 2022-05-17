@@ -11,6 +11,7 @@ import User from '@src/entities/user/user.entity';
 import Drawing from '@src/entities/drawing/drawing.entity';
 import DrawingComment from '@src/entities/drawing/comment.entity';
 import ApiError from '@src/errors/api.error';
+import s3Delete from '@src/utils/s3.utils';
 import {
   CreateCommentDTO,
   CreateDisLikeDTO,
@@ -88,6 +89,7 @@ export const deleteDrawing = async (req: Request, res: Response): Promise<any> =
   }
 
   const deletedDrawing = await drawingRepo.delete(drawingId);
+  await s3Delete(deletedDrawing.key);
 
   logger.info(`그림 제거 성공하였습니다.`);
   return res.status(200).json({ ok: true, message: '그림 제거 성공하였습니다.', deletedDrawing });

@@ -19,7 +19,6 @@ export const createPostSchema = object({
 
 export const updatePostSchema = object({
   params: object({
-    board: z.string(),
     postId: z.string(),
   }),
   body: object({

@@ -56,7 +56,7 @@ function EditForm() {
         alert(err.message);
       }
     }
-    navigate(`/board/${board}/post/${post?.id}`);
+    navigate(`/${board}/${post?.id}`);
   };
 
   return (
