@@ -14,6 +14,8 @@ import addLikeNoti from '@src/socketio/notification/addLikeNoti';
 import addPenaltyNoti from '@src/socketio/notification/addPenaltyNoti';
 import getNotification from '@src/socketio/notification/getNotification';
 import updateNotification from '@src/socketio/notification/updateNotification';
+import updateAllNotifications from '@src/socketio/notification/updateAllNotifications';
+import deleteAllNotifications from '@src/socketio/notification/deleteAllNotifications';
 
 const socket = ({ io }: { io: Server }) => {
   io.on('connect', async (defaultSocket: Socket) => {
@@ -74,6 +76,14 @@ const socket = ({ io }: { io: Server }) => {
 
     socket.on('updateNotification', (notificationId) => {
       updateNotification(socket, notificationId);
+    });
+
+    socket.on('updateAllNotifications', () => {
+      updateAllNotifications(socket);
+    });
+
+    socket.on('deleteAllNotifications', () => {
+      deleteAllNotifications(socket);
     });
 
     socket.on('disconnect', () => {

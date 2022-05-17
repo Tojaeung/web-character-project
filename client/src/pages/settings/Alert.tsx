@@ -9,6 +9,7 @@ import TabMenu from './common/TabMenu';
 import socket from '@src/utils/socket';
 import notificationType from '@src/utils/notificationType.util';
 import { NotificationType } from '@src/types';
+import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
 
 function Alert() {
   const navigate = useNavigate();
@@ -18,6 +19,18 @@ function Alert() {
   useEffect(() => {
     socket.emit('getNotification');
   }, []);
+
+  const handleReadAll = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!notifications.length) return alert('알림이 없습니다.');
+    if (notifications.every((notification) => notification.is_confirmed)) {
+      return alert('이미 모든 알림을 확인했습니다.');
+    }
+    await socket.emit('updateAllNotifications');
+  };
+  const handleDeleteAll = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!notifications.length) return alert('알림이 없습니다.');
+    await socket.emit('deleteAllNotifications');
+  };
 
   const handlePenaltyNoti = (notification: NotificationType) => async (e: React.MouseEvent<HTMLParagraphElement>) => {
     if (!notification.is_confirmed) {
@@ -37,6 +50,10 @@ function Alert() {
   return (
     <Container>
       <TabMenu />
+      <ButtonBox>
+        <ReadAllButton onClick={handleReadAll}>모두읽음처리</ReadAllButton>
+        <DeleteAllButton onClick={handleDeleteAll}>알림모두삭제</DeleteAllButton>
+      </ButtonBox>
       <table>
         <thead>
           <tr>
@@ -78,6 +95,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
   table {
     width: 100%;
   }
@@ -120,6 +138,29 @@ const Container = styled.div`
   }
   .unVisited {
     color: ${({ theme }) => theme.palette.black};
+  }
+`;
+const ButtonBox = styled.div`
+  align-self: flex-end;
+  display: flex;
+  gap: 1rem;
+`;
+
+const ReadAllButton = styled.button`
+  ${inverseGreenButtonStyle};
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
+  }
+`;
+
+const DeleteAllButton = styled.button`
+  ${greenButtonStyle};
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.2rem;
   }
 `;
 

@@ -29,13 +29,13 @@ export class NotificationRepository extends AbstractRepository<Notification> {
     return result.raw[0];
   };
 
-  // delete = async (postId: number): Promise<Notification> => {
-  //   const result = await this.createQueryBuilder('post')
-  //     .delete()
-  //     .from(Post)
-  //     .where('id = :id', { id: postId })
-  //     .returning('*')
-  //     .execute();
-  //   return result.raw[0];
-  // };
+  updateAll = async (id: number): Promise<Notification> => {
+    const result = await this.createQueryBuilder('notification')
+      .update(Notification)
+      .set({ is_confirmed: true })
+      .where('userId = :id', { id })
+      .returning('*')
+      .execute();
+    return result.raw[0];
+  };
 }

@@ -17,6 +17,8 @@ import {
   addNotification,
   getNotification,
   updateNotification,
+  updateAllNotifications,
+  deleteAllNotifications,
 } from '@src/store/slices/notification.slice';
 import { NotificationType } from '@src/types';
 
@@ -87,6 +89,20 @@ const useSocketSetup = () => {
       }
     );
 
+    socket.on('updateAllNotifications', async (result: { ok: boolean; message: string }) => {
+      const { ok, message } = result;
+      if (!ok) return alert(message);
+      await dispatch(updateAllNotifications(result));
+      alert(message);
+    });
+
+    socket.on('deleteAllNotifications', async (result: { ok: boolean; message: string }) => {
+      const { ok, message } = result;
+      if (!ok) return alert(message);
+      await dispatch(deleteAllNotifications(result));
+      alert(message);
+    });
+
     socket.on('connect_error', async () => {
       await dispatch(signOut());
       socket.disconnect();
@@ -104,6 +120,8 @@ const useSocketSetup = () => {
       socket.off('addNotification');
       socket.off('getNotification');
       socket.off('updateNotification');
+      socket.off('updateAllNotifications');
+      socket.off('deleteAllNotifications');
       socket.off('connect_error');
     };
   }, []);

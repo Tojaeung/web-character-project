@@ -59,10 +59,34 @@ export const notificationSlice = createSlice({
       );
       state.notifications?.splice(index as number, 1, action.payload.updatedNotification);
     },
+
+    updateAllNotifications: (state, action: PayloadAction<{ ok: boolean; message: string }>) => {
+      state.ok = action.payload.ok;
+      state.message = action.payload.message;
+      state.notifications = state.notifications.map((notification) => {
+        if (!notification.is_confirmed) {
+          return { ...notification, is_confirmed: true };
+        }
+        return { ...notification };
+      });
+    },
+
+    deleteAllNotifications: (state, action: PayloadAction<{ ok: boolean; message: string }>) => {
+      state.ok = action.payload.ok;
+      state.message = action.payload.message;
+      state.notifications = [];
+    },
   },
 });
 
-export const { initNotification, addNotification, getNotification, updateNotification } = notificationSlice.actions;
+export const {
+  initNotification,
+  addNotification,
+  getNotification,
+  updateNotification,
+  updateAllNotifications,
+  deleteAllNotifications,
+} = notificationSlice.actions;
 export const selectNotificationOk = (state: RootState) => state.notification.ok;
 export const selectNotificationMessage = (state: RootState) => state.notification.message;
 export const selectNotificationNotifications = (state: RootState) => state.notification.notifications;
