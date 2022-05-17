@@ -17,7 +17,7 @@ const addPenaltyNoti = async (socket: SessionSocket, penaltyNotiObj: PenaltyNoti
   const { type, userId, penaltyPeriod } = penaltyNotiObj;
 
   const content = `${penaltyPeriod}일간 제재조치 되었습니다.\n 제재 만료일: ${moment()
-    .add(penaltyPeriod, 'days')
+    .add(penaltyPeriod, 'minutes')
     .format('YYYY-MM-DD HH:mm:ss')}`;
 
   const user = await getRepository(User).findOne({ id: userId });
@@ -30,7 +30,7 @@ const addPenaltyNoti = async (socket: SessionSocket, penaltyNotiObj: PenaltyNoti
 
   // 제재조치 기간후, 제재조치가 풀릴때 실행되는 함수이다.
   // 제재조치를 당한 유저에게 제재가 해제 되었다는 알림을 보낸다.
-  const expiredData = moment().add(Number(penaltyPeriod), 'days').format();
+  const expiredData = moment().add(Number(penaltyPeriod), 'minutes').format();
   schedule.scheduleJob(expiredData, async () => {
     const content = `제재조치가 해제되었습니다. 서비스를 정상적으로 사용할 수 있습니다. `;
 

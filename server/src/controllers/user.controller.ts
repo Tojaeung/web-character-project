@@ -483,7 +483,7 @@ export const givePenalty = async (
   }
 
   // 제재조치기간 후에 다시 exp가 0으로 돌아오면서 서비스를 이용할 수 있게된다.
-  const expiredData = moment().add(penaltyPeriod, 'days').format();
+  const expiredData = moment().add(penaltyPeriod, 'minutes').format();
   schedule.scheduleJob(expiredData, async () => {
     const result = await getRepository(User).update(userId, { exp: 0 });
     if (!result.affected) {
