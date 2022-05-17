@@ -189,6 +189,7 @@ function Board() {
 const Container = styled.div`
   width: 100%;
   padding: 0 1rem;
+  background-color: ${({ theme }) => theme.palette.bgColor};
   @media ${({ theme }) => theme.device.tablet} {
     display: none;
   }
@@ -273,11 +274,13 @@ const Responsive = styled.div`
     width: 100%;
     display: block;
     padding: 0 1rem;
+    background-color: ${({ theme }) => theme.palette.bgColor};
   }
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
     display: block;
     padding: 0 0.5rem;
+    background-color: ${({ theme }) => theme.palette.bgColor};
   }
 `;
 const NoResultText = styled.p`

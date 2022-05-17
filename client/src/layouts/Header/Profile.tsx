@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectUserUser } from '@src/store/slices/user.slice';
+import { selectNotificationNotifications } from '@src/store/slices/notification.slice';
 import { signOut } from '@src/store/requests/session.request';
 import Avatar from '@src/components/Avatar';
 import useDropDown from '@src/hooks/useDropDown';
@@ -16,6 +17,7 @@ function Profile() {
   const navigate = useNavigate();
 
   const user = useAppSelector(selectUserUser);
+  const notifications = useAppSelector(selectNotificationNotifications);
 
   const [openDropDown, setOpenDropDown] = useState(false);
   const targetRef = useRef<HTMLUListElement>(null);
@@ -50,6 +52,11 @@ function Profile() {
           </List>
 
           <List onClick={(e) => navigate('/settings/alert')}>
+            {notifications?.some((notification) => notification.isConfirmed === false) && (
+              <NotiBox>
+                <NotiNum>{notifications?.filter((notification) => notification.isConfirmed === false).length}</NotiNum>
+              </NotiBox>
+            )}
             <BellIcon />
             알림
           </List>
@@ -108,6 +115,7 @@ const List = styled.li`
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  position: relative;
   &:hover {
     background: ${({ theme }) => theme.palette.gray};
     cursor: pointer;
@@ -150,5 +158,23 @@ const GoProfile = styled.a`
     background: ${({ theme }) => theme.palette.gray};
     cursor: pointer;
   }
+`;
+
+const NotiBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: red;
+  border-radius: 100%;
+  position: absolute;
+  top: 2.5rem;
+  left: 2.5rem;
+`;
+
+const NotiNum = styled.span`
+  font-size: 1.2rem;
+  color: white;
 `;
 export default Profile;

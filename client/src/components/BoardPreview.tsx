@@ -88,7 +88,7 @@ const PostTitle = styled(NavLink)`
     color: black;
   }
   &:visited {
-    color: blueviolet;
+    color: blue;
   }
 `;
 const PostUser = styled.span`

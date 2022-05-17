@@ -99,7 +99,7 @@ export const updatePostComment = createAsyncThunk<
 >('UPDATE_POST_COMMENT', async (data, thunkApi) => {
   try {
     const { commentId, updatedContent } = data;
-    const res = await instance.patch(`/comments/${commentId}`, { updatedContent });
+    const res = await instance.patch(`/posts/comments/${commentId}`, { updatedContent });
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue(err.response.data);
@@ -113,7 +113,7 @@ export const deletePostComment = createAsyncThunk<
 >('DELETE_POST_COMMENT', async (data, thunkApi) => {
   try {
     const { commentId } = data;
-    const res = await instance.delete(`/comments/${commentId}`);
+    const res = await instance.delete(`/posts/comments/${commentId}`);
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue(err.response.data);

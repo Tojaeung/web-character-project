@@ -9,30 +9,12 @@ import {
   verifyUser,
   forgotPw,
   resetPw,
-  verifyEmail,
-  updateEmail,
-  updateNickname,
-  updatePw,
-  updateDesc,
-  updateAvatar,
-  updateDefaultAvatar,
-  updateCover,
-  updateDefaultCover,
-  deleteAccount,
   getUser,
   sendReport,
   getUserInfo,
   givePenalty,
 } from '@src/controllers/user.controller';
-import {
-  signUpSchema,
-  forgotPwSchema,
-  resetPwSchema,
-  verifyEmailSchema,
-  updateNicknameSchema,
-  updatePwSchema,
-  updateDescSchema,
-} from '@src/schemas/user.schema';
+import { signUpSchema, forgotPwSchema, resetPwSchema } from '@src/schemas/user.schema';
 
 const router = Router();
 

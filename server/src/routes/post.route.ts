@@ -48,9 +48,9 @@ router.post(
   asyncHandler(createComment)
 );
 // 게시물 댓글 변경
-router.patch('/comments/:commentId', auth, validator(updateCommentSchema), asyncHandler(updateComment));
+router.patch('/posts/comments/:commentId', auth, validator(updateCommentSchema), asyncHandler(updateComment));
 // 게시물 댓글 삭제
-router.delete('/comments/:commentId', auth, asyncHandler(deleteComment));
+router.delete('/posts/comments/:commentId', auth, asyncHandler(deleteComment));
 
 // 게시물 좋아요 생성
 router.post('/posts/:postId/like', auth, penalty, validator(createLikeSchema), asyncHandler(createLike));
