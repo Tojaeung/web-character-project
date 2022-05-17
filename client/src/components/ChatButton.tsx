@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '@src/store/app/hook';
-import { selectChats } from '@src/store/slices/chat.slice';
+import { selectChatChats } from '@src/store/slices/chat.slice';
 import { selectUserUser } from '@src/store/slices/user.slice';
 import socket from '@src/utils/socket';
 
@@ -11,7 +11,7 @@ interface IProps {
 
 function ChatButton({ chatUserId }: IProps) {
   const user = useAppSelector(selectUserUser);
-  const chats = useAppSelector(selectChats);
+  const chats = useAppSelector(selectChatChats);
 
   const [isChatting, setIsChatting] = useState(false);
 

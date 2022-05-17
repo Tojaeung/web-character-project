@@ -6,6 +6,8 @@ import { MdPlaylistAdd } from 'react-icons/md';
 import Profile from './Profile';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectUserUser } from '@src/store/slices/user.slice';
+import { selectChatMsgNotis } from '@src/store/slices/chat.slice';
+import { selectNotificationNotifications } from '@src/store/slices/notification.slice';
 import { openModal } from '@src/store/slices/modal.slice';
 import logo from '@src/assets/images/logo.jpg';
 import { greenButtonStyle } from '@src/styles/button.style';
@@ -15,6 +17,8 @@ function Header() {
 
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUserUser);
+  const msgNotis = useAppSelector(selectChatMsgNotis);
+  const notifications = useAppSelector(selectNotificationNotifications);
 
   const openLoginModal = async (e: any) => {
     await dispatch(openModal({ modal: 'login' }));
@@ -38,7 +42,12 @@ function Header() {
           <NavLink to={'/reque'}>리퀘스트</NavLink>
           <NavLink to={'/sale'}>분양</NavLink>
           {user ? (
-            <Profile />
+            <ProfileBox>
+              {(msgNotis.length || notifications.some((notification) => !notification.is_confirmed)) && (
+                <NotificationDot />
+              )}
+              <Profile />
+            </ProfileBox>
           ) : (
             <AuthBox>
               <LoginButton onClick={openLoginModal}>
@@ -94,7 +103,12 @@ function Header() {
           }}
         />
         {user ? (
-          <Profile />
+          <ProfileBox>
+            {(msgNotis.length || notifications.some((notification) => !notification.is_confirmed)) && (
+              <NotificationDot />
+            )}
+            <Profile />
+          </ProfileBox>
         ) : (
           <AuthBox>
             <KeyIcon onClick={openLoginModal} />
@@ -133,6 +147,20 @@ const NavLink = styled(Link)`
   &:hover {
     text-decoration: underline;
   }
+`;
+
+const ProfileBox = styled.div`
+  position: relative;
+`;
+const NotificationDot = styled.div`
+  position: absolute;
+  background-color: ${({ theme }) => theme.palette.red};
+  border-radius: 70%;
+  width: 1rem;
+  height: 1rem;
+  top: 3rem;
+  right: 0.2rem;
+  z-index: 1020;
 `;
 
 const AuthBox = styled.div`

@@ -6,14 +6,14 @@ import socket from '@src/utils/socket';
 import 'moment/locale/ko';
 import relativeTime from '@src/utils/date.util';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectChats, selectChatUser, selectMsgNotis, closeChatModal } from '@src/store/slices/chat.slice';
+import { selectChatChats, selectChatUser, selectChatMsgNotis, closeChatModal } from '@src/store/slices/chat.slice';
 import { ChatUserType } from '@src/types';
 import Avatar from '@src/components/Avatar';
 
 function ChatList() {
   const dispatch = useAppDispatch();
-  const chats = useAppSelector(selectChats);
-  const msgNotis = useAppSelector(selectMsgNotis);
+  const chats = useAppSelector(selectChatChats);
+  const msgNotis = useAppSelector(selectChatMsgNotis);
 
   useEffect(() => {
     socket.emit('updateLastMessage');

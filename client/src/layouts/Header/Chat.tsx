@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BsChatLeftText } from 'react-icons/bs';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectMsgNotis } from '@src/store/slices/chat.slice';
+import { selectChatMsgNotis } from '@src/store/slices/chat.slice';
 import { openChatModal, closeChatModal, selectChatOk } from '@src/store/slices/chat.slice';
 
 interface IProp {
@@ -12,7 +12,7 @@ interface IProp {
 function Chat({ chatRef }: IProp) {
   const dispatch = useAppDispatch();
   const chatOk = useAppSelector(selectChatOk);
-  const msgNotis = useAppSelector(selectMsgNotis);
+  const msgNotis = useAppSelector(selectChatMsgNotis);
   const [totalMsgNotiNum, setTotalMsgNotiNum] = useState<number>(0);
 
   useEffect(() => {

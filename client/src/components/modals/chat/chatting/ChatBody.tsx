@@ -4,10 +4,10 @@ import styled, { css } from 'styled-components';
 import 'moment/locale/ko';
 import relativeTime from '@src/utils/date.util';
 import { useAppSelector } from '@src/store/app/hook';
-import { selectChatIsChatUser, selectMessages } from '@src/store/slices/chat.slice';
+import { selectChatIsChatUser, selectChatMessages } from '@src/store/slices/chat.slice';
 
 function ChatBody() {
-  const messages = useAppSelector(selectMessages);
+  const messages = useAppSelector(selectChatMessages);
   const isChatUser = useAppSelector(selectChatIsChatUser);
 
   // 새로운 메세지 추가, 대화상대 바뀔때마다 스크롤 하단으로 내리기

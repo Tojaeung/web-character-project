@@ -68,8 +68,8 @@ export const {
 
 export const selectChatOk = (state: RootState) => state.chat.ok;
 export const selectChatIsChatUser = (state: RootState) => state.chat.isChatUser;
-export const selectChats = (state: RootState) => state.chat.chats;
-export const selectMessages = (state: RootState) => state.chat.messages;
-export const selectMsgNotis = (state: RootState) => state.chat.msgNotis;
+export const selectChatChats = (state: RootState) => state.chat.chats;
+export const selectChatMessages = (state: RootState) => state.chat.messages;
+export const selectChatMsgNotis = (state: RootState) => state.chat.msgNotis;
 
 export default chatSlice.reducer;

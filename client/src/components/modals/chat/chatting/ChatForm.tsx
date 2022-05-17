@@ -6,7 +6,7 @@ import moment from 'moment';
 import socket from '@src/utils/socket';
 import instance from '@src/utils/axios.util';
 import { selectUserUser } from '@src/store/slices/user.slice';
-import { selectChatIsChatUser, selectMessages } from '@src/store/slices/chat.slice';
+import { selectChatIsChatUser, selectChatMessages } from '@src/store/slices/chat.slice';
 import { useAppSelector } from '@src/store/app/hook';
 import { greenInputStyle } from '@src/styles/input.style';
 import { greenButtonStyle } from '@src/styles/button.style';
@@ -14,7 +14,7 @@ import { greenButtonStyle } from '@src/styles/button.style';
 function ChatForm() {
   const user = useAppSelector(selectUserUser);
   const isChatUser = useAppSelector(selectChatIsChatUser);
-  const messages = useAppSelector(selectMessages);
+  const messages = useAppSelector(selectChatMessages);
 
   // 대화방에서 상대방이 나갔다면 더이상 채팅입력을 하지 못하게 한다.
   const [isEndChat, setIsEndChat] = useState(false);
