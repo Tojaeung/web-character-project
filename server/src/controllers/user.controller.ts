@@ -12,6 +12,10 @@ import s3Delete from '@src/utils/s3.utils';
 import User from '@src/entities/user/user.entity';
 import Drawing from '@src/entities/drawing/drawing.entity';
 import DrawingComment from '@src/entities/drawing/comment.entity';
+import Post from '@src/entities/board/post.entity';
+import Comment from '@src/entities/board/comment.entity';
+import ImageKey from '@src/entities/board/imageKey.entity';
+import Penalty from '@src/entities/penalty/penalty.entity';
 import { UserRepository } from '@src/repositorys/user.repository';
 import { sendAuthEmail, sendEmailForResetPw, sendEmailForUpdateEmail } from '@src/helpers/nodemailer.helper';
 
@@ -27,10 +31,6 @@ import {
   UpdatePwDTO,
   VerifyEmailDTO,
 } from '@src/schemas/user.schema';
-import Post from '@src/entities/board/post.entity';
-import Comment from '@src/entities/board/comment.entity';
-import ImageKey from '@src/entities/board/imageKey.entity';
-import { deleteImageKey } from '@src/utils/imagekey.utils';
 
 export const signUp = async (req: Request<{}, {}, SignUpDTO>, res: Response): Promise<any> => {
   const { email, nickname, pw } = req.body;
@@ -196,17 +196,8 @@ export const updateNickname = async (req: Request<{}, {}, UpdateNicknameDTO>, re
   // 닉네임을 변경해줍니다.
   await getRepository(User).update(id, { nickname: updatedNickname });
 
-  req.session.user = {
-    id: user.id,
-    chatId: user.chatId,
-    nickname: user.nickname,
-    role: user.role,
-    exp: user.exp,
-  };
-  req.session.save(() => {
-    logger.info(`${id}님의 닉네임 변경이 완료되었습니다.`);
-    return res.status(200).json({ ok: true, message: '닉네임 변경 완료되었습니다.', updatedNickname });
-  });
+  logger.info(`${id}님의 닉네임 변경이 완료되었습니다.`);
+  return res.status(200).json({ ok: true, message: '닉네임 변경 완료되었습니다.', updatedNickname });
 };
 
 export const updatePw = async (req: Request<{}, {}, UpdatePwDTO>, res: Response): Promise<any> => {
@@ -475,25 +466,28 @@ export const givePenalty = async (
   const userId = Number(req.params.userId);
   const { penaltyPeriod } = req.body;
 
-  // exp에 null 값을 주어서 패널티를 받고 있는 유저라는것을 나타낸다.
-  const result = await getRepository(User).update(userId, { exp: null });
-  if (!result.affected) {
-    logger.error('관리자 권한으로 불량유저를 제제하지 못했습니다.');
-    throw ApiError.InternalServerError('관리자 권한으로 불량유저를 제제하지 못했습니다.');
+  const user = await getRepository(User).findOne({ id: userId });
+  if (user?.isPenalty) {
+    logger.warn(`불량유저에게 다시 제재조치를 하려고 시도합니다.`);
+    throw ApiError.BadRequest('아직 제재기간이 남아있습니다.');
   }
 
-  // 제재조치기간 후에 다시 exp가 0으로 돌아오면서 서비스를 이용할 수 있게된다.
-  const expiredData = moment().add(penaltyPeriod, 'minutes').format();
-  schedule.scheduleJob(expiredData, async () => {
-    const result = await getRepository(User).update(userId, { exp: 0 });
-    if (!result.affected) {
-      logger.error(`id:${userId}) 불량유저를 정상유저로 돌려놓지 못했습니다.`);
-      throw ApiError.InternalServerError('불량유저를 정상유저로 돌려놓지 못했습니다.');
-    }
-  });
+  // 제재조치기간 후에 다시 user테이블의 isPenalty칼럼이 false가 되면서 제재가 풀리게 된다.
+  const expiredDate = moment().add(penaltyPeriod, 'minutes').toDate();
 
-  logger.info(`id:${userId}) 관리자 권한으로 유저에게 패널티를 주었습니다.`);
-  return res.status(200).json({ ok: true, message: '관리자 권한으로 불량유저가 되었습니다.' });
+  // Penalty테이블에 제재유저의 정보를 저장한다.
+  const newPenalty = new Penalty();
+  newPenalty.userId = userId;
+  newPenalty.expired_at = expiredDate;
+  await getRepository(Penalty).save(newPenalty);
+
+  // user테이블의 isPenalty칼럼을 true로 변경한다.
+  await getRepository(User).update(userId, { isPenalty: true });
+  req.session.user!.isPenalty = true;
+  req.session.save(() => {
+    logger.info(`id:${userId}님에게 관리자 권한으로 유저에게 패널티를 주었습니다.`);
+    return res.status(200).json({ ok: true, message: '관리자 권한으로 불량유저가 되었습니다.' });
+  });
 };
 
 export const deleteAccount = async (req: Request, res: Response): Promise<any> => {

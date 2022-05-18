@@ -4,7 +4,7 @@ import parseChats from './chat/parseChats';
 import parseMessages from './chat/parseMessages';
 import parseMsgNotis from './chat/parseMsgNotis';
 import { getRepository } from 'typeorm';
-import Notification from '@src/entities/notification.entity';
+import Notification from '@src/entities/notification/notification.entity';
 
 const initUser = async (socket: SessionSocket) => {
   const user = socket.request.session.user;

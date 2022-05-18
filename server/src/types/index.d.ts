@@ -8,9 +8,8 @@ declare module 'express-session' {
       [key: string]: any;
       id: number;
       chatId: string;
-      nickname: string;
       role: string;
-      exp: number | null;
+      isPenalty: boolean;
     };
   }
 }

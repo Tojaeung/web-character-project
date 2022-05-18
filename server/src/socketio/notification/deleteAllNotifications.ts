@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 import { SessionSocket } from '@src/types/index';
-import Notification from '@src/entities/notification.entity';
+import Notification from '@src/entities/notification/notification.entity';
 
 const deleteNotifications = async (socket: SessionSocket) => {
   const user = socket.request.session.user;

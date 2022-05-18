@@ -93,8 +93,11 @@ class User extends Relation {
   })
   isVerified: boolean;
 
-  @Column({ type: 'integer', default: 0, nullable: true })
-  exp: number | null;
+  @Column({ type: 'integer', default: 0 })
+  exp: number;
+
+  @Column({ default: false, name: 'is_penalty' })
+  isPenalty: boolean;
 
   @CreateDateColumn()
   created_at: Date;

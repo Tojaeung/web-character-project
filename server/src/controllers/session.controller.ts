@@ -41,9 +41,8 @@ export const signIn = async (req: Request<{}, {}, SignInDTO['body']>, res: Respo
   req.session.user = {
     id: user.id,
     chatId: user.chatId,
-    nickname: user.nickname,
     role: user.role,
-    exp: user.exp,
+    isPenalty: user.isPenalty,
   };
   req.session.save(() => {
     logger.info('로그인 되었습니다.');
@@ -72,9 +71,8 @@ export const refreshLogin = async (req: Request, res: Response): Promise<any> =>
   req.session.user = {
     id: user.id,
     chatId: user.chatId,
-    nickname: user.nickname,
     role: user.role,
-    exp: user.exp,
+    isPenalty: user.isPenalty,
   };
   req.session.save(() => {
     logger.info('로그인 정보를 새로 불러왔습니다.');

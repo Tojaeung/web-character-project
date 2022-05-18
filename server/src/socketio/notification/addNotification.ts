@@ -15,17 +15,21 @@ interface AddNotificationType {
 }
 
 const addNotification = async (socket: SessionSocket, addNotificationObj: AddNotificationType) => {
-  const nickname = socket.request.session.user.nickname;
+  const id = socket.request.session.user.id;
+
+  const user = await getRepository(User).findOne({ id });
+
   const notificationRepo = getCustomRepository(NotificationRepository);
 
   const { type, userId, board, postId } = addNotificationObj;
 
-  const user = await getRepository(User).findOne({ id: userId });
-  if (!user) {
+  const isExistingUser = await getRepository(User).findOne({ id: userId });
+  if (!isExistingUser) {
     logger.warn('존재하지 않는 유저에게 알림을 보내려고 시도합니다.');
     const result = { ok: false, message: '존재하지 않는 유저입니다.' };
     return socket.emit('addNotification', result);
   }
+  const chatId = isExistingUser.chatId;
 
   const isExistingBoard = await getRepository(Board).findOne({ enName: board });
   if (!isExistingBoard) {
@@ -41,12 +45,12 @@ const addNotification = async (socket: SessionSocket, addNotificationObj: AddNot
     return socket.emit('addNotification', result);
   }
 
-  const content = `${nickname}님이 ${post?.title}에 댓글을 남겼습니다.`;
+  const content = `${user?.nickname}님이 ${post?.title}에 댓글을 남겼습니다.`;
   const newNotification = await notificationRepo.create(type, content, userId, board, postId);
 
   const result = { ok: true, message: '게시글 작성자에게 댓글 알림을 보냈습니다.', newNotification };
 
-  socket.to(user?.chatId as string).emit('addNotification', result);
+  socket.to(chatId).emit('addNotification', result);
 };
 
 export default addNotification;
