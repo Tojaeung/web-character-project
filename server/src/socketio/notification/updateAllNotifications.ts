@@ -1,4 +1,4 @@
-import { getCustomRepository, getRepository } from 'typeorm';
+import { getCustomRepository } from 'typeorm';
 import { SessionSocket } from '@src/types/index';
 import { NotificationRepository } from '@src/repositorys/notification.repository';
 

@@ -28,10 +28,12 @@ export const notificationSlice = createSlice({
     },
     addNotification: (
       state,
-      action: PayloadAction<{ ok: boolean; message: string; newNotification: NotificationType }>
+      action: PayloadAction<{ ok: boolean; message: string; newNotification?: NotificationType }>
     ) => {
       state.ok = action.payload.ok;
       state.message = action.payload.message;
+
+      if (!action.payload.newNotification) return;
       if (state.notifications?.length === 20) {
         state.notifications.splice(19);
         state.notifications.unshift(action.payload.newNotification);
@@ -50,12 +52,14 @@ export const notificationSlice = createSlice({
 
     updateNotification: (
       state,
-      action: PayloadAction<{ ok: boolean; message: string; updatedNotification: NotificationType }>
+      action: PayloadAction<{ ok: boolean; message: string; updatedNotification?: NotificationType }>
     ) => {
       state.ok = action.payload.ok;
       state.message = action.payload.message;
+
+      if (!action.payload.updatedNotification) return;
       const index = state.notifications?.findIndex(
-        (notification) => notification.id === action.payload.updatedNotification.id
+        (notification) => notification.id === action.payload.updatedNotification?.id
       );
       state.notifications?.splice(index as number, 1, action.payload.updatedNotification);
     },

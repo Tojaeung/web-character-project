@@ -138,10 +138,10 @@ export type MsgNotiType = {
 
 export type NotificationType = {
   id: number;
-  type: 'comment' | 'like' | 'penalty';
+  type: 'comment' | 'like' | 'dislike';
   content: string;
   userId: number;
-  boardName: string;
+  board: string;
   postId?: number;
   is_confirmed: boolean;
   created_at: Date;

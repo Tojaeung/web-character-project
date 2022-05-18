@@ -69,7 +69,9 @@ const useSocketSetup = () => {
 
     socket.on(
       'addNotification',
-      async (result: { ok: boolean; message: string; newNotification: NotificationType }) => {
+      async (result: { ok: boolean; message: string; newNotification?: NotificationType }) => {
+        const { ok, message } = result;
+        if (!ok) return alert(message);
         await dispatch(addNotification(result));
       }
     );
@@ -83,21 +85,21 @@ const useSocketSetup = () => {
 
     socket.on(
       'updateNotification',
-      async (result: { ok: boolean; message: string; updatedNotification: NotificationType }) => {
+      async (result: { ok: boolean; message: string; updatedNotification?: NotificationType }) => {
+        const { ok, message } = result;
+        if (!ok) return alert(message);
         await dispatch(updateNotification(result));
       }
     );
 
     socket.on('updateAllNotifications', async (result: { ok: boolean; message: string }) => {
-      const { ok, message } = result;
-      if (!ok) return alert(message);
+      const { message } = result;
       await dispatch(updateAllNotifications(result));
       alert(message);
     });
 
     socket.on('deleteAllNotifications', async (result: { ok: boolean; message: string }) => {
-      const { ok, message } = result;
-      if (!ok) return alert(message);
+      const { message } = result;
       await dispatch(deleteAllNotifications(result));
       alert(message);
     });

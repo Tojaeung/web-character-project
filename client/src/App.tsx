@@ -20,7 +20,7 @@ import Board from '@src/pages/board/[board]';
 import Post from '@src/pages/post/[id]';
 import NotFound from '@src/components/NotFound';
 import Account from './pages/settings/Account';
-import Alert from './pages/settings/Alert';
+import Notification from './pages/settings/Notification';
 import Desc from './pages/settings/Desc';
 import EditPostForm from '@src/pages/edit/PostForm';
 import MyPosts from '@src/pages/settings/MyPosts';
@@ -49,7 +49,7 @@ function App() {
             <Route path="/" element={<PrivateRouter />}>
               <Route path="settings">
                 <Route path="account" element={<Account />} />
-                <Route path="alert" element={<Alert />} />
+                <Route path="notification" element={<Notification />} />
                 <Route path="desc" element={<Desc />} />
                 <Route path="my-posts" element={<MyPosts />} />
                 <Route path="my-comments" element={<MyComments />} />

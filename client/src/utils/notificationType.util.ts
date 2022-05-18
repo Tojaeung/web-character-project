@@ -1,4 +1,4 @@
-const notificationType = (type: 'comment' | 'like' | 'penalty') => {
+const notificationType = (type: 'comment' | 'like' | 'dislike') => {
   switch (type) {
     case 'comment':
       return '댓글';
@@ -6,8 +6,8 @@ const notificationType = (type: 'comment' | 'like' | 'penalty') => {
     case 'like':
       return '좋아요';
 
-    case 'penalty':
-      return '제재';
+    case 'dislike':
+      return '싫어요';
   }
 };
 

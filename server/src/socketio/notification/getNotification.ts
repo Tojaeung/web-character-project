@@ -2,7 +2,7 @@ import { getRepository } from 'typeorm';
 import { SessionSocket } from '@src/types/index';
 import Notification from '@src/entities/notification.entity';
 
-const addLikeNoti = async (socket: SessionSocket) => {
+const getNotification = async (socket: SessionSocket) => {
   const user = socket.request.session.user;
 
   const notifications = await getRepository(Notification).find({
@@ -23,4 +23,4 @@ const addLikeNoti = async (socket: SessionSocket) => {
   socket.emit('getNotification', result);
 };
 
-export default addLikeNoti;
+export default getNotification;

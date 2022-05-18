@@ -1,19 +1,20 @@
 import { AbstractRepository, EntityRepository } from 'typeorm';
 import Notification from '@src/entities/notification.entity';
+import NotificationType from '@src/types/notification.type';
 
 @EntityRepository(Notification)
 export class NotificationRepository extends AbstractRepository<Notification> {
   create = async (
-    type: 'comment' | 'like' | 'penalty',
+    type: NotificationType,
     content: string,
     userId: number,
-    boardName?: string,
-    postId?: number
+    board: string,
+    postId: number
   ): Promise<Notification> => {
     const result = await this.createQueryBuilder('notification')
       .insert()
       .into(Notification)
-      .values({ type, content, userId, boardName, postId })
+      .values({ type, content, userId, board, postId })
       .returning('*')
       .execute();
     return result.raw[0];

@@ -6,7 +6,7 @@ function TabMenu() {
     <>
       <Container>
         <SettingsLink to="/settings/account">계정설정</SettingsLink>
-        <SettingsLink to="/settings/alert">알림</SettingsLink>
+        <SettingsLink to="/settings/notification">알림</SettingsLink>
         <SettingsLink to="/settings/desc">자기소개</SettingsLink>
         <SettingsLink to="/settings/my-posts">내가 쓴 글</SettingsLink>
         <SettingsLink to="/settings/my-comments">내가 쓴 댓글</SettingsLink>
@@ -16,7 +16,7 @@ function TabMenu() {
         <SettingsLink to="/settings/account">
           <Menu>계정설정</Menu>
         </SettingsLink>
-        <SettingsLink to="/settings/alert">
+        <SettingsLink to="/settings/notification">
           <Menu>알림</Menu>
         </SettingsLink>
         <SettingsLink to="/settings/desc">

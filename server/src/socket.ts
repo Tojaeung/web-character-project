@@ -9,9 +9,7 @@ import deleteChat from '@src/socketio/chat/deleteChat';
 import deleteMessage from '@src/socketio/chat/deleteMessage';
 import updateLastMessage from '@src/socketio/chat/updateLastMessage';
 
-import addCommentNoti from '@src/socketio/notification/addCommentNoti';
-import addLikeNoti from '@src/socketio/notification/addLikeNoti';
-import addPenaltyNoti from '@src/socketio/notification/addPenaltyNoti';
+import addNotification from '@src/socketio/notification/addNotification';
 import getNotification from '@src/socketio/notification/getNotification';
 import updateNotification from '@src/socketio/notification/updateNotification';
 import updateAllNotifications from '@src/socketio/notification/updateAllNotifications';
@@ -23,10 +21,6 @@ const socket = ({ io }: { io: Server }) => {
     console.log(`${socket.request.session.user.id}님 입장`);
 
     initUser(socket);
-
-    // socket.on('initUser', () => {
-    //   initUser(socket);
-    // });
 
     // 채팅
     socket.on('addChat', (chatId) => {
@@ -58,16 +52,8 @@ const socket = ({ io }: { io: Server }) => {
     });
 
     // 알림
-    socket.on('addCommentNoti', (commentNotiObj) => {
-      addCommentNoti(socket, commentNotiObj);
-    });
-
-    socket.on('addLikeNoti', (likeNotiObj) => {
-      addLikeNoti(socket, likeNotiObj);
-    });
-
-    socket.on('addPenaltyNoti', (penaltyNotiObj) => {
-      addPenaltyNoti(socket, penaltyNotiObj);
+    socket.on('addNotification', (addNotificationObj) => {
+      addNotification(socket, addNotificationObj);
     });
 
     socket.on('getNotification', () => {

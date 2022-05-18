@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { DrawingLikeType, DrawingDisLikeType, PostDisLikeType, PostLikeType } from '@src/types';
 import { createDrawingDisLike } from '@src/store/requests/drawing.request';
 import { createPostDisLike } from '@src/store/requests/post.request';
+import socket from '@src/utils/socket';
 
 interface IProps {
   type: 'drawing' | 'board';
@@ -18,7 +19,7 @@ interface IProps {
 
 function DisLikeButton({ type, drawingId, userId, likes, dislikes }: IProps) {
   const dispatch = useAppDispatch();
-  const { postId } = useParams();
+  const { board, postId } = useParams();
   const user = useAppSelector(selectUserUser);
 
   const handleAddDisLike = async (e: React.MouseEvent<HTMLSpanElement>) => {
@@ -35,7 +36,14 @@ function DisLikeButton({ type, drawingId, userId, likes, dislikes }: IProps) {
     if (type === 'board') {
       if (existingLike || existingDisLike) return alert('이미 선택하셨습니다.');
       try {
-        await dispatch(createPostDisLike({ postId: Number(postId), userId })).unwrap();
+        const res = await dispatch(createPostDisLike({ postId: Number(postId), userId })).unwrap();
+        alert(res.message);
+        // 게시물 작성자에게 싫어요가 추가되었음을 알리는 알림을 보낸다.
+        // 유저 자신이 자신이 생성한 게시물에 싫어요를 추가할때는 제외한다.
+        if (user?.id !== userId) {
+          const addNotificationObj = { type: 'dislike', userId, board, postId: Number(postId) };
+          await socket.emit('addNotification', addNotificationObj);
+        }
       } catch (err: any) {
         alert(err.message);
       }

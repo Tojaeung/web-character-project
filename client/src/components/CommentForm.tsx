@@ -44,8 +44,8 @@ function CommentForm({ type, drawingId, userId }: IProp) {
         // 게시물 작성자에게 댓글이 생성되었음을 알리는 알림을 보낸다.
         // 유저 자신이 자신이 생성한 게시물에 댓글를 남길때는 제외한다.
         if (user?.id !== userId) {
-          const commentNotiObj = { type: 'comment', userId, boardName: board, postId: Number(postId) };
-          await socket.emit('addCommentNoti', commentNotiObj);
+          const addNotificationObj = { type: 'comment', userId, board, postId: Number(postId) };
+          await socket.emit('addNotification', addNotificationObj);
         }
       } catch (err: any) {
         alert(err.message);

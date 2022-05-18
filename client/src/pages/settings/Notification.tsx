@@ -7,11 +7,11 @@ import { selectNotificationNotifications } from '@src/store/slices/notification.
 import CreatedTime from '@src/components/CreatedTime';
 import TabMenu from './common/TabMenu';
 import socket from '@src/utils/socket';
-import notificationType from '@src/utils/notificationType.util';
 import { NotificationType } from '@src/types';
+import notificationType from '@src/utils/notificationType.util';
 import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
 
-function Alert() {
+function Notification() {
   const navigate = useNavigate();
 
   const notifications = useAppSelector(selectNotificationNotifications);
@@ -32,20 +32,14 @@ function Alert() {
     await socket.emit('deleteAllNotifications');
   };
 
-  const handlePenaltyNoti = (notification: NotificationType) => async (e: React.MouseEvent<HTMLParagraphElement>) => {
-    if (!notification.is_confirmed) {
-      const notificationId = notification.id;
-      await socket.emit('updateNotification', notificationId);
-    }
-  };
-
-  const handleNoPenaltyNoti = (notification: NotificationType) => async (e: React.MouseEvent<HTMLParagraphElement>) => {
-    if (!notification.is_confirmed) {
-      const notificationId = notification.id;
-      await socket.emit('updateNotification', notificationId);
-    }
-    navigate(`/${notification.boardName}/${notification.postId}`);
-  };
+  const handleUpdateNotification =
+    (notification: NotificationType) => async (e: React.MouseEvent<HTMLParagraphElement>) => {
+      if (!notification.is_confirmed) {
+        const notificationId = notification.id;
+        await socket.emit('updateNotification', notificationId);
+        navigate(`/${notification.board}/${notification.postId}`);
+      }
+    };
 
   return (
     <Container>
@@ -57,7 +51,6 @@ function Alert() {
       <table>
         <thead>
           <tr>
-            <th>유형</th>
             <th>내용</th>
             <th>시간</th>
           </tr>
@@ -70,13 +63,10 @@ function Alert() {
           ) : (
             notifications.map((notification) => (
               <tr key={v4()} className={notification.is_confirmed ? 'visited' : 'unVisited'}>
-                <td>{notificationType(notification.type)}</td>
                 <td className="content">
-                  {notification.type === 'penalty' ? (
-                    <p onClick={handlePenaltyNoti(notification)}>{notification.content}</p>
-                  ) : (
-                    <p onClick={handleNoPenaltyNoti(notification)}>{notification.content}</p>
-                  )}
+                  <p onClick={handleUpdateNotification(notification)}>
+                    [ {[notificationType(notification.type)]} ] {notification.content}
+                  </p>
                 </td>
                 <td>
                   <CreatedTime createdTime={notification.created_at} fontSize={1.2} />
@@ -129,7 +119,7 @@ const Container = styled.div`
   }
   .content {
     text-align: left;
-    width: 80%;
+    width: 90%;
     word-break: break-all;
   }
 
@@ -164,4 +154,4 @@ const DeleteAllButton = styled.button`
   }
 `;
 
-export default Alert;
+export default Notification;
