@@ -6,24 +6,24 @@ import moment from 'moment';
 import socket from '@src/utils/socket';
 import instance from '@src/utils/axios.util';
 import { selectUserUser } from '@src/store/slices/user.slice';
-import { selectChatIsChatUser, selectChatMessages } from '@src/store/slices/chat.slice';
+import { selectChatSelectedChat, selectChatMessages } from '@src/store/slices/chat.slice';
 import { useAppSelector } from '@src/store/app/hook';
 import { greenInputStyle } from '@src/styles/input.style';
 import { greenButtonStyle } from '@src/styles/button.style';
 
 function ChatForm() {
   const user = useAppSelector(selectUserUser);
-  const isChatUser = useAppSelector(selectChatIsChatUser);
+  const selectedChat = useAppSelector(selectChatSelectedChat);
   const messages = useAppSelector(selectChatMessages);
 
   // 대화방에서 상대방이 나갔다면 더이상 채팅입력을 하지 못하게 한다.
   const [isEndChat, setIsEndChat] = useState(false);
   useEffect(() => {
     const isEndGuideMessage = messages
-      .filter((message) => message.from === isChatUser?.chatId || message.to === isChatUser?.chatId)
+      .filter((message) => message.from === selectedChat?.chatId || message.to === selectedChat?.chatId)
       .some((message) => message.type === 'endChat');
     isEndGuideMessage && setIsEndChat(true);
-  }, [messages, isChatUser?.chatId]);
+  }, [messages, selectedChat?.chatId]);
 
   const targetRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState<string | undefined>(undefined);
@@ -32,7 +32,7 @@ function ChatForm() {
   const onSendTextMsg = async (e: any) => {
     const textMsgObj = {
       type: 'text',
-      to: isChatUser?.chatId,
+      to: selectedChat?.chatId,
       from: user?.chatId,
       content: message,
       date: moment().format(),
@@ -45,14 +45,14 @@ function ChatForm() {
     }
 
     socket.emit('addMessage', textMsgObj);
-    socket.emit('addMsgNoti', { from: user?.chatId, to: isChatUser?.chatId });
-    socket.emit('deleteMsgNoti', isChatUser?.chatId);
+    socket.emit('addMsgNoti', { from: user?.chatId, to: selectedChat?.chatId });
+    socket.emit('deleteMsgNoti', selectedChat?.chatId);
     setMessage('');
   };
 
   // 이미지 메세지
   const onSendImgMsg = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isChatUser) return alert('대화상대를 찾을 수 없습니다.');
+    if (!selectedChat) return alert('대화상대를 찾을 수 없습니다.');
     if (!e.target?.files) return;
 
     const file = e.target.files[0];
@@ -67,14 +67,14 @@ function ChatForm() {
     try {
       const formData = new FormData();
       formData.append('imgMessage', e.target?.files[0]);
-      formData.append('chatUserId', isChatUser?.chatId);
+      formData.append('chatUserId', selectedChat?.chatId);
       formData.append('chatId', user?.chatId as string);
       formData.append('messageDate', moment().format());
       const response = await instance.post('/chat/imgMessage', formData);
       const { imgMsgObj } = response.data;
       socket.emit('addMessage', imgMsgObj);
-      socket.emit('addMsgNoti', { from: user?.chatId, to: isChatUser?.chatId });
-      socket.emit('deleteMsgNoti', isChatUser?.chatId);
+      socket.emit('addMsgNoti', { from: user?.chatId, to: selectedChat?.chatId });
+      socket.emit('deleteMsgNoti', selectedChat?.chatId);
     } catch (err: any) {
       alert(err.message);
     }

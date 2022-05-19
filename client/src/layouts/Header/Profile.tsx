@@ -57,7 +57,7 @@ function Profile() {
             메세지
           </List>
 
-          <List onClick={(e) => navigate('/settings/alert')}>
+          <List onClick={(e) => navigate('/settings/notification')}>
             {notifications?.some((notification) => notification.is_confirmed === false) && (
               <NotiBox>
                 <NotiNum>{totalNotificationNum}</NotiNum>

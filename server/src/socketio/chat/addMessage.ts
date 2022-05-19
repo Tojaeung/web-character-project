@@ -8,14 +8,14 @@ interface MessageType {
   to: string;
   from: string;
   content: string;
-  imgKey: string | undefined;
+  imgKey?: string;
   date: string;
 }
 
 const addMessage = async (socket: SessionSocket, message: MessageType) => {
-  const user = socket.request.session.user;
+  const id = socket.request.session.user.id;
 
-  const userData = await getRepository(User).findOne(user.id);
+  const user = await getRepository(User).findOne({ id });
 
   // 메세지 객체를 스트링으로 바꿔준후 나와 대화상대 레디스에 저장한다.
   const messageStr = [message.type, message.to, message.from, message.content, message.imgKey, message.date].join(',');
@@ -24,15 +24,16 @@ const addMessage = async (socket: SessionSocket, message: MessageType) => {
 
   // 채팅상대는 메세지를 받을때 나를 친구목록에 추가한다.
   const chats = await cluster.lrange(`chats:${message.to}`, 0, -1);
+
   // 대화상대의 채팅상대에 내가 없다면 추가해준다.
   const existingChat = chats.some((chat) => chat === message.from);
   if (!existingChat) {
     await cluster.lpush(`chats:${message.to}`, message.from);
 
     const newChat = {
-      chatId: user.chatId,
-      nickname: userData?.nickname,
-      avatar: userData?.avatar,
+      chatId: user?.chatId,
+      nickname: user?.nickname,
+      avatar: user?.avatar,
     };
 
     const result = { ok: true, newChat };

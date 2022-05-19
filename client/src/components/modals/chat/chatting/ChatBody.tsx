@@ -4,33 +4,33 @@ import styled, { css } from 'styled-components';
 import 'moment/locale/ko';
 import relativeTime from '@src/utils/date.util';
 import { useAppSelector } from '@src/store/app/hook';
-import { selectChatIsChatUser, selectChatMessages } from '@src/store/slices/chat.slice';
+import { selectChatSelectedChat, selectChatMessages } from '@src/store/slices/chat.slice';
 
 function ChatBody() {
   const messages = useAppSelector(selectChatMessages);
-  const isChatUser = useAppSelector(selectChatIsChatUser);
+  const selectedChat = useAppSelector(selectChatSelectedChat);
 
   // 새로운 메세지 추가, 대화상대 바뀔때마다 스크롤 하단으로 내리기
   const messageBoxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     messageBoxRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isChatUser]);
+  }, [messages, selectedChat]);
 
   return (
     <Container>
-      {isChatUser &&
+      {selectedChat &&
         messages.length > 0 &&
         messages
-          .filter((message) => message.to === isChatUser.chatId || message.from === isChatUser.chatId)
+          .filter((message) => message.to === selectedChat.chatId || message.from === selectedChat.chatId)
           .map((message) => {
             return (
               <MessageBox
-                who={message.to === isChatUser.chatId ? 'me' : 'you'}
+                who={message.to === selectedChat.chatId ? 'me' : 'you'}
                 isEndMessage={message.type === 'endChat' ? true : false}
                 key={v4()}
               >
                 <Message
-                  who={message.to === isChatUser.chatId ? 'me' : 'you'}
+                  who={message.to === selectedChat.chatId ? 'me' : 'you'}
                   isEndMessage={message.type === 'endChat' ? true : false}
                 >
                   {message.type === 'text' && <TextMessage>{message.content}</TextMessage>}

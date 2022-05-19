@@ -113,13 +113,10 @@ export type PostDisLikeType = {
   post?: PostType;
 };
 
-export type ChatUserType = {
+export type ChatType = {
   chatId: string;
   nickname: string;
   avatar: string;
-  lastType: string | null;
-  lastMessage: string | null;
-  lastDate: string | null;
 };
 
 export type MessageType = {

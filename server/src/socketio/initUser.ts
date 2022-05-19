@@ -10,9 +10,9 @@ const initUser = async (socket: SessionSocket) => {
   const user = socket.request.session.user;
 
   // 자신의 대화상대를 초기화 시킨다.
-  const chats = await cluster.lrange(`chats:${user.chatId}`, 0, -1);
-  const parsedChats = await parseChats(user.chatId, chats);
-  socket.emit('initChats', parsedChats);
+  const chatIds = await cluster.lrange(`chats:${user.chatId}`, 0, -1);
+  const chats = await parseChats(chatIds);
+  socket.emit('initChats', chats);
 
   // 자신의 메세지를 초기화 시킨다.
   const messages = await cluster.lrange(`messages:${user.chatId}`, 0, -1);

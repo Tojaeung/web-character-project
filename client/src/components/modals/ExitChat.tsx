@@ -2,26 +2,26 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { closeModal } from '@src/store/slices/modal.slice';
-import { selectChatUser, selectChatIsChatUser } from '@src/store/slices/chat.slice';
+import { selectChat, selectChatSelectedChat } from '@src/store/slices/chat.slice';
 import socket from '@src/utils/socket';
 import { greenButtonStyle } from '@src/styles/button.style';
 
 function ExitChat() {
   const dispatch = useAppDispatch();
-  const isChatUser = useAppSelector(selectChatIsChatUser);
+  const selectedChat = useAppSelector(selectChatSelectedChat);
 
   const onExitChat = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    socket.emit('deleteChat', isChatUser?.chatId);
-    socket.emit('deleteMessage', isChatUser?.chatId);
-    socket.emit('deleteMsgNoti', isChatUser?.chatId);
-    dispatch(selectChatUser({ selectedChatUser: null }));
+    socket.emit('deleteChat', selectedChat?.chatId);
+    socket.emit('deleteMessage', selectedChat?.chatId);
+    socket.emit('deleteMsgNoti', selectedChat?.chatId);
+    dispatch(selectChat({ chat: null }));
     await dispatch(closeModal());
   };
 
   return (
     <Container>
       <Content>
-        <i>{isChatUser?.nickname}</i>님과
+        <i>{selectedChat?.nickname}</i>님과
         <br /> 채팅을 종료하시겠습니까?
       </Content>
 

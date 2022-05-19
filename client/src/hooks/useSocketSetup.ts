@@ -21,6 +21,7 @@ import {
   deleteAllNotifications,
 } from '@src/store/slices/notification.slice';
 import { NotificationType } from '@src/types';
+import { ChatType } from '@src/types';
 
 const useSocketSetup = () => {
   const dispatch = useAppDispatch();
@@ -32,8 +33,8 @@ const useSocketSetup = () => {
     socket.connect();
 
     // 채팅
-    socket.on('initChats', async (parsedChats) => {
-      await dispatch(initChats({ newChats: parsedChats }));
+    socket.on('initChats', async (chats: ChatType[]) => {
+      await dispatch(initChats({ chats }));
     });
 
     socket.on('initMessages', async (parsedMessages) => {

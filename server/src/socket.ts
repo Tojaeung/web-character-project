@@ -7,7 +7,6 @@ import addMsgNoti from '@src/socketio/chat/addMsgNoti';
 import deleteMsgNoti from '@src/socketio/chat/deleteMsgNoti';
 import deleteChat from '@src/socketio/chat/deleteChat';
 import deleteMessage from '@src/socketio/chat/deleteMessage';
-import updateLastMessage from '@src/socketio/chat/updateLastMessage';
 
 import addNotification from '@src/socketio/notification/addNotification';
 import getNotification from '@src/socketio/notification/getNotification';
@@ -45,10 +44,6 @@ const socket = ({ io }: { io: Server }) => {
 
     socket.on('deleteMessage', (chatId) => {
       deleteMessage(socket, chatId);
-    });
-
-    socket.on('updateLastMessage', async () => {
-      updateLastMessage(socket);
     });
 
     // 알림

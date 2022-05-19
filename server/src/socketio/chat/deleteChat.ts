@@ -9,7 +9,7 @@ const deleteChat = async (socket: SessionSocket, chatId: string) => {
   // 클라이언트에 보내기 위해 대화상대 정보들을 객체로 만들어준다.
   await cluster.lrem(`chats:${user.chatId}`, 1, chatId);
   const updatedChats = await cluster.lrange(`chats:${user.chatId}`, 0, -1);
-  const parsedChats = await parseChats(user.chatId, updatedChats);
+  const parsedChats = await parseChats(updatedChats);
 
   socket.emit('initChats', parsedChats);
 };

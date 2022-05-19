@@ -1,26 +1,29 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { v4 } from 'uuid';
 import styled from 'styled-components';
 import { AiOutlineClose } from 'react-icons/ai';
-import socket from '@src/utils/socket';
 import 'moment/locale/ko';
+import Avatar from '@src/components/Avatar';
 import relativeTime from '@src/utils/date.util';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectChatChats, selectChatUser, selectChatMsgNotis, closeChatModal } from '@src/store/slices/chat.slice';
-import { ChatUserType } from '@src/types';
-import Avatar from '@src/components/Avatar';
+import { ChatType } from '@src/types';
+import {
+  selectChatChats,
+  selectChat,
+  selectChatMsgNotis,
+  closeChatModal,
+  selectChatMessages,
+} from '@src/store/slices/chat.slice';
 
 function ChatList() {
   const dispatch = useAppDispatch();
+
   const chats = useAppSelector(selectChatChats);
+  const messages = useAppSelector(selectChatMessages);
   const msgNotis = useAppSelector(selectChatMsgNotis);
 
-  useEffect(() => {
-    socket.emit('updateLastMessage');
-  }, []);
-
-  const handleSelectChatUser = (chat: ChatUserType) => async (e: React.MouseEvent<HTMLLIElement>) => {
-    await dispatch(selectChatUser({ selectedChatUser: chat }));
+  const handleSelectChat = (chat: ChatType) => async (e: React.MouseEvent<HTMLLIElement>) => {
+    await dispatch(selectChat({ chat }));
   };
 
   const closeChat = async (e: React.MouseEvent<SVGElement>) => {
@@ -38,10 +41,11 @@ function ChatList() {
           <GuideText>대화상대가 존재하지 않습니다...</GuideText>
         ) : (
           chats.map((chat) => {
+            const lastMessage = messages.filter((message) => message.from || message.to === chat.chatId).pop();
             const msgNotiNum = msgNotis.filter((msgNoti) => msgNoti.from === chat.chatId).length;
 
             return (
-              <ListBox key={v4()} onClick={handleSelectChatUser(chat)}>
+              <ListBox key={v4()} onClick={handleSelectChat(chat)}>
                 {msgNotiNum === 0 ? null : (
                   <NotiBox>
                     <NotiNum>{msgNotiNum}</NotiNum>
@@ -52,11 +56,12 @@ function ChatList() {
 
                   <FlexBox>
                     <Nickname>{chat.nickname}</Nickname>
-                    <LastMessage>{chat.lastType === 'image' ? '이미지' : chat.lastMessage}</LastMessage>
+                    {lastMessage && (
+                      <LastMessage>{lastMessage?.type === 'image' ? '이미지' : lastMessage?.content}</LastMessage>
+                    )}
                   </FlexBox>
                 </ChatUser>
-
-                <LastDate>{relativeTime(chat.lastDate!)}</LastDate>
+                {lastMessage && <LastDate>{relativeTime(lastMessage?.date!)}</LastDate>}
               </ListBox>
             );
           })

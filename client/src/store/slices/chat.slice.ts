@@ -1,18 +1,18 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
-import { ChatUserType, MessageType, MsgNotiType } from '@src/types';
+import { ChatType, MessageType, MsgNotiType } from '@src/types';
 
-interface ChatType {
+interface StateType {
   ok: boolean;
-  isChatUser: ChatUserType | null;
-  chats: ChatUserType[];
+  selectedChat: ChatType | null; // 대화를 위해 선택된 유저의 정보
+  chats: ChatType[]; // 대화중인 모든 대화상대들의 정보
   messages: MessageType[];
   msgNotis: MsgNotiType[];
 }
 
-const initialState: ChatType = {
+const initialState: StateType = {
   ok: false,
-  isChatUser: null,
+  selectedChat: null,
   chats: [],
   messages: [],
   msgNotis: [],
@@ -28,12 +28,12 @@ export const chatSlice = createSlice({
     closeChatModal: (state) => {
       state.ok = false;
     },
-    selectChatUser: (state, action) => {
-      state.isChatUser = action.payload.selectedChatUser;
+    selectChat: (state, action: PayloadAction<{ chat: ChatType | null }>) => {
+      state.selectedChat = action.payload.chat;
     },
 
-    initChats: (state, action) => {
-      state.chats = action.payload.newChats;
+    initChats: (state, action: PayloadAction<{ chats: ChatType[] }>) => {
+      state.chats = action.payload.chats;
     },
     addChat: (state, action) => {
       state.chats.unshift(action.payload.newChat);
@@ -57,7 +57,7 @@ export const chatSlice = createSlice({
 export const {
   openChatModal,
   closeChatModal,
-  selectChatUser,
+  selectChat,
   initChats,
   addChat,
   initMessages,
@@ -67,7 +67,7 @@ export const {
 } = chatSlice.actions;
 
 export const selectChatOk = (state: RootState) => state.chat.ok;
-export const selectChatIsChatUser = (state: RootState) => state.chat.isChatUser;
+export const selectChatSelectedChat = (state: RootState) => state.chat.selectedChat;
 export const selectChatChats = (state: RootState) => state.chat.chats;
 export const selectChatMessages = (state: RootState) => state.chat.messages;
 export const selectChatMsgNotis = (state: RootState) => state.chat.msgNotis;
