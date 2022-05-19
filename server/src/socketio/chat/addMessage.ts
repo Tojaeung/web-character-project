@@ -4,11 +4,11 @@ import cluster from '@src/helpers/redis.helper';
 import User from '@src/entities/user/user.entity';
 
 interface MessageType {
-  type: string;
+  type: 'text' | 'image' | 'end';
   to: string;
   from: string;
   content: string;
-  imgKey?: string;
+  imageKey?: string;
   date: string;
 }
 
@@ -18,7 +18,9 @@ const addMessage = async (socket: SessionSocket, message: MessageType) => {
   const user = await getRepository(User).findOne({ id });
 
   // 메세지 객체를 스트링으로 바꿔준후 나와 대화상대 레디스에 저장한다.
-  const messageStr = [message.type, message.to, message.from, message.content, message.imgKey, message.date].join(',');
+  const messageStr = [message.type, message.to, message.from, message.content, message.imageKey, message.date].join(
+    ','
+  );
   await cluster.rpush(`messages:${message.from}`, messageStr);
   await cluster.rpush(`messages:${message.to}`, messageStr);
 
@@ -45,7 +47,7 @@ const addMessage = async (socket: SessionSocket, message: MessageType) => {
     to: message.to,
     from: message.from,
     content: message.content,
-    imgKey: message.imgKey,
+    imageKey: message.imageKey,
     date: message.date,
   };
 

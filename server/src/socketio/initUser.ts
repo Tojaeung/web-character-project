@@ -2,7 +2,7 @@ import { SessionSocket } from '@src/types/index';
 import cluster from '@src/helpers/redis.helper';
 import parseChats from './chat/parseChats';
 import parseMessages from './chat/parseMessages';
-import parseMsgNotis from './chat/parseMsgNotis';
+import parseMessageNotis from './chat/parseMessageNotis';
 import { getRepository } from 'typeorm';
 import Notification from '@src/entities/notification/notification.entity';
 
@@ -20,9 +20,9 @@ const initUser = async (socket: SessionSocket) => {
   socket.emit('initMessages', parsedMessages);
 
   // 자신의 메세지알림을 초기화 시킨다.
-  const msgNotis = await cluster.lrange(`msgNotis:${user.chatId}`, 0, -1);
-  const parsedMsgNotis = await parseMsgNotis(msgNotis);
-  socket.emit('initMsgNotis', parsedMsgNotis);
+  const messageNotis = await cluster.lrange(`messageNotis:${user.chatId}`, 0, -1);
+  const parsedMessageNotis = await parseMessageNotis(messageNotis);
+  socket.emit('initMessageNotis', parsedMessageNotis);
 
   // 자신의 알림을 초기화 시킨다.
   const notifications = await getRepository(Notification).find({

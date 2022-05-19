@@ -8,8 +8,8 @@ import {
   initChats,
   initMessages,
   addMessage,
-  initMsgNotis,
-  addMsgNoti,
+  initMessageNotis,
+  addMessageNoti,
   openChatModal,
 } from '@src/store/slices/chat.slice';
 import {
@@ -21,7 +21,7 @@ import {
   deleteAllNotifications,
 } from '@src/store/slices/notification.slice';
 import { NotificationType } from '@src/types';
-import { ChatType } from '@src/types';
+import { ChatType, MessageType, MessageNotiType } from '@src/types';
 
 const useSocketSetup = () => {
   const dispatch = useAppDispatch();
@@ -37,27 +37,27 @@ const useSocketSetup = () => {
       await dispatch(initChats({ chats }));
     });
 
-    socket.on('initMessages', async (parsedMessages) => {
-      await dispatch(initMessages({ newMessages: parsedMessages }));
+    socket.on('initMessages', async (messages: MessageType[]) => {
+      await dispatch(initMessages({ messages }));
     });
 
-    socket.on('initMsgNotis', async (parsedMsgNotis) => {
-      await dispatch(initMsgNotis({ newMsgNotis: parsedMsgNotis }));
+    socket.on('initMessageNotis', async (messageNotis: MessageNotiType[]) => {
+      await dispatch(initMessageNotis({ messageNotis }));
     });
 
-    socket.on('addChat', async (result) => {
+    socket.on('addChat', async (result: { ok: boolean; message: string; newChat?: ChatType }) => {
       const { ok, message, newChat } = result;
       if (!ok) return alert(message);
       await dispatch(addChat({ newChat }));
       await dispatch(openChatModal());
     });
 
-    socket.on('addMessage', async (newMessage) => {
-      await dispatch(addMessage({ newMessage: newMessage }));
+    socket.on('addMessage', async (newMessage: MessageType) => {
+      await dispatch(addMessage({ newMessage }));
     });
 
-    socket.on('addMsgNoti', async (newMsgNoti) => {
-      await dispatch(addMsgNoti({ newMsgNoti: newMsgNoti }));
+    socket.on('addMessageNoti', async (newMessageNoti: MessageNotiType) => {
+      await dispatch(addMessageNoti({ newMessageNoti }));
     });
 
     // 알림
@@ -117,7 +117,7 @@ const useSocketSetup = () => {
       socket.off('initNotiList');
       socket.off('addChat');
       socket.off('addMessage');
-      socket.off('addMsgNoti');
+      socket.off('addMessageNoti');
       socket.off('initNotification');
       socket.off('addNotification');
       socket.off('getNotification');

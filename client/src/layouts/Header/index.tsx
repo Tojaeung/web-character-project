@@ -6,7 +6,7 @@ import { MdPlaylistAdd } from 'react-icons/md';
 import Profile from './Profile';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
 import { selectUserUser } from '@src/store/slices/user.slice';
-import { selectChatMsgNotis } from '@src/store/slices/chat.slice';
+import { selectChatMessageNotis } from '@src/store/slices/chat.slice';
 import { selectNotificationNotifications } from '@src/store/slices/notification.slice';
 import { openModal } from '@src/store/slices/modal.slice';
 import logo from '@src/assets/images/logo.jpg';
@@ -17,7 +17,7 @@ function Header() {
 
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUserUser);
-  const msgNotis = useAppSelector(selectChatMsgNotis);
+  const messageNotiss = useAppSelector(selectChatMessageNotis);
   const notifications = useAppSelector(selectNotificationNotifications);
 
   const openLoginModal = async (e: any) => {
@@ -43,7 +43,7 @@ function Header() {
           <NavLink to={'/sale'}>분양</NavLink>
           {user ? (
             <ProfileBox>
-              {(msgNotis.length || notifications.some((notification) => !notification.is_confirmed)) && (
+              {(messageNotiss.length || notifications.some((notification) => !notification.is_confirmed)) && (
                 <NotificationDot />
               )}
               <Profile />
@@ -104,7 +104,7 @@ function Header() {
         />
         {user ? (
           <ProfileBox>
-            {(msgNotis.length || notifications.some((notification) => !notification.is_confirmed)) && (
+            {(messageNotiss.length || notifications.some((notification) => !notification.is_confirmed)) && (
               <NotificationDot />
             )}
             <Profile />

@@ -520,7 +520,7 @@ export const deleteAccount = async (req: Request, res: Response): Promise<any> =
   // 레디스에 저장된 대화정보 등등 식제
   await cluster.del(`chats:${user?.chatId}`);
   await cluster.del(`messages:${user?.chatId}`);
-  await cluster.del(`msgNotis:${user?.chatId}`);
+  await cluster.del(`messageNotis:${user?.chatId}`);
 
   // 세션 제거
   req.session.destroy((err: any) => {

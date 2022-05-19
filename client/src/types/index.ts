@@ -120,15 +120,15 @@ export type ChatType = {
 };
 
 export type MessageType = {
-  type: string;
+  type: 'text' | 'image' | 'end';
   to: string;
   from: string;
   content: string;
-  imgKey: string;
+  imageKey: string;
   date: string;
 };
 
-export type MsgNotiType = {
+export type MessageNotiType = {
   from: string;
   to: string;
 };

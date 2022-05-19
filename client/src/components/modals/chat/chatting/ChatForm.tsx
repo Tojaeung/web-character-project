@@ -19,18 +19,18 @@ function ChatForm() {
   // 대화방에서 상대방이 나갔다면 더이상 채팅입력을 하지 못하게 한다.
   const [isEndChat, setIsEndChat] = useState(false);
   useEffect(() => {
-    const isEndGuideMessage = messages
+    const isEndMessage = messages
       .filter((message) => message.from === selectedChat?.chatId || message.to === selectedChat?.chatId)
-      .some((message) => message.type === 'endChat');
-    isEndGuideMessage && setIsEndChat(true);
+      .some((message) => message.type === 'end');
+    isEndMessage && setIsEndChat(true);
   }, [messages, selectedChat?.chatId]);
 
   const targetRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState<string | undefined>(undefined);
 
   // 텍스트 메세지
-  const onSendTextMsg = async (e: any) => {
-    const textMsgObj = {
+  const handleSendTextMessage = async (e: any) => {
+    const textMessageObj = {
       type: 'text',
       to: selectedChat?.chatId,
       from: user?.chatId,
@@ -39,19 +39,19 @@ function ChatForm() {
     };
 
     if (message === '') return alert('입력된 글자가 없습니다.');
-    if (!textMsgObj.to) {
+    if (!textMessageObj.to) {
       setMessage('');
       return alert('대화상대를 찾을 수 없습니다.');
     }
 
-    socket.emit('addMessage', textMsgObj);
-    socket.emit('addMsgNoti', { from: user?.chatId, to: selectedChat?.chatId });
-    socket.emit('deleteMsgNoti', selectedChat?.chatId);
+    socket.emit('addMessage', textMessageObj);
+    socket.emit('addMessageNoti', { from: user?.chatId, to: selectedChat?.chatId });
+    socket.emit('deleteMessageNoti', selectedChat?.chatId);
     setMessage('');
   };
 
   // 이미지 메세지
-  const onSendImgMsg = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSendImageMessage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!selectedChat) return alert('대화상대를 찾을 수 없습니다.');
     if (!e.target?.files) return;
 
@@ -66,15 +66,15 @@ function ChatForm() {
 
     try {
       const formData = new FormData();
-      formData.append('imgMessage', e.target?.files[0]);
+      formData.append('imageMessage', e.target?.files[0]);
       formData.append('chatUserId', selectedChat?.chatId);
       formData.append('chatId', user?.chatId as string);
       formData.append('messageDate', moment().format());
-      const response = await instance.post('/chat/imgMessage', formData);
-      const { imgMsgObj } = response.data;
-      socket.emit('addMessage', imgMsgObj);
-      socket.emit('addMsgNoti', { from: user?.chatId, to: selectedChat?.chatId });
-      socket.emit('deleteMsgNoti', selectedChat?.chatId);
+      const res = await instance.post('/chat/image-message', formData);
+      const { imageMessageObj } = res.data;
+      socket.emit('addMessage', imageMessageObj);
+      socket.emit('addMessageNoti', { from: user?.chatId, to: selectedChat?.chatId });
+      socket.emit('deleteMessageNoti', selectedChat?.chatId);
     } catch (err: any) {
       alert(err.message);
     }
@@ -87,7 +87,7 @@ function ChatForm() {
         accept=".png, .jpeg, .jpg"
         disabled={isEndChat && true}
         ref={targetRef}
-        onChange={onSendImgMsg}
+        onChange={handleSendImageMessage}
       />
       <CameraIcon onClick={(e) => targetRef.current?.click()} />
 
@@ -96,9 +96,9 @@ function ChatForm() {
         placeholder="메세지를 입력하세요..."
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        onKeyPress={(e) => e.key === 'Enter' && onSendTextMsg(e)}
+        onKeyPress={(e) => e.key === 'Enter' && handleSendTextMessage(e)}
       />
-      <SendButton disabled={(!message && true) || (isEndChat && true)} onClick={onSendTextMsg}>
+      <SendButton disabled={(!message && true) || (isEndChat && true)} onClick={handleSendTextMessage}>
         <SendIcon />
       </SendButton>
     </Container>

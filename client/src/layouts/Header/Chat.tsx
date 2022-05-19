@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BsChatLeftText } from 'react-icons/bs';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectChatMsgNotis } from '@src/store/slices/chat.slice';
+import { selectChatMessageNotis } from '@src/store/slices/chat.slice';
 import { openChatModal, closeChatModal, selectChatOk } from '@src/store/slices/chat.slice';
 
 interface IProp {
@@ -12,12 +12,12 @@ interface IProp {
 function Chat({ chatRef }: IProp) {
   const dispatch = useAppDispatch();
   const chatOk = useAppSelector(selectChatOk);
-  const msgNotis = useAppSelector(selectChatMsgNotis);
-  const [totalMsgNotiNum, setTotalMsgNotiNum] = useState<number>(0);
+  const messageNotis = useAppSelector(selectChatMessageNotis);
+  const [totalMessageNotiNum, setTotalMessageNotiNum] = useState<number>(0);
 
   useEffect(() => {
-    setTotalMsgNotiNum(msgNotis.length);
-  }, [msgNotis]);
+    setTotalMessageNotiNum(messageNotis.length);
+  }, [messageNotis]);
 
   const onChatModal = async (e: React.MouseEvent<HTMLDivElement>) => {
     if (!chatOk) return await dispatch(openChatModal());
@@ -26,9 +26,9 @@ function Chat({ chatRef }: IProp) {
 
   return (
     <Container ref={chatRef} chatOk={chatOk} onClick={onChatModal}>
-      {totalMsgNotiNum === 0 ? null : (
+      {totalMessageNotiNum === 0 ? null : (
         <NotiBox>
-          <NotiNum>{totalMsgNotiNum}</NotiNum>
+          <NotiNum>{totalMessageNotiNum}</NotiNum>
         </NotiBox>
       )}
 

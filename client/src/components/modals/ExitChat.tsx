@@ -13,7 +13,7 @@ function ExitChat() {
   const onExitChat = async (e: React.MouseEvent<HTMLButtonElement>) => {
     socket.emit('deleteChat', selectedChat?.chatId);
     socket.emit('deleteMessage', selectedChat?.chatId);
-    socket.emit('deleteMsgNoti', selectedChat?.chatId);
+    socket.emit('deleteMessageNoti', selectedChat?.chatId);
     dispatch(selectChat({ chat: null }));
     await dispatch(closeModal());
   };

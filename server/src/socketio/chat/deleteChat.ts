@@ -11,7 +11,7 @@ const deleteChat = async (socket: SessionSocket, chatId: string) => {
   const updatedChats = await cluster.lrange(`chats:${user.chatId}`, 0, -1);
   const parsedChats = await parseChats(updatedChats);
 
-  socket.emit('initChats', parsedChats);
+  return socket.emit('initChats', parsedChats);
 };
 
 export default deleteChat;

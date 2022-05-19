@@ -1,17 +1,17 @@
 const parseMessages = async (messages: string[]) => {
-  const newMessages = [];
+  const parsedMessages = [];
   for (const message of messages) {
-    const parsedMsg = message.split(',');
-    newMessages.push({
-      type: parsedMsg[0],
-      to: parsedMsg[1],
-      from: parsedMsg[2],
-      content: parsedMsg[3],
-      imgKey: parsedMsg[4],
-      date: parsedMsg[5],
+    const parsedMessage = message.split(',');
+    parsedMessages.push({
+      type: parsedMessage[0],
+      to: parsedMessage[1],
+      from: parsedMessage[2],
+      content: parsedMessage[3],
+      imgKey: parsedMessage[4],
+      date: parsedMessage[5],
     });
   }
-  return newMessages;
+  return parsedMessages;
 };
 
 export default parseMessages;

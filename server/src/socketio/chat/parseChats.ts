@@ -5,18 +5,18 @@ const parseChats = async (chatIds: string[]) => {
   if (!chatIds.length) return [];
 
   // 대화 상대방들의 정보를 가져온다.
-  const chats = [];
+  const parsedChats = [];
   for (const chatId of chatIds) {
     // 대화상대의 정보를 가져온다.
     const chatUser = await getRepository(User).findOne({ chatId });
-    chats.push({
+    parsedChats.push({
       chatId: chatUser?.chatId,
       nickname: chatUser?.nickname,
       avatar: chatUser?.avatar,
     });
   }
 
-  return chats;
+  return parsedChats;
 };
 
 export default parseChats;

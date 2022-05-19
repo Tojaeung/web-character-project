@@ -26,16 +26,16 @@ function ChatBody() {
             return (
               <MessageBox
                 who={message.to === selectedChat.chatId ? 'me' : 'you'}
-                isEndMessage={message.type === 'endChat' ? true : false}
+                isEndMessage={message.type === 'end' ? true : false}
                 key={v4()}
               >
                 <Message
                   who={message.to === selectedChat.chatId ? 'me' : 'you'}
-                  isEndMessage={message.type === 'endChat' ? true : false}
+                  isEndMessage={message.type === 'end' ? true : false}
                 >
                   {message.type === 'text' && <TextMessage>{message.content}</TextMessage>}
                   {message.type === 'image' && <Image src={message.content} alt="이미지" />}
-                  {message.type === 'endChat' && <GuideMessage>{message.content}</GuideMessage>}
+                  {message.type === 'end' && <GuideMessage>{message.content}</GuideMessage>}
                 </Message>
                 <MessageDate>{relativeTime(message.date!)}</MessageDate>
               </MessageBox>

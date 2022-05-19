@@ -10,7 +10,7 @@ import { ChatType } from '@src/types';
 import {
   selectChatChats,
   selectChat,
-  selectChatMsgNotis,
+  selectChatMessageNotis,
   closeChatModal,
   selectChatMessages,
 } from '@src/store/slices/chat.slice';
@@ -20,7 +20,7 @@ function ChatList() {
 
   const chats = useAppSelector(selectChatChats);
   const messages = useAppSelector(selectChatMessages);
-  const msgNotis = useAppSelector(selectChatMsgNotis);
+  const messageNotis = useAppSelector(selectChatMessageNotis);
 
   const handleSelectChat = (chat: ChatType) => async (e: React.MouseEvent<HTMLLIElement>) => {
     await dispatch(selectChat({ chat }));
@@ -42,13 +42,13 @@ function ChatList() {
         ) : (
           chats.map((chat) => {
             const lastMessage = messages.filter((message) => message.from || message.to === chat.chatId).pop();
-            const msgNotiNum = msgNotis.filter((msgNoti) => msgNoti.from === chat.chatId).length;
+            const MessageNotiNum = messageNotis.filter((MessageNoti) => MessageNoti.from === chat.chatId).length;
 
             return (
               <ListBox key={v4()} onClick={handleSelectChat(chat)}>
-                {msgNotiNum === 0 ? null : (
+                {MessageNotiNum === 0 ? null : (
                   <NotiBox>
-                    <NotiNum>{msgNotiNum}</NotiNum>
+                    <NotiNum>{MessageNotiNum}</NotiNum>
                   </NotiBox>
                 )}
                 <ChatUser>

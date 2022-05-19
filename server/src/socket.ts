@@ -3,8 +3,8 @@ import { SessionSocket } from '@src/types';
 import initUser from '@src/socketio/initUser';
 import addChat from '@src/socketio/chat/addChat';
 import addMessage from '@src/socketio/chat/addMessage';
-import addMsgNoti from '@src/socketio/chat/addMsgNoti';
-import deleteMsgNoti from '@src/socketio/chat/deleteMsgNoti';
+import addMessageNoti from '@src/socketio/chat/addMessageNoti';
+import deleteMessageNoti from '@src/socketio/chat/deleteMessageNoti';
 import deleteChat from '@src/socketio/chat/deleteChat';
 import deleteMessage from '@src/socketio/chat/deleteMessage';
 
@@ -26,16 +26,16 @@ const socket = ({ io }: { io: Server }) => {
       addChat(socket, chatId);
     });
 
-    socket.on('addMessage', (msgObj) => {
-      addMessage(socket, msgObj);
+    socket.on('addMessage', (messageObj) => {
+      addMessage(socket, messageObj);
     });
 
-    socket.on('addMsgNoti', (msgNoti) => {
-      addMsgNoti(socket, msgNoti);
+    socket.on('addMessageNoti', (messageNoti) => {
+      addMessageNoti(socket, messageNoti);
     });
 
-    socket.on('deleteMsgNoti', (chatId) => {
-      deleteMsgNoti(socket, chatId);
+    socket.on('deleteMessageNoti', (chatId) => {
+      deleteMessageNoti(socket, chatId);
     });
 
     socket.on('deleteChat', (chatId) => {
