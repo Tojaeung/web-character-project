@@ -190,6 +190,7 @@ const Container = styled.div`
   width: 100%;
   padding: 0 1rem;
   background-color: ${({ theme }) => theme.palette.bgColor};
+  box-shadow: ${({ theme }) => theme.palette.shadowColor};
   @media ${({ theme }) => theme.device.tablet} {
     display: none;
   }
@@ -228,7 +229,7 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
+  padding: 1rem 0;
   @media ${({ theme }) => theme.device.tablet} {
     border-bottom: 1px solid ${({ theme }) => theme.palette.gray};
   }

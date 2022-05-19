@@ -54,6 +54,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  padding: 1rem 0;
   @media ${({ theme }) => theme.device.mobile} {
     gap: 0.5rem;
   }

@@ -8,6 +8,7 @@ import PublicRouter from '@src/routes/PublicRouter';
 import PrivateRouter from '@src/routes/PrivateRouter';
 
 import Header from '@src/layouts/Header';
+import Footer from '@src/layouts/Footer';
 import Home from '@src/pages/Home';
 import CreatePostForm from '@src/pages/create/PostForm';
 import CreateDrawingForm from '@src/pages/create/DrawingForm';
@@ -70,6 +71,7 @@ function App() {
           </Routes>
           <Modal />
           <Chat />
+          <Footer />
         </AppScreen>
       </FullScreen>
     </BrowserRouter>

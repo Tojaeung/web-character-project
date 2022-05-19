@@ -39,7 +39,6 @@ const Container = styled.div`
   gap: 5rem;
   padding: 2rem;
   background-color: ${({ theme }) => theme.palette.bgColor};
-  border-bottom: 3px solid ${({ theme }) => theme.palette.gray};
   @media ${({ theme }) => theme.device.tablet} {
     gap: 2rem;
     padding: 1rem;
@@ -65,7 +64,7 @@ const SettingsLink = styled(NavLink)`
       height: 0.3rem;
       width: 100%;
       position: absolute;
-      top: 3.7rem;
+      top: 3.5rem;
       background-color: ${({ theme }) => theme.palette.green};
     }
   }

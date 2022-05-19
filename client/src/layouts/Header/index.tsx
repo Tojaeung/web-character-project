@@ -128,6 +128,8 @@ const Container = styled.div`
   padding: 0rem 1rem;
   background: ${({ theme }) => theme.palette.bgColor};
   border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
+  margin-bottom: 1rem;
+  box-shadow: ${({ theme }) => theme.palette.shadowColor};
   @media ${({ theme }) => theme.device.tablet} {
     display: none;
   }

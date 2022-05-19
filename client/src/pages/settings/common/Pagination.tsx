@@ -76,10 +76,13 @@ function Pagination({ total, page, setPage }: IProps) {
 }
 
 const Container = styled.div`
+  width: 100%;
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 1rem;
   padding: 1rem 0;
+  background-color: ${({ theme }) => theme.palette.bgColor};
 `;
 const PrevButton = styled.button`
   padding: 0.5rem;

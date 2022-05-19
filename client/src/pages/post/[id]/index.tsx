@@ -59,10 +59,12 @@ const Container = styled.div`
   gap: 1rem;
   padding: 0 1rem;
   background-color: ${({ theme }) => theme.palette.bgColor};
+  box-shadow: ${({ theme }) => theme.palette.shadowColor};
 `;
 const BoardName = styled.h2`
   align-self: flex-start;
   font-size: 2rem;
+  padding-top: 1rem;
 `;
 
 const TitleBox = styled.div`
