@@ -4,7 +4,7 @@ function Footer() {
   return (
     <Container>
       <Intro>
-        <Title>그림러</Title>
+        <Title>그림러들</Title>
         <Description>그림 그리기를 좋아하는 사람들을 위한 커뮤니티 사이트입니다.</Description>
       </Intro>
       <Detailed>

@@ -1,5 +1,4 @@
 import { getRepository } from 'typeorm';
-import _ from 'lodash';
 import ImageKey from '@src/entities/board/imageKey.entity';
 import s3Delete from '@src/utils/s3.utils';
 

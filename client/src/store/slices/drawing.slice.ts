@@ -46,7 +46,7 @@ export const drawingSlice = createSlice({
         state.isLoading = false;
         state.ok = payload.ok;
         state.message = payload.message;
-        state.drawings = state.drawings.concat(payload.drawings);
+        state.drawings = state.drawings?.concat(payload.drawings);
       })
       .addCase(getDrawings.rejected, (state, { payload }) => {
         state.isLoading = false;

@@ -316,6 +316,9 @@ const PostLink = styled(NavLink)`
   &:visited {
     color: blue;
   }
+  &.active {
+    background-color: yellow;
+  }
 `;
 
 const Views = styled.span``;

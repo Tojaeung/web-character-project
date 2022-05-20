@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
 import { getCustomRepository, getRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
-import _ from 'lodash';
 import moment from 'moment';
-import schedule from 'node-schedule';
 import { IncomingWebhook } from '@slack/webhook';
 import cluster from '@src/helpers/redis.helper';
 import logger from '@src/helpers/winston.helper';
