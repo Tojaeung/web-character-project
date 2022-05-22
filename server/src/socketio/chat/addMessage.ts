@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import { SessionSocket } from '@src/types/index';
 import cluster from '@src/helpers/redis.helper';
-import User from '@src/entities/user/user.entity';
+import User from '@src/entities/profile/user.entity';
 
 interface MessageType {
   type: 'text' | 'image' | 'end';

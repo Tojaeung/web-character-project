@@ -17,7 +17,7 @@ import {
   UpdateCommentDTO,
   UpdatePostDTO,
 } from '@src/schemas/board.schema';
-import User from '@src/entities/user/user.entity';
+import User from '@src/entities/profile/user.entity';
 
 export const getPost = async (req: Request, res: Response): Promise<any> => {
   const postRepo = getCustomRepository(PostRepository);

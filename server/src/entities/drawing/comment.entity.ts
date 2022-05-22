@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import User from '@src/entities/user/user.entity';
+import User from '@src/entities/profile/user.entity';
 import Drawing from '@src/entities/drawing/drawing.entity';
 
 class Relation {

@@ -7,7 +7,7 @@
   "license": "ISC",
   "scripts": {
     "start:dev": "nodemon --exec ./node_modules/.bin/ts-node -r tsconfig-paths/register ./src/server.ts",
-    "start:prod": "node -r ts-node/register/transpile-only -r tsconfig-paths/register --files ./dist/src/server.js",
+    "start:prod": "node -r ts-node/register/transpile-only -r tsconfig-paths/register ./dist/server.js",
     "build": "npx tsc -p tsconfig.prod.json",
     "test": "jest",
     "test:watch": "jest --watch",

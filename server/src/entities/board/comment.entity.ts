@@ -8,7 +8,7 @@ import {
   Index,
   Column,
 } from 'typeorm';
-import User from '@src/entities/user/user.entity';
+import User from '@src/entities/profile/user.entity';
 import Post from '@src/entities/board/post.entity';
 import Board from '@src/entities/board/board.entity';
 

@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import User from '@src/entities/user/user.entity';
+import User from '@src/entities/profile/user.entity';
 
 const parseChats = async (chatIds: string[]) => {
   if (!chatIds.length) return [];

@@ -1,5 +1,4 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import NotificationType from '@src/types/notification.type';
 
 @Entity('notification', { schema: 'notification' })
 class Notification {
@@ -7,7 +6,7 @@ class Notification {
   id: number;
 
   @Column()
-  type: NotificationType;
+  type: string;
 
   @Column()
   content: string;

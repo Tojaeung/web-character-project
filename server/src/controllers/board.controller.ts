@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { getRepository, ILike } from 'typeorm';
 import logger from '@src/helpers/winston.helper';
 import ApiError from '@src/errors/api.error';
-import User from '@src/entities/user/user.entity';
+import User from '@src/entities/profile/user.entity';
 import Post from '@src/entities/board/post.entity';
 import Board from '@src/entities/board/board.entity';
 import Comment from '@src/entities/board/comment.entity';

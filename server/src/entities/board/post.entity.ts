@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import User from '@src/entities/user/user.entity';
+import User from '@src/entities/profile/user.entity';
 import Board from '@src/entities/board/board.entity';
 import Comment from '@src/entities/board/comment.entity';
 import Like from '@src/entities/board/like.entity';

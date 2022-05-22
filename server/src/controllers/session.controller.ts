@@ -6,7 +6,7 @@ import { SignInDTO } from '@src/schemas/session.schema';
 import { sendAuthEmail } from '@src/helpers/nodemailer.helper';
 import ApiError from '@src/errors/api.error';
 import { UserRepository } from '@src/repositorys/user.repository';
-import User from '@src/entities/user/user.entity';
+import User from '@src/entities/profile/user.entity';
 
 export const signIn = async (req: Request<{}, {}, SignInDTO['body']>, res: Response) => {
   const userRepo = getCustomRepository(UserRepository);

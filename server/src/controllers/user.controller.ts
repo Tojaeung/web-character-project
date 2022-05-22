@@ -7,7 +7,7 @@ import cluster from '@src/helpers/redis.helper';
 import logger from '@src/helpers/winston.helper';
 import ApiError from '@src/errors/api.error';
 import s3Delete from '@src/utils/s3.utils';
-import User from '@src/entities/user/user.entity';
+import User from '@src/entities/profile/user.entity';
 import Drawing from '@src/entities/drawing/drawing.entity';
 import DrawingComment from '@src/entities/drawing/comment.entity';
 import Post from '@src/entities/board/post.entity';

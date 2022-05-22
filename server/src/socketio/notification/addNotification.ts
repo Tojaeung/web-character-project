@@ -2,7 +2,7 @@ import { getCustomRepository, getRepository } from 'typeorm';
 import { SessionSocket } from '@src/types/index';
 import { NotificationRepository } from '@src/repositorys/notification.repository';
 import Post from '@src/entities/board/post.entity';
-import User from '@src/entities/user/user.entity';
+import User from '@src/entities/profile/user.entity';
 import Board from '@src/entities/board/board.entity';
 import NotificationType from '@src/types/notification.type';
 import logger from '@src/helpers/winston.helper';

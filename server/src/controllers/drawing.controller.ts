@@ -7,7 +7,7 @@ import {
   LikeRepository,
   DisLikeRepository,
 } from '@src/repositorys/drawing.repository';
-import User from '@src/entities/user/user.entity';
+import User from '@src/entities/profile/user.entity';
 import Drawing from '@src/entities/drawing/drawing.entity';
 import DrawingComment from '@src/entities/drawing/comment.entity';
 import ApiError from '@src/errors/api.error';
