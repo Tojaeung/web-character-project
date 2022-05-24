@@ -2,10 +2,10 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { AiOutlineMore } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
-import useDropDown from '@src/hooks/useDropDown';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { openModal, closeModal } from '@src/store/slices/modal.slice';
-import { selectUserUser } from '@src/store/slices/user.slice';
+import useDropDown from 'hooks/useDropDown';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { openModal, closeModal } from 'store/slices/modal.slice';
+import { selectUserUser } from 'store/slices/user.slice';
 
 interface IProps {
   type: 'drawing' | 'board';

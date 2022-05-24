@@ -1,23 +1,51 @@
 {
-  "extends": "./tsconfig.paths.json",
+  // "extends": "./tsconfig.paths.json",
   "compilerOptions": {
-    "target": "es6" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
-    "module": "commonjs" /* Specify what module code is generated. */,
-    "lib": ["ESNext", "dom"],
+    "target": "ESNext",
+    "module": "CommonJS",
+    "baseUrl": "./src",
+    "paths": {
+      "@configs/*": ["configs/*"],
+      "@controllers/*": ["controllers/*"],
+      "@entities/*": ["entities/*"],
+      "@errors/*": ["errors/*"],
+      "@helpers/*": ["helpers/*"],
+      "@middlewares/*": ["middlewares/*"],
+      "@repositorys/*": ["repositorys/*"],
+      "@routes/*": ["routes/*"],
+      "@schemas/*": ["schemas/*"],
+      "@socketio/*": ["socketio/*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@utils/*": ["utils/*"]
+    },
     "allowJs": true,
     "outDir": "./dist" /* Specify an output folder for all emitted files. */,
     "removeComments": true /* Disable emitting comments. */,
     "strict": true /* Enable all strict type-checking options. */,
     "noImplicitAny": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
-    "typeRoots": ["./src/types", "./node_modules/@types"],
-    "strictPropertyInitialization": false /* 타입 orm 오류 나는거 */
+    "typeRoots": ["src/interfaces", "./node_modules/@types"],
+    "strictPropertyInitialization": false /* 타입 orm 오류 나는거 */,
+    "downlevelIteration": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "sourceMap": false,
+    "declaration": false,
+    "strictNullChecks": false,
+    "noEmit": false,
+    "noImplicitReturns": false
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "coverage", "__tests__"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"],
+  "ts-node": {
+    "compilerHost": true,
+    "transpileOnly": true,
+    "files": true,
+    "pretty": true
+  }
 }

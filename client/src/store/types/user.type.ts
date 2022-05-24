@@ -1,4 +1,4 @@
-import { UserType } from '@src/types';
+import { UserType } from 'interfaces/index';
 
 export type signUpReturnType = {
   ok: boolean;

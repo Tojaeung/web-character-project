@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import instance from '@src/utils/axios.util';
+import instance from 'utils/axios.util';
 import { RootState } from '../app/store';
 import {
   getPostReturnType,

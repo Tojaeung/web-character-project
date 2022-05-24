@@ -4,12 +4,12 @@ import { BsBell } from 'react-icons/bs';
 import { FiSettings, FiLogOut } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectUserUser } from '@src/store/slices/user.slice';
-import { selectNotificationNotifications } from '@src/store/slices/notification.slice';
-import { signOut } from '@src/store/requests/session.request';
-import Avatar from '@src/components/Avatar';
-import useDropDown from '@src/hooks/useDropDown';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { selectUserUser } from 'store/slices/user.slice';
+import { selectNotificationNotifications } from 'store/slices/notification.slice';
+import { signOut } from 'store/requests/session.request';
+import Avatar from 'components/Avatar';
+import useDropDown from 'hooks/useDropDown';
 import Chat from './Chat';
 
 function Profile() {
@@ -99,7 +99,7 @@ const DropDown = styled.ul`
   z-index: 1032;
   background: ${({ theme }) => theme.palette.bgColor};
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     width: 13rem;
     font-size: 1.5rem;
     top: 4.5rem;
@@ -130,27 +130,27 @@ const List = styled.li`
 
 const ProfileIcon = styled(CgProfile)`
   font-size: 2.5rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 2rem;
   }
 `;
 const BellIcon = styled(BsBell)`
   font-size: 2.5rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 2rem;
   }
 `;
 
 const SettingsIcon = styled(FiSettings)`
   font-size: 2.5rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 2rem;
   }
 `;
 
 const LogOutIcon = styled(FiLogOut)`
   font-size: 2.5rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 2rem;
   }
 `;

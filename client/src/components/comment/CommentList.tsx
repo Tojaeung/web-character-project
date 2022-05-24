@@ -1,16 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import Avatar from '@src/components/Avatar';
+import Avatar from 'components/Avatar';
 import { useParams } from 'react-router-dom';
-import Nickname from '@src/components/Nickname';
-import CreatedTime from '@src/components/CreatedTime';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectUserUser } from '@src/store/slices/user.slice';
-import { deleteDrawingComment } from '@src/store/requests/drawing.request';
-import { deletePostComment } from '@src/store/requests/post.request';
-import EditCommentForm from '@src/components/comment/EditCommentForm';
-import { inverseGreenButtonStyle, redButtonStyle } from '@src/styles/button.style';
-import { DrawingCommentType, PostCommentType } from '@src/types';
+import Nickname from 'components/Nickname';
+import CreatedTime from 'components/CreatedTime';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { selectUserUser } from 'store/slices/user.slice';
+import { deleteDrawingComment } from 'store/requests/drawing.request';
+import { deletePostComment } from 'store/requests/post.request';
+import EditCommentForm from 'components/comment/EditCommentForm';
+import { inverseGreenButtonStyle, redButtonStyle } from 'styles/button.style';
+import { DrawingCommentType, PostCommentType } from 'interfaces/index';
 
 interface IProps {
   type: 'drawing' | 'board';

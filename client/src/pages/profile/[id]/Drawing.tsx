@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { getDrawings, incrementView } from '@src/store/requests/drawing.request';
-import { selectDrawing, selectDrawingDrawings, selectDrawingIsLoading } from '@src/store/slices/drawing.slice';
-import loading from '@src/assets/images/loading.gif';
-import { useObserver } from '@src/hooks/useObserver';
-import { openModal } from '@src/store/slices/modal.slice';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { getDrawings, incrementView } from 'store/requests/drawing.request';
+import { selectDrawing, selectDrawingDrawings, selectDrawingIsLoading } from 'store/slices/drawing.slice';
+import loading from 'assets/images/loading.gif';
+import { useObserver } from 'hooks/useObserver';
+import { openModal } from 'store/slices/modal.slice';
 
 function Drawing() {
   const { profileId } = useParams();
@@ -63,12 +63,12 @@ const DrawingBox = styled.ul`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
   }
 
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     grid-template-columns: 1fr;
     gap: 1rem;
   }

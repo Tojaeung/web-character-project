@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { getAllMyComments } from '@src/store/requests/board.request';
+import { getAllMyComments } from 'store/requests/board.request';
 import { Link, useSearchParams } from 'react-router-dom';
 import { v4 } from 'uuid';
-import { inverseRedButtonStyle } from '@src/styles/button.style';
-import CreatedTime from '@src/components/CreatedTime';
-import { useAppDispatch } from '@src/store/app/hook';
-import { deletePostComment } from '@src/store/requests/post.request';
-import { PostCommentType } from '@src/types';
+import { inverseRedButtonStyle } from 'styles/button.style';
+import CreatedTime from 'components/CreatedTime';
+import { useAppDispatch } from 'store/app/hook';
+import { deletePostComment } from 'store/requests/post.request';
+import { PostCommentType } from 'interfaces/index';
 import TabMenu from './common/TabMenu';
 import Pagination from './common/Pagination';
 
@@ -95,7 +95,7 @@ const Container = styled.table`
     background-color: ${({ theme }) => theme.palette.gray};
     border: 1px solid ${({ theme }) => theme.palette.black};
     white-space: nowrap;
-    @media ${({ theme }) => theme.device.mobile} {
+    media ${({ theme }) => theme.device.mobile} {
       font-size: 1.3rem;
     }
   }
@@ -106,7 +106,7 @@ const Container = styled.table`
     background-color: ${({ theme }) => theme.palette.white};
     border: 1px solid ${({ theme }) => theme.palette.gray};
     padding: 0.5rem;
-    @media ${({ theme }) => theme.device.mobile} {
+    media ${({ theme }) => theme.device.mobile} {
       font-size: 1.2rem;
     }
   }

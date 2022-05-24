@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import getLevel from '@src/utils/exp.util';
-import ChatButton from '@src/components/ChatButton';
-import useDropDown from '@src/hooks/useDropDown';
-import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
-import { selectUserUser } from '@src/store/slices/user.slice';
-import { openModal } from '@src/store/slices/modal.slice';
+import getLevel from 'utils/exp.util';
+import ChatButton from 'components/ChatButton';
+import useDropDown from 'hooks/useDropDown';
+import { useAppSelector, useAppDispatch } from 'store/app/hook';
+import { selectUserUser } from 'store/slices/user.slice';
+import { openModal } from 'store/slices/modal.slice';
 
 interface IProps {
   exp: number;

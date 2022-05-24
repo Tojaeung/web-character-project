@@ -1,7 +1,6 @@
 import Redis, { Cluster } from 'ioredis';
 import logger from './winston.helper';
-import dotenv from 'dotenv';
-dotenv.config();
+import 'dotenv/config';
 
 let cluster: Cluster;
 if (process.env.NODE_ENV === 'development') {

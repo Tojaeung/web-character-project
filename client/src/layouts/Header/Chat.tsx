@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { BsChatLeftText } from 'react-icons/bs';
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectChatMessageNotis } from '@src/store/slices/chat.slice';
-import { openChatModal, closeChatModal, selectChatOk } from '@src/store/slices/chat.slice';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { selectChatMessageNotis } from 'store/slices/chat.slice';
+import { openChatModal, closeChatModal, selectChatOk } from 'store/slices/chat.slice';
 
 interface IProp {
   chatRef: React.MutableRefObject<HTMLDivElement | null>;
@@ -44,7 +44,7 @@ const Container = styled.div<{ chatOk: boolean }>`
 
 const ChatIcon = styled(BsChatLeftText)`
   font-size: 2.5rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 2rem;
   }
 `;

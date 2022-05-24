@@ -2,12 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { useParams } from 'react-router-dom';
-import { selectUserUser } from '@src/store/slices/user.slice';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { PostLikeType, PostDisLikeType, DrawingLikeType, DrawingDisLikeType } from '@src/types';
-import { createDrawingLike } from '@src/store/requests/drawing.request';
-import { createPostLike } from '@src/store/requests/post.request';
-import socket from '@src/utils/socket';
+import { selectUserUser } from 'store/slices/user.slice';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { PostLikeType, PostDisLikeType, DrawingLikeType, DrawingDisLikeType } from 'interfaces/index';
+import { createDrawingLike } from 'store/requests/drawing.request';
+import { createPostLike } from 'store/requests/post.request';
+import socket from 'utils/socket';
 
 interface IProps {
   type: 'drawing' | 'board';

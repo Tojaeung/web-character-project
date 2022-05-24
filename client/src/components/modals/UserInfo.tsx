@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useAppDispatch } from '@src/store/app/hook';
-import { getUserInfo } from '@src/store/requests/user.request';
-import getLevel from '@src/utils/exp.util';
-import relativeTime from '@src/utils/date.util';
-import { UserType } from '@src/types';
-import { useAppSelector } from '@src/store/app/hook';
-import { selectUserUser } from '@src/store/slices/user.slice';
+import { useAppDispatch } from 'store/app/hook';
+import { getUserInfo } from 'store/requests/user.request';
+import getLevel from 'utils/exp.util';
+import relativeTime from 'utils/date.util';
+import { UserType } from 'interfaces/index';
+import { useAppSelector } from 'store/app/hook';
+import { selectUserUser } from 'store/slices/user.slice';
 
 interface IProp {
   props: { userId: number };

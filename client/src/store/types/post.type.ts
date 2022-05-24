@@ -1,4 +1,4 @@
-import { PostCommentType, PostDisLikeType, PostLikeType, PostType } from '@src/types';
+import { PostCommentType, PostDisLikeType, PostLikeType, PostType } from 'interfaces/index';
 
 export type getPostReturnType = {
   ok: boolean;

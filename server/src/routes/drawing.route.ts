@@ -1,16 +1,16 @@
 import { Router } from 'express';
 import asyncHandler from 'express-async-handler';
-import auth from '@src/middlewares/auth.middleware';
-import penalty from '@src/middlewares/penalty.middleware';
-import { drawingUpload } from '@src/helpers/s3.helper';
-import validator from '@src/middlewares/validator.middleware';
+import auth from '@middlewares/auth.middleware';
+import penalty from '@middlewares/penalty.middleware';
+import { drawingUpload } from '@helpers/s3.helper';
+import validator from '@middlewares/validator.middleware';
 import {
   createDrawingSchema,
   createCommentSchema,
   updateCommentSchema,
   createLikeSchema,
   createDisLikeSchema,
-} from '@src/schemas/drawing.schema';
+} from '@schemas/drawing.schema';
 import {
   createComment,
   createDisLike,
@@ -21,7 +21,7 @@ import {
   deleteDrawing,
   getDrawings,
   incrementView,
-} from '@src/controllers/drawing.controller';
+} from '@controllers/drawing.controller';
 
 const router = Router();
 

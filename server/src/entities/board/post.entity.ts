@@ -9,12 +9,12 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import User from '@src/entities/profile/user.entity';
-import Board from '@src/entities/board/board.entity';
-import Comment from '@src/entities/board/comment.entity';
-import Like from '@src/entities/board/like.entity';
-import DisLike from '@src/entities/board/dislike.entity';
-import ImageKey from '@src/entities/board/imageKey.entity';
+import User from '@entities/profile/user.entity';
+import Board from '@entities/board/board.entity';
+import Comment from '@entities/board/comment.entity';
+import Like from '@entities/board/like.entity';
+import DisLike from '@entities/board/dislike.entity';
+import ImageKey from '@entities/board/imageKey.entity';
 
 class Relation {
   @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })

@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react';
 import { v4 } from 'uuid';
 import styled, { css } from 'styled-components';
 import 'moment/locale/ko';
-import relativeTime from '@src/utils/date.util';
-import { useAppSelector } from '@src/store/app/hook';
-import { selectChatSelectedChat, selectChatMessages } from '@src/store/slices/chat.slice';
+import relativeTime from 'utils/date.util';
+import { useAppSelector } from 'store/app/hook';
+import { selectChatSelectedChat, selectChatMessages } from 'store/slices/chat.slice';
 
 function ChatBody() {
   const messages = useAppSelector(selectChatMessages);
@@ -54,7 +54,7 @@ const Container = styled.div`
   min-height: 60rem;
   max-height: 60rem;
   overflow-y: scroll;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     min-height: 40rem;
     max-height: 40rem;
   }
@@ -115,7 +115,7 @@ const Message = styled.div<{ who: string; isEndMessage: boolean }>`
       `;
     }
   }}
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     padding: 0.6rem;
   }
 `;
@@ -123,7 +123,7 @@ const TextMessage = styled.div`
   font-size: 1.3rem;
   white-space: pre-wrap;
   word-break: break-all;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;

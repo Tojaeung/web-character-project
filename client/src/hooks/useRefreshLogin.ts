@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { refreshLogin, signOut } from '@src/store/requests/session.request';
-import { selectUserUser } from '@src/store/slices/user.slice';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { refreshLogin, signOut } from 'store/requests/session.request';
+import { selectUserUser } from 'store/slices/user.slice';
 
 const useRefreshLogin = () => {
   const dispatch = useAppDispatch();

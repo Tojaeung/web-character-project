@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import asyncHandler from 'express-async-handler';
-import validator from '@src/middlewares/validator.middleware';
-import auth from '@src/middlewares/auth.middleware';
-import admin from '@src/middlewares/admin.middleware';
+import validator from '@middlewares/validator.middleware';
+import auth from '@middlewares/auth.middleware';
+import admin from '@middlewares/admin.middleware';
 
 import {
   signUp,
@@ -13,8 +13,8 @@ import {
   sendReport,
   getUserInfo,
   givePenalty,
-} from '@src/controllers/user.controller';
-import { signUpSchema, forgotPwSchema, resetPwSchema } from '@src/schemas/user.schema';
+} from '@controllers/user.controller';
+import { signUpSchema, forgotPwSchema, resetPwSchema } from '@schemas/user.schema';
 
 const router = Router();
 

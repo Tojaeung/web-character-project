@@ -1,10 +1,10 @@
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
-import { lightTheme } from '@src/styles/Theme';
-import GlobalStyles from '@src/styles/GlobalStyles';
+import { lightTheme } from 'styles/Theme';
+import GlobalStyles from 'styles/GlobalStyles';
 import App from './App';
-import { store } from '@src/store/app/store';
+import { store } from 'store/app/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 

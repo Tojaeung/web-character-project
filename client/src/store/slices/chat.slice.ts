@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
-import { ChatType, MessageType, MessageNotiType } from '@src/types';
+import { ChatType, MessageType, MessageNotiType } from 'interfaces/index';
 
 interface StateType {
   ok: boolean;

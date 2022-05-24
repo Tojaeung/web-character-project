@@ -1,8 +1,8 @@
 import { AbstractRepository, EntityRepository } from 'typeorm';
-import Drawing from '@src/entities/drawing/drawing.entity';
-import Comment from '@src/entities/drawing/comment.entity';
-import Like from '@src/entities/drawing/like.entity';
-import DisLike from '@src/entities/drawing/dislike.entity';
+import Drawing from '@entities/drawing/drawing.entity';
+import Comment from '@entities/drawing/comment.entity';
+import Like from '@entities/drawing/like.entity';
+import DisLike from '@entities/drawing/dislike.entity';
 
 @EntityRepository(Drawing)
 export class DrawingRepository extends AbstractRepository<Drawing> {

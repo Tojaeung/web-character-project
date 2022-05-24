@@ -1,10 +1,10 @@
-import { SessionSocket } from '@src/types/index';
-import cluster from '@src/helpers/redis.helper';
+import { SessionSocket } from '@interfaces/index';
+import cluster from '@helpers/redis.helper';
 import parseChats from './chat/parseChats';
 import parseMessages from './chat/parseMessages';
 import parseMessageNotis from './chat/parseMessageNotis';
 import { getRepository } from 'typeorm';
-import Notification from '@src/entities/notification/notification.entity';
+import Notification from '@entities/notification/notification.entity';
 
 const initUser = async (socket: SessionSocket) => {
   const user = socket.request.session.user;

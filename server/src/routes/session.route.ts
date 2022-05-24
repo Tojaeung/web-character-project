@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import auth from '@src/middlewares/auth.middleware';
-import { refreshLogin, signIn, signOut } from '@src/controllers/session.controller';
-import validator from '@src/middlewares/validator.middleware';
-import { signInSchema } from '@src/schemas/session.schema';
+import auth from '@middlewares/auth.middleware';
+import { refreshLogin, signIn, signOut } from '@controllers/session.controller';
+import validator from '@middlewares/validator.middleware';
+import { signInSchema } from '@schemas/session.schema';
 import asyncHandler from 'express-async-handler';
 
 const router = Router();

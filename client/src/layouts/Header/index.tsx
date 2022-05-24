@@ -4,13 +4,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineMenu, AiOutlineUser, AiOutlineKey, AiOutlineClose } from 'react-icons/ai';
 import { MdPlaylistAdd } from 'react-icons/md';
 import Profile from './Profile';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectUserUser } from '@src/store/slices/user.slice';
-import { selectChatMessageNotis } from '@src/store/slices/chat.slice';
-import { selectNotificationNotifications } from '@src/store/slices/notification.slice';
-import { openModal } from '@src/store/slices/modal.slice';
-import logo from '@src/assets/images/logo.jpg';
-import { greenButtonStyle } from '@src/styles/button.style';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { selectUserUser } from 'store/slices/user.slice';
+import { selectChatMessageNotis } from 'store/slices/chat.slice';
+import { selectNotificationNotifications } from 'store/slices/notification.slice';
+import { openModal } from 'store/slices/modal.slice';
+import logo from 'assets/images/logo.jpg';
+import { greenButtonStyle } from 'styles/button.style';
 
 function Header() {
   const navigate = useNavigate();
@@ -130,7 +130,7 @@ const Container = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
   margin-bottom: 1rem;
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     display: none;
   }
 `;
@@ -193,7 +193,7 @@ const AddIcon = styled(MdPlaylistAdd)`
 
 const Responsive = styled.div`
   display: none;
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     position: relative;
     display: flex;
     justify-content: space-between;

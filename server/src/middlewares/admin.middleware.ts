@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import logger from '@src/helpers/winston.helper';
+import logger from '@helpers/winston.helper';
 
 const admin = (req: Request, res: Response, next: NextFunction) => {
   const role = req.session.user?.role;

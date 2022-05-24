@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import { AiOutlineClose } from 'react-icons/ai';
-import ImageSide from '@src/components/modals/drawing/ImageSide';
-import Info from '@src/components/modals/drawing/Info';
-import Comment from '@src/components/comment';
-import CommentForm from '@src/components/CommentForm';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectDrawingDrawings, selectDrawingIndex } from '@src/store/slices/drawing.slice';
-import { closeModal } from '@src/store/slices/modal.slice';
+import ImageSide from 'components/modals/drawing/ImageSide';
+import Info from 'components/modals/drawing/Info';
+import Comment from 'components/comment';
+import CommentForm from 'components/CommentForm';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { selectDrawingDrawings, selectDrawingIndex } from 'store/slices/drawing.slice';
+import { closeModal } from 'store/slices/modal.slice';
 
 function DrawingModal() {
   const dispatch = useAppDispatch();
@@ -39,7 +39,7 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -55,7 +55,7 @@ const InfoSide = styled.div`
   gap: 1rem;
   padding: 0 1rem;
   z-index: 1035;
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     width: 100%;
   }
 `;

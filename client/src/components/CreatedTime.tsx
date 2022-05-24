@@ -1,4 +1,4 @@
-import relativeTime from '@src/utils/date.util';
+import relativeTime from 'utils/date.util';
 import styled from 'styled-components';
 
 interface IProp {

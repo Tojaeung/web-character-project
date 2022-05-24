@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useAppSelector } from '@src/store/app/hook';
-import { selectChatChats } from '@src/store/slices/chat.slice';
-import { selectUserUser } from '@src/store/slices/user.slice';
-import socket from '@src/utils/socket';
+import { useAppSelector } from 'store/app/hook';
+import { selectChatChats } from 'store/slices/chat.slice';
+import { selectUserUser } from 'store/slices/user.slice';
+import socket from 'utils/socket';
 
 interface IProps {
   chatUserId: string; // 채팅상대를 표현한 변수이다.

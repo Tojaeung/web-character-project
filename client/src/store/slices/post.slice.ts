@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
-import { PostType } from '@src/types';
+import { PostType } from 'interfaces/index';
 import {
   createPost,
   getPost,
@@ -11,7 +11,7 @@ import {
   deletePostComment,
   createPostLike,
   createPostDisLike,
-} from '@src/store/requests/post.request';
+} from 'store/requests/post.request';
 
 interface PostSliceType {
   ok: boolean;

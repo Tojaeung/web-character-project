@@ -1,9 +1,9 @@
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import { selectChatSelectedChat, selectChatOk } from '@src/store/slices/chat.slice';
-import { useAppSelector } from '@src/store/app/hook';
-import Chatting from '@src/components/modals/chat/chatting';
-import ChatList from '@src/components/modals/chat/ChatList';
+import { selectChatSelectedChat, selectChatOk } from 'store/slices/chat.slice';
+import { useAppSelector } from 'store/app/hook';
+import Chatting from 'components/modals/chat/chatting';
+import ChatList from 'components/modals/chat/ChatList';
 
 function Chat() {
   const chatOk = useAppSelector(selectChatOk);
@@ -26,7 +26,7 @@ const Container = styled.div`
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
   background-color: ${({ theme }) => theme.palette.bgColor};
   z-index: 1020;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     right: 0;
     width: 100%;
     height: 50rem;

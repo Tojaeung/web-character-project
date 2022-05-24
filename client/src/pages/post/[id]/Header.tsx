@@ -1,20 +1,20 @@
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
-import Avatar from '@src/components/Avatar';
-import Nickname from '@src/components/Nickname';
+import Avatar from 'components/Avatar';
+import Nickname from 'components/Nickname';
 import {
   inverseBlackButtonStyle,
   inverseGreenButtonStyle,
   redButtonStyle,
   inverseRedButtonStyle,
-} from '@src/styles/button.style';
-import { selectUserUser } from '@src/store/slices/user.slice';
-import { selectPostPost } from '@src/store/slices/post.slice';
-import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
-import { deletePost } from '@src/store/requests/post.request';
-import { openModal } from '@src/store/slices/modal.slice';
-import MoreButton from '@src/components/MoreButton';
+} from 'styles/button.style';
+import { selectUserUser } from 'store/slices/user.slice';
+import { selectPostPost } from 'store/slices/post.slice';
+import { useAppSelector, useAppDispatch } from 'store/app/hook';
+import { deletePost } from 'store/requests/post.request';
+import { openModal } from 'store/slices/modal.slice';
+import MoreButton from 'components/MoreButton';
 
 function Header() {
   const navigate = useNavigate();
@@ -92,7 +92,7 @@ const ButtonBox = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     display: none;
   }
 `;
@@ -120,7 +120,7 @@ const ReportPost = styled.button`
 
 const ResponsiveButtonBox = styled.div`
   display: none;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     display: flex;
     align-items: center;
     gap: 1rem;

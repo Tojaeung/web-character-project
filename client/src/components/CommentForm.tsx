@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectUserUser } from '@src/store/slices/user.slice';
-import { createDrawingComment } from '@src/store/requests/drawing.request';
-import { createPostComment } from '@src/store/requests/post.request';
-import { greenButtonStyle } from '@src/styles/button.style';
-import socket from '@src/utils/socket';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { selectUserUser } from 'store/slices/user.slice';
+import { createDrawingComment } from 'store/requests/drawing.request';
+import { createPostComment } from 'store/requests/post.request';
+import { greenButtonStyle } from 'styles/button.style';
+import socket from 'utils/socket';
 
 interface IProp {
   type: 'drawing' | 'board';

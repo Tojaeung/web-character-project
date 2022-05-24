@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate, useParams } from 'react-router-dom';
-import instance from '@src/utils/axios.util';
-import { inverseGreenButtonStyle, greenButtonStyle } from '@src/styles/button.style';
-import boarName from '@src/utils/boardName.util';
-import { useImageUploadConfig } from '@src/hooks/useReactQuillConfig';
-import LengthCountInput from '@src/components/LengthCountInput';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectPostPost } from '@src/store/slices/post.slice';
-import { updatePost, getPost } from '@src/store/requests/post.request';
+import instance from 'utils/axios.util';
+import { inverseGreenButtonStyle, greenButtonStyle } from 'styles/button.style';
+import boarName from 'utils/boardName.util';
+import { useImageUploadConfig } from 'hooks/useReactQuillConfig';
+import LengthCountInput from 'components/LengthCountInput';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { selectPostPost } from 'store/slices/post.slice';
+import { updatePost, getPost } from 'store/requests/post.request';
 
 function EditForm() {
   const dispatch = useAppDispatch();
@@ -99,11 +99,11 @@ const Container = styled.div`
     font-size: 1.5rem;
     min-height: 30rem;
   }
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     width: 100%;
     box-shadow: none;
   }
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     .ql-editor {
       min-height: 10rem;
       font-size: 1.2rem;
@@ -113,7 +113,7 @@ const Container = styled.div`
 const Title = styled.h1`
   font-size: 2rem;
   font-weight: 700;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
   }
 `;
@@ -126,7 +126,7 @@ const ButtonBox = styled.div`
 const SubmitButton = styled.button`
   ${greenButtonStyle};
   padding: 1rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
     padding: 0.7rem 1rem;
   }
@@ -134,7 +134,7 @@ const SubmitButton = styled.button`
 const GoBackButton = styled.button`
   ${inverseGreenButtonStyle};
   padding: 1rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
     padding: 0.7rem 1rem;
   }

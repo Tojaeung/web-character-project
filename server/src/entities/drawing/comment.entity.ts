@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import User from '@src/entities/profile/user.entity';
-import Drawing from '@src/entities/drawing/drawing.entity';
+import User from '@entities/profile/user.entity';
+import Drawing from '@entities/drawing/drawing.entity';
 
 class Relation {
   @ManyToOne(() => User, (user) => user.drawingComments, { onUpdate: 'CASCADE', onDelete: 'CASCADE' })

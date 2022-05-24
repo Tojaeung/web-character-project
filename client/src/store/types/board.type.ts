@@ -1,4 +1,4 @@
-import { PostCommentType, PostType } from '@src/types';
+import { PostCommentType, PostType } from 'interfaces/index';
 
 export type getAllBoardsReturnType = {
   ok: boolean;

@@ -1,6 +1,6 @@
 import { createTransport } from 'nodemailer';
-import logger from '@src/helpers/winston.helper';
-import ApiError from '@src/errors/api.error';
+import logger from '@helpers/winston.helper';
+import ApiError from '@errors/api.error';
 
 // 회원가입시, 이메일 인증 메일이다. (인증 메일을 확인해야 로그인이 가능하다.)
 export const sendAuthEmail = async (email: string, emailToken: string) => {

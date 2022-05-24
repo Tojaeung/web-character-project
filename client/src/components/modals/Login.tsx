@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { AiOutlineEye, AiOutlineMail, AiOutlineEyeInvisible } from 'react-icons/ai';
-import useSocketSetup from '@src/hooks/useSocketSetup';
-import { signIn } from '@src/store/requests/session.request';
-import { useAppDispatch } from '@src/store/app/hook';
-import { openModal, closeModal } from '@src/store/slices/modal.slice';
-import { greenInputStyle } from '@src/styles/input.style';
-import { greenButtonStyle } from '@src/styles/button.style';
-import socket from '@src/utils/socket';
+import useSocketSetup from 'hooks/useSocketSetup';
+import { signIn } from 'store/requests/session.request';
+import { useAppDispatch } from 'store/app/hook';
+import { openModal, closeModal } from 'store/slices/modal.slice';
+import { greenInputStyle } from 'styles/input.style';
+import { greenButtonStyle } from 'styles/button.style';
+import socket from 'utils/socket';
 
 function Login() {
   useSocketSetup();
@@ -50,7 +50,7 @@ function Login() {
         <Input
           color="green"
           type="text"
-          placeholder="홍길동@xxxxx.com"
+          placeholder="홍길동xxxxx.com"
           autoComplete="off"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -89,7 +89,7 @@ const Form = styled.form`
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     gap: 1rem;
   }
 `;
@@ -107,7 +107,7 @@ const Label = styled.label`
   font-size: 1.4rem;
   align-self: flex-start;
   white-space: nowrap;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -143,7 +143,7 @@ const SubmitButton = styled.button`
   width: 100%;
   padding: 1rem 0;
   font-size: 1.5rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -159,7 +159,7 @@ const FindPw = styled.span`
   &:hover {
     text-decoration: underline;
   }
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -171,7 +171,7 @@ const SignUp = styled.span`
   &:hover {
     text-decoration: underline;
   }
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;

@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { closeModal } from '@src/store/slices/modal.slice';
-import { selectChat, selectChatSelectedChat } from '@src/store/slices/chat.slice';
-import socket from '@src/utils/socket';
-import { greenButtonStyle } from '@src/styles/button.style';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { closeModal } from 'store/slices/modal.slice';
+import { selectChat, selectChatSelectedChat } from 'store/slices/chat.slice';
+import socket from 'utils/socket';
+import { greenButtonStyle } from 'styles/button.style';
 
 function ExitChat() {
   const dispatch = useAppDispatch();

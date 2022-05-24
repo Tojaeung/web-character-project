@@ -1,8 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
-import ApiError from '@src/errors/api.error';
-import logger from '@src/helpers/winston.helper';
+import { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
+import ApiError from '@errors/api.error';
+import logger from '@helpers/winston.helper';
 
-const apiErrorHandler = (err: ApiError, req: Request, res: Response, next: NextFunction) => {
+const apiErrorHandler: ErrorRequestHandler = (err: ApiError, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof ApiError) {
     return res.status(err.status).json({ ok: false, message: err.message, status: err.status });
   }

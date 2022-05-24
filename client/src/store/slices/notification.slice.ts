@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
-import { NotificationType } from '@src/types/index';
+import { NotificationType } from 'interfaces/index';
 
 interface NotificationSliceType {
   ok: boolean;

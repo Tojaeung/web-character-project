@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useAppDispatch } from '@src/store/app/hook';
-import { updateDrawingComment } from '@src/store/requests/drawing.request';
-import { updatePostComment } from '@src/store/requests/post.request';
-import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
+import { useAppDispatch } from 'store/app/hook';
+import { updateDrawingComment } from 'store/requests/drawing.request';
+import { updatePostComment } from 'store/requests/post.request';
+import { greenButtonStyle, inverseGreenButtonStyle } from 'styles/button.style';
 
 interface IProp {
   type: 'drawing' | 'board';

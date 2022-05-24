@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import logger from '@src/helpers/winston.helper';
-import ApiError from '@src/errors/api.error';
+import logger from '@helpers/winston.helper';
+import ApiError from '@errors/api.error';
 
 const auth = (req: Request, res: Response, next: NextFunction) => {
   if (!req.session.user) {

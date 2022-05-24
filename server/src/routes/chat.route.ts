@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
-import { chatUpload } from '@src/helpers/s3.helper';
-import logger from '@src/helpers/winston.helper';
-import ApiError from '@src/errors/api.error';
+import { chatUpload } from '@helpers/s3.helper';
+import logger from '@helpers/winston.helper';
+import ApiError from '@errors/api.error';
 
 const chatRouter = Router();
 

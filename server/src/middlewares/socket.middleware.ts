@@ -1,6 +1,6 @@
 import { NextFunction } from 'express';
-import { SessionSocket } from '@src/types';
-import logger from '@src/helpers/winston.helper';
+import { SessionSocket } from '../interfaces/index';
+import logger from '@helpers/winston.helper';
 import { Socket } from 'socket.io';
 
 export const authorizeUser = async (defaultSocket: Socket, next: NextFunction) => {

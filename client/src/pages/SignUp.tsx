@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import styled from 'styled-components';
 import { AiOutlineUser, AiOutlineEye, AiOutlineMail, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { greenInputStyle } from '@src/styles/input.style';
-import { greenButtonStyle } from '@src/styles/button.style';
+import { greenInputStyle } from 'styles/input.style';
+import { greenButtonStyle } from 'styles/button.style';
 import { useNavigate } from 'react-router-dom';
-import { openModal } from '@src/store/slices/modal.slice';
-import { useAppDispatch } from '@src/store/app/hook';
-import { signUp } from '@src/store/requests/user.request';
+import { openModal } from 'store/slices/modal.slice';
+import { useAppDispatch } from 'store/app/hook';
+import { signUp } from 'store/requests/user.request';
 
 function SignUp() {
   const dispatch = useAppDispatch();
@@ -43,13 +43,13 @@ function SignUp() {
         <Label htmlFor="email">이메일</Label>
         <Input
           type="text"
-          placeholder="이메일 (홍길동@xxxxx.com)"
+          placeholder="이메일 (홍길동xxxxx.com)"
           autoComplete="off"
           style={{ borderColor: errors.email && 'red' }}
           {...register('email', {
             required: { value: true, message: '이메일 입력해주세요.' },
             pattern: {
-              value: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/,
+              value: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/,
               message: '이메일 형식이 아닙니다.',
             },
           })}
@@ -89,7 +89,7 @@ function SignUp() {
           {...register('pw', {
             required: { value: true, message: '비밀번호를 입력해주세요' },
             pattern: {
-              value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/,
+              value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$$!%*#?&])[A-Za-z\d$$!%*#?&]{8,}$/,
               message: '영문,숫자.특수문자 조합하여 8자리 이상',
             },
           })}
@@ -136,7 +136,7 @@ const Form = styled.form`
   align-items: center;
   margin: 0 auto;
   gap: 3rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
   }
 `;
 

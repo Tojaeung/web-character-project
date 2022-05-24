@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import User from '@src/entities/profile/user.entity';
-import Post from '@src/entities/board/post.entity';
+import User from '@entities/profile/user.entity';
+import Post from '@entities/board/post.entity';
 
 class Relation {
   @ManyToOne(() => User, (user) => user.imageKeys, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })

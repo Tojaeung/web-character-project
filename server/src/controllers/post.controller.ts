@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import { getCustomRepository, getRepository } from 'typeorm';
-import logger from '@src/helpers/winston.helper';
-import ApiError from '@src/errors/api.error';
-import s3Delete from '@src/utils/s3.utils';
-import { createImageKey, deleteImageKey } from '@src/utils/imagekey.utils';
-import Post from '@src/entities/board/post.entity';
-import Board from '@src/entities/board/board.entity';
-import { CommentRepository, DisLikeRepository, LikeRepository, PostRepository } from '@src/repositorys/post.repository';
-import Comment from '@src/entities/board/comment.entity';
+import logger from '@helpers/winston.helper';
+import ApiError from '@errors/api.error';
+import s3Delete from '@utils/s3.utils';
+import { createImageKey, deleteImageKey } from '@utils/imagekey.utils';
+import Post from '@entities/board/post.entity';
+import Board from '@entities/board/board.entity';
+import { CommentRepository, DisLikeRepository, LikeRepository, PostRepository } from '@repositorys/post.repository';
+import Comment from '@entities/board/comment.entity';
 import {
   CreateCommentDTO,
   CreateDisLikeDTO,
@@ -16,8 +16,8 @@ import {
   RemoveImageKeyDTO,
   UpdateCommentDTO,
   UpdatePostDTO,
-} from '@src/schemas/board.schema';
-import User from '@src/entities/profile/user.entity';
+} from '@schemas/board.schema';
+import User from '@entities/profile/user.entity';
 
 export const getPost = async (req: Request, res: Response): Promise<any> => {
   const postRepo = getCustomRepository(PostRepository);

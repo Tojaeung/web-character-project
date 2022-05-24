@@ -1,24 +1,24 @@
 import { Request, Response } from 'express';
 import { getRepository, getCustomRepository } from 'typeorm';
-import logger from '@src/helpers/winston.helper';
+import logger from '@helpers/winston.helper';
 import {
   DrawingRepository,
   DrawingCommentRepository,
   LikeRepository,
   DisLikeRepository,
-} from '@src/repositorys/drawing.repository';
-import User from '@src/entities/profile/user.entity';
-import Drawing from '@src/entities/drawing/drawing.entity';
-import DrawingComment from '@src/entities/drawing/comment.entity';
-import ApiError from '@src/errors/api.error';
-import s3Delete from '@src/utils/s3.utils';
+} from '@repositorys/drawing.repository';
+import User from '@entities/profile/user.entity';
+import Drawing from '@entities/drawing/drawing.entity';
+import DrawingComment from '@entities/drawing/comment.entity';
+import ApiError from '@errors/api.error';
+import s3Delete from '@utils/s3.utils';
 import {
   CreateCommentDTO,
   CreateDisLikeDTO,
   CreateDrawingDTO,
   CreateLikeDTO,
   UpdateCommentDTO,
-} from '@src/schemas/drawing.schema';
+} from '@schemas/drawing.schema';
 
 export const createDrawing = async (req: Request<{}, {}, CreateDrawingDTO>, res: Response): Promise<any> => {
   const drawingRepo = getCustomRepository(DrawingRepository);

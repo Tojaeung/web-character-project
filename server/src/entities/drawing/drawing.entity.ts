@@ -9,10 +9,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import User from '@src/entities/profile/user.entity';
-import Comment from '@src/entities/drawing/comment.entity';
-import Like from '@src/entities/drawing/like.entity';
-import DisLike from '@src/entities/drawing/dislike.entity';
+import User from '@entities/profile/user.entity';
+import Comment from '@entities/drawing/comment.entity';
+import Like from '@entities/drawing/like.entity';
+import DisLike from '@entities/drawing/dislike.entity';
 
 class Relation {
   @ManyToOne(() => User, (user) => user.drawings, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })

@@ -1,9 +1,9 @@
 import moment from 'moment';
-import { SessionSocket } from '@src/types/index';
-import cluster from '@src/helpers/redis.helper';
-import parseMessages from '@src/socketio/chat/parseMessages';
-import s3Delete from '@src/utils/s3.utils';
-import logger from '@src/helpers/winston.helper';
+import { SessionSocket } from '@interfaces/index';
+import cluster from '@helpers/redis.helper';
+import parseMessages from '@socketio/chat/parseMessages';
+import s3Delete from '@utils/s3.utils';
+import logger from '@helpers/winston.helper';
 
 const deleteMessage = async (socket: SessionSocket, chatId: string) => {
   const user = socket.request.session.user;

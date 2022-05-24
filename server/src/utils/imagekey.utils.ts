@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
-import ImageKey from '@src/entities/board/imageKey.entity';
-import s3Delete from '@src/utils/s3.utils';
+import ImageKey from '@entities/board/imageKey.entity';
+import s3Delete from '@utils/s3.utils';
 
 export const createImageKey = (imageKeys: string[], id: number, postId: number) => {
   imageKeys.forEach(

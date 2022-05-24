@@ -4,16 +4,16 @@ import { useParams, useNavigate, useLocation, NavLink, useSearchParams } from 'r
 import { v4 } from 'uuid';
 import { BsPencilSquare } from 'react-icons/bs';
 import { HiOutlineChevronDoubleUp } from 'react-icons/hi';
-import { useAppDispatch } from '@src/store/app/hook';
-import Nickname from '@src/components/Nickname';
-import { getBoard } from '@src/store/requests/board.request';
+import { useAppDispatch } from 'store/app/hook';
+import Nickname from 'components/Nickname';
+import { getBoard } from 'store/requests/board.request';
 import Pagination from './Pagination';
 import LimitSelector from './LimitSelector';
 import SearchBar from './SearchBar';
-import CreatedTime from '@src/components/CreatedTime';
-import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
-import boardName from '@src/utils/boardName.util';
-import { PostType } from '@src/types';
+import CreatedTime from 'components/CreatedTime';
+import { greenButtonStyle, inverseGreenButtonStyle } from 'styles/button.style';
+import boardName from 'utils/boardName.util';
+import { PostType } from 'interfaces/index';
 
 function Board() {
   const dispatch = useAppDispatch();
@@ -191,7 +191,7 @@ const Container = styled.div`
   padding: 0 1rem;
   background-color: ${({ theme }) => theme.palette.bgColor};
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     display: none;
   }
 
@@ -230,7 +230,7 @@ const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 1rem 0;
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     border-bottom: 1px solid ${({ theme }) => theme.palette.gray};
   }
 `;
@@ -242,7 +242,7 @@ const Footer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     justify-content: center;
   }
 `;
@@ -250,7 +250,7 @@ const Footer = styled.div`
 const ScrollUpButton = styled.button`
   ${greenButtonStyle};
   padding: 0.7rem;
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     position: fixed;
     bottom: 10rem;
     right: 2rem;
@@ -261,7 +261,7 @@ const ScrollUpButton = styled.button`
 const CreatePostButton = styled.button`
   ${inverseGreenButtonStyle};
   padding: 0.7rem;
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     ${greenButtonStyle};
     position: fixed;
     bottom: 6rem;
@@ -271,13 +271,13 @@ const CreatePostButton = styled.button`
 
 const Responsive = styled.div`
   display: none;
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     width: 100%;
     display: block;
     padding: 0 1rem;
     background-color: ${({ theme }) => theme.palette.bgColor};
   }
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     width: 100%;
     display: block;
     padding: 0 0.5rem;
@@ -302,7 +302,7 @@ const Title = styled.div`
   align-self: flex-start;
   font-size: 1.3rem;
   word-break: break-all;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;

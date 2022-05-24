@@ -1,8 +1,8 @@
 import { AbstractRepository, EntityRepository } from 'typeorm';
-import Post from '@src/entities/board/post.entity';
-import Comment from '@src/entities/board/comment.entity';
-import Like from '@src/entities/board/like.entity';
-import DisLike from '@src/entities/board/dislike.entity';
+import Post from '@entities/board/post.entity';
+import Comment from '@entities/board/comment.entity';
+import Like from '@entities/board/like.entity';
+import DisLike from '@entities/board/dislike.entity';
 
 @EntityRepository(Post)
 export class PostRepository extends AbstractRepository<Post> {

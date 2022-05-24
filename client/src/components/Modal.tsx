@@ -1,30 +1,30 @@
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectModalIsOpen, selectModalModal, closeModal, selectModalProps } from '@src/store/slices/modal.slice';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { selectModalIsOpen, selectModalModal, closeModal, selectModalProps } from 'store/slices/modal.slice';
 import { AiOutlineClose } from 'react-icons/ai';
 // user 모달
-import Login from '@src/components/modals/Login';
-import SignUpGuide from '@src/components/modals/SignUpGuide';
-import ForgotPw from '@src/components/modals/ForgotPw';
+import Login from 'components/modals/Login';
+import SignUpGuide from 'components/modals/SignUpGuide';
+import ForgotPw from 'components/modals/ForgotPw';
 
 // 채팅 모달
-import ExitChat from '@src/components/modals/ExitChat';
+import ExitChat from 'components/modals/ExitChat';
 
 // settings 모달
-import ChangeEmail from '@src/components/modals/ChangeEmail';
-import ChangeNickname from '@src/components/modals/ChangeNickname';
-import ChangePw from '@src/components/modals/ChangePw';
-import Desc from '@src/components/modals/Desc';
-import DeleteAccount from '@src/components/modals/DeleteAccount';
+import ChangeEmail from 'components/modals/ChangeEmail';
+import ChangeNickname from 'components/modals/ChangeNickname';
+import ChangePw from 'components/modals/ChangePw';
+import Desc from 'components/modals/Desc';
+import DeleteAccount from 'components/modals/DeleteAccount';
 
 // 그림 모달
-import Drawing from '@src/components/modals/drawing';
+import Drawing from 'components/modals/drawing';
 
 // 기타 등등 모달
-import Penalty from '@src/components/modals/Penalty';
-import Report from '@src/components/modals/Report';
-import UserInfo from '@src/components/modals/UserInfo';
+import Penalty from 'components/modals/Penalty';
+import Report from 'components/modals/Report';
+import UserInfo from 'components/modals/UserInfo';
 
 function Modal() {
   const dispatch = useAppDispatch();

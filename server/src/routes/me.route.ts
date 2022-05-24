@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import asyncHandler from 'express-async-handler';
-import validator from '@src/middlewares/validator.middleware';
-import auth from '@src/middlewares/auth.middleware';
-import { avatarUpload, coverUpload } from '@src/helpers/s3.helper';
+import validator from '@middlewares/validator.middleware';
+import auth from '@middlewares/auth.middleware';
+import { avatarUpload, coverUpload } from '@helpers/s3.helper';
 import {
   verifyEmail,
   updateEmail,
@@ -14,9 +14,9 @@ import {
   updateCover,
   updateDefaultCover,
   deleteAccount,
-} from '@src/controllers/user.controller';
-import { getAllMyPosts, getAllMyComments } from '@src/controllers/board.controller';
-import { verifyEmailSchema, updateNicknameSchema, updatePwSchema, updateDescSchema } from '@src/schemas/user.schema';
+} from '@controllers/user.controller';
+import { getAllMyPosts, getAllMyComments } from '@controllers/board.controller';
+import { verifyEmailSchema, updateNicknameSchema, updatePwSchema, updateDescSchema } from '@schemas/user.schema';
 
 const router = Router();
 

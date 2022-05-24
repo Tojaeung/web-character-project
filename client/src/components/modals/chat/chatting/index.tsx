@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import { AiOutlineClose } from 'react-icons/ai';
 import { IoIosArrowBack } from 'react-icons/io';
 import { ImExit } from 'react-icons/im';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectChatSelectedChat, selectChat, closeChatModal } from '@src/store/slices/chat.slice';
-import { openModal } from '@src/store/slices/modal.slice';
-import Avatar from '@src/components/Avatar';
-import ChatBody from '@src/components/modals/chat/chatting/ChatBody';
-import ChatForm from '@src/components/modals/chat/chatting/ChatForm';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { selectChatSelectedChat, selectChat, closeChatModal } from 'store/slices/chat.slice';
+import { openModal } from 'store/slices/modal.slice';
+import Avatar from 'components/Avatar';
+import ChatBody from 'components/modals/chat/chatting/ChatBody';
+import ChatForm from 'components/modals/chat/chatting/ChatForm';
 
 function Chatting() {
   const dispatch = useAppDispatch();
@@ -53,7 +53,7 @@ const Container = styled.div`
   flex-direction: column;
   min-height: 70rem;
   justify-content: space-between;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     min-height: 50rem;
   }
 `;
@@ -72,7 +72,7 @@ const FlexBox = styled.div`
 const Nickname = styled.span`
   font-size: 1.5rem;
   font-weight: bold;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.3rem;
   }
 `;

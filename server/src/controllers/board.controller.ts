@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { getRepository, ILike } from 'typeorm';
-import logger from '@src/helpers/winston.helper';
-import ApiError from '@src/errors/api.error';
-import User from '@src/entities/profile/user.entity';
-import Post from '@src/entities/board/post.entity';
-import Board from '@src/entities/board/board.entity';
-import Comment from '@src/entities/board/comment.entity';
+import logger from '@helpers/winston.helper';
+import ApiError from '@errors/api.error';
+import User from '@entities/profile/user.entity';
+import Post from '@entities/board/post.entity';
+import Board from '@entities/board/board.entity';
+import Comment from '@entities/board/comment.entity';
 
 export const getAllBoards = async (req: Request, res: Response): Promise<any> => {
   const free = await getRepository(Post).find({

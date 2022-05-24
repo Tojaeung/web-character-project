@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineUser } from 'react-icons/ai';
-import { closeModal } from '@src/store/slices/modal.slice';
-import { useAppDispatch } from '@src/store/app/hook';
-import { greenInputStyle } from '@src/styles/input.style';
-import { greenButtonStyle } from '@src/styles/button.style';
-import { updateNickname } from '@src/store/requests/user.request';
+import { closeModal } from 'store/slices/modal.slice';
+import { useAppDispatch } from 'store/app/hook';
+import { greenInputStyle } from 'styles/input.style';
+import { greenButtonStyle } from 'styles/button.style';
+import { updateNickname } from 'store/requests/user.request';
 
 function ChangeNickname() {
   const dispatch = useAppDispatch();
@@ -51,7 +51,7 @@ const Form = styled.form`
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     width: 25rem;
     gap: 1rem;
   }
@@ -60,14 +60,14 @@ const Title = styled.h1`
   align-self: flex-start;
   font-size: 2rem;
   font-weight: 700;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
   }
 `;
 const Content = styled.p`
   font-size: 1.5rem;
   align-self: flex-start;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -93,7 +93,7 @@ const SubmitButton = styled.button`
   ${greenButtonStyle};
   width: 50%;
   padding: 1rem 0;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
     padding: 0.7rem 1rem;
   }

@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { GrAddCircle } from 'react-icons/gr';
-import Avatar from '@src/components/Avatar';
-import Nickname from '@src/components/Nickname';
-import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
-import { useDefaultConfig } from '@src/hooks/useReactQuillConfig';
-import { useAppSelector, useAppDispatch } from '@src/store/app/hook';
-import { selectUserUser } from '@src/store/slices/user.slice';
-import { createDrawing } from '@src/store/requests/drawing.request';
+import Avatar from 'components/Avatar';
+import Nickname from 'components/Nickname';
+import { greenButtonStyle, inverseGreenButtonStyle } from 'styles/button.style';
+import { useDefaultConfig } from 'hooks/useReactQuillConfig';
+import { useAppSelector, useAppDispatch } from 'store/app/hook';
+import { selectUserUser } from 'store/slices/user.slice';
+import { createDrawing } from 'store/requests/drawing.request';
 
 function DrawingForm() {
   const dispatch = useAppDispatch();
@@ -117,11 +117,11 @@ const Container = styled.div`
     min-height: 30rem;
     font-size: 1.5rem;
   }
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     width: 100%;
     box-shadow: none;
   }
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     .ql-editor {
       min-height: 10rem;
       font-size: 1.2rem;
@@ -132,7 +132,7 @@ const Title = styled.h1`
   align-self: flex-start;
   font-size: 2rem;
   font-weight: 700;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
   }
 `;
@@ -162,7 +162,7 @@ const Drawing = styled.div`
     opacity: 0.5;
     background-color: ${({ theme }) => theme.palette.gray};
   }
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     min-height: 10rem;
   }
 `;
@@ -173,7 +173,7 @@ const Image = styled.img`
 `;
 const GuideText = styled.span`
   font-size: 2rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
   }
 `;
@@ -196,7 +196,7 @@ const ButtonWrapper = styled.div`
 
 const AddIcon = styled(GrAddCircle)`
   font-size: 5rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 3rem;
   }
 `;
@@ -204,14 +204,14 @@ const AddIcon = styled(GrAddCircle)`
 const SubmitButton = styled.button`
   ${greenButtonStyle};
   padding: 1rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     padding: 0.7rem 1rem;
   }
 `;
 const CancelButton = styled.button`
   ${inverseGreenButtonStyle};
   padding: 1rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     padding: 0.7rem 1rem;
   }
 `;

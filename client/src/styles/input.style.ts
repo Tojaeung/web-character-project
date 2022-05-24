@@ -14,7 +14,7 @@ export const greenInputStyle = css`
     font-size: 1.4rem;
   }
 
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
     &::placeholder {
       font-size: 1.2rem;
@@ -32,7 +32,7 @@ export const defaultInputStyle = css`
     font-size: 1.4rem;
   }
 
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
     &::placeholder {
       font-size: 1.2rem;

@@ -1,6 +1,6 @@
 import { getCustomRepository } from 'typeorm';
-import { SessionSocket } from '@src/types/index';
-import { NotificationRepository } from '@src/repositorys/notification.repository';
+import { SessionSocket } from '@interfaces/index';
+import { NotificationRepository } from '@repositorys/notification.repository';
 
 const updateAllNotifications = async (socket: SessionSocket) => {
   const user = socket.request.session.user;

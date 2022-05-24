@@ -1,5 +1,5 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import Drawing from '@src/entities/drawing/drawing.entity';
+import Drawing from '@entities/drawing/drawing.entity';
 
 class Relation {
   @ManyToOne(() => Drawing, (drawing) => drawing.likes, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })

@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import asyncHandler from 'express-async-handler';
-import validator from '@src/middlewares/validator.middleware';
-import auth from '@src/middlewares/auth.middleware';
-import penalty from '@src/middlewares/penalty.middleware';
-import { boardUpload } from '@src/helpers/s3.helper';
+import validator from '@middlewares/validator.middleware';
+import auth from '@middlewares/auth.middleware';
+import penalty from '@middlewares/penalty.middleware';
+import { boardUpload } from '@helpers/s3.helper';
 import {
   createCommentSchema,
   createDisLikeSchema,
@@ -12,7 +12,7 @@ import {
   removeImageKeySchema,
   updateCommentSchema,
   updatePostSchema,
-} from '@src/schemas/board.schema';
+} from '@schemas/board.schema';
 import {
   getPost,
   createComment,
@@ -25,7 +25,7 @@ import {
   deletePost,
   addImageKey,
   removeImageKey,
-} from '@src/controllers/post.controller';
+} from '@controllers/post.controller';
 
 const router = Router();
 

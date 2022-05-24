@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import instance from '@src/utils/axios.util';
+import instance from 'utils/axios.util';
 import {
   signUpReturnType,
   signUpDataType,
@@ -31,7 +31,7 @@ import {
   givePenaltyDataType,
   givePenaltyReturnType,
   deleteAccountReturnType,
-} from '@src/store/types/user.type';
+} from 'store/types/user.type';
 
 export const signUp = createAsyncThunk<
   signUpReturnType,

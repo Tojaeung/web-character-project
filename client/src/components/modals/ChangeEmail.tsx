@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineMail } from 'react-icons/ai';
-import { closeModal } from '@src/store/slices/modal.slice';
-import { useAppDispatch } from '@src/store/app/hook';
-import { signOut } from '@src/store/requests/session.request';
-import { updateEmail } from '@src/store/requests/user.request';
-import { greenInputStyle } from '@src/styles/input.style';
-import { greenButtonStyle } from '@src/styles/button.style';
+import { closeModal } from 'store/slices/modal.slice';
+import { useAppDispatch } from 'store/app/hook';
+import { signOut } from 'store/requests/session.request';
+import { updateEmail } from 'store/requests/user.request';
+import { greenInputStyle } from 'styles/input.style';
+import { greenButtonStyle } from 'styles/button.style';
 
 function ChangeEmail() {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ function ChangeEmail() {
       <InputBox>
         <Input
           type="text"
-          placeholder="이메일 (email@xxxxx.com)"
+          placeholder="이메일 (emailxxxxx.com)"
           autoComplete="off"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -58,7 +58,7 @@ const Form = styled.form`
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     width: 25rem;
     gap: 1rem;
   }
@@ -68,14 +68,14 @@ const Title = styled.h1`
   align-self: flex-start;
   font-size: 2rem;
   font-weight: 700;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
   }
 `;
 const Content = styled.p`
   font-size: 1.5rem;
   align-self: flex-start;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -103,7 +103,7 @@ const SubmitButton = styled.button`
   ${greenButtonStyle};
   width: 50%;
   padding: 1rem 0;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     padding: 0.7rem 1rem;
     font-size: 1.2rem;
   }

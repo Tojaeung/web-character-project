@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import imageResize from 'quill-image-resize';
-import instance from '@src/utils/axios.util';
+import instance from 'utils/axios.util';
 Quill.register('modules/imageResize', imageResize);
 
 export const useDefaultConfig = () => {

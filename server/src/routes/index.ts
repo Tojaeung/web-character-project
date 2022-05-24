@@ -1,11 +1,11 @@
 import express from 'express';
-import board from '@src/routes/board.route';
-import post from '@src/routes/post.route';
-import chat from '@src/routes/chat.route';
-import drawing from '@src/routes/drawing.route';
-import session from '@src/routes/session.route';
-import user from '@src/routes/user.route';
-import me from '@src/routes/me.route';
+import board from '@routes/board.route';
+import post from '@routes/post.route';
+import chat from '@routes/chat.route';
+import drawing from '@routes/drawing.route';
+import session from '@routes/session.route';
+import user from '@routes/user.route';
+import me from '@routes/me.route';
 
 const router = express.Router();
 

@@ -3,12 +3,12 @@ import ReactQuill from 'react-quill';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import 'react-quill/dist/quill.snow.css';
-import { useDefaultConfig } from '@src/hooks/useReactQuillConfig';
+import { useDefaultConfig } from 'hooks/useReactQuillConfig';
 import TabMenu from './common/TabMenu';
-import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectUserUser } from '@src/store/slices/user.slice';
-import { updateDesc } from '@src/store/requests/user.request';
+import { greenButtonStyle, inverseGreenButtonStyle } from 'styles/button.style';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { selectUserUser } from 'store/slices/user.slice';
+import { updateDesc } from 'store/requests/user.request';
 
 function Desc() {
   const user = useAppSelector(selectUserUser);
@@ -65,7 +65,7 @@ const Container = styled.div`
   .ql-editor {
     min-height: 20rem;
   }
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     box-shadow: none;
   }
 `;
@@ -79,7 +79,7 @@ const ButtonBox = styled.div`
 const SubmitButton = styled.button`
   ${greenButtonStyle};
   padding: 1rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     padding: 0.7rem 1rem;
     font-size: 1.2rem;
   }
@@ -87,7 +87,7 @@ const SubmitButton = styled.button`
 const CancelButton = styled.button`
   ${inverseGreenButtonStyle};
   padding: 1rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     padding: 0.7rem 1rem;
     font-size: 1.2rem;
   }

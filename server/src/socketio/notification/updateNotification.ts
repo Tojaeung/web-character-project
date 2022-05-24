@@ -1,8 +1,8 @@
 import { getCustomRepository, getRepository } from 'typeorm';
-import { SessionSocket } from '@src/types/index';
-import { NotificationRepository } from '@src/repositorys/notification.repository';
-import Notification from '@src/entities/notification/notification.entity';
-import logger from '@src/helpers/winston.helper';
+import { SessionSocket } from '@interfaces/index';
+import { NotificationRepository } from '@repositorys/notification.repository';
+import Notification from '@entities/notification/notification.entity';
+import logger from '@helpers/winston.helper';
 
 const updateNotification = async (socket: SessionSocket, notificationId: number) => {
   const notificationRepo = getCustomRepository(NotificationRepository);

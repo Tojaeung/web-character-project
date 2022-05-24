@@ -1,6 +1,6 @@
 import { AbstractRepository, EntityRepository } from 'typeorm';
-import Notification from '@src/entities/notification/notification.entity';
-import NotificationType from '@src/types/notification.type';
+import Notification from '@entities/notification/notification.entity';
+import NotificationType from '@interfaces/notification.type';
 
 @EntityRepository(Notification)
 export class NotificationRepository extends AbstractRepository<Notification> {

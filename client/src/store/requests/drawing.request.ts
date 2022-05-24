@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import instance from '@src/utils/axios.util';
+import instance from 'utils/axios.util';
 import { RootState } from '../app/store';
 import {
   getDrawingsReturnType,
@@ -20,7 +20,7 @@ import {
   createLikeDataType,
   createDisLikeReturnType,
   createDisLikeDataType,
-} from '@src/store/types/drawing.type';
+} from 'store/types/drawing.type';
 
 export const getDrawings = createAsyncThunk<
   getDrawingsReturnType,

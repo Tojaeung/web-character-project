@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import Post from '@src/entities/board/post.entity';
-import Comment from '@src/entities/board/comment.entity';
+import Post from '@entities/board/post.entity';
+import Comment from '@entities/board/comment.entity';
 
 class Relation {
   @OneToMany(() => Post, (post) => post.board_id)

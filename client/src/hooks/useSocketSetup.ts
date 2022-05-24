@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import socket from '@src/utils/socket';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectUserUser } from '@src/store/slices/user.slice';
-import { signOut } from '@src/store/requests/session.request';
+import socket from 'utils/socket';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { selectUserUser } from 'store/slices/user.slice';
+import { signOut } from 'store/requests/session.request';
 import {
   addChat,
   initChats,
@@ -11,7 +11,7 @@ import {
   initMessageNotis,
   addMessageNoti,
   openChatModal,
-} from '@src/store/slices/chat.slice';
+} from 'store/slices/chat.slice';
 import {
   initNotification,
   addNotification,
@@ -19,9 +19,9 @@ import {
   updateNotification,
   updateAllNotifications,
   deleteAllNotifications,
-} from '@src/store/slices/notification.slice';
-import { NotificationType } from '@src/types';
-import { ChatType, MessageType, MessageNotiType } from '@src/types';
+} from 'store/slices/notification.slice';
+import { NotificationType } from 'interfaces/index';
+import { ChatType, MessageType, MessageNotiType } from 'interfaces/index';
 
 const useSocketSetup = () => {
   const dispatch = useAppDispatch();

@@ -2,10 +2,10 @@ import styled from 'styled-components';
 import { v4 } from 'uuid';
 import { FiChevronRight } from 'react-icons/fi';
 import { Link, NavLink } from 'react-router-dom';
-import CreatedTime from '@src/components/CreatedTime';
+import CreatedTime from 'components/CreatedTime';
 import Nickname from './Nickname';
-import { PostType } from '@src/types';
-import boardName from '@src/utils/boardName.util';
+import { PostType } from 'interfaces/index';
+import boardName from 'utils/boardName.util';
 
 interface IProps {
   posts: PostType[];
@@ -67,7 +67,7 @@ const Table = styled.table`
       align-items: center;
       padding: 0.5rem 1rem;
       border-bottom: 1px solid ${({ theme }) => theme.palette.gray};
-      @media ${({ theme }) => theme.device.mobile} {
+      media ${({ theme }) => theme.device.mobile} {
         flex-wrap: wrap;
       }
     }

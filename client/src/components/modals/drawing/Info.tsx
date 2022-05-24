@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 import { AiOutlineEye } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
-import Avatar from '@src/components/Avatar';
-import Nickname from '@src/components/Nickname';
-import CreatedTime from '@src/components/CreatedTime';
-import LikeButton from '@src/components/LikeButton';
-import DisLikeButton from '@src/components/DisLikeButton';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { selectDrawingDrawings, selectDrawingIndex } from '@src/store/slices/drawing.slice';
-import { closeModal } from '@src/store/slices/modal.slice';
-import { deleteDrawing } from '@src/store/requests/drawing.request';
-import MoreButton from '@src/components/MoreButton';
+import Avatar from 'components/Avatar';
+import Nickname from 'components/Nickname';
+import CreatedTime from 'components/CreatedTime';
+import LikeButton from 'components/LikeButton';
+import DisLikeButton from 'components/DisLikeButton';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { selectDrawingDrawings, selectDrawingIndex } from 'store/slices/drawing.slice';
+import { closeModal } from 'store/slices/modal.slice';
+import { deleteDrawing } from 'store/requests/drawing.request';
+import MoreButton from 'components/MoreButton';
 
 function Info() {
   const dispatch = useAppDispatch();
@@ -107,7 +107,7 @@ const UserBox = styled.div`
 
 const Content = styled.div`
   font-size: 1.4rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;

@@ -7,12 +7,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import Drawing from '@src/entities/drawing/drawing.entity';
-import DrawingComment from '@src/entities/drawing/comment.entity';
+import Drawing from '@entities/drawing/drawing.entity';
+import DrawingComment from '@entities/drawing/comment.entity';
 
-import Post from '@src/entities/board/post.entity';
-import PostComment from '@src/entities/board/comment.entity';
-import ImageKey from '@src/entities/board/imageKey.entity';
+import Post from '@entities/board/post.entity';
+import PostComment from '@entities/board/comment.entity';
+import ImageKey from '@entities/board/imageKey.entity';
 
 class Relation {
   @OneToMany(() => Drawing, (drawing) => drawing.user)

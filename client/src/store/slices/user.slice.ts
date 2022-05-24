@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
-import { UserType } from '@src/types';
-import { signIn, signOut, refreshLogin } from '@src/store/requests/session.request';
+import { UserType } from 'interfaces/index';
+import { signIn, signOut, refreshLogin } from 'store/requests/session.request';
 import {
   updateAvatar,
   updateCover,
@@ -9,8 +9,8 @@ import {
   updateDefaultCover,
   updateDesc,
   updateNickname,
-} from '@src/store/requests/user.request';
-import socket from '@src/utils/socket';
+} from 'store/requests/user.request';
+import socket from 'utils/socket';
 
 interface UserSliceType {
   ok: boolean;

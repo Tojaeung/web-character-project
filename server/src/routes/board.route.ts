@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import asyncHandler from 'express-async-handler';
-import { getAllBoards, getBoard } from '@src/controllers/board.controller';
+import { getAllBoards, getBoard } from '@controllers/board.controller';
 
 const router = Router();
 

@@ -3,17 +3,17 @@ import { v4 } from 'uuid';
 import styled from 'styled-components';
 import { AiOutlineClose } from 'react-icons/ai';
 import 'moment/locale/ko';
-import Avatar from '@src/components/Avatar';
-import relativeTime from '@src/utils/date.util';
-import { useAppDispatch, useAppSelector } from '@src/store/app/hook';
-import { ChatType } from '@src/types';
+import Avatar from 'components/Avatar';
+import relativeTime from 'utils/date.util';
+import { useAppDispatch, useAppSelector } from 'store/app/hook';
+import { ChatType } from 'interfaces/index';
 import {
   selectChatChats,
   selectChat,
   selectChatMessageNotis,
   closeChatModal,
   selectChatMessages,
-} from '@src/store/slices/chat.slice';
+} from 'store/slices/chat.slice';
 
 function ChatList() {
   const dispatch = useAppDispatch();
@@ -85,7 +85,7 @@ const Header = styled.div`
 const Topic = styled.span`
   font-size: 1.5rem;
   font-weight: bold;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.3rem;
   }
 `;
@@ -115,7 +115,7 @@ const GuideText = styled.p`
   text-align: center;
   margin-top: 5rem;
   font-size: 1.4rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -131,7 +131,7 @@ const FlexBox = styled.div`
 const Nickname = styled.span`
   font-size: 1.4rem;
   font-weight: bold;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.3rem;
   }
 `;

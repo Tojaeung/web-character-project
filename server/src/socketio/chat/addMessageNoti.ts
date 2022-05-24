@@ -1,5 +1,5 @@
-import { SessionSocket } from '@src/types/index';
-import cluster from '@src/helpers/redis.helper';
+import { SessionSocket } from '@interfaces/index';
+import cluster from '@helpers/redis.helper';
 
 interface MessageNotiType {
   from: string;

@@ -8,9 +8,9 @@ import {
   Index,
   Column,
 } from 'typeorm';
-import User from '@src/entities/profile/user.entity';
-import Post from '@src/entities/board/post.entity';
-import Board from '@src/entities/board/board.entity';
+import User from '@entities/profile/user.entity';
+import Post from '@entities/board/post.entity';
+import Board from '@entities/board/board.entity';
 
 class Relation {
   @ManyToOne(() => User, (user) => user.postComments, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })

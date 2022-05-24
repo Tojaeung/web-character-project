@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { greenButtonStyle } from '@src/styles/button.style';
-import { useAppDispatch } from '@src/store/app/hook';
-import { resetPw } from '@src/store/requests/user.request';
-import { greenInputStyle } from '@src/styles/input.style';
+import { greenButtonStyle } from 'styles/button.style';
+import { useAppDispatch } from 'store/app/hook';
+import { resetPw } from 'store/requests/user.request';
+import { greenInputStyle } from 'styles/input.style';
 
 function ResetPw() {
   const navigate = useNavigate();
@@ -84,7 +84,7 @@ const Logo = styled.span`
 const Content = styled.p`
   align-self: flex-start;
   font-size: 1.5rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.3rem;
   }
 `;
@@ -118,7 +118,7 @@ const SubmitButton = styled.button`
   ${greenButtonStyle};
   width: 100%;
   padding: 1rem 0;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;

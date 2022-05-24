@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 import { v4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from '@src/store/app/hook';
-import { selectNotificationNotifications } from '@src/store/slices/notification.slice';
-import CreatedTime from '@src/components/CreatedTime';
+import { useAppSelector } from 'store/app/hook';
+import { selectNotificationNotifications } from 'store/slices/notification.slice';
+import CreatedTime from 'components/CreatedTime';
 import TabMenu from './common/TabMenu';
-import socket from '@src/utils/socket';
-import { NotificationType } from '@src/types';
-import notificationType from '@src/utils/notificationType.util';
-import { greenButtonStyle, inverseGreenButtonStyle } from '@src/styles/button.style';
+import socket from 'utils/socket';
+import { NotificationType } from 'interfaces/index';
+import notificationType from 'utils/notificationType.util';
+import { greenButtonStyle, inverseGreenButtonStyle } from 'styles/button.style';
 
 function Notification() {
   const navigate = useNavigate();
@@ -96,7 +96,7 @@ const Container = styled.div`
     background-color: ${({ theme }) => theme.palette.gray};
     border: 1px solid ${({ theme }) => theme.palette.black};
     white-space: nowrap;
-    @media ${({ theme }) => theme.device.mobile} {
+    media ${({ theme }) => theme.device.mobile} {
       font-size: 1.3rem;
     }
   }
@@ -107,7 +107,7 @@ const Container = styled.div`
     background-color: ${({ theme }) => theme.palette.white};
     border: 1px solid ${({ theme }) => theme.palette.gray};
     padding: 0.5rem;
-    @media ${({ theme }) => theme.device.mobile} {
+    media ${({ theme }) => theme.device.mobile} {
       font-size: 1.2rem;
     }
   }
@@ -140,7 +140,7 @@ const ReadAllButton = styled.button`
   ${inverseGreenButtonStyle};
   padding: 0.5rem;
   font-size: 1.5rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -149,7 +149,7 @@ const DeleteAllButton = styled.button`
   ${greenButtonStyle};
   padding: 0.5rem;
   font-size: 1.5rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;

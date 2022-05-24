@@ -1,31 +1,31 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 
-import useRefreshLogin from '@src/hooks/useRefreshLogin';
-import useSocketSetup from '@src/hooks/useSocketSetup';
+import useRefreshLogin from 'hooks/useRefreshLogin';
+import useSocketSetup from 'hooks/useSocketSetup';
 
-import PublicRouter from '@src/routes/PublicRouter';
-import PrivateRouter from '@src/routes/PrivateRouter';
+import PublicRouter from 'routes/PublicRouter';
+import PrivateRouter from 'routes/PrivateRouter';
 
-import Header from '@src/layouts/Header';
-import Footer from '@src/layouts/Footer';
-import Home from '@src/pages/Home';
-import CreatePostForm from '@src/pages/create/PostForm';
-import CreateDrawingForm from '@src/pages/create/DrawingForm';
-import Modal from '@src/components/Modal';
-import Chat from '@src/components/modals/chat';
-import Profile from '@src/pages/profile/[id]';
-import ResetPw from '@src/pages/ResetPw';
-import SignUp from '@src/pages/SignUp';
-import Board from '@src/pages/board/[board]';
-import Post from '@src/pages/post/[id]';
-import NotFound from '@src/components/NotFound';
-import Account from './pages/settings/Account';
-import Notification from './pages/settings/Notification';
-import Desc from './pages/settings/Desc';
-import EditPostForm from '@src/pages/edit/PostForm';
-import MyPosts from '@src/pages/settings/MyPosts';
-import MyComments from '@src/pages/settings/MyComments';
+import Header from 'layouts/Header';
+import Footer from 'layouts/Footer';
+import Home from 'pages/Home';
+import CreatePostForm from 'pages/create/PostForm';
+import CreateDrawingForm from 'pages/create/DrawingForm';
+import Modal from 'components/Modal';
+import Chat from 'components/modals/chat';
+import Profile from 'pages/profile/[id]';
+import ResetPw from 'pages/ResetPw';
+import SignUp from 'pages/SignUp';
+import Board from 'pages/board/[board]';
+import Post from 'pages/post/[id]';
+import NotFound from 'components/NotFound';
+import Account from 'pages/settings/Account';
+import Notification from 'pages/settings/Notification';
+import Desc from 'pages/settings/Desc';
+import EditPostForm from 'pages/edit/PostForm';
+import MyPosts from 'pages/settings/MyPosts';
+import MyComments from 'pages/settings/MyComments';
 
 function App() {
   useSocketSetup();

@@ -39,11 +39,11 @@ const Container = styled.div`
   gap: 5rem;
   padding: 2rem;
   background-color: ${({ theme }) => theme.palette.bgColor};
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     gap: 2rem;
     padding: 1rem;
   }
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     display: none;
   }
 `;
@@ -69,7 +69,7 @@ const SettingsLink = styled(NavLink)`
     }
   }
 
-  @media ${({ theme }) => theme.device.tablet} {
+  media ${({ theme }) => theme.device.tablet} {
     font-size: 1.7rem;
     &.active {
       &:before {
@@ -78,7 +78,7 @@ const SettingsLink = styled(NavLink)`
     }
   }
 
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     &.active {
       &:before {
         display: none;
@@ -89,7 +89,7 @@ const SettingsLink = styled(NavLink)`
 
 const Responsive = styled.div`
   display: none;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;

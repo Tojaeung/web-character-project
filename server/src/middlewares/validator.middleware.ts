@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { AnyZodObject, z } from 'zod';
-import logger from '@src/helpers/winston.helper';
+import logger from '@helpers/winston.helper';
 
 const validator = (schema: AnyZodObject) => (req: Request, res: Response, next: NextFunction) => {
   try {

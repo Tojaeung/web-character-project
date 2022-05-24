@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom';
 import { BiImageAdd } from 'react-icons/bi';
 import Drawing from './Drawing';
-import Avatar from '@src/components/Avatar';
-import Nickname from '@src/components/Nickname';
-import { useAppDispatch } from '@src/store/app/hook';
-import { UserType } from '@src/types';
-import { getUser } from '@src/store/requests/user.request';
-import { greenButtonStyle } from '@src/styles/button.style';
+import Avatar from 'components/Avatar';
+import Nickname from 'components/Nickname';
+import { useAppDispatch } from 'store/app/hook';
+import { UserType } from 'interfaces/index';
+import { getUser } from 'store/requests/user.request';
+import { greenButtonStyle } from 'styles/button.style';
 
 function Profile() {
   const dispatch = useAppDispatch();
@@ -114,13 +114,13 @@ const AddDrawingButton = styled.button`
   justify-content: center;
   padding: 0.2rem 0.5rem;
   margin-top: 1rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
 const AddDrawingIcon = styled(BiImageAdd)`
   font-size: 3rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 2.5rem;
   }
 `;

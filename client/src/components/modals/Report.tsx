@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
-import { redButtonStyle } from '@src/styles/button.style';
-import { useAppDispatch } from '@src/store/app/hook';
-import { sendReport } from '@src/store/requests/user.request';
-import { closeModal } from '@src/store/slices/modal.slice';
+import { redButtonStyle } from 'styles/button.style';
+import { useAppDispatch } from 'store/app/hook';
+import { sendReport } from 'store/requests/user.request';
+import { closeModal } from 'store/slices/modal.slice';
 
 interface IProp {
   props: { suspectId: number }; // 용의자 id (신고당한사람)

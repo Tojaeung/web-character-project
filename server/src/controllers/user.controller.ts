@@ -3,19 +3,19 @@ import { getCustomRepository, getRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
 import moment from 'moment';
 import { IncomingWebhook } from '@slack/webhook';
-import cluster from '@src/helpers/redis.helper';
-import logger from '@src/helpers/winston.helper';
-import ApiError from '@src/errors/api.error';
-import s3Delete from '@src/utils/s3.utils';
-import User from '@src/entities/profile/user.entity';
-import Drawing from '@src/entities/drawing/drawing.entity';
-import DrawingComment from '@src/entities/drawing/comment.entity';
-import Post from '@src/entities/board/post.entity';
-import Comment from '@src/entities/board/comment.entity';
-import ImageKey from '@src/entities/board/imageKey.entity';
-import Penalty from '@src/entities/penalty/penalty.entity';
-import { UserRepository } from '@src/repositorys/user.repository';
-import { sendAuthEmail, sendEmailForResetPw, sendEmailForUpdateEmail } from '@src/helpers/nodemailer.helper';
+import cluster from '@helpers/redis.helper';
+import logger from '@helpers/winston.helper';
+import ApiError from '@errors/api.error';
+import s3Delete from '@utils/s3.utils';
+import User from '@entities/profile/user.entity';
+import Drawing from '@entities/drawing/drawing.entity';
+import DrawingComment from '@entities/drawing/comment.entity';
+import Post from '@entities/board/post.entity';
+import Comment from '@entities/board/comment.entity';
+import ImageKey from '@entities/board/imageKey.entity';
+import Penalty from '@entities/penalty/penalty.entity';
+import { UserRepository } from '@repositorys/user.repository';
+import { sendAuthEmail, sendEmailForResetPw, sendEmailForUpdateEmail } from '@helpers/nodemailer.helper';
 
 import {
   ForgotPwDTO,
@@ -28,7 +28,7 @@ import {
   UpdateNicknameDTO,
   UpdatePwDTO,
   VerifyEmailDTO,
-} from '@src/schemas/user.schema';
+} from '@schemas/user.schema';
 
 export const signUp = async (req: Request<{}, {}, SignUpDTO>, res: Response): Promise<any> => {
   const { email, nickname, pw } = req.body;

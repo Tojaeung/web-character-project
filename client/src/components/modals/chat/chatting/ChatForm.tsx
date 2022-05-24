@@ -3,13 +3,13 @@ import { IoIosSend } from 'react-icons/io';
 import { AiOutlineCamera } from 'react-icons/ai';
 import styled from 'styled-components';
 import moment from 'moment';
-import socket from '@src/utils/socket';
-import instance from '@src/utils/axios.util';
-import { selectUserUser } from '@src/store/slices/user.slice';
-import { selectChatSelectedChat, selectChatMessages } from '@src/store/slices/chat.slice';
-import { useAppSelector } from '@src/store/app/hook';
-import { greenInputStyle } from '@src/styles/input.style';
-import { greenButtonStyle } from '@src/styles/button.style';
+import socket from 'utils/socket';
+import instance from 'utils/axios.util';
+import { selectUserUser } from 'store/slices/user.slice';
+import { selectChatSelectedChat, selectChatMessages } from 'store/slices/chat.slice';
+import { useAppSelector } from 'store/app/hook';
+import { greenInputStyle } from 'styles/input.style';
+import { greenButtonStyle } from 'styles/button.style';
 
 function ChatForm() {
   const user = useAppSelector(selectUserUser);

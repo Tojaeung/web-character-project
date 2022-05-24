@@ -1,5 +1,4 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { createConnection } from 'typeorm';
@@ -10,16 +9,16 @@ import { createServer } from 'http';
 import { Server, Socket } from 'socket.io';
 import helmet from 'helmet';
 
-import ormconfig from '@src/configs/orm.config';
-import corsConfig from '@src/configs/cors.config';
-import logger, { stream } from '@src/helpers/winston.helper';
+import ormconfig from '@configs/orm.config';
+import corsConfig from '@configs/cors.config';
+import logger, { stream } from '@helpers/winston.helper';
 
-import { sessionConfig, wrapper } from '@src/configs/session.config';
-import { authorizeUser } from '@src/middlewares/socket.middleware';
+import { sessionConfig, wrapper } from '@configs/session.config';
+import { authorizeUser } from '@middlewares/socket.middleware';
 import socket from './socket';
 
-import router from '@src/routes';
-import apiErrorHandler from '@src/errors/apiHandler.error';
+import router from '@routes/index';
+import apiErrorHandler from '@errors/apiHandler.error';
 
 const app = express();
 const http = createServer(app);

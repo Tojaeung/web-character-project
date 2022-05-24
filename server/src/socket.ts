@@ -1,18 +1,18 @@
 import { Server, Socket } from 'socket.io';
-import { SessionSocket } from '@src/types';
-import initUser from '@src/socketio/initUser';
-import addChat from '@src/socketio/chat/addChat';
-import addMessage from '@src/socketio/chat/addMessage';
-import addMessageNoti from '@src/socketio/chat/addMessageNoti';
-import deleteMessageNoti from '@src/socketio/chat/deleteMessageNoti';
-import deleteChat from '@src/socketio/chat/deleteChat';
-import deleteMessage from '@src/socketio/chat/deleteMessage';
+import { SessionSocket } from '@interfaces/index';
+import initUser from '@socketio/initUser';
+import addChat from '@socketio/chat/addChat';
+import addMessage from '@socketio/chat/addMessage';
+import addMessageNoti from '@socketio/chat/addMessageNoti';
+import deleteMessageNoti from '@socketio/chat/deleteMessageNoti';
+import deleteChat from '@socketio/chat/deleteChat';
+import deleteMessage from '@socketio/chat/deleteMessage';
 
-import addNotification from '@src/socketio/notification/addNotification';
-import getNotification from '@src/socketio/notification/getNotification';
-import updateNotification from '@src/socketio/notification/updateNotification';
-import updateAllNotifications from '@src/socketio/notification/updateAllNotifications';
-import deleteAllNotifications from '@src/socketio/notification/deleteAllNotifications';
+import addNotification from '@socketio/notification/addNotification';
+import getNotification from '@socketio/notification/getNotification';
+import updateNotification from '@socketio/notification/updateNotification';
+import updateAllNotifications from '@socketio/notification/updateAllNotifications';
+import deleteAllNotifications from '@socketio/notification/deleteAllNotifications';
 
 const socket = ({ io }: { io: Server }) => {
   io.on('connect', async (defaultSocket: Socket) => {

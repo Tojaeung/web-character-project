@@ -1,4 +1,4 @@
-import { DrawingType, DrawingCommentType, DrawingDisLikeType, DrawingLikeType } from '@src/types';
+import { DrawingType, DrawingCommentType, DrawingDisLikeType, DrawingLikeType } from 'interfaces/index';
 
 export type getDrawingsReturnType = {
   ok: boolean;

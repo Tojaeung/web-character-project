@@ -1,7 +1,6 @@
-import redisClient from '@src/helpers/redis.helper';
+import redisClient from '@helpers/redis.helper';
 import session from 'express-session';
-import dotenv from 'dotenv';
-dotenv.config();
+import 'dotenv/config';
 import ConnectRedis from 'connect-redis';
 import { Socket } from 'socket.io';
 const RedisStore = ConnectRedis(session);

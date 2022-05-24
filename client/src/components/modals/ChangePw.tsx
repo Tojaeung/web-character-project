@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { signOut } from '@src/store/requests/session.request';
-import { useAppDispatch } from '@src/store/app/hook';
-import { closeModal } from '@src/store/slices/modal.slice';
-import { greenInputStyle } from '@src/styles/input.style';
-import { greenButtonStyle } from '@src/styles/button.style';
-import { updatePw } from '@src/store/requests/user.request';
+import { signOut } from 'store/requests/session.request';
+import { useAppDispatch } from 'store/app/hook';
+import { closeModal } from 'store/slices/modal.slice';
+import { greenInputStyle } from 'styles/input.style';
+import { greenButtonStyle } from 'styles/button.style';
+import { updatePw } from 'store/requests/user.request';
 
 function ChangePw() {
   const dispatch = useAppDispatch();
@@ -78,7 +78,7 @@ const Form = styled.form`
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     width: 25rem;
     gap: 1rem;
   }
@@ -87,14 +87,14 @@ const Title = styled.h1`
   align-self: flex-start;
   font-size: 2rem;
   font-weight: 700;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
   }
 `;
 const Content = styled.p`
   align-self: flex-start;
   font-size: 1.5rem;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -114,7 +114,7 @@ const SubmitButton = styled.button`
   ${greenButtonStyle};
   width: 50%;
   padding: 1rem 0;
-  @media ${({ theme }) => theme.device.mobile} {
+  media ${({ theme }) => theme.device.mobile} {
     padding: 0.7rem 1rem;
     font-size: 1.2rem;
   }

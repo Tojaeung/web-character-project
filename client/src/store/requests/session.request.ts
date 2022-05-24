@@ -1,12 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import instance from '@src/utils/axios.util';
-import {
-  signInDataType,
-  signInReturnType,
-  refreshLoginReturnType,
-  signOutReturnType,
-} from '@src/store/types/session.type';
+import instance from 'utils/axios.util';
+import { signInDataType, signInReturnType, refreshLoginReturnType, signOutReturnType } from 'store/types/session.type';
 
 export const signIn = createAsyncThunk<
   signInReturnType,

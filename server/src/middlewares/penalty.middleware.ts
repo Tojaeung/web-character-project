@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import moment from 'moment';
-import User from '@src/entities/profile/user.entity';
-import Penalty from '@src/entities/penalty/penalty.entity';
-import logger from '@src/helpers/winston.helper';
-import ApiError from '@src/errors/api.error';
+import User from '@entities/profile/user.entity';
+import Penalty from '@entities/penalty/penalty.entity';
+import logger from '@helpers/winston.helper';
+import ApiError from '@errors/api.error';
 import { getRepository } from 'typeorm';
 
 const penalty = async (req: Request, res: Response, next: NextFunction) => {
