@@ -9,7 +9,7 @@
     "dev": "nodemon --exec ./node_modules/.bin/ts-node -r tsconfig-paths/register ./src/server.ts",
     "build": "tsc -p tsconfig.json && tsc-alias",
     "pre-start": "rm -rf ./dist && npm run build && tsc-alias",
-    "start": "pm2 start ecosystem.config.js"
+    "start": "pm2 start pm2.config.js"
   },
   "devDependencies": {
     "@types/babel__core": "^7.1.18",
