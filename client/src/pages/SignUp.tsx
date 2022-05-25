@@ -49,7 +49,7 @@ function SignUp() {
           {...register('email', {
             required: { value: true, message: '이메일 입력해주세요.' },
             pattern: {
-              value: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/,
+              value: /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
               message: '이메일 형식이 아닙니다.',
             },
           })}
@@ -89,7 +89,7 @@ function SignUp() {
           {...register('pw', {
             required: { value: true, message: '비밀번호를 입력해주세요' },
             pattern: {
-              value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$$!%*#?&])[A-Za-z\d$$!%*#?&]{8,}$/,
+              value: /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/,
               message: '영문,숫자.특수문자 조합하여 8자리 이상',
             },
           })}
