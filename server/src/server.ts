@@ -31,7 +31,7 @@ app.use(morgan(process.env.NODE_ENV !== 'production' ? 'tiny' : combined, { stre
 
 // Middlewares
 app.use(cors(corsConfig));
-app.use(express.static(path.join(__dirname, '../../client/build/')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
