@@ -8,3 +8,4 @@ coverage
 # production
 build
 dist
+public
