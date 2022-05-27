@@ -8,7 +8,7 @@ const apiErrorHandler: ErrorRequestHandler = (err: ApiError, req: Request, res: 
   }
 
   logger.error('500 에러 발생', err);
-  return res.status(500).json({ ok: false, message: '에러 발생..' });
+  return res.status(500).json({ ok: false, message: '에러 발생..', err });
 };
 
 export default apiErrorHandler;
