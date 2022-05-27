@@ -12,15 +12,19 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: "npm"
-          cache-dependency-path: client/package-lock.json
+          # cache: "npm"
+          # cache-dependency-path: ./client/package-lock.json
+
+      # - name: 1
+      #   run: ls -al
+      # - name: 2
+      #   run: pwd
 
       - name: 1
-        run: ls -al
+        run: cd client
+
       - name: 2
-        run: pwd
-      # - name: 1
-      #   run: cd client
+        run: ls -al
       # - name: 2
       #   run: touch .env
       # - name: 3
