@@ -7,15 +7,17 @@ jobs:
     name: Build react app in docker of github action
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
         uses: actions/checkout@v3
+
       - name: Set up node
         uses: actions/setup-node@v3
         with:
           node-version: 16
           cache: "npm"
           cache-dependency-path: client/package-lock.json
-      
-      - name: Build react app, config environment variable
+
+        # - name: Build react app, config environment variable
         run: |
           cd client
           touch .env
@@ -23,7 +25,6 @@ jobs:
           npm i
           npm run build
 
-    steps:
       - name: Sending build foler to ec2
         uses: appleboy/scp-action@master
         with:
@@ -33,8 +34,7 @@ jobs:
           port: ${{ secrets.PORT }}
           source: "build/*"
           target: "/git/web-character-project/client/build"
-  
-    steps:
+
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
@@ -42,5 +42,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
-          script: | 
+          script: |
             ./deploy.sh
