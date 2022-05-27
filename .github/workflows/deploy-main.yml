@@ -16,15 +16,19 @@ jobs:
           cache-dependency-path: client/package-lock.json
 
       - name: 1
-        run: cd client
+        run: ls -al
       - name: 2
-        run: touch .env
-      - name: 3
-        run: echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
-      - name: 4
-        run: npm i
-      - name: 5
-        run: npm run build
+        run: pwd
+      # - name: 1
+      #   run: cd client
+      # - name: 2
+      #   run: touch .env
+      # - name: 3
+      #   run: echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
+      # - name: 4
+      #   run: npm i
+      # - name: 5
+      #   run: npm run build
 
     # steps:
     #   - name: Sending build foler to ec2
