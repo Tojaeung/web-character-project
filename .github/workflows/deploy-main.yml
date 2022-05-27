@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: 16
           cache: "npm"
-          # cache-dependency-path: ./client/package-lock.json
+          cache-dependency-path: ./client/package-lock.json
 
       # - name: 1
       #   run: ls -al
