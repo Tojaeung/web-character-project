@@ -36,7 +36,7 @@ jobs:
           port: ${{ secrets.PORT }}
           source: "./client/build/*"
           strip_components: 1
-          target: "./git"
+          target: "./git/web-character-project/client/build"
 
       - name: Deploy
         uses: appleboy/ssh-action@master
@@ -45,5 +45,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
-          script: |
-            ./deploy.sh
+          script: ./deploy.sh
