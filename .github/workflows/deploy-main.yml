@@ -3,8 +3,8 @@ on:
   push:
     branches: [master]
 jobs:
-  build:
-    name: Build react app in docker of github action
+  CI/CD:
+    name: web-character-project CI/CD
     runs-on: ubuntu-latest
     env:
       CI: false
@@ -17,7 +17,9 @@ jobs:
           cache: "npm"
           cache-dependency-path: ./client/package-lock.json
 
-      - name: 123e4
+      # ec2프리티어에서 리엑트 빌드를 할수 없다,
+      # 깃헙액션을 이용해서 빌드한 다음, ec2로 빌드폴더를 보내주는 방법이다.
+      - name: Build React
         run: |
           cd ./client
           touch .env
@@ -33,13 +35,13 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           source: "./client/build/*"
-          target: "./git/web-character-project/client/build"
-    # steps:
-    #   - name: Deploy
-    #   - uses: appleboy/ssh-action@master
-    #   - with:
-    #       host: ${{ secrets.HOST }}
-    #       username: ${{ secrets.USERNAME }}
-    #       key: ${{ secrets.KEY }}
-    #       port: ${{ secrets.PORT }}
-    #       script: ./deploy.sh
+          target: "./git"
+
+      - name: Deploy
+      - uses: appleboy/ssh-action@master
+      - with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: ./deploy.sh
