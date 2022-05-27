@@ -21,10 +21,8 @@ jobs:
       #   run: pwd
 
       - name: 1
-        run: cd ./client
+        run: cd ./client && ls -al
 
-      - name: 2
-        run: ls -al
       # - name: 2
       #   run: touch .env
       # - name: 3
