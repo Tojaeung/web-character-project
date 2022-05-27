@@ -7,18 +7,14 @@ jobs:
     name: Build react app in docker of github action
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
         uses: actions/checkout@v3
-
-    steps:
       - name: Set up node
         uses: actions/setup-node@v3
         with:
           node-version: 16
           cache: "npm"
           cache-dependency-path: client/package-lock.json
-
-    steps:
+      
       - name: Build react app, config environment variable
         run: |
           cd client
