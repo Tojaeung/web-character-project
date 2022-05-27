@@ -2,7 +2,6 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { createConnection } from 'typeorm';
-import path from 'path';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import { createServer } from 'http';
@@ -31,8 +30,6 @@ app.use(morgan(process.env.NODE_ENV !== 'production' ? 'tiny' : combined, { stre
 
 // Middlewares
 app.use(cors(corsConfig));
-app.use(express.static(path.join(__dirname, '../../client/build')));
-
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
