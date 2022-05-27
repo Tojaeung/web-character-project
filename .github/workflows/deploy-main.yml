@@ -22,7 +22,7 @@ jobs:
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
           npm i
           npm run build
-    steps:
+    
       - name: Sending build foler to ec2
       - uses: appleboy/scp-action@master
       - with:
