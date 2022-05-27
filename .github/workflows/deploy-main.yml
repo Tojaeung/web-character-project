@@ -23,8 +23,11 @@ jobs:
       - name: 1
         run: cd ./client && ls -al
 
-      # - name: 2
-      #   run: touch .env
+      - name: 2
+        run: touch .env
+
+      - name: 3
+        run: ls -al
       # - name: 3
       #   run: echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
       # - name: 4
