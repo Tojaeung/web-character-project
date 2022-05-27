@@ -8,17 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Set up node
-        uses: actions/setup-node@v3
-        with:
+      - uses: actions/setup-node@v3
+      - with:
           node-version: 16
           cache: "npm"
           cache-dependency-path: client/package-lock.json
 
-        # - name: Build react app, config environment variable
-        run: |
+      - name: Build react app, config environment variable
+      - run: |
           cd client
           touch .env
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
@@ -26,8 +26,8 @@ jobs:
           npm run build
 
       - name: Sending build foler to ec2
-        uses: appleboy/scp-action@master
-        with:
+      - uses: appleboy/scp-action@master
+      - with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
@@ -36,8 +36,8 @@ jobs:
           target: "/git/web-character-project/client/build"
 
       - name: Deploy
-        uses: appleboy/ssh-action@master
-        with:
+      - uses: appleboy/ssh-action@master
+      - with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
