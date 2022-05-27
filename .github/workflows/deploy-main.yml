@@ -27,7 +27,7 @@ jobs:
           npm i
           npm run build
 
-      # spc를 이용해서 리엑트 빌드를 ec2에 보낸다...
+      # spc를 이용해서 리엑트 빌드를 ec2에 보낸다....
       - name: Sending build foler to ec2
         uses: appleboy/scp-action@master
         with:
