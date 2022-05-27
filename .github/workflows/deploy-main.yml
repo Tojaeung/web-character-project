@@ -21,7 +21,7 @@ jobs:
       #   run: pwd
 
       - name: 1
-        run: cd client
+        run: cd ./client
 
       - name: 2
         run: ls -al
