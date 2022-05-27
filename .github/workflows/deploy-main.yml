@@ -14,7 +14,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          # cache: "npm"
+          cache: "npm"
           # cache-dependency-path: ./client/package-lock.json
 
       # - name: 1
@@ -28,7 +28,6 @@ jobs:
           touch .env
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
           npm i
-          npm run build
           ls -al
 
       # - name: 2
