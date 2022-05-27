@@ -7,9 +7,10 @@ jobs:
     name: Build react app in docker of github action
     runs-on: ubuntu-latest
     steps:
-      # - name: Checkout
+      - name: Checkout
         uses: actions/checkout@v3
 
+    steps:
       - name: Set up node
         uses: actions/setup-node@v3
         with:
@@ -17,7 +18,8 @@ jobs:
           cache: "npm"
           cache-dependency-path: client/package-lock.json
 
-      # - name: Build react app, config environment variable
+    steps:
+      - name: Build react app, config environment variable
         run: |
           cd client
           touch .env
@@ -25,26 +27,23 @@ jobs:
           npm i
           npm run build
 
-  send:
-    needs: build
-    name: Sending build foler to ec2
     steps:
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        source: "build/*"
-        target: "/git/web-character-project/client/build"
-  deploy:
-    needs: send
-    name: Deploy
+      - name: Sending build foler to ec2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          source: "build/*"
+          target: "/git/web-character-project/client/build"
+  
     steps:
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        script: ./deploy.sh
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: ./deploy.sh
