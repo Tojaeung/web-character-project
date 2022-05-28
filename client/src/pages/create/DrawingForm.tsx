@@ -61,7 +61,7 @@ function DrawingForm() {
       <Hr />
       <User>
         <Avatar src={user?.avatar} diameter={3.5} />
-        <Nickname exp={user?.exp!} nickname={user?.nickname!} fontSize={1.3} />
+        <Nickname user={user!} fontSize={1.3} />
       </User>
 
       <Drawing onClick={(e) => drawingInputRef.current?.click()}>

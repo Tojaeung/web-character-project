@@ -44,15 +44,7 @@ function Header() {
       <Container>
         <ProfileBox>
           <Avatar src={post?.user?.avatar} diameter={3.5} />
-          <Nickname
-            exp={post?.user?.exp!}
-            userId={post?.user?.id!}
-            chatId={post?.user?.chatId!}
-            desc={post?.user?.desc!}
-            nickname={post?.user?.nickname!}
-            dropDown={true}
-            fontSize={1.3}
-          />
+          <Nickname user={post?.user!} dropDown={true} fontSize={1.3} />
         </ProfileBox>
 
         <ButtonBox>

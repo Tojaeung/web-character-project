@@ -6,11 +6,11 @@ import { selectUserUser } from 'store/slices/user.slice';
 import { closeModal } from 'store/slices/modal.slice';
 
 interface IProp {
-  props: { userId: number; desc: string };
+  props: { userId: number; desc: string } | null;
 }
 
 function Desc({ props }: IProp) {
-  const { desc, userId } = props;
+  const { desc, userId } = props!;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

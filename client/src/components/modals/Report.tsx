@@ -7,11 +7,11 @@ import { sendReport } from 'store/requests/user.request';
 import { closeModal } from 'store/slices/modal.slice';
 
 interface IProp {
-  props: { suspectId: number }; // 용의자 id (신고당한사람)
+  props: { suspectId: number } | null; // 용의자 id (신고당한사람)
 }
 
 function Report({ props }: IProp) {
-  const { suspectId } = props;
+  const { suspectId } = props!;
 
   const location = useLocation();
   const dispatch = useAppDispatch();

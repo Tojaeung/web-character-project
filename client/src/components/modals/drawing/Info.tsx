@@ -34,15 +34,7 @@ function Info() {
         <UserBox>
           <Avatar src={drawings[index!].user?.avatar} diameter={3.5} />
           <FlexBox>
-            <Nickname
-              exp={drawings[index!].user?.exp!}
-              userId={drawings[index!].user?.id}
-              chatId={drawings[index!].user?.chatId}
-              desc={drawings[index!].user?.desc}
-              nickname={drawings[index!].user?.nickname!}
-              dropDown={true}
-              fontSize={1.3}
-            />
+            <Nickname user={drawings[index!].user!} dropDown={true} fontSize={1.3} />
             <CreatedTime createdTime={drawings[index!]?.created_at!} fontSize={1.2} />
           </FlexBox>
         </UserBox>

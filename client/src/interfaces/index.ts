@@ -11,6 +11,7 @@ export type UserType = {
   role: string;
   emailToken: null;
   isVerified: boolean;
+  isPenalty: boolean;
   exp: number;
   created_at: Date;
   updated_at: Date;

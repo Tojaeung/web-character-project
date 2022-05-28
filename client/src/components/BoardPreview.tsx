@@ -32,7 +32,7 @@ function BoardPreview({ posts, board }: IProps) {
               <td>
                 <PostTitle to={`/${board}/${post.id}`}>{post.title}</PostTitle>
                 <PostUser>
-                  <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} fontSize={1.3} />
+                  <Nickname user={post?.user!} fontSize={1.3} />
                   <CreatedTime createdTime={post.created_at} fontSize={1.2} />
                 </PostUser>
               </td>

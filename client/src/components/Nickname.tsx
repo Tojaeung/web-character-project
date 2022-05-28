@@ -1,26 +1,23 @@
 import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import getLevel from 'utils/exp.util';
+import Exp from 'components/Exp';
 import ChatButton from 'components/ChatButton';
 import useDropDown from 'hooks/useDropDown';
 import { useAppSelector, useAppDispatch } from 'store/app/hook';
 import { selectUserUser } from 'store/slices/user.slice';
 import { openModal } from 'store/slices/modal.slice';
+import { UserType } from 'interfaces/index';
 
 interface IProps {
-  exp: number;
-  userId?: number;
-  chatId?: string;
-  desc?: string;
-  nickname: string;
-  dropDown?: boolean;
+  user: UserType;
+  dropDown?: boolean; // 닉네임 드롭다운(프로필보기, 대화하기 등등..) 유무
   fontSize: number;
 }
 
-function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, fontSize }: IProps) {
+function Nickname({ user, dropDown = false, fontSize }: IProps) {
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector(selectUserUser);
+  const me = useAppSelector(selectUserUser);
 
   // 드롭다운 메뉴 커스텀 훅
   const [openDropDown, setOpenDropDown] = useState(false);
@@ -28,39 +25,41 @@ function Nickname({ exp, userId, chatId, desc, nickname, dropDown = false, fontS
   useDropDown({ openDropDown, setOpenDropDown, targetRef });
 
   const openDescModal = async (e: React.MouseEvent<HTMLLIElement>) => {
-    await dispatch(openModal({ modal: 'desc', props: { userId, desc } }));
+    await dispatch(openModal({ modal: 'desc', props: { userId: user.id, desc: user.desc } }));
   };
 
   const openPenaltyModal = async (e: React.MouseEvent<HTMLLIElement>) => {
-    await dispatch(openModal({ modal: 'penalty', props: { userId } }));
+    await dispatch(openModal({ modal: 'penalty', props: { userId: user.id } }));
   };
 
   const openUserInfoModal = async (e: React.MouseEvent<HTMLLIElement>) => {
-    await dispatch(openModal({ modal: 'userInfo', props: { userId } }));
+    await dispatch(openModal({ modal: 'userInfo', props: { userId: user.id } }));
   };
 
   return (
     <>
-      <Container>
-        <NicknameBox fontSize={fontSize} dropDown={dropDown} onClick={(e) => setOpenDropDown(!openDropDown)}>
-          <Level>[Lv.{getLevel(exp)}]</Level>
-          <NickName>{nickname}</NickName>
-        </NicknameBox>
-        {openDropDown && dropDown && (
-          <Dropdown ref={targetRef} onClick={(e) => setOpenDropDown(!openDropDown)}>
-            <List>
-              <GoProfile href={`/profile/${userId}`}>프로필 보기</GoProfile>
-            </List>
+      {user && (
+        <Container>
+          <NicknameBox fontSize={fontSize} dropDown={dropDown} onClick={(e) => setOpenDropDown(!openDropDown)}>
+            <Exp exp={user.exp} role={user.role} isPenalty={user.isPenalty} />
+            <NickName>{user.nickname}</NickName>
+          </NicknameBox>
+          {openDropDown && dropDown && (
+            <Dropdown ref={targetRef} onClick={(e) => setOpenDropDown(!openDropDown)}>
+              <List>
+                <GoProfile href={`/profile/${user.id}`}>프로필 보기</GoProfile>
+              </List>
 
-            <List onClick={openUserInfoModal}>{user?.id === userId ? '내 정보' : '유저정보'}</List>
-            <List onClick={openDescModal}>자기소개</List>
+              <List onClick={openUserInfoModal}>{me?.id === user.id ? '내 정보' : '유저정보'}</List>
+              <List onClick={openDescModal}>자기소개</List>
 
-            {userId !== user?.id && <ChatButton chatUserId={chatId!} />}
+              {user.id !== me?.id && <ChatButton chatUserId={user.chatId!} />}
 
-            {user?.role === 'admin' && userId !== user.id && <List onClick={openPenaltyModal}>불량유저</List>}
-          </Dropdown>
-        )}
-      </Container>
+              {me?.role === 'admin' && user.id !== me.id && <List onClick={openPenaltyModal}>불량유저</List>}
+            </Dropdown>
+          )}
+        </Container>
+      )}
     </>
   );
 }
@@ -70,6 +69,10 @@ const Container = styled.div`
 `;
 
 const NicknameBox = styled.div<{ fontSize: number; dropDown: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
   ${({ fontSize }) => {
     return css`
       font-size: ${fontSize}rem;
@@ -91,8 +94,6 @@ const NicknameBox = styled.div<{ fontSize: number; dropDown: boolean }>`
     }
   }}
 `;
-
-const Level = styled.span``;
 
 const Dropdown = styled.ul`
   position: absolute;

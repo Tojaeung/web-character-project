@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch } from 'store/app/hook';
 import { getUserInfo } from 'store/requests/user.request';
-import getLevel from 'utils/exp.util';
+import Exp from 'components/Exp';
 import relativeTime from 'utils/date.util';
 import { UserType } from 'interfaces/index';
 import { useAppSelector } from 'store/app/hook';
@@ -69,7 +69,9 @@ function UserInfo({ props }: IProp) {
           </tr>
           <tr>
             <td>레벨</td>
-            <td>{getLevel(userInfo?.exp!)}</td>
+            <td>
+              <Exp exp={userInfo?.exp!} role={userInfo?.role!} isPenalty={userInfo?.isPenalty!} />
+            </td>
           </tr>
           <tr>
             <td>가입일</td>

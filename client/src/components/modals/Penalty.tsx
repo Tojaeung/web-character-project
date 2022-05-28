@@ -8,11 +8,11 @@ import { closeModal } from 'store/slices/modal.slice';
 import socket from 'utils/socket';
 
 interface IProp {
-  props: { userId: number };
+  props: { userId: number } | null;
 }
 
 function Penalty({ props }: IProp) {
-  const { userId } = props;
+  const { userId } = props!;
 
   const dispatch = useAppDispatch();
   const [penaltyPeriod, setPenaltyPeriod] = useState('');

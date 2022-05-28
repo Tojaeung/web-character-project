@@ -43,15 +43,7 @@ function Profile() {
         </AvatarBox>
 
         <NicknameBox>
-          <Nickname
-            exp={profile?.exp!}
-            userId={profile?.id!}
-            chatId={profile?.chatId!}
-            desc={profile?.desc!}
-            nickname={profile?.nickname!}
-            dropDown={true}
-            fontSize={1.7}
-          />
+          <Nickname user={profile!} dropDown={true} fontSize={1.7} />
         </NicknameBox>
         <AddDrawingButton onClick={(e) => navigate('/create/drawingForm')}>
           <AddDrawingIcon />

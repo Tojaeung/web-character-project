@@ -54,15 +54,7 @@ function CommentList({ type, comment, index, setCommentIndex, isSelected }: IPro
       <UserBox>
         <UserInfoBox>
           <Avatar src={comment.user?.avatar} diameter={3} />
-          <Nickname
-            exp={comment.user?.exp!}
-            userId={comment.user?.id}
-            chatId={comment.user?.chatId}
-            desc={comment.user?.desc}
-            nickname={comment.user?.nickname!}
-            dropDown={true}
-            fontSize={1.3}
-          />
+          <Nickname user={comment.user!} dropDown={true} fontSize={1.3} />
         </UserInfoBox>
         <CreatedTime createdTime={comment.created_at} fontSize={1.2} />
       </UserBox>

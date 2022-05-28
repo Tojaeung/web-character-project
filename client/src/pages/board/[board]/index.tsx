@@ -90,7 +90,7 @@ function Board() {
                     <PostLink to={`/${board}/${post.id}${location.search}`}>{post.title}</PostLink>
                   </td>
                   <td>
-                    <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} fontSize={1.3} />
+                    <Nickname user={post?.user!} fontSize={1.3} />
                   </td>
                   <td>{post.views}</td>
                   <td>
@@ -147,8 +147,7 @@ function Board() {
               </Title>
 
               <DetailBox>
-                <Nickname exp={post.user?.exp!} nickname={post.user?.nickname!} fontSize={1.3} />|
-                <Views>조회수: {post.views}</Views>
+                <Nickname user={post?.user!} fontSize={1.3} />|<Views>조회수: {post.views}</Views>
                 |
                 <CreatedTime createdTime={post.created_at} fontSize={1.2} />
               </DetailBox>
