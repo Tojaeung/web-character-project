@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import Avatar from 'components/Avatar';
-import { useParams } from 'react-router-dom';
 import Nickname from 'components/Nickname';
 import CreatedTime from 'components/CreatedTime';
 import { useAppDispatch, useAppSelector } from 'store/app/hook';
@@ -22,7 +21,6 @@ interface IProps {
 
 function CommentList({ type, comment, index, setCommentIndex, isSelected }: IProps) {
   const dispatch = useAppDispatch();
-  const { board } = useParams();
 
   const user = useAppSelector(selectUserUser);
 

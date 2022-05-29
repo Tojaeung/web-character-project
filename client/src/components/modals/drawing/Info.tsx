@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { AiOutlineEye } from 'react-icons/ai';
-import { useNavigate } from 'react-router-dom';
 import Avatar from 'components/Avatar';
 import Nickname from 'components/Nickname';
 import CreatedTime from 'components/CreatedTime';

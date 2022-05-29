@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
+import { AiOutlineLike, AiOutlineDislike, AiOutlineComment } from 'react-icons/ai';
+import { v4 } from 'uuid';
 import { useAppDispatch, useAppSelector } from 'store/app/hook';
 import { getDrawings, incrementView } from 'store/requests/drawing.request';
 import { selectDrawing, selectDrawingDrawings, selectDrawingIsLoading } from 'store/slices/drawing.slice';
@@ -16,6 +18,7 @@ function Drawing() {
   const drawings = useAppSelector(selectDrawingDrawings);
 
   const [cursor, setCursor] = useState<number | null>(0);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   // useObserver는 무한스크롤 커스텀 훅이다.
   const targetRef = useRef<HTMLDivElement>(null);
@@ -39,20 +42,39 @@ function Drawing() {
   };
 
   return (
-    <>
-      <Container>
-        <DrawingBox>
-          {drawings?.map((drawing, index) => (
-            <DrawingList key={index} onClick={openDrawing(index)}>
-              <Image src={drawing.url} alt="그림" />
-            </DrawingList>
-          ))}
-          {isLoading ? <Image src={loading} alt="로딩중..." /> : null}
+    <Container>
+      <DrawingBox>
+        {drawings?.map((drawing, index) => (
+          <DrawingList
+            key={v4()}
+            onClick={openDrawing(index)}
+            onMouseOver={(e) => setSelectedIndex(index)}
+            onMouseOut={(e) => setSelectedIndex(null)}
+          >
+            <Image src={drawing.url} alt="그림" />
+            {index === selectedIndex && (
+              <DetailBox>
+                <IconBox>
+                  <AiOutlineComment size={20} />
+                  {drawing.comments?.length}
+                </IconBox>
+                <IconBox>
+                  <AiOutlineLike size={20} />
+                  {drawing.likes?.length}
+                </IconBox>
+                <IconBox>
+                  <AiOutlineDislike size={20} />
+                  {drawing.dislikes?.length}
+                </IconBox>
+              </DetailBox>
+            )}
+          </DrawingList>
+        ))}
+        {isLoading ? <Image src={loading} alt="로딩중..." /> : null}
 
-          <Observer ref={targetRef} />
-        </DrawingBox>
-      </Container>
-    </>
+        <Observer ref={targetRef} />
+      </DrawingBox>
+    </Container>
   );
 }
 
@@ -78,8 +100,29 @@ const Observer = styled.div`
 `;
 
 const DrawingList = styled.li`
+  position: relative;
   cursor: pointer;
 `;
 const Image = styled.img``;
+
+const DetailBox = styled.div`
+  width: 100%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1rem 0.5rem;
+  bottom: 0;
+  right: 0;
+  background-color: ${({ theme }) => theme.palette.gray};
+  opacity: 0.7;
+`;
+
+const IconBox = styled.span`
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+`;
 
 export default Drawing;
