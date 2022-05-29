@@ -48,8 +48,8 @@ function Drawing() {
           <DrawingList
             key={v4()}
             onClick={openDrawing(index)}
-            onMouseOver={(e) => setSelectedIndex(index)}
-            onMouseOut={(e) => setSelectedIndex(null)}
+            onMouseEnter={(e) => setSelectedIndex(index)}
+            onMouseLeave={(e) => setSelectedIndex(null)}
           >
             <Image src={drawing.url} alt="그림" />
             {index === selectedIndex && (
