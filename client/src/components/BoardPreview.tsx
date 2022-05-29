@@ -67,7 +67,7 @@ const Table = styled.table`
       align-items: center;
       padding: 0.5rem 1rem;
       border-bottom: 1px solid ${({ theme }) => theme.palette.gray};
-      media ${({ theme }) => theme.device.mobile} {
+      @media ${({ theme }) => theme.device.mobile} {
         flex-wrap: wrap;
       }
     }

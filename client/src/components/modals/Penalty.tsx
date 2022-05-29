@@ -53,7 +53,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     gap: 1rem;
   }
 `;
@@ -61,14 +61,14 @@ const Container = styled.div`
 const Title = styled.h1`
   font-size: 2rem;
   font-weight: 700;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
   }
 `;
 
 const Content = styled.p`
   font-size: 1.5rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -81,7 +81,7 @@ const SubmitButton = styled.button`
   align-self: center;
   ${redButtonStyle};
   padding: 1rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     padding: 0.5rem;
     font-size: 1.2rem;
   }

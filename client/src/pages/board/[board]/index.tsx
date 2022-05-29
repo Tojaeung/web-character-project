@@ -190,7 +190,7 @@ const Container = styled.div`
   padding: 0 1rem;
   background-color: ${({ theme }) => theme.palette.bgColor};
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
-  media ${({ theme }) => theme.device.tablet} {
+  @media ${({ theme }) => theme.device.tablet} {
     display: none;
   }
 
@@ -229,7 +229,7 @@ const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 1rem 0;
-  media ${({ theme }) => theme.device.tablet} {
+  @media ${({ theme }) => theme.device.tablet} {
     border-bottom: 1px solid ${({ theme }) => theme.palette.gray};
   }
 `;
@@ -241,7 +241,7 @@ const Footer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  media ${({ theme }) => theme.device.tablet} {
+  @media ${({ theme }) => theme.device.tablet} {
     justify-content: center;
   }
 `;
@@ -249,7 +249,7 @@ const Footer = styled.div`
 const ScrollUpButton = styled.button`
   ${greenButtonStyle};
   padding: 0.7rem;
-  media ${({ theme }) => theme.device.tablet} {
+  @media ${({ theme }) => theme.device.tablet} {
     position: fixed;
     bottom: 10rem;
     right: 2rem;
@@ -260,7 +260,7 @@ const ScrollUpButton = styled.button`
 const CreatePostButton = styled.button`
   ${inverseGreenButtonStyle};
   padding: 0.7rem;
-  media ${({ theme }) => theme.device.tablet} {
+  @media ${({ theme }) => theme.device.tablet} {
     ${greenButtonStyle};
     position: fixed;
     bottom: 6rem;
@@ -270,13 +270,13 @@ const CreatePostButton = styled.button`
 
 const Responsive = styled.div`
   display: none;
-  media ${({ theme }) => theme.device.tablet} {
+  @media ${({ theme }) => theme.device.tablet} {
     width: 100%;
     display: block;
     padding: 0 1rem;
     background-color: ${({ theme }) => theme.palette.bgColor};
   }
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
     display: block;
     padding: 0 0.5rem;
@@ -301,7 +301,7 @@ const Title = styled.div`
   align-self: flex-start;
   font-size: 1.3rem;
   word-break: break-all;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;

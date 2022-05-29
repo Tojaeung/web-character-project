@@ -106,13 +106,13 @@ const AddDrawingButton = styled.button`
   justify-content: center;
   padding: 0.2rem 0.5rem;
   margin-top: 1rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
 const AddDrawingIcon = styled(BiImageAdd)`
   font-size: 3rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 2.5rem;
   }
 `;

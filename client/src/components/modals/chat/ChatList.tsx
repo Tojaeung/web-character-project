@@ -85,7 +85,7 @@ const Header = styled.div`
 const Topic = styled.span`
   font-size: 1.5rem;
   font-weight: bold;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.3rem;
   }
 `;
@@ -115,7 +115,7 @@ const GuideText = styled.p`
   text-align: center;
   margin-top: 5rem;
   font-size: 1.4rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -131,7 +131,7 @@ const FlexBox = styled.div`
 const Nickname = styled.span`
   font-size: 1.4rem;
   font-weight: bold;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.3rem;
   }
 `;

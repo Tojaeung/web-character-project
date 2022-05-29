@@ -55,7 +55,7 @@ const Container = styled.div`
   align-items: center;
   gap: 1rem;
   padding: 1rem 0;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     gap: 0.5rem;
   }
 `;
@@ -63,7 +63,7 @@ const Select = styled.select`
   font-size: 1.4rem;
   height: 4rem;
 
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     width: 6rem;
     height: 3rem;
     font-size: 1.2rem;
@@ -73,7 +73,7 @@ const Option = styled.option``;
 const Input = styled.input`
   ${greenInputStyle};
   width: 20rem !important;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     width: 50% !important;
     min-height: 3.5rem !important;
   }
@@ -81,7 +81,7 @@ const Input = styled.input`
 const SubmitButton = styled.button`
   ${greenButtonStyle};
   padding: 1rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     padding: 0.7rem;
   }
 `;

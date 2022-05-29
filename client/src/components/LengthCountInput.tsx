@@ -63,7 +63,7 @@ const ErrorMessage = styled.p`
   bottom: -1.5rem;
   color: ${({ theme }) => theme.palette.red};
   font-size: 1.3rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.1rem;
   }
 `;

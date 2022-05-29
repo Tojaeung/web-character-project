@@ -42,7 +42,7 @@ const Container = styled.div`
 `;
 const Label = styled.label`
   font-size: 1.4rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;

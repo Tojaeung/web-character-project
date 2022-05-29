@@ -96,7 +96,7 @@ const Container = styled.div`
     background-color: ${({ theme }) => theme.palette.gray};
     border: 1px solid ${({ theme }) => theme.palette.black};
     white-space: nowrap;
-    media ${({ theme }) => theme.device.mobile} {
+    @media ${({ theme }) => theme.device.mobile} {
       font-size: 1.3rem;
     }
   }
@@ -107,7 +107,7 @@ const Container = styled.div`
     background-color: ${({ theme }) => theme.palette.white};
     border: 1px solid ${({ theme }) => theme.palette.gray};
     padding: 0.5rem;
-    media ${({ theme }) => theme.device.mobile} {
+    @media ${({ theme }) => theme.device.mobile} {
       font-size: 1.2rem;
     }
   }
@@ -140,7 +140,7 @@ const ReadAllButton = styled.button`
   ${inverseGreenButtonStyle};
   padding: 0.5rem;
   font-size: 1.5rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -149,7 +149,7 @@ const DeleteAllButton = styled.button`
   ${greenButtonStyle};
   padding: 0.5rem;
   font-size: 1.5rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;

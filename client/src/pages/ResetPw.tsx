@@ -84,7 +84,7 @@ const Logo = styled.span`
 const Content = styled.p`
   align-self: flex-start;
   font-size: 1.5rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.3rem;
   }
 `;
@@ -118,7 +118,7 @@ const SubmitButton = styled.button`
   ${greenButtonStyle};
   width: 100%;
   padding: 1rem 0;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;

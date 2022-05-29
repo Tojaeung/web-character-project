@@ -65,7 +65,7 @@ const Container = styled.div`
   .ql-editor {
     min-height: 20rem;
   }
-  media ${({ theme }) => theme.device.tablet} {
+  @media ${({ theme }) => theme.device.tablet} {
     box-shadow: none;
   }
 `;
@@ -79,7 +79,7 @@ const ButtonBox = styled.div`
 const SubmitButton = styled.button`
   ${greenButtonStyle};
   padding: 1rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     padding: 0.7rem 1rem;
     font-size: 1.2rem;
   }
@@ -87,7 +87,7 @@ const SubmitButton = styled.button`
 const CancelButton = styled.button`
   ${inverseGreenButtonStyle};
   padding: 1rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     padding: 0.7rem 1rem;
     font-size: 1.2rem;
   }

@@ -26,7 +26,7 @@ const Container = styled.div`
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
   background-color: ${({ theme }) => theme.palette.bgColor};
   z-index: 1020;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     right: 0;
     width: 100%;
     height: 50rem;

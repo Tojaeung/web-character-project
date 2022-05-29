@@ -84,7 +84,7 @@ const ButtonBox = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     display: none;
   }
 `;
@@ -112,7 +112,7 @@ const ReportPost = styled.button`
 
 const ResponsiveButtonBox = styled.div`
   display: none;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     display: flex;
     align-items: center;
     gap: 1rem;

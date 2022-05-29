@@ -39,7 +39,7 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  media ${({ theme }) => theme.device.tablet} {
+  @media ${({ theme }) => theme.device.tablet} {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -55,7 +55,7 @@ const InfoSide = styled.div`
   gap: 1rem;
   padding: 0 1rem;
   z-index: 1035;
-  media ${({ theme }) => theme.device.tablet} {
+  @media ${({ theme }) => theme.device.tablet} {
     width: 100%;
   }
 `;

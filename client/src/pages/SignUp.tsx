@@ -136,7 +136,7 @@ const Form = styled.form`
   align-items: center;
   margin: 0 auto;
   gap: 3rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
   }
 `;
 

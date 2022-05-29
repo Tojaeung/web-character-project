@@ -91,13 +91,13 @@ const CommentNum = styled.span``;
 const Footer = styled.div`
   display: flex;
   justify-content: center;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     display: none;
   }
 `;
 const ResponsiveFooter = styled.div`
   display: none;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     display: flex;
     justify-content: center;
   }
@@ -108,7 +108,7 @@ const ScrollUpButton = styled.button`
   bottom: 0.7rem;
   right: 7rem;
   padding: 0.7rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     position: fixed;
     bottom: 10rem;
     right: 2rem;
@@ -122,7 +122,7 @@ const CreatePostButton = styled.button`
   bottom: 0.7rem;
   right: 1rem;
   padding: 0.7rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     ${greenButtonStyle};
     position: fixed;
     bottom: 6rem;

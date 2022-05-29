@@ -130,7 +130,7 @@ const Container = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.palette.borderColor};
   margin-bottom: 1rem;
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
-  media ${({ theme }) => theme.device.tablet} {
+  @media ${({ theme }) => theme.device.tablet} {
     display: none;
   }
 `;
@@ -193,7 +193,7 @@ const AddIcon = styled(MdPlaylistAdd)`
 
 const Responsive = styled.div`
   display: none;
-  media ${({ theme }) => theme.device.tablet} {
+  @media ${({ theme }) => theme.device.tablet} {
     position: relative;
     display: flex;
     justify-content: space-between;

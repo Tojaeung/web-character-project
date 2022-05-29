@@ -40,10 +40,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  media ${({ theme }) => theme.device.tablet} {
+  @media ${({ theme }) => theme.device.tablet} {
     width: 35rem;
   }
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     width: 25rem;
   }
 `;
@@ -52,7 +52,7 @@ const Title = styled.h1`
   align-self: flex-start;
   font-size: 2rem;
   font-weight: bold;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
   }
 `;
@@ -60,7 +60,7 @@ const Title = styled.h1`
 const Content = styled.p`
   align-self: flex-start;
   font-size: 1.5rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -69,7 +69,7 @@ const ModifyButton = styled.button`
   align-self: center;
   width: 5rem;
   padding: 1rem 0;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     padding: 0.8rem 0;
     font-size: 1.2rem;
   }

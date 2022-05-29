@@ -150,7 +150,7 @@ const EditBox = styled.div`
 `;
 const Title = styled.span`
   font-size: 2rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.6rem;
   }
 `;
@@ -158,14 +158,14 @@ const ButtonBox = styled.div`
   display: flex;
   align-items: center;
   gap: 3rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     gap: 1rem;
   }
 `;
 const EditButton = styled.button`
   ${greenButtonStyle};
   padding: 1rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     padding: 0.5rem;
     font-size: 1.2rem;
   }
@@ -173,7 +173,7 @@ const EditButton = styled.button`
 const DeleteAccountButton = styled.button`
   ${redButtonStyle};
   padding: 1rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     padding: 0.5rem;
     font-size: 1.2rem;
   }
@@ -181,7 +181,7 @@ const DeleteAccountButton = styled.button`
 const DefaultButton = styled.button`
   ${redButtonStyle};
   padding: 1rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     padding: 0.5rem;
     font-size: 1.2rem;
   }

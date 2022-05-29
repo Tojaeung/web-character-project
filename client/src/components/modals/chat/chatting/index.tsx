@@ -53,7 +53,7 @@ const Container = styled.div`
   flex-direction: column;
   min-height: 70rem;
   justify-content: space-between;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     min-height: 50rem;
   }
 `;
@@ -72,7 +72,7 @@ const FlexBox = styled.div`
 const Nickname = styled.span`
   font-size: 1.5rem;
   font-weight: bold;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.3rem;
   }
 `;

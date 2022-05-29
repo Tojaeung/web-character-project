@@ -54,7 +54,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     width: 25rem;
     gap: 1rem;
   }
@@ -63,7 +63,7 @@ const Title = styled.h2`
   align-self: flex-start;
   font-size: 2rem;
   font-weight: 700;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
   }
 `;
@@ -83,13 +83,13 @@ const WarnIcon = styled(AiOutlineWarning)`
 `;
 const WarningText = styled.p`
   font-size: 1.3rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
 const GuideText = styled.p`
   font-size: 1.3rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -114,7 +114,7 @@ const SubmitButton = styled.button`
     border-radius: 5px;
     background-color: ${({ theme }) => theme.palette.gray};
   }
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     padding: 0.7rem 1rem;
     font-size: 1.2rem;
   }

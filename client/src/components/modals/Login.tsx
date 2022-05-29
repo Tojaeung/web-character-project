@@ -89,7 +89,7 @@ const Form = styled.form`
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     gap: 1rem;
   }
 `;
@@ -107,7 +107,7 @@ const Label = styled.label`
   font-size: 1.4rem;
   align-self: flex-start;
   white-space: nowrap;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -143,7 +143,7 @@ const SubmitButton = styled.button`
   width: 100%;
   padding: 1rem 0;
   font-size: 1.5rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -159,7 +159,7 @@ const FindPw = styled.span`
   &:hover {
     text-decoration: underline;
   }
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -171,7 +171,7 @@ const SignUp = styled.span`
   &:hover {
     text-decoration: underline;
   }
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;

@@ -95,7 +95,7 @@ const Container = styled.table`
     background-color: ${({ theme }) => theme.palette.gray};
     border: 1px solid ${({ theme }) => theme.palette.black};
     white-space: nowrap;
-    media ${({ theme }) => theme.device.mobile} {
+    @media ${({ theme }) => theme.device.mobile} {
       font-size: 1.3rem;
     }
   }
@@ -106,7 +106,7 @@ const Container = styled.table`
     background-color: ${({ theme }) => theme.palette.white};
     border: 1px solid ${({ theme }) => theme.palette.gray};
     padding: 0.5rem;
-    media ${({ theme }) => theme.device.mobile} {
+    @media ${({ theme }) => theme.device.mobile} {
       font-size: 1.2rem;
     }
   }

@@ -99,11 +99,11 @@ const Container = styled.div`
     font-size: 1.5rem;
     min-height: 30rem;
   }
-  media ${({ theme }) => theme.device.tablet} {
+  @media ${({ theme }) => theme.device.tablet} {
     width: 100%;
     box-shadow: none;
   }
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     .ql-editor {
       min-height: 10rem;
       font-size: 1.2rem;
@@ -113,7 +113,7 @@ const Container = styled.div`
 const Title = styled.h1`
   font-size: 2rem;
   font-weight: 700;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
   }
 `;
@@ -126,7 +126,7 @@ const ButtonBox = styled.div`
 const SubmitButton = styled.button`
   ${greenButtonStyle};
   padding: 1rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
     padding: 0.7rem 1rem;
   }
@@ -134,7 +134,7 @@ const SubmitButton = styled.button`
 const GoBackButton = styled.button`
   ${inverseGreenButtonStyle};
   padding: 1rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
     padding: 0.7rem 1rem;
   }

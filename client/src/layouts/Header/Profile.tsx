@@ -99,7 +99,7 @@ const DropDown = styled.ul`
   z-index: 1032;
   background: ${({ theme }) => theme.palette.bgColor};
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     width: 13rem;
     font-size: 1.5rem;
     top: 4.5rem;
@@ -130,27 +130,27 @@ const List = styled.li`
 
 const ProfileIcon = styled(CgProfile)`
   font-size: 2.5rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 2rem;
   }
 `;
 const BellIcon = styled(BsBell)`
   font-size: 2.5rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 2rem;
   }
 `;
 
 const SettingsIcon = styled(FiSettings)`
   font-size: 2.5rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 2rem;
   }
 `;
 
 const LogOutIcon = styled(FiLogOut)`
   font-size: 2.5rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 2rem;
   }
 `;

@@ -44,7 +44,7 @@ const Container = styled.div<{ chatOk: boolean }>`
 
 const ChatIcon = styled(BsChatLeftText)`
   font-size: 2.5rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 2rem;
   }
 `;

@@ -28,7 +28,7 @@ const Container = styled.div`
   padding: 2rem;
   margin-top: 1rem;
   box-shadow: ${({ theme }) => theme.palette.shadowColor};
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     gap: 1rem;
     padding: 1rem;
   }
@@ -44,14 +44,14 @@ const Intro = styled.div`
 const Title = styled.div`
   font-size: 2.5rem;
   font-weight: bold;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 2rem;
   }
 `;
 
 const Description = styled.p`
   font-size: 1.5rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.2rem;
   }
 `;
@@ -61,7 +61,7 @@ const Detailed = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   font-size: 1.3rem;
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     font-size: 1rem;
   }
 `;

@@ -85,12 +85,12 @@ const DrawingBox = styled.ul`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
-  media ${({ theme }) => theme.device.tablet} {
+  @media ${({ theme }) => theme.device.tablet} {
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
   }
 
-  media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.mobile} {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
