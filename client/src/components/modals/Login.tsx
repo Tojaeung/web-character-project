@@ -9,6 +9,7 @@ import { openModal, closeModal } from 'store/slices/modal.slice';
 import { greenInputStyle } from 'styles/input.style';
 import { greenButtonStyle } from 'styles/button.style';
 import socket from 'utils/socket';
+import Logo from 'assets/images/logo.svg';
 
 function Login() {
   useSocketSetup();
@@ -43,7 +44,7 @@ function Login() {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Logo>기업로고</Logo>
+      <img width="200" src={Logo} alt="로고" />
 
       <InputBox>
         <Label htmlFor="email">이메일</Label>
@@ -93,7 +94,6 @@ const Form = styled.form`
     gap: 1rem;
   }
 `;
-const Logo = styled.h1``;
 
 const InputBox = styled.div`
   position: relative;

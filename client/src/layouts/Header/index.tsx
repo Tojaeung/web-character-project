@@ -9,7 +9,7 @@ import { selectUserUser } from 'store/slices/user.slice';
 import { selectChatMessageNotis } from 'store/slices/chat.slice';
 import { selectNotificationNotifications } from 'store/slices/notification.slice';
 import { openModal } from 'store/slices/modal.slice';
-import logo from 'assets/images/logo.jpg';
+import Logo from 'assets/images/logo.svg';
 import { greenButtonStyle } from 'styles/button.style';
 
 function Header() {
@@ -29,13 +29,17 @@ function Header() {
   return (
     <>
       <Container>
-        <Logo
-          src={logo}
-          alt="logo"
+        <img
+          style={{ cursor: 'pointer' }}
+          width="150"
+          height="50"
+          src={Logo}
+          alt="로고"
           onClick={(e) => {
             navigate('/');
           }}
         />
+
         <RightSide>
           <NavLink to={'/free'}>자유게시판</NavLink>
           <NavLink to={'/commission'}>커미션</NavLink>
@@ -95,9 +99,12 @@ function Header() {
           </NavBox>
         )}
 
-        <Logo
-          src={logo}
-          alt="logo"
+        <img
+          style={{ cursor: 'pointer' }}
+          width="120"
+          height="50"
+          src={Logo}
+          alt="로고"
           onClick={(e) => {
             navigate('/');
           }}
@@ -134,7 +141,8 @@ const Container = styled.div`
     display: none;
   }
 `;
-const Logo = styled.img`
+
+const LogoBox = styled.div`
   cursor: pointer;
 `;
 

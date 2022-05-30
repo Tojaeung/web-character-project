@@ -135,12 +135,15 @@ const Form = styled.form`
   flex-direction: column;
   align-items: center;
   margin: 0 auto;
-  gap: 3rem;
+  gap: 2.5rem;
   @media ${({ theme }) => theme.device.mobile} {
   }
 `;
 
-const Title = styled.h1``;
+const Title = styled.h1`
+  font-size: 3rem;
+  font-weight: bold;
+`;
 const InputBox = styled.div`
   position: relative;
   width: 100%;
@@ -177,12 +180,14 @@ const UserIcon = styled(AiOutlineUser)`
   position: absolute;
 `;
 const ShowPwIcon = styled(AiOutlineEye)`
+  cursor: pointer;
   position: absolute;
   font-size: 2rem;
   top: 3.7rem;
   right: 1.5rem;
 `;
 const HidePwIcon = styled(AiOutlineEyeInvisible)`
+  cursor: pointer;
   position: absolute;
   font-size: 2rem;
   top: 3.7rem;

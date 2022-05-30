@@ -36,6 +36,7 @@ class User extends Relation {
   @PrimaryGeneratedColumn()
   id: number;
 
+  // 소켓을 이용한 채팅시, 유저를 대표한다.
   @Column({ name: 'chat_id' })
   @Generated('uuid')
   chatId: string;
@@ -50,25 +51,30 @@ class User extends Relation {
   })
   nickname: string;
 
+  // 자기소개
   @Column({ nullable: true, default: null })
   desc: string;
 
+  // 프로필사진 s3경로
   @Column({
     default: process.env.DEFAULT_AVATAR_URL as string,
   })
   avatar: string;
 
+  // 프로필사진 s3파일이름
   @Column({
     default: process.env.DEFAULT_AVATAR_KEY as string,
     name: 'avatar_key',
   })
   avatarKey: string;
 
+  // 프로필배경사진 s3경로
   @Column({
     default: process.env.DEFAULT_COVER_URL as string,
   })
   cover: string;
 
+  // 프로필배경사진 s3파일이름
   @Column({
     default: process.env.DEFAULT_COVER_KEY as string,
     name: 'cover_key',
@@ -78,26 +84,31 @@ class User extends Relation {
   @Column({ default: 'user' })
   role: string;
 
-  @Column({ type: 'varchar', select: false })
-  pw?: string;
-
+  // 회원가입인증시, 회원을 찾아내는데 사용된다.
+  // 회원가입인증 완료후, null로 변경된다.
   @Column({ type: 'varchar', name: 'email_token', nullable: true })
   emailToken: string | null;
+
+  @Column({ type: 'varchar', select: false })
+  pw?: string;
 
   @Column({ type: 'varchar', name: 'pw_token', select: false })
   pwToken?: string;
 
+  // 회원가입인증 유무
   @Column({
     default: false,
     name: 'is_verified',
   })
   isVerified: boolean;
 
-  @Column({ type: 'integer', default: 0 })
-  exp: number;
-
+  // 불량유저 유무
   @Column({ default: false, name: 'is_penalty' })
   isPenalty: boolean;
+
+  // 경험치, 레벨을 표현한다.
+  @Column({ type: 'integer', default: 0 })
+  exp: number;
 
   @CreateDateColumn()
   created_at: Date;

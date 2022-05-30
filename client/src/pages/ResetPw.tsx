@@ -6,6 +6,7 @@ import { greenButtonStyle } from 'styles/button.style';
 import { useAppDispatch } from 'store/app/hook';
 import { resetPw } from 'store/requests/user.request';
 import { greenInputStyle } from 'styles/input.style';
+import Logo from 'assets/images/logo.svg';
 
 function ResetPw() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ function ResetPw() {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Logo>기업로고</Logo>
+      <img width="200" src={Logo} alt="로고" />
       <Content>변경할 비밀번호를 입력해주세요. 🔐</Content>
 
       <InputBox>
@@ -78,9 +79,7 @@ const Form = styled.form`
   align-items: center;
   gap: 2rem;
 `;
-const Logo = styled.span`
-  font-size: 3rem;
-`;
+
 const Content = styled.p`
   align-self: flex-start;
   font-size: 1.5rem;
@@ -102,12 +101,14 @@ const Input = styled.input`
 `;
 
 const ShowPwIcon = styled(AiOutlineEye)`
+  cursor: pointer;
   position: absolute;
   font-size: 2rem;
   top: 1rem;
   right: 1.5rem;
 `;
 const HidePwIcon = styled(AiOutlineEyeInvisible)`
+  cursor: pointer;
   position: absolute;
   font-size: 2rem;
   top: 1rem;

@@ -75,7 +75,7 @@ export const verifyUser = async (req: Request, res: Response): Promise<any> => {
     throw ApiError.BadRequest('존재하지 않는 유저입니다.');
   }
 
-  //  auth 테이블에 emailToken과 isVerified 정보를 수정해서 이메일 인증을 완료합니다.
+  //  user 테이블에 emailToken과 isVerified 정보를 수정해서 이메일 인증을 완료합니다.
   // 로그인이 가능한 계정입니다.
   const decryptedEmailToken = await bcrypt.compare(user?.email!, emailToken);
   if (decryptedEmailToken) {
