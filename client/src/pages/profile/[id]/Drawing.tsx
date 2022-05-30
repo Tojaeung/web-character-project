@@ -18,7 +18,7 @@ function Drawing() {
   const drawings = useAppSelector(selectDrawingDrawings);
 
   const [cursor, setCursor] = useState<number | null>(0);
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   // useObserver는 무한스크롤 커스텀 훅이다.
   const targetRef = useRef<HTMLDivElement>(null);
@@ -48,11 +48,11 @@ function Drawing() {
           <DrawingList
             key={v4()}
             onClick={openDrawing(index)}
-            onMouseEnter={(e) => setSelectedIndex(index)}
-            onMouseLeave={(e) => setSelectedIndex(null)}
+            onMouseEnter={(e) => setHoveredIndex(index)}
+            onMouseLeave={(e) => setHoveredIndex(null)}
           >
             <Image src={drawing.url} alt="그림" />
-            {index === selectedIndex && (
+            {hoveredIndex === index && (
               <DetailBox>
                 <IconBox>
                   <AiOutlineComment size={20} />

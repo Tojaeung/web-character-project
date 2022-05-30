@@ -170,7 +170,7 @@ const NotificationDot = styled.div`
   height: 1rem;
   top: 3rem;
   right: 0.2rem;
-  z-index: 1020;
+  z-index: 1000;
 `;
 
 const AuthBox = styled.div`
