@@ -471,7 +471,7 @@ export const givePenalty = async (
   }
 
   // 제재조치기간 후에 다시 user테이블의 isPenalty칼럼이 false가 되면서 제재가 풀리게 된다.
-  const expiredDate = moment().add(penaltyPeriod, 'minutes').toDate();
+  const expiredDate = moment().add(penaltyPeriod, 'days').toDate();
 
   // Penalty테이블에 제재유저의 정보를 저장한다.
   const newPenalty = new Penalty();

@@ -17,7 +17,7 @@ class ImageKey extends Relation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // 게시물에 올라온 사진파일
+  // 게시물에 올라온 사진파일이 s3에 업로드 될때 uid
   @Column()
   key: string;
 

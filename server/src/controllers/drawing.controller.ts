@@ -52,7 +52,7 @@ export const getDrawings = async (req: Request, res: Response): Promise<any> => 
   const cursor = Number(req.query.cursor as string);
 
   // 무한스크롤 작동할때마다 몇개의 그림이 뜨는지 정하는 변수
-  const limit = 20;
+  const limit = 12;
   // 무한스크롤 작동시마다 클라이언트에 응답해줄 그림들
   let drawings;
   // 무한스크롤 작동시 아직도 남아있는 그림이 없다면 null을 응답해줘서 무한스크롤을 중지시킨다.

@@ -65,7 +65,7 @@ function Notification() {
               <tr key={v4()} className={notification.is_confirmed ? 'visited' : 'unVisited'}>
                 <td className="content">
                   <p onClick={handleUpdateNotification(notification)}>
-                    [ {[notificationType(notification.type)]} ] {notification.content}
+                    [ {notificationType(notification.type)} ] {notification.content}
                   </p>
                 </td>
                 <td>

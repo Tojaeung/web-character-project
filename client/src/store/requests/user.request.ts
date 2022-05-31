@@ -198,7 +198,7 @@ export const sendReport = createAsyncThunk<
 >('SEND_REPORT', async (data, thunkApi) => {
   const { reportType, report, url, suspectId } = data;
   try {
-    const res = await instance.post(`/users/${suspectId}/sendReport`, { reportType, report, url });
+    const res = await instance.post(`/users/${suspectId}/report`, { reportType, report, url });
     return res.data;
   } catch (err: any) {
     return thunkApi.rejectWithValue(err.response.data);

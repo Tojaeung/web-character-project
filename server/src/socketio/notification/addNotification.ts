@@ -45,8 +45,17 @@ const addNotification = async (socket: SessionSocket, addNotificationObj: AddNot
     return socket.emit('addNotification', result);
   }
 
-  const content = `${user?.nickname}님이 ${post?.title}에 댓글을 남겼습니다.`;
-  const newNotification = await notificationRepo.create(type, content, userId, board, postId);
+  let newNotification;
+  if (type === 'comment') {
+    const content = `${user?.nickname}님이 ${post?.title}에 댓글을 남겼습니다.`;
+    newNotification = await notificationRepo.create(type, content, userId, board, postId);
+  } else if (type === 'like') {
+    const content = `${user?.nickname}님이 ${post?.title}에 좋아요를 눌렀습니다.`;
+    newNotification = await notificationRepo.create(type, content, userId, board, postId);
+  } else if (type === 'dislike') {
+    const content = `${user?.nickname}님이 ${post?.title}에 싫어요를 눌렀습니다.`;
+    newNotification = await notificationRepo.create(type, content, userId, board, postId);
+  }
 
   const result = { ok: true, message: '게시글 작성자에게 댓글 알림을 보냈습니다.', newNotification };
 
