@@ -1,5 +1,5 @@
 import { SessionSocket } from '@interfaces/index';
-import cluster from '@helpers/redis.helper';
+import redis from '@helpers/redis.helper';
 import parseChats from './chat/parseChats';
 import parseMessages from './chat/parseMessages';
 import parseMessageNotis from './chat/parseMessageNotis';
@@ -10,17 +10,17 @@ const initUser = async (socket: SessionSocket) => {
   const user = socket.request.session.user;
 
   // 자신의 대화상대를 초기화 시킨다.
-  const chatIds = await cluster.lrange(`chats:${user.chatId}`, 0, -1);
+  const chatIds = await redis.lrange(`chats:${user.chatId}`, 0, -1);
   const chats = await parseChats(chatIds);
   socket.emit('initChats', chats);
 
   // 자신의 메세지를 초기화 시킨다.
-  const messages = await cluster.lrange(`messages:${user.chatId}`, 0, -1);
+  const messages = await redis.lrange(`messages:${user.chatId}`, 0, -1);
   const parsedMessages = await parseMessages(messages);
   socket.emit('initMessages', parsedMessages);
 
   // 자신의 메세지알림을 초기화 시킨다.
-  const messageNotis = await cluster.lrange(`messageNotis:${user.chatId}`, 0, -1);
+  const messageNotis = await redis.lrange(`messageNotis:${user.chatId}`, 0, -1);
   const parsedMessageNotis = await parseMessageNotis(messageNotis);
   socket.emit('initMessageNotis', parsedMessageNotis);
 

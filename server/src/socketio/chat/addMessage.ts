@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 import { SessionSocket } from '@interfaces/index';
-import cluster from '@helpers/redis.helper';
+import redis from '@helpers/redis.helper';
 import User from '@entities/profile/user.entity';
 
 interface MessageType {
@@ -21,16 +21,16 @@ const addMessage = async (socket: SessionSocket, message: MessageType) => {
   const messageStr = [message.type, message.to, message.from, message.content, message.imageKey, message.date].join(
     ','
   );
-  await cluster.rpush(`messages:${message.from}`, messageStr);
-  await cluster.rpush(`messages:${message.to}`, messageStr);
+  await redis.rpush(`messages:${message.from}`, messageStr);
+  await redis.rpush(`messages:${message.to}`, messageStr);
 
   // 채팅상대는 메세지를 받을때 나를 친구목록에 추가한다.
-  const chats = await cluster.lrange(`chats:${message.to}`, 0, -1);
+  const chats = await redis.lrange(`chats:${message.to}`, 0, -1);
 
   // 대화상대의 채팅상대에 내가 없다면 추가해준다.
   const existingChat = chats.some((chat) => chat === message.from);
   if (!existingChat) {
-    await cluster.lpush(`chats:${message.to}`, message.from);
+    await redis.lpush(`chats:${message.to}`, message.from);
 
     const newChat = {
       chatId: user?.chatId,

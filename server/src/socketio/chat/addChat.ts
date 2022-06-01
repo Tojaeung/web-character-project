@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 import { SessionSocket } from '@interfaces/index';
-import cluster from '@helpers/redis.helper';
+import redis from '@helpers/redis.helper';
 import User from '@entities/profile/user.entity';
 
 /* 대화상대 추가 */
@@ -23,7 +23,7 @@ const addChat = async (socket: SessionSocket, chatId: string) => {
   }
 
   // 추가한 채팅상대가 이미 채팅상대인지 확인합니다.
-  const chats = await cluster.lrange(`chats:${user.chatId}`, 0, -1);
+  const chats = await redis.lrange(`chats:${user.chatId}`, 0, -1);
   const existingChat = chats.filter((chat) => chat === chatId);
   if (existingChat.length > 0) {
     const result = { ok: false, message: '이미 존재하는 유저입니다.' };
@@ -32,7 +32,7 @@ const addChat = async (socket: SessionSocket, chatId: string) => {
   }
 
   // 채팅상대정보를 레디스에 저장합니다.
-  await cluster.lpush(`chats:${user.chatId}`, chatId);
+  await redis.lpush(`chats:${user.chatId}`, chatId);
 
   const newChat = {
     chatId: chatUser.chatId,

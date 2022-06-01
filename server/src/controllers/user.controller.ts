@@ -3,7 +3,7 @@ import { getCustomRepository, getRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
 import moment from 'moment';
 import { IncomingWebhook } from '@slack/webhook';
-import cluster from '@helpers/redis.helper';
+import redis from '@helpers/redis.helper';
 import logger from '@helpers/winston.helper';
 import ApiError from '@errors/api.error';
 import s3Delete from '@utils/s3.utils';
@@ -516,9 +516,9 @@ export const deleteAccount = async (req: Request, res: Response): Promise<any> =
   await getRepository(User).delete({ id });
 
   // 레디스에 저장된 대화정보 등등 식제
-  await cluster.del(`chats:${user?.chatId}`);
-  await cluster.del(`messages:${user?.chatId}`);
-  await cluster.del(`messageNotis:${user?.chatId}`);
+  await redis.del(`chats:${user?.chatId}`);
+  await redis.del(`messages:${user?.chatId}`);
+  await redis.del(`messageNotis:${user?.chatId}`);
 
   // 세션 제거
   req.session.destroy((err: any) => {

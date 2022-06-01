@@ -1,5 +1,5 @@
 import { SessionSocket } from '@interfaces/index';
-import cluster from '@helpers/redis.helper';
+import redis from '@helpers/redis.helper';
 
 interface MessageNotiType {
   from: string;
@@ -11,7 +11,7 @@ const addMessageNoti = async (socket: SessionSocket, messageNoti: MessageNotiTyp
   const messageNotiStr = [messageNoti.from, messageNoti.to].join(',');
 
   // 대화상대에게 온 메세지 알림을 레디스에 저장한다.
-  await cluster.lpush(`messageNotis:${messageNoti.to}`, messageNotiStr);
+  await redis.lpush(`messageNotis:${messageNoti.to}`, messageNotiStr);
 
   const newMessageNoti = {
     from: messageNoti.from,

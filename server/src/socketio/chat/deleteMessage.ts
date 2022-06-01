@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { SessionSocket } from '@interfaces/index';
-import cluster from '@helpers/redis.helper';
+import redis from '@helpers/redis.helper';
 import parseMessages from '@socketio/chat/parseMessages';
 import s3Delete from '@utils/s3.utils';
 import logger from '@helpers/winston.helper';
@@ -8,8 +8,8 @@ import logger from '@helpers/winston.helper';
 const deleteMessage = async (socket: SessionSocket, chatId: string) => {
   const user = socket.request.session.user;
 
-  const messages = await cluster.lrange(`messages:${user.chatId}`, 0, -1);
-  await cluster.del(`messages:${user.chatId}`);
+  const messages = await redis.lrange(`messages:${user.chatId}`, 0, -1);
+  await redis.del(`messages:${user.chatId}`);
 
   // 나의 메세지가 하나도 없을때 아래 과정을 생략한다.
   if (!messages.length) return;
@@ -50,7 +50,7 @@ const deleteMessage = async (socket: SessionSocket, chatId: string) => {
       ','
     );
 
-    await cluster.rpush(`messages:${chatId}`, endMessageStr);
+    await redis.rpush(`messages:${chatId}`, endMessageStr);
     socket.to(chatId).emit('addMessage', endMessage);
   }
 
@@ -71,7 +71,7 @@ const deleteMessage = async (socket: SessionSocket, chatId: string) => {
       updatedMessage.content,
       updatedMessage.date,
     ].join(',');
-    await cluster.lpush(`messages:${user.chatId}`, newMessageStr);
+    await redis.lpush(`messages:${user.chatId}`, newMessageStr);
   }
 
   return socket.emit('initMessages', updatedMessages);
