@@ -24,6 +24,7 @@ jobs:
           cd ./client
           touch .env
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
+          echo "REACT_APP_SOCKET_ENDPOINT=${{ secrets.REACT_APP_SOCKET_ENDPOINT }}" >> .env
           npm i
           npm run build
 
