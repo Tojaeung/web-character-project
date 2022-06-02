@@ -26,7 +26,7 @@ function Login() {
       await dispatch(signIn({ email, pw })).unwrap();
       await socket.connect();
       await dispatch(closeModal());
-      navigate(0);
+      // navigate(0);
     } catch (err: any) {
       alert(err.message);
     }
