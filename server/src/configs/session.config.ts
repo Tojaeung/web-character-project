@@ -1,4 +1,4 @@
-import redisClient from '@helpers/redis.helper';
+import redis from '@helpers/redis.helper';
 import session from 'express-session';
 import 'dotenv/config';
 import ConnectRedis from 'connect-redis';
@@ -7,14 +7,15 @@ const RedisStore = ConnectRedis(session);
 
 export const sessionConfig = session({
   secret: process.env.SESSION_SECRET as string,
-  store: new RedisStore({ client: redisClient }),
+  store: new RedisStore({ client: redis }),
   name: 'sid',
   resave: false,
   saveUninitialized: false,
+  proxy: true,
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24 * 7,
+    secure: process.env.NODE_ENV === 'production',
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   },
 });
