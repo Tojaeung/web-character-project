@@ -5,9 +5,6 @@ import { createConnection } from 'typeorm';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import { createServer } from 'http';
-import https from 'https';
-import fs from 'fs';
-import path from 'path';
 import { Server, Socket } from 'socket.io';
 import helmet from 'helmet';
 
@@ -22,22 +19,9 @@ import socket from './socket';
 import router from '@routes/index';
 import apiErrorHandler from '@errors/apiHandler.error';
 
-const domain = 'grimlerdl.ciom';
-
-const opt = {
-  ca: fs.readFileSync('/etc/letsencrypt/live/' + domain + '/fullchain.pem'),
-  key: fs
-    .readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/' + domain + '/privkey.pem'), 'utf8')
-    .toString(),
-  cert: fs
-    .readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/' + domain + '/cert.pem'), 'utf8')
-    .toString(),
-};
-
 const app = express();
 const http = createServer(app);
 const io = new Server(http, { cors: corsConfig });
-const server = new https.Server(opt, app);
 
 // Logging
 const combined =
@@ -73,4 +57,3 @@ http.listen(port, async () => {
     });
   await socket({ io });
 });
-server.listen(443);
