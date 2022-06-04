@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { AiOutlineLike, AiOutlineDislike, AiOutlineComment } from 'react-icons/ai';
@@ -25,9 +25,9 @@ function Drawing() {
   const isVisible = useObserver(targetRef);
 
   useEffect(() => {
-    // cursor가 0 일때는 더이상 drawing 데이터가 없기 때문이다.
+    // cursor가 null 일때는 더이상 drawing 데이터가 없기 때문이다.
     if (!isVisible || cursor === null) return;
-    dispatch(getDrawings({ userId: Number(profileId), cursor: cursor }))
+    dispatch(getDrawings({ userId: Number(profileId), cursor }))
       .unwrap()
       .then((res) => {
         const { newCursor } = res;
@@ -96,7 +96,9 @@ const DrawingBox = styled.ul`
   }
 `;
 const Observer = styled.div`
-  border: 1px solid ${({ theme }) => theme.palette.white};
+  border: 5px solid ${({ theme }) => theme.palette.black};
+  width: 100%;
+  height: 10rem;
 `;
 
 const DrawingList = styled.li`

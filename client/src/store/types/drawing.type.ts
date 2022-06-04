@@ -9,7 +9,7 @@ export type getDrawingsReturnType = {
 
 export type getDrawingsDataType = {
   userId: number;
-  cursor: number;
+  cursor: number | null;
 };
 
 export type incrementViewReturnType = {
