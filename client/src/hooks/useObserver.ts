@@ -8,7 +8,7 @@ export const useObserver = (targetRef: React.RefObject<HTMLDivElement>) => {
   };
 
   useEffect(() => {
-    const observer = new IntersectionObserver(callbackFunction, { root: null, rootMargin: '0px', threshold: 0.1 });
+    const observer = new IntersectionObserver(callbackFunction, { root: null, rootMargin: '0px', threshold: 0 });
     targetRef.current && observer.observe(targetRef.current);
     return () => {
       observer.disconnect();

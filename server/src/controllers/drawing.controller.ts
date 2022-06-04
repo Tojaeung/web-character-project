@@ -72,7 +72,6 @@ export const getDrawings = async (req: Request, res: Response): Promise<any> => 
   } else {
     newCursor = drawings[limit - 1].id;
   }
-  console.log({ newCursor });
 
   logger.info(`${drawings.length}장의 그림을 얻었습니다.`);
   return res.status(200).json({ ok: true, message: '그림을 얻었습니다.', drawings, newCursor });

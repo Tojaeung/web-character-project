@@ -96,9 +96,8 @@ const DrawingBox = styled.ul`
   }
 `;
 const Observer = styled.div`
-  border: 5px solid ${({ theme }) => theme.palette.black};
+  border: 1px solid ${({ theme }) => theme.palette.white};
   width: 100%;
-  height: 10rem;
 `;
 
 const DrawingList = styled.li`

@@ -8,7 +8,7 @@ function Footer() {
         <Description>그림 그리기를 좋아하는 사람들을 위한 커뮤니티 사이트입니다.</Description>
       </Intro>
       <Detailed>
-        <a href="https://github.com/Tojaeung" target="_blank" rel="noreferrer">
+        <a href="https://github.com/Tojaeung/web-character-project" target="_blank" rel="noreferrer">
           https://github.com/Tojaeung
         </a>
         <p>Tel: 010-2230-1027</p>
