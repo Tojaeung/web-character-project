@@ -15,7 +15,7 @@
 
 **※ 아래의 계정으로 로그인하면 여러기능들을 빠르게 확인할 수 있습니다.**
 
-아이디: example@email.com
+아이디: dltnswk0707@naver.com
 
 비밀번호: example1027@
 
